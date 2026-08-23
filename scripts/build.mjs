@@ -104,7 +104,7 @@ function shell({ title, desc, body, active, ogImage }) {
   <link rel="icon" type="image/png" href="/assets/media/favicon.webp">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Catamaran:wght@400;700&family=Antic+Slab&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Catamaran:wght@400;700&family=Antic+Slab&family=Bona+Nova:wght@400;700&family=Rufina&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/assets/css/site.css">
 </head>
 <body>
@@ -236,10 +236,12 @@ function bannerBody(data) {
 function poleBody(data) {
   const feat = data.featured.map((p) => `
     <article class="feat-card">
-      <h2>${esc(p.name)}</h2>
-      <p class="feat-desc">${esc(p.desc)}</p>
-      ${p.detail ? `<p class="feat-desc">${esc(p.detail)}</p>` : ''}
-      <p class="feat-tag">${esc(p.tag)}</p>
+      <div class="feat-text">
+        <h2>${esc(p.name)}</h2>
+        <p class="feat-desc">${esc(p.desc)}</p>
+        ${p.detail ? `<p class="feat-desc">${esc(p.detail)}</p>` : ''}
+        <p class="feat-tag">${esc(p.tag)}</p>
+      </div>
       <img src="${p.image}" alt="${esc(p.name)}" loading="lazy" decoding="async" width="553" height="368">
     </article>`).join('');
   const ing = data.ingredients.items.map((p) => `
@@ -249,13 +251,13 @@ function poleBody(data) {
       <p>${esc(p.desc)}</p>
     </article>`).join('');
   return `
-  <section class="page-hero">
+  <section class="page-hero pole-hero">
     <div class="container">
       <h1>${esc(data.subheading)}</h1>
-      <p class="tagline" style="letter-spacing:0;text-transform:none;text-align:center;max-width:520px;margin:8px auto 0">${esc(data.subtext)}</p>
+      <p class="pole-subtext">${esc(data.subtext)}</p>
     </div>
   </section>
-  <section class="section" style="padding-top:10px">
+  <section class="section" style="padding-top:20px">
     <div class="container">
       <div class="featured-2">${feat}</div>
     </div>

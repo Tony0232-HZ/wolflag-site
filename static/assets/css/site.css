@@ -464,84 +464,118 @@ ul { list-style: none; }
    Pole & Display page
    ========================================================================== */
 
+.pole-hero h1 {
+  font-size: 46px;
+  font-weight: 700;
+  color: #1c1c1c;
+  line-height: 1.2;
+  letter-spacing: 0;
+}
+
+.pole-hero { padding: 80px 0 0; }
+.pole-hero .page-subtext-wrap { margin: 15px auto 0; }
+
+.pole-subtext {
+  color: #545a6d;
+  font-size: 16px;
+  max-width: 620px;
+  text-align: center;
+  margin: 15px auto 0;
+}
+
 .featured-2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 46px;
-  margin-top: 26px;
+  margin-top: 92px;
 }
 
+.feat-card {
+  padding: 0 12px;
+}
+
+.feat-card .feat-text { padding: 0 40px; }
+
 .feat-card h2 {
-  font-size: 20px;
+  font-size: 24px;
   font-weight: 700;
-  color: #1d1d1f;
+  color: var(--navy);
 }
 
 .feat-card .feat-desc {
-  color: #4a5260;
+  color: #545a6d;
   font-size: 15px;
   margin: 10px 0 4px;
 }
 
 .feat-card .feat-tag {
-  color: #1d1d1f;
-  font-size: 15px;
-  font-weight: 600;
+  color: #545a6d;
+  font-size: 14px;
+  font-weight: 700;
   margin-top: 8px;
 }
 
 .feat-card img {
   width: 100%;
-  height: auto;
-  margin-top: 18px;
-  border-radius: 6px;
+  height: 368px;
+  object-fit: cover;
+  margin-top: 8px;
 }
 
-.ingredients { text-align: center; padding: 64px 0 0; }
+.ingredients { text-align: center; padding: 104px 0 0; }
 
 .ingredients h3 {
-  font-size: 18px;
+  font-family: "Bona Nova", Georgia, serif;
+  font-size: 28px;
   font-weight: 700;
-  letter-spacing: .3em;
+  line-height: 1.2;
+  letter-spacing: .18em;
   text-transform: uppercase;
-  color: #1d1d1f;
-  margin-bottom: 8px;
+  color: var(--navy);
+  margin-bottom: 17px;
 }
 
-.ingredients .ing-sub { color: #6b7280; font-size: 14px; margin-bottom: 34px; }
+.ingredients .ing-sub { color: var(--navy); font-size: 16px; margin-bottom: 51px; }
 
 .ing-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 26px;
+  gap: 40px;
 }
 
 .ing-card {
   background: var(--warm-bg);
   border-radius: 14px;
-  padding: 26px 20px 28px;
+  padding: 0 27px 34px;
   text-align: center;
 }
 
 .ing-card img {
-  margin: 0 auto 18px;
-  width: 82%;
+  margin: 0 auto;
+  width: 100%;
   height: auto;
 }
 
 .ing-card h4 {
-  font-family: var(--serif);
-  font-size: 17px;
+  font-family: "Rufina", Georgia, serif;
+  font-size: 20px;
   font-weight: 400;
-  color: #3a4440;
-  margin-bottom: 10px;
+  color: var(--navy);
+  margin: 29px 0 12px;
 }
 
-.ing-card p { color: #6b7280; font-size: 13px; }
+.ing-card p {
+  color: #545a6d;
+  font-size: 14px;
+  max-width: 200px;
+  margin: 0 auto;
+}
 
 @media (max-width: 900px) {
   .featured-2 { grid-template-columns: 1fr; }
   .ing-grid { grid-template-columns: repeat(2, 1fr); }
+  .ingredients { padding-top: 90px; }
+  .pole-hero h1 { font-size: 34px; }
 }
 @media (max-width: 560px) {
   .ing-grid { grid-template-columns: 1fr; }
