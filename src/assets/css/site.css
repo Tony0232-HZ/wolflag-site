@@ -166,7 +166,7 @@ ul { list-style: none; }
 .home-hero .hero-row {
   display: grid;
   grid-template-columns: 397px 1fr;
-  gap: 124px;
+  gap: 250px;
   align-items: start;
 }
 
@@ -181,11 +181,11 @@ ul { list-style: none; }
 }
 
 .home-hero .hero-text {
-  color: #6b7280;
+  color: #312925;
   font-size: 14px;
-  line-height: 1.8;
-  max-width: 380px;
-  margin-top: 0;
+  line-height: 21px;
+  max-width: 505px;
+  align-self: end;
 }
 
 .home-hero .hero-image {
