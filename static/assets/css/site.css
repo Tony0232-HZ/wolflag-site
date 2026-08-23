@@ -319,21 +319,22 @@ ul { list-style: none; }
 .cat-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 37px 48px;
-  padding: 0;
+  gap: 32px;
+  margin: 0 -15px;
 }
 
 .cat-card {
   display: flex;
-  gap: 20px;
-  background: #fff;
+  align-items: center;
+  background: #f9fafb;
+  border-radius: 10px;
+  overflow: hidden;
 }
 
 .cat-card > .cat-img {
   flex: 0 0 384px;
   aspect-ratio: 1 / 1;
   overflow: hidden;
-  border-radius: 4px;
   display: block;
 }
 
@@ -342,27 +343,34 @@ ul { list-style: none; }
 
 .cat-card .cat-info {
   flex: 1;
-  align-self: center;
-  padding-right: 6px;
+  padding: 20px;
 }
 
 .cat-card .cat-title {
-  font-size: 20px;
+  display: inline-block;
+  font-size: 16px;
   font-weight: 700;
   color: #111827;
-  margin-bottom: 36px;
-  text-transform: none;
-  letter-spacing: 0;
+  text-transform: uppercase;
+  letter-spacing: .02em;
+  border-bottom: 2px solid #4b5c7a;
+  padding-bottom: 8px;
+  margin-bottom: 26px;
 }
 
-.cat-card .cat-desc { color: #6b7280; font-size: 16px; line-height: 24px; }
+.cat-card .cat-desc {
+  color: #4b5563;
+  font-size: 14px;
+  line-height: 22px;
+  text-transform: uppercase;
+}
 
 @media (max-width: 1000px) {
-  .cat-grid { grid-template-columns: 1fr; }
+  .cat-grid { grid-template-columns: 1fr; margin: 0 -12px; }
   .cat-card > .cat-img { flex: 0 0 auto; }
 }
 @media (max-width: 560px) {
-  .cat-card, .cat-card.flip { flex-direction: column; gap: 18px; }
+  .cat-card, .cat-card.flip { flex-direction: column; }
   .cat-card > .cat-img { width: 100%; }
 }
 
