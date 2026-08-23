@@ -88,7 +88,15 @@ function footer() {
 </footer>`;
 }
 
-function shell({ title, desc, body, active, ogImage }) {
+function minimalFooter() {
+  return `<footer class="site-footer site-footer-minimal">
+  <div class="container">
+    <div class="footer-bottom">${esc(settings.footer.copyright)}</div>
+  </div>
+</footer>`;
+}
+
+function shell({ title, desc, body, active, ogImage, footerMode }) {
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -112,7 +120,7 @@ ${header(active)}
 <main>
 ${body}
 </main>
-${footer()}
+${footerMode === 'minimal' ? minimalFooter() : footer()}
 <script src="/assets/js/site.js"></script>
 </body>
 </html>`;
@@ -257,7 +265,7 @@ function poleBody(data) {
       <p class="pole-subtext">${esc(data.subtext)}</p>
     </div>
   </section>
-  <section class="section" style="padding-top:20px">
+  <section class="section pole-featured">
     <div class="container">
       <div class="featured-2">${feat}</div>
     </div>
@@ -339,7 +347,14 @@ for (const f of readdirSync(STATIC)) {
 
 for (const p of PAGES) {
   const title = p.title || 'WOLFLAG — Professional manufacturer of flags, banners, and poles';
-  const html = shell({ title, desc: p.desc, body: bodies.get(p.file), active: p.nav, ogImage: home.hero.image });
+  const html = shell({
+    title,
+    desc: p.desc,
+    body: bodies.get(p.file),
+    active: p.nav,
+    ogImage: home.hero.image,
+    footerMode: p.file === 'index.html' || p.file === 'about-us.html' ? 'full' : 'minimal',
+  });
   writeFileSync(join(STATIC, p.file), html);
   console.log('built', p.file);
 }
