@@ -58,7 +58,10 @@ collections:
                 name: phones
                 widget: list
                 field: { label: 电话, name: phone, widget: string }
-              - { label: 邮箱, name: email, widget: string }
+              - label: 邮箱列表
+                name: emails
+                widget: list
+                field: { label: 邮箱, name: email, widget: string }
               - { label: 页脚 Logo, name: logo, widget: image, required: false }
               - label: 社交图标
                 name: icons

@@ -67,7 +67,10 @@ function footer() {
       <h4>${esc(s.heading)}</h4>
       ${s.lines.map((l) => `<p>${esc(l)}</p>`).join('\n      ')}
     </div>`).join('\n');
-  const phones = settings.footer.phones.map((p) => `<a class="f-phone" href="tel:${p.replace(/[^+\d]/g, '')}">${esc(p)}</a>`).join('\n');
+  const mails = (settings.footer.emails || [settings.footer.email]).map((e) =>
+    `<p><a href="mailto:${e}" style="color:inherit">${esc(e)}</a></p>`).join('\n');
+  const phoneRows = settings.footer.phones.slice(1).map((p) =>
+    `<p><a href="tel:${p.replace(/[^+\d]/g, '')}" style="color:inherit">${esc(p)}</a></p>`).join('\n');
   const socialIcons = settings.footer.icons.map((i) => `<a href="mailto:${settings.footer.email}" aria-label="Contact us"><img src="${i}" alt=""></a>`).join('\n');
   return `<footer class="site-footer">
   <div class="container">
@@ -78,9 +81,9 @@ function footer() {
       </div>
       ${cols}
       <div class="footer-col">
-        <h4>Contact</h4>
-        ${phones}
-        <a href="mailto:${settings.footer.email}"><p>${esc(settings.footer.email).toUpperCase()}</p></a>
+        <p class="f-phone-main">${esc(settings.footer.phones[0] || '')}</p>
+        ${phoneRows}
+        ${mails}
       </div>
     </div>
     <div class="footer-bottom">${esc(settings.footer.copyright)}</div>
