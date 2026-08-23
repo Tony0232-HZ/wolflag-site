@@ -1,0 +1,39 @@
+{
+  "seo": {
+    "title": "Feather flag - WOLFLAG",
+    "description": "Custom feather flags in feather, leaf, rectangle and teardrop shapes. 110g knitted polyester, digital or silkscreen printing, full customization supported. Factory-direct from China."
+  },
+  "heading": "Feather flag",
+  "badge": "Custom Design / Portable / Premium Quality / Weatherproof",
+  "products": [
+    {
+      "name": "Feather shape",
+      "size": "size: 6.75ft*2.2ft / 11.15ft*2.62ft",
+      "material": "110g Knitted Polyester / digital printing or silkscreen printing",
+      "desc": "flags are portable and easy to install. The flag is made of high-quality durable fabric with an optional carbon composite fiber stand.",
+      "image": "/assets/media/feather-1.webp"
+    },
+    {
+      "name": "Leaf shape",
+      "size": "size:7.38ft*2.62ft",
+      "material": "110g Knitted Polyester / digital printing or silkscreen printing",
+      "desc": "Leaf-shaped flag, very unique, eye-catching, supported by two fiberglass rods. Easy to install and carry.",
+      "image": "/assets/media/feather-2.webp"
+    },
+    {
+      "name": "Rectangle shape",
+      "size": "",
+      "material": "110g Knitted Polyester / digital printing or silkscreen printing",
+      "desc": "The easiest to install, with the smoothest flag surface, your advertising slogan is displayed in full view. It is more like a standing banner.",
+      "image": "/assets/media/feather-3.webp"
+    },
+    {
+      "name": "Teardrop Shape",
+      "size": "",
+      "material": "110g Knitted Polyester / digital printing or silkscreen printing",
+      "desc": "The coolest and most beautiful shape, often seen in major shopping malls and sports venues, people can't help but take a few more glances.",
+      "image": "/assets/media/feather-4.webp"
+    }
+  ],
+  "cta": "Contact us to discuss specific customization plans."
+}

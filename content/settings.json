@@ -1,0 +1,35 @@
+{
+  "brand": "WOLFLAG",
+  "logo": "/assets/media/logo.webp",
+  "nav": [
+    { "label": "Home", "url": "/", "external": false },
+    { "label": "Feather flag", "url": "/feather-flag.html", "external": false },
+    { "label": "Banner", "url": "/banner.html", "external": false },
+    { "label": "National Flag", "url": "/national-flag.html", "external": false },
+    { "label": "Pole & Display", "url": "/pole-display.html", "external": false },
+    { "label": "About Us", "url": "/about-us.html", "external": false },
+    { "label": "More", "url": "https://waimao.163.com/dealers", "external": true }
+  ],
+  "contactButton": { "text": "Contact Us", "url": "mailto:eden@wolflag.com" },
+  "footer": {
+    "sections": [
+      {
+        "heading": "Wolflag factory",
+        "lines": ["JianAn Rd., Fengjing Town,", "Jinshan District, Shanghai CHINA"]
+      },
+      {
+        "heading": "Hangzhou Loyal Import & Export co, ltd",
+        "lines": ["Room 620, Jinshaju Building 2,xuezheng St.", "hangzhou China"]
+      }
+    ],
+    "phones": ["+86 (571) 28239823", "+86 159 9018 9075"],
+    "email": "eden@wolflag.com",
+    "logo": "/assets/media/footer-logo.webp",
+    "icons": [
+      "/assets/media/footer-icon-1.webp",
+      "/assets/media/footer-icon-2.webp",
+      "/assets/media/footer-icon-3.webp"
+    ],
+    "copyright": "© 2026 WOLFLAG. All Rights Reserved."
+  }
+}

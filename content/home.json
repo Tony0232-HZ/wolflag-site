@@ -1,0 +1,58 @@
+{
+  "seo": {
+    "title": "Professional manufacturer of flags, banners, and poles | WOLFLAG",
+    "description": "WOLFLAG is a 22-year professional manufacturer of flags, banners, feather flags, national flags, flag poles and display kits in Hangzhou, China. Custom designs, factory-direct prices."
+  },
+  "hero": {
+    "title": "BESPOKE FLAGS MADE WITH YOUR DESIGNS AND SPECIFICATIONS!",
+    "text": "We are delighted to enhance the quality of products and services for our customers. Honesty and integrity are the qualities we adhere to.",
+    "image": "/assets/media/home-hero.webp",
+    "features": [
+      "Professional",
+      "Reliable"
+    ]
+  },
+  "intro": {
+    "title": "Flag, Banner and Pole Kits",
+    "text": "We are a professional manufacturer of flags, banners, and pole kits, located in Hangzhou, China. We have 22 years of experience in production and sales.",
+    "images": [
+      "/assets/media/home-workshop.webp",
+      "/assets/media/home-printing.webp",
+      "/assets/media/home-factory.webp"
+    ]
+  },
+  "categories": {
+    "title": "main products",
+    "intro": "wolflag is a leading factory that is dedicated to making your brand/business visible with quality printed signage solutions.",
+    "items": [
+      {
+        "title": "National flag",
+        "text": "Order premium-quality Flags of the World for commercial/non-commercial use, events, festivals, celebrations, or promotional purposes.",
+        "image": "/assets/media/home-cat-national.webp",
+        "link": "/national-flag.html"
+      },
+      {
+        "title": "banner",
+        "text": "banners are versatile outdoor promotional tools that can make your brand stand out in any setting.",
+        "image": "/assets/media/home-cat-banner.webp",
+        "link": "/banner.html"
+      },
+      {
+        "title": "Feather flag",
+        "text": "Custom Feather flags are a perfect marketing tool to grab attention of potential customers with superior quality print and durable material.",
+        "image": "/assets/media/home-cat-feather.webp",
+        "link": "/feather-flag.html"
+      },
+      {
+        "title": "pole kits",
+        "text": "Four piece fiberglass pole slides into flags which fits nicely onto the aluminum ground anchor. Standard feather flag pole set & ground stake kit comes with ground stake and fits nicely into 40\" black oxford carrying bag. Kit weighs 7.5 lbs.",
+        "image": "/assets/media/home-cat-polekit.webp",
+        "link": "/pole-display.html"
+      }
+    ]
+  },
+  "factory": {
+    "title": "Wolflag factory",
+    "image": "/assets/media/about-factory.webp"
+  }
+}

@@ -1,0 +1,287 @@
+# WOLFLAG 网站管理后台配置（Decap CMS）
+# 部署到 GitHub + Cloudflare Pages 后需改两个地方：
+#   1. repo:     改成你的 GitHub 仓库，如 "yourname/wolflag-site"
+#   2. base_url: 改成 OAuth 代理地址，如 "https://decap-proxy.你的名字.workers.dev"
+# 详细步骤见仓库根目录 README.md
+
+backend:
+  name: github
+  repo: 你的GitHub用户名/wolflag-site     # TODO: 部署时替换
+  branch: main
+  base_url: https://你的代理worker域名.workers.dev   # TODO: 部署时替换
+
+media_folder: "media"                 # 上传图片保存位置（站内图片库）
+public_folder: "/assets/media"        # 网站上图片 URL 前缀
+logo_url: "/assets/media/favicon.webp"
+site_url: https://wolflag.pages.dev
+
+collections:
+  # ---------- 站点设置：导航 / 页脚 / 联系方式 ----------
+  - name: settings
+    label: 站点设置
+    files:
+      - name: site
+        label: 导航 / 页脚 / 联系方式
+        file: content/settings.json
+        fields:
+          - { label: 品牌名, name: brand, widget: string }
+          - { label: Logo, name: logo, widget: image }
+          - label: 导航菜单
+            name: nav
+            widget: list
+            summary: "{{fields.label}} → {{fields.url}}"
+            fields:
+              - { label: 菜单文字, name: label, widget: string }
+              - { label: 链接, name: url, widget: string }
+              - { label: 外链(新窗口打开), name: external, widget: boolean, default: false }
+          - label: 联系按钮
+            name: contactButton
+            widget: object
+            fields:
+              - { label: 按钮文字, name: text, widget: string }
+              - { label: 按钮链接, name: url, widget: string }
+          - label: 页脚
+            name: footer
+            widget: object
+            fields:
+              - label: 地址区块
+                name: sections
+                widget: list
+                summary: "{{fields.heading}}"
+                fields:
+                  - { label: 标题, name: heading, widget: string }
+                  - label: 地址行
+                    name: lines
+                    widget: list
+                    field: { label: 行, name: line, widget: string }
+              - label: 电话
+                name: phones
+                widget: list
+                field: { label: 电话, name: phone, widget: string }
+              - { label: 邮箱, name: email, widget: string }
+              - { label: 页脚 Logo, name: logo, widget: image, required: false }
+              - label: 社交图标
+                name: icons
+                widget: list
+                field: { label: 图标, name: icon, widget: image }
+              - { label: 版权行, name: copyright, widget: string }
+
+  # ---------- 首页 ----------
+  - name: home
+    label: 首页
+    files:
+      - name: page
+        label: 首页内容
+        file: content/home.json
+        fields:
+          - label: SEO
+            name: seo
+            widget: object
+            fields:
+              - { label: 页面标题, name: title, widget: string }
+              - { label: 页面描述, name: description, widget: text }
+          - label: 首屏 (Hero)
+            name: hero
+            widget: object
+            fields:
+              - { label: 大标题, name: title, widget: string }
+              - { label: 副文案, name: text, widget: text }
+              - { label: 横幅图片, name: image, widget: image }
+              - label: 特性标签
+                name: features
+                widget: list
+                field: { label: 标签, name: tag, widget: string }
+          - label: 简介区块
+            name: intro
+            widget: object
+            fields:
+              - { label: 标题, name: title, widget: string }
+              - { label: 文案, name: text, widget: text }
+              - label: 照片
+                name: images
+                widget: list
+                field: { label: 图片, name: image, widget: image }
+          - label: 主要产品
+            name: categories
+            widget: object
+            fields:
+              - { label: 区块标题, name: title, widget: string }
+              - { label: 导语, name: intro, widget: text }
+              - label: 产品卡片
+                name: items
+                widget: list
+                summary: "{{fields.title}}"
+                fields:
+                  - { label: 卡片标题, name: title, widget: string }
+                  - { label: 卡片文案, name: text, widget: text }
+                  - { label: 图片, name: image, widget: image }
+                  - { label: 跳转链接, name: link, widget: string }
+
+  # ---------- 关于我们 ----------
+  - name: about
+    label: 关于我们
+    files:
+      - name: page
+        label: 关于我们内容
+        file: content/about.json
+        fields:
+          - label: SEO
+            name: seo
+            widget: object
+            fields:
+              - { label: 页面标题, name: title, widget: string }
+              - { label: 页面描述, name: description, widget: text }
+          - label: 页头
+            name: hero
+            widget: object
+            fields:
+              - { label: 标题, name: title, widget: string }
+              - { label: 副标题, name: subtitle, widget: string }
+              - { label: 页头图片, name: image, widget: image }
+          - label: 介绍段落
+            name: paragraphs
+            widget: list
+            field: { label: 段落, name: text, widget: text }
+          - { label: 工厂图片, name: factoryImage, widget: image }
+          - label: 客户
+            name: clients
+            widget: object
+            fields:
+              - { label: 区块标题, name: title, widget: string }
+              - { label: 大标题, name: tagline, widget: string }
+              - { label: 副文案, name: subtitle, widget: string }
+              - label: 客户 Logo
+                name: logos
+                widget: list
+                field: { label: Logo, name: logo, widget: image }
+          - label: 常见问题 (FAQ)
+            name: faq
+            widget: list
+            summary: "{{fields.q}}"
+            fields:
+              - { label: 问题, name: q, widget: string }
+              - { label: 答案, name: a, widget: text }
+
+  # ---------- 产品：羽毛旗 ----------
+  - name: feather-flags
+    label: 羽毛旗产品页
+    files:
+      - name: page
+        label: Feather flag
+        file: content/products/feather-flags.json
+        fields:
+          - label: SEO
+            name: seo
+            widget: object
+            fields:
+              - { label: 页面标题, name: title, widget: string }
+              - { label: 页面描述, name: description, widget: text }
+          - { label: 页面标题, name: heading, widget: string }
+          - { label: 徽标文案, name: badge, widget: string }
+          - label: 产品
+            name: products
+            widget: list
+            summary: "{{fields.name}}"
+            fields:
+              - { label: 名称, name: name, widget: string }
+              - { label: 尺寸, name: size, widget: string }
+              - { label: 材质/工艺, name: material, widget: string }
+              - { label: 描述, name: desc, widget: text }
+              - { label: 图片, name: image, widget: image }
+          - { label: 底部引导语, name: cta, widget: string }
+
+  # ---------- 产品：横幅 ----------
+  - name: banners
+    label: 横幅产品页
+    files:
+      - name: page
+        label: Banner
+        file: content/products/banners.json
+        fields:
+          - label: SEO
+            name: seo
+            widget: object
+            fields:
+              - { label: 页面标题, name: title, widget: string }
+              - { label: 页面描述, name: description, widget: text }
+          - { label: 页面标题, name: heading, widget: string }
+          - { label: 标语, name: tagline, widget: string }
+          - label: 产品
+            name: products
+            widget: list
+            summary: "{{fields.name}}"
+            fields:
+              - { label: 名称, name: name, widget: string }
+              - { label: 描述, name: desc, widget: string }
+              - { label: 材质, name: material, widget: string }
+              - { label: 细节说明, name: detail, widget: text }
+              - { label: 图片, name: image, widget: image }
+
+  # ---------- 产品：国旗 ----------
+  - name: national-flags
+    label: 国旗产品页
+    files:
+      - name: page
+        label: National Flag
+        file: content/products/national-flags.json
+        fields:
+          - label: SEO
+            name: seo
+            widget: object
+            fields:
+              - { label: 页面标题, name: title, widget: string }
+              - { label: 页面描述, name: description, widget: text }
+          - { label: 页面标题, name: heading, widget: string }
+          - { label: 标语, name: tagline, widget: string }
+          - label: 产品
+            name: products
+            widget: list
+            summary: "{{fields.name}}"
+            fields:
+              - { label: 名称, name: name, widget: string }
+              - { label: 尺寸, name: size, widget: string }
+              - { label: 材质, name: material, widget: string }
+              - { label: 印刷工艺, name: printing, widget: string }
+              - { label: 图片, name: image, widget: image }
+
+  # ---------- 产品：旗杆展架 ----------
+  - name: pole-display
+    label: 旗杆展架产品页
+    files:
+      - name: page
+        label: Pole & Display
+        file: content/products/pole-display.json
+        fields:
+          - label: SEO
+            name: seo
+            widget: object
+            fields:
+              - { label: 页面标题, name: title, widget: string }
+              - { label: 页面描述, name: description, widget: text }
+          - { label: 页面标题, name: heading, widget: string }
+          - { label: 副标题, name: subheading, widget: string }
+          - { label: 副标题说明, name: subtext, widget: text }
+          - label: 主打产品 (大型卡)
+            name: featured
+            widget: list
+            summary: "{{fields.name}}"
+            fields:
+              - { label: 名称, name: name, widget: string }
+              - { label: 描述, name: desc, widget: text }
+              - { label: 补充说明, name: detail, widget: string }
+              - { label: 强调标签, name: tag, widget: string }
+              - { label: 图片, name: image, widget: image }
+          - label: 配件专栏
+            name: ingredients
+            widget: object
+            fields:
+              - { label: 专栏标题, name: title, widget: string }
+              - { label: 副标题, name: subtitle, widget: string }
+              - label: 配件
+                name: items
+                widget: list
+                summary: "{{fields.name}}"
+                fields:
+                  - { label: 名称, name: name, widget: string }
+                  - { label: 描述, name: desc, widget: text }
+                  - { label: 图片, name: image, widget: image }

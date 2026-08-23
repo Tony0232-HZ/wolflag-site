@@ -1,0 +1,61 @@
+{
+  "seo": {
+    "title": "Pole & Display - WOLFLAG",
+    "description": "Feather flag pole kits, indoor flag pole kits, water tank bases, water bags, chrome cross bases, square bases, tension fabric display stands and ground pegs."
+  },
+  "heading": "Pole & Display",
+  "subheading": "Featured Products",
+  "subtext": "The recommended popular items on this website are always in high demand and are known for their quality and affordability.",
+  "featured": [
+    {
+      "name": "Feather flag pole kit",
+      "desc": "Fiberglass and aluminum pole set, one galvanized steel ground stake, and an Oxford carrying bag. For use in wind gusts up to 31 miles per hour. Pole length: 9.51ft (without flag attached)",
+      "detail": "Suitable for flag size: 6.75ft x 2.2ft",
+      "tag": "Other pole sizes are available for selection.",
+      "image": "/assets/media/pole-01.webp"
+    },
+    {
+      "name": "Indoor flag pole kit",
+      "desc": "Telescoping aluminum silver pole, made of quality aluminum alloy. it is suitable for sending to your friends, colleagues, relatives, neighbors, family members and others you care and love, they will be happy to receive this gift.",
+      "detail": "",
+      "tag": "American flag: approx. 3 x 5 ft",
+      "image": "/assets/media/pole-02.webp"
+    }
+  ],
+  "ingredients": {
+    "title": "BETTER INGREDIENTS",
+    "subtitle": "The heart of our formulas",
+    "items": [
+      {
+        "name": "Chrome cross base",
+        "desc": "made of pure durable metal alloy and robust steel with a polished finish",
+        "image": "/assets/media/pole-03.webp"
+      },
+      {
+        "name": "Water tank base",
+        "desc": "Around 33.0lbs with water",
+        "image": "/assets/media/pole-04.webp"
+      },
+      {
+        "name": "Water bag",
+        "desc": "water bags provide stability to flag poles and stands",
+        "image": "/assets/media/pole-05.webp"
+      },
+      {
+        "name": "Ground Peg",
+        "desc": "For soft ground (Grass/Earth/Sand)",
+        "image": "/assets/media/pole-06.webp"
+      },
+      {
+        "name": "Square Base",
+        "desc": "The square configuration provides stability, allowing you to install your flag outside and in windy circumstances",
+        "image": "/assets/media/pole-07.webp"
+      },
+      {
+        "name": "Tension Fabric Display Stand",
+        "desc": "consists of a steel base with lightweight aluminum tube poles",
+        "image": "/assets/media/pole-08.webp"
+      }
+    ]
+  }
+}

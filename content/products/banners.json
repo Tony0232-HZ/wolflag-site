@@ -1,0 +1,52 @@
+{
+  "seo": {
+    "title": "Banner - WOLFLAG",
+    "description": "Custom banners: street pole banners, swallowtail banners, hook banners, grommet banners, tassel banners and banner stands. 100% knitted polyester, custom sizes, factory-direct."
+  },
+  "heading": "Banner",
+  "tagline": "Make your custom banners look just the way you want",
+  "products": [
+    {
+      "name": "street pole banner",
+      "desc": "attract the attention of passersby",
+      "material": "comstom size /100% knitted polyester",
+      "detail": "a sleeve at both the top and bottom.",
+      "image": "/assets/media/banner-1.webp"
+    },
+    {
+      "name": "Swallowtail banner",
+      "desc": "A unique shape, like a beautiful landscape.",
+      "material": "comstom size /100% knitted polyester",
+      "detail": "a sleeve at both the top and 2 grommets at bottom.",
+      "image": "/assets/media/banner-2.webp"
+    },
+    {
+      "name": "Hook banner",
+      "desc": "Customizable sizes to fit various spaces",
+      "material": "comstom size /100% knitted polyester",
+      "detail": "The left side is inlaid with sturdy hooks, easily securing it in your desired position",
+      "image": "/assets/media/banner-3.webp"
+    },
+    {
+      "name": "grommet banner",
+      "desc": "provide reinforced holes through ropes, hooks, or ties",
+      "material": "comstom size /100% knitted polyester",
+      "detail": "metal rings inserted along the let edges, can be easily tied in various locations",
+      "image": "/assets/media/banner-4.webp"
+    },
+    {
+      "name": "tassel banner",
+      "desc": "adorned with tassels on its three edges",
+      "material": "comstom size /100% knitted polyester",
+      "detail": "Tassels make the banner stand out, providing a more elegant look",
+      "image": "/assets/media/banner-5.webp"
+    },
+    {
+      "name": "Banner stand",
+      "desc": "ideal for trade shows, exhibitions and promotion",
+      "material": "size:5.05ft*2ft/100% knitted polyester",
+      "detail": "easy to set up and dismantle, Banner stands take up minimal floor space",
+      "image": "/assets/media/banner-6.webp"
+    }
+  ]
+}
