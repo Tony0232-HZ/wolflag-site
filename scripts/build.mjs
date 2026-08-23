@@ -208,7 +208,7 @@ function featherBody(data) {
         ${p.size ? `<p class="f-name-lite">${esc(p.size)}</p>` : ''}
         <h2 class="f-title">${esc(p.name)}</h2>
         <p class="f-desc">${esc(p.material)}<br>${esc(p.desc)}</p>
-        <a class="f-cta" href="mailto:${settings.footer.email}">${esc(data.cta)}</a>
+        <p class="f-cta">${esc(data.cta)}</p>
       </div>
     </article>`).join('');
   return `
