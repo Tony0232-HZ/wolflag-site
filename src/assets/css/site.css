@@ -470,6 +470,7 @@ ul { list-style: none; }
   color: #1c1c1c;
   line-height: 1.2;
   letter-spacing: 0;
+  text-align: center;
 }
 
 .pole-hero { padding: 80px 0 0; }
@@ -524,12 +525,13 @@ ul { list-style: none; }
 }
 
 .feat-card img {
-  width: 100%;
+  width: calc(100% + 60px);
+  max-width: none;
   height: 368px;
   flex-shrink: 0;
   object-fit: cover;
   margin: auto -30px 0;
-  width: calc(100% + 60px);
+  display: block;
 }
 
 .ingredients { text-align: center; padding: 160px 0 69px; }
@@ -563,6 +565,7 @@ ul { list-style: none; }
   width: 320px;
   height: 320px;
   object-fit: cover;
+  border-radius: 16px;
 }
 
 .ing-card h4 {
