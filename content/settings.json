@@ -7,8 +7,7 @@
     { "label": "Banner", "url": "/banner.html", "external": false },
     { "label": "National Flag", "url": "/national-flag.html", "external": false },
     { "label": "Pole & Display", "url": "/pole-display.html", "external": false },
-    { "label": "About Us", "url": "/about-us.html", "external": false },
-    { "label": "More", "url": "https://waimao.163.com/dealers", "external": true }
+    { "label": "About Us", "url": "/about-us.html", "external": false }
   ],
   "contactButton": { "text": "Contact Us", "url": "mailto:eden@wolflag.com" },
   "footer": {

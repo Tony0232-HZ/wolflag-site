@@ -71,14 +71,16 @@ ul { list-style: none; }
 .nav-menu {
   display: flex;
   align-items: center;
-  gap: 26px;
-  margin-left: auto;
+  justify-content: flex-start;
+  gap: 31px;
+  flex: 1;
+  margin: 0 8px 0 32px;
 }
 
 .nav-menu a {
-  font-size: 14px;
-  color: rgba(0, 0, 0, 0.85);
-  padding: 4px 2px;
+  font-size: 16px;
+  color: #272e47;
+  padding: 6px 2px;
   border-bottom: 2px solid transparent;
 }
 
