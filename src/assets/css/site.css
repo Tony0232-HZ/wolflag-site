@@ -226,8 +226,9 @@ ul { list-style: none; }
 
 .section-sub {
   color: #282f48;
-  font-size: 14px;
-  max-width: 480px;
+  font-size: 18px;
+  line-height: 1.7;
+  max-width: 540px;
   margin: 0 auto;
 }
 
@@ -310,7 +311,7 @@ ul { list-style: none; }
 .main-products .intro {
   text-align: center;
   color: #6b7280;
-  font-size: 20px;
+  font-size: 18px;
   line-height: 24px;
   text-transform: uppercase;
   max-width: 640px;
