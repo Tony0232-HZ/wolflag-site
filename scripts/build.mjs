@@ -123,10 +123,17 @@ ${footer()}
 function homeBody() {
   const pills = home.hero.features.map((f, i) =>
     `<span class="tag-pill ${i === 0 ? 'fill' : 'line'}">${esc(f)}</span>`).join('');
-  const photos = home.intro.images.map((p) => `<img src="${p}" alt="" loading="lazy" decoding="async">`).join('\n        ');
+  const imgs = home.intro.images;
+  const photos = `
+      <img src="${imgs[0]}" alt="WOLFLAG printing workshop" loading="lazy" decoding="async" width="1005" height="757">
+      <div class="mid">
+        <div class="tag-pills">${pills}</div>
+        <img src="${imgs[1]}" alt="Flags printing line" loading="lazy" decoding="async" width="1110" height="758">
+      </div>
+      <img src="${imgs[2]}" alt="Banner production machine" loading="lazy" decoding="async" width="960" height="540">`;
   const cards = home.categories.items.map((c, i) =>
     `<a class="cat-card ${i % 2 === 1 ? 'flip' : ''}" href="${esc(c.link)}">
-       <span class="cat-img"><img src="${c.image}" alt="${esc(c.title)}" loading="lazy" decoding="async"></span>
+       <span class="cat-img"><img src="${c.image}" alt="${esc(c.title)}" loading="lazy" decoding="async" width="700" height="700"></span>
        <span class="cat-info">
          <span class="cat-title">${esc(c.title)}</span>
          <span class="cat-desc">${esc(c.text)}</span>
@@ -147,8 +154,7 @@ function homeBody() {
     <div class="container">
       <h2 class="section-title">${esc(home.intro.title)}</h2>
       <p class="section-sub">${esc(home.intro.text)}</p>
-      <div class="tag-pills">${pills}</div>
-      <div class="photos-row">${photos}</div>
+      <div class="intro-photos">${photos}</div>
     </div>
   </section>
 
@@ -156,7 +162,7 @@ function homeBody() {
     <div class="container">
       <h2 class="eyebrow">${esc(home.categories.title)}</h2>
       <p class="intro">${esc(home.categories.intro)}</p>
-      <div class="cat-list">${cards}</div>
+      <div class="cat-grid">${cards}</div>
     </div>
   </section>`;
 }
