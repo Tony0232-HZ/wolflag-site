@@ -160,7 +160,7 @@ ul { list-style: none; }
 
 .home-hero {
   background: #faf7f5;
-  padding: 76px 0 120px;
+  padding: 76px 0 71px;
 }
 
 .home-hero .hero-row {
@@ -214,7 +214,7 @@ ul { list-style: none; }
   padding: 56px 0;
 }
 
-.section-center { text-align: center; padding: 161px 0 0; }
+.section-center { text-align: center; padding: 91px 0 0; }
 
 .section-title {
   font-size: 54px;
@@ -235,19 +235,23 @@ ul { list-style: none; }
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 51px;
+  gap: 29px;
+  margin: -11px 0 0;
 }
 
 .tag-pill {
-  border-radius: 999px;
-  padding: 3px 32px;
-  font-size: 17px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 328px;
+  height: 60px;
+  border-radius: 30px;
+  font-size: 18px;
   font-weight: 400;
-  line-height: 1.5;
 }
 
-.tag-pill.fill  { background: #1f2430; color: #fff; }
-.tag-pill.line { background: #fff; color: var(--navy); border: 1px solid #83879b; }
+.tag-pill.fill  { background: #04101b; color: #fff; }
+.tag-pill.line { background: #fff; color: var(--navy); border: 1.5px solid #cfd3da; }
 
 .intro-photos {
   display: grid;
@@ -305,13 +309,11 @@ ul { list-style: none; }
 
 .main-products .intro {
   text-align: center;
-  color: #4b5563;
-  font-size: 13px;
-  letter-spacing: .04em;
-  text-transform: uppercase;
-  max-width: 460px;
-  line-height: 1.8;
-  margin: 0 auto 60px;
+  color: #6b7280;
+  font-size: 20px;
+  line-height: 24px;
+  max-width: 640px;
+  margin: 0 auto 57px;
 }
 
 .cat-grid {
@@ -348,12 +350,12 @@ ul { list-style: none; }
   font-size: 20px;
   font-weight: 700;
   color: #111827;
-  margin-bottom: 14px;
+  margin-bottom: 36px;
   text-transform: none;
   letter-spacing: 0;
 }
 
-.cat-card .cat-desc { color: #4b5563; font-size: 13px; }
+.cat-card .cat-desc { color: #6b7280; font-size: 16px; line-height: 24px; }
 
 @media (max-width: 1000px) {
   .cat-grid { grid-template-columns: 1fr; }
