@@ -829,7 +829,7 @@ ul { list-style: none; }
   padding-bottom: 34px;
 }
 
-.footer-col { padding: 0 20px; }
+.footer-col { padding: 0 6px; }
 .footer-col:first-child { padding-left: 0; }
 
 .footer-col .f-brand { display: flex; align-items: center; margin-bottom: 28px; }
