@@ -92,6 +92,21 @@ git push -u origin main
 
 改坏也不会丢：每次发布都是一个 GitHub commit，可在 GitHub 网页上查看历史、随时回滚。
 
+## 新增产品类目页（自动发现机制）
+
+网站构建时会**自动扫描** `content/products/` 与 `content/pages/` 两个目录，每个 JSON 自动生成一个页面并进入 sitemap。
+
+新增一个类目页（例如 LED Display）只需三步：
+
+1. **后台创建内容文件**：打开 `/admin/` → **新增类目页** → 新建（示例页 `led-display.html` 已存在，可直接复制修改）
+   - `页面声明` 填三项：文件标识 `led-display` / 页面文件名 `led-display.html` / 排版模板 `simple`（通用）/ 导航地址 `/led-display.html`
+   - 填 SEO 标题、页面主标题、标语、上传产品图片并填写产品列表 → 保存
+2. **加导航菜单**：`/admin/` → 站点设置 → 导航菜单 → 添加一项（名称「LED Display」、链接 `/led-display.html`）→ 保存
+3. 1-3 分钟后线上出现新页面，自动进入 sitemap
+
+> 排版模板选择：`simple` 通用网格 | `flags` 国旗式 | `feather` 横卡式 | `bannerCards` 横幅式 | `pole` 旗杆展架式。
+> 参考：`content/pages/led-display.json`（仓库里已内置 LED 示例页，可直接替换内容）。
+
 ## SEO 说明
 
 - 每页标题/描述可在各自 content JSON 的 `seo` 字段管理

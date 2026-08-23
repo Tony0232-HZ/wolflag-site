@@ -48,5 +48,10 @@
       "printing": "silkscreen printing /digital printing",
       "image": "/assets/media/flag-06.webp"
     }
-  ]
+  ],
+  "page": {
+    "file": "national-flag.html",
+    "layout": "flags",
+    "nav": "/national-flag.html"
+  }
 }

@@ -21,22 +21,39 @@ const j = (p) => JSON.parse(readFileSync(p, 'utf8'));
 const settings = j(join(CONTENT, 'settings.json'));
 const home = j(join(CONTENT, 'home.json'));
 const about = j(join(CONTENT, 'about.json'));
-const pageFiles = {};
-for (const f of readdirSync(join(CONTENT, 'products'))) {
-  if (f.endsWith('.json')) pageFiles[f.replace(/\.json$/, '')] = j(join(CONTENT, 'products', f));
+
+/* 自动发现：content/products/* 与 content/pages/* 均注册为产品页 */
+const PAGE_DIRS = ['products', 'pages'];
+const pageFiles = {};   // key: json 文件名(不带扩展) -> 内容
+for (const dir of PAGE_DIRS) {
+  const abs = join(CONTENT, dir);
+  if (!existsSync(abs)) continue;
+  for (const f of readdirSync(abs)) {
+    if (f.endsWith('.json')) pageFiles[f.replace(/\.json$/, '')] = j(join(abs, f));
+  }
 }
 
 const SITE = 'https://wolflag.pages.dev'; // TODO: replace with real domain when attached
 
-/* ---------------- page registry ---------------- */
+/* ---------------- page registry（首页/关于页固定 + 产品页自动发现） ---------------- */
 const PAGES = [
-  { file: 'index.html',      slug: '/',                 title: home.seo.title,           desc: home.seo.description,        nav: '/' },
-  { file: 'feather-flag.html',  slug: '/feather-flag.html',  title: pageFiles['feather-flags'].seo.title,  desc: pageFiles['feather-flags'].seo.description,  nav: '/feather-flag.html' },
-  { file: 'banner.html', slug: '/banner.html',    title: pageFiles.banners.seo.title,        desc: pageFiles.banners.seo.description,        nav: '/banner.html' },
-  { file: 'national-flag.html', slug: '/national-flag.html', title: pageFiles['national-flags'].seo.title, desc: pageFiles['national-flags'].seo.description, nav: '/national-flag.html' },
-  { file: 'pole-display.html',  slug: '/pole-display.html',  title: pageFiles['pole-display'].seo.title,  desc: pageFiles['pole-display'].seo.description,  nav: '/pole-display.html' },
-  { file: 'about-us.html',      slug: '/about-us.html',      title: about.seo.title,            desc: about.seo.description,            nav: '/about-us.html' },
+  { file: 'index.html', slug: '/', title: home.seo.title, desc: home.seo.description, nav: '/' },
+  { file: 'about-us.html', slug: '/about-us.html', title: about.seo.title, desc: about.seo.description, nav: '/about-us.html' },
 ];
+for (const [key, data] of Object.entries(pageFiles)) {
+  const p = data.page || {};
+  const file = p.file || `${key.replace(/-$/, '')}.html`;
+  if (!/(^|\.)html$/.test(file)) throw new Error(`bad page.file for ${key}: ${file}`);
+  PAGES.push({
+    file,
+    slug: '/' + file,
+    title: (data.seo && data.seo.title) || `${data.heading || key} - WOLFLAG`,
+    desc: (data.seo && data.seo.description) || 'WOLFLAG products.',
+    layout: p.layout || 'grid3',
+    nav: p.nav || ('/' + file),
+    data,
+  });
+}
 
 /* ---------------- helpers ---------------- */
 const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -331,14 +348,41 @@ function aboutBody(data) {
 
 /* ---------------- render ---------------- */
 
-const bodies = new Map([
-  ['index.html', homeBody()],
-  ['feather-flag.html', featherBody(pageFiles['feather-flags'])],
-  ['banner.html', bannerBody(pageFiles.banners)],
-  ['national-flag.html', nfBody(pageFiles['national-flags'])],
-  ['pole-display.html', poleBody(pageFiles['pole-display'])],
-  ['about-us.html', aboutBody(about)],
-]);
+/** 通用产品页布局：标题+标语+产品网格（name/desc/image/specs 均可选） */
+function simpleBody(data) {
+  const products = (data.products || []).map((p) => `
+    <article class="product-card">
+      <span class="p-img"><img src="${p.image}" alt="${esc(p.name)}" loading="lazy" decoding="async" width="600" height="600"></span>
+      <div class="p-body">
+        <h2 class="p-name" ${data.titleFontSerif ? '' : 'style="font-family:Arial;font-weight:700;font-size:14px;letter-spacing:0;text-transform:none"'}>${esc(p.name)}</h2>
+        ${p.size ? `<p class="p-size">${esc(p.size)}</p>` : ''}
+        ${p.material ? `<p class="p-material">${esc(p.material)}</p>` : ''}
+        ${p.desc ? `<p class="p-desc">${esc(p.desc)}</p>` : ''}
+        ${(p.specs || []).map((sp) => `<p class="p-material">${esc(sp)}</p>`).join('')}
+      </div>
+    </article>`).join('');
+  return `
+  <section class="page-hero">
+    <div class="container">
+      <h1>${esc(data.heading || '')}</h1>
+      ${data.tagline ? `<p class="tagline" style="letter-spacing:0;text-transform:none">${esc(data.tagline)}</p>` : ''}
+    </div>
+  </section>
+  <section class="section">
+    <div class="container">
+      <div class="product-grid-3">${products}</div>
+    </div>
+  </section>`;
+}
+
+/** 按 layout 分派 body 渲染 */
+function renderBody(p) {
+  if (p.layout === 'feather') return featherBody(p.data);
+  if (p.layout === 'bannerCards') return bannerBody(p.data);
+  if (p.layout === 'flags') return nfBody(p.data);
+  if (p.layout === 'pole') return poleBody(p.data);
+  return simpleBody(p.data); // 默认通用布局（新类目页）
+}
 
 /* wipe old html */
 for (const f of readdirSync(STATIC)) {
@@ -349,16 +393,17 @@ for (const f of readdirSync(STATIC)) {
 
 for (const p of PAGES) {
   const title = p.title || 'WOLFLAG — Professional manufacturer of flags, banners, and poles';
+  const body = p.file === 'index.html' ? homeBody() : p.file === 'about-us.html' ? aboutBody(about) : renderBody(p);
   const html = shell({
     title,
     desc: p.desc,
-    body: bodies.get(p.file),
+    body,
     active: p.nav,
     ogImage: home.hero.image,
     footerMode: p.file === 'index.html' || p.file === 'about-us.html' ? 'full' : 'minimal',
   });
   writeFileSync(join(STATIC, p.file), html);
-  console.log('built', p.file);
+  console.log('built', p.file, '→ layout:', p.layout || 'home');
 }
 
 /* static assets (css/js sources) */

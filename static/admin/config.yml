@@ -165,6 +165,47 @@ collections:
               - { label: 问题, name: q, widget: string }
               - { label: 答案, name: a, widget: text }
 
+  # ---------- 新增类目页（通用模板） ----------
+  - name: pages
+    label: 新增类目页
+    folder: content/pages
+    create: true
+    slug: "{{fields.slug}}"
+    summary: "{{fields.heading}}"
+    identifier_field: slug
+    fields:
+      - { label: 文件标识（英文小写，如 led-display）, name: slug, widget: string, hint: 用于内容文件与网址命名 }
+      - label: 页面声明
+        name: page
+        widget: object
+        fields:
+          - { label: 页面文件名（含 .html）, name: file, widget: string, hint: 如 led-display.html }
+          - label: 排版模板
+            name: layout
+            widget: select
+            options: [simple, flags, feather, bannerCards, pole]
+            default: simple
+            hint: simple=通用网格；flags=国旗式；feather=横卡式；bannerCards=横幅式；pole=旗杆展架式
+          - { label: 导航地址，如 /led-display.html, name: nav, widget: string }
+      - label: SEO
+        name: seo
+        widget: object
+        fields:
+          - { label: 页面标题, name: title, widget: string }
+          - { label: 页面描述, name: description, widget: text }
+      - { label: 页面主标题, name: heading, widget: string }
+      - { label: 标语（可选）, name: tagline, widget: string, required: false }
+      - label: 产品列表
+        name: products
+        widget: list
+        summary: "{{fields.name}}"
+        fields:
+          - { label: 名称, name: name, widget: string }
+          - { label: 尺寸（可选）, name: size, widget: string, required: false }
+          - { label: 材质（可选）, name: material, widget: string, required: false }
+          - { label: 描述, name: desc, widget: text, required: false }
+          - { label: 图片, name: image, widget: image }
+
   # ---------- 产品：羽毛旗 ----------
   - name: feather-flags
     label: 羽毛旗产品页

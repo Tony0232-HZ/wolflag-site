@@ -57,5 +57,10 @@
         "image": "/assets/media/pole-08.webp"
       }
     ]
+  },
+  "page": {
+    "file": "pole-display.html",
+    "layout": "pole",
+    "nav": "/pole-display.html"
   }
 }

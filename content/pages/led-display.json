@@ -1,0 +1,23 @@
+{
+  "slug": "led-display",
+  "page": {
+    "file": "led-display.html",
+    "layout": "simple",
+    "nav": "/led-display.html"
+  },
+  "seo": {
+    "title": "LED Display - WOLFLAG",
+    "description": "LED display screens for advertising and events, custom sizes and designs from WOLFLAG."
+  },
+  "heading": "LED Display",
+  "tagline": "Make your message shine on LED screens",
+  "products": [
+    {
+      "name": "P10 Outdoor LED Display",
+      "size": "custom size",
+      "material": "SMD / full color",
+      "desc": "High brightness outdoor LED screen, waterproof and weatherproof.",
+      "image": "/assets/media/banner-1.webp"
+    }
+  ]
+}

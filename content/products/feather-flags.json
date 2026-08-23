@@ -35,5 +35,10 @@
       "image": "/assets/media/feather-4.webp"
     }
   ],
-  "cta": "Contact us to discuss specific customization plans."
+  "cta": "Contact us to discuss specific customization plans.",
+  "page": {
+    "file": "feather-flag.html",
+    "layout": "feather",
+    "nav": "/feather-flag.html"
+  }
 }

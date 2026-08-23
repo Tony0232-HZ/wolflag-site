@@ -48,5 +48,10 @@
       "detail": "easy to set up and dismantle, Banner stands take up minimal floor space",
       "image": "/assets/media/banner-6.webp"
     }
-  ]
+  ],
+  "page": {
+    "file": "banner.html",
+    "layout": "bannerCards",
+    "nav": "/banner.html"
+  }
 }
