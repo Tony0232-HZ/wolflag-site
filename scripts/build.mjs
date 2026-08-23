@@ -141,7 +141,7 @@ function homeBody() {
      </a>`).join('\n');
   return `
   <section class="home-hero">
-    <div class="container">
+    <div class="container hero-row">
       <h1>${esc(home.hero.title)}</h1>
       <p class="hero-text">${esc(home.hero.text)}</p>
     </div>
