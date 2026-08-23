@@ -299,7 +299,6 @@ function aboutBody(data) {
       ${`<span>${esc(data.hero.title)}</span>`.repeat(8)}
     </div>
   </div>
-  <div class="container"><h2 class="about-heading">${esc(data.hero.title)}</h2></div>
   <div class="container about-body">
     <div class="about-copy">
       ${paras}
