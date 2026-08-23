@@ -33,7 +33,7 @@ for (const dir of PAGE_DIRS) {
   }
 }
 
-const SITE = 'https://wolflag.pages.dev'; // TODO: replace with real domain when attached
+const SITE = 'https://www.wolflag.com';
 
 /* ---------------- page registry（首页/关于页固定 + 产品页自动发现） ---------------- */
 const PAGES = [
