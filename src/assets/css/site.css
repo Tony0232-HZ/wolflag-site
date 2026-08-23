@@ -152,7 +152,7 @@ ul { list-style: none; }
 
 .page-hero .tagline { margin-top: 12px; color: #556; font-size: 14px; letter-spacing: .12em; text-transform: uppercase; }
 
-.page-badge { font-size: 16px; font-weight: 400; color: #5b5f6b; letter-spacing: .04em; }
+.page-badge { font-size: 16px; font-weight: 500; color: #5b5f6b; letter-spacing: .04em; }
 
 /* ==========================================================================
    Home hero
@@ -442,7 +442,7 @@ ul { list-style: none; }
   display: flex;
   gap: 26px;
   background: #fff;
-  border: 1px solid #ececf0;
+  border: 1px solid #d9e2f5;
   border-radius: 10px;
   overflow: hidden;
 }
