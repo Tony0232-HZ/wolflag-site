@@ -112,7 +112,7 @@ function shell({ title, desc, body, active, ogImage, footerMode }) {
   <link rel="icon" type="image/png" href="/assets/media/favicon.webp">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Catamaran:wght@400;700&family=Antic+Slab&family=Bona+Nova:wght@400;700&family=Rufina&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Catamaran:wght@400;700&family=Antic+Slab&family=Bona+Nova:wght@400;700&family=Rufina&family=Acme&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/assets/css/site.css">
 </head>
 <body>
@@ -285,7 +285,7 @@ function aboutBody(data) {
     <div class="faq-item ${i === 0 ? 'open' : ''}">
       <button class="faq-q" aria-expanded="${i === 0}">
         <span>${esc(f.q)}</span>
-        <span class="chev" aria-hidden="true">&#9650;</span>
+        <span class="chev" aria-hidden="true">&#9660;</span>
       </button>
       <div class="faq-a"><p>${esc(f.a)}</p></div>
     </div>`).join('');
@@ -293,19 +293,19 @@ function aboutBody(data) {
   <div class="about-hero">
     <img src="${data.hero.image}" alt="WOLFLAG factory workshop" width="1500" height="575">
   </div>
+  <section class="about-grey">
   <div class="about-marquee" aria-hidden="true">
     <div class="track">
       ${`<span>${esc(data.hero.title)}</span>`.repeat(8)}
     </div>
   </div>
-  <section class="about-body">
-    <div class="container" style="display:contents">
-      <div class="about-copy">
-        <h2>${esc(data.hero.title)}</h2>
-        ${paras}
-      </div>
-      <div class="about-img"><img src="${data.factoryImage}" alt="WOLFLAG factory building" loading="lazy" decoding="async" width="1259" height="944"></div>
+  <div class="container"><h2 class="about-heading">${esc(data.hero.title)}</h2></div>
+  <div class="container about-body">
+    <div class="about-copy">
+      ${paras}
     </div>
+    <div class="about-img"><img src="${data.factoryImage}" alt="WOLFLAG factory building" loading="lazy" decoding="async" width="1259" height="944"></div>
+  </div>
   </section>
   <section class="clients">
     <div class="container">
