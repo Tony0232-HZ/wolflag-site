@@ -158,7 +158,8 @@ feather 卡: 淡蓝边框 #d9e2f5 圆角10、size 行15px灰、标题18px/700、
 - 视觉基准截图：`screenshots-original/`（原站渲染）、`screenshots-new/`（新版渲染）、人工标注稿在用户桌面（001/004/011/016/019 等）——**用户截图即"标准"**
 - 一次迁移工具 `scripts/extract.py`：含 48 张图的 md5→语义名映射表（改图命名必须同步此表）
 - `admin/index.html`:jsdelivr CDN 载入 decap-cms@3.9.0
-- 后台登录 OAuth 尚未完成（README 有步骤：GitHub OAuth App + decap-proxy 部署到 Cloudflare Worker + config.yml 的 `repo`/`base_url` 替换）
+- **后台登录 OAuth 已配置完成并实测通过（2026-08-24）**：GitHub OAuth App `wolflag admin`（Callback 登记**纯净** `https://decap.tony222.workers.dev/callback`，无 `?provider` 尾巴）；Cloudflare Worker `decap`（密钥 GITHUB_OAUTH_ID=Ov23liV3OrfRG3tL4IlZ、GITHUB_OAUTH_SECRET 见 wrangler secret）；config.yml 的 `repo/base_url` 已填实；本地克隆 `H:\工作总集\wolflag 网站信息\2026 公司网站\decap-proxy`（**已修改源码**：handleCallback 删除 provider 检查 + /auth 跳转改 302+no-store + redirect_uri 纯净）——Wrangler 登录用 `CLOUDFLARE_API_TOKEN` 环境变量（api token：Edit Cloudflare Workers 模板、建 token 时删 Zone Resources 行）
+- 登录排障三字诀：client_id（选中复制，连字符/大小写）、callback 登记值、redirect_uri 三处逐字核对；state 不变 = 浏览器缓存旧 301，用无痕窗口
 - 用户是中文母语、非程序员；沟通用中文、给可点击的步骤；一切改动以用户确认图片为准
 - 全站目标对象：海外 B2B 买家（英文站点、询盘全靠邮箱/电话：tony@wolflag.com + tony@wolflagdisplay.com、+86 (571) 28239823）
 
