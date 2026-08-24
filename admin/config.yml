@@ -6,14 +6,14 @@
 
 backend:
   name: github
-  repo: 你的GitHub用户名/wolflag-site     # TODO: 部署时替换
+  repo: Tony0232-HZ/wolflag-site
   branch: main
-  base_url: https://你的代理worker域名.workers.dev   # TODO: 部署时替换
+  base_url: https://decap.tony222.workers.dev
 
 media_folder: "media"                 # 上传图片保存位置（站内图片库）
 public_folder: "/assets/media"        # 网站上图片 URL 前缀
 logo_url: "/assets/media/favicon.webp"
-site_url: https://wolflag.pages.dev
+site_url: https://www.wolflag.com
 
 collections:
   # ---------- 站点设置：导航 / 页脚 / 联系方式 ----------
