@@ -2,8 +2,8 @@
 slug: Stands & Displays
 page:
   layout: bannerCards
-  file: stands-displays.html
-  nav: /stands-displays.html
+  file: Stands-Displays.html
+  nav: /Stands-Displays.html
 seo:
   title: Stands & Displays
   description: Designed for durability and high impact, these stands and displays
