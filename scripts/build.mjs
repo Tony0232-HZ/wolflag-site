@@ -73,7 +73,6 @@ function header(active) {
     <ul class="nav-menu">
       ${menu}
     </ul>
-    ${settings.catalogButton ? `<a class="nav-cta nav-cta-catalog" href="${esc(settings.catalogButton.file)}" download>${esc(settings.catalogButton.text)}</a>` : ''}
     <a class="nav-cta" href="${esc(settings.contactButton.url)}">${esc(settings.contactButton.text)}</a>
   </nav>
 </header>`;
@@ -170,6 +169,7 @@ function homeBody() {
      </a>`).join('\n');
   return `
   <section class="home-hero">
+    ${settings.catalogButton ? `<div class="container hero-catalog"><a class="hero-catalog-btn" href="${esc(settings.catalogButton.file)}" download>${esc(settings.catalogButton.text)}</a></div>` : ''}
     <div class="container hero-row">
       <h1>${esc(home.hero.title)}</h1>
       <p class="hero-text">${esc(home.hero.text)}</p>

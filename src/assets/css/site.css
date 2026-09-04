@@ -101,11 +101,20 @@ ul { list-style: none; }
 }
 .nav-cta:hover { background: var(--blue-dark); }
 
-.nav-cta-catalog {
+.home-hero .hero-catalog {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 28px;
+}
+.hero-catalog-btn {
   background: var(--catalog);
   color: var(--navy) !important;
+  font-weight: 600;
+  border-radius: 6px;
+  padding: 10px 18px;
+  display: inline-block;
 }
-.nav-cta-catalog:hover { background: var(--catalog-dark); }
+.hero-catalog-btn:hover { background: var(--catalog-dark); }
 
 .nav-toggle {
   display: none;
