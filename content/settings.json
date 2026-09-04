@@ -28,14 +28,14 @@
       "external": false
     },
     {
-      "label": "About Us",
-      "url": "/about-us.html",
-      "external": false
-    },
-    {
       "external": false,
       "label": "Stands & Displays",
       "url": "/Stands-Displays.html"
+    },
+    {
+      "label": "About Us",
+      "url": "/about-us.html",
+      "external": false
     }
   ],
   "contactButton": {
