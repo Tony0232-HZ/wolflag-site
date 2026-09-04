@@ -5,8 +5,9 @@ page:
   file: Stands-Displays.html
   nav: /Stands-Displays.html
 seo:
-  title: Stands & Displays
+  title: Stands & Displays - WOLFLAG
   description: Designed for durability and high impact, these stands and displays
     ensure your message stands out in any crowd.
-heading: Maximize Visibility with Easy Setup
+heading: Stands & Displays
+tagline: Maximize Visibility with Easy Setup
 ---
