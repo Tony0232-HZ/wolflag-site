@@ -23,14 +23,14 @@
       "external": false
     },
     {
-      "label": "Flagpoles & Accessories",
-      "url": "/pole-display.html",
-      "external": false
-    },
-    {
       "external": false,
       "label": "Stands & Displays",
       "url": "/stands-displays.html"
+    },
+    {
+      "label": "Flagpoles & Accessories",
+      "url": "/pole-display.html",
+      "external": false
     },
     {
       "label": "About Us",
