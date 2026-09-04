@@ -170,6 +170,7 @@ collections:
     label: 新增类目页
     folder: content/pages
     create: true
+    format: json
     slug: "{{fields.slug}}"
     summary: "{{fields.heading}}"
     identifier_field: slug
