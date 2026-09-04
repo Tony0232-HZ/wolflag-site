@@ -104,8 +104,22 @@ git push -u origin main
 2. **加导航菜单**：`/admin/` → 站点设置 → 导航菜单 → 添加一项（名称「LED Display」、链接 `/led-display.html`）→ 保存
 3. 1-3 分钟后线上出现新页面，自动进入 sitemap
 
+> ⚠️ **新页面不出现？先检查这三点**：
+> ① `content/pages/` 里对应文件是 **`.json`** 不是 `.md`（后台已配 `format: json`，正常为 `.json`；若是 `.md` 会被忽略）；
+> ②「文件标识(slug)」、文件名、网址都**英文小写、无空格**（如 `stands-displays`，别用 "Stands & Displays"）；
+> ③ 页面没重新生成——后台保存会自动触发 Cloudflare 重新构建，约 1-3 分钟。
+
 > 排版模板选择：`simple` 通用网格 | `flags` 国旗式 | `feather` 横卡式 | `bannerCards` 横幅式 | `pole` 旗杆展架式。
 > 参考：`content/pages/led-display.json`（仓库里已内置 LED 示例页，可直接替换内容）。
+
+## 产品手册下载按钮（Download Catalog PDF）
+
+首页首屏右上角有一个金色「Download Catalog (PDF)」按钮（**只出现在首页**），点击可下载产品手册。相关配置：
+
+- **数据**：`content/settings.json` → `catalogButton`（`text` 按钮文字、`file` PDF 路径）。当前 PDF：`media/wolflag-catalog.pdf`（13.6MB），网站引用 `/assets/media/wolflag-catalog.pdf`。
+- **后台更新手册**：`/admin/` → 站点设置 →「产品手册下载按钮」→ 用文件组件上传/替换 PDF → 保存，线上自动生效。
+- **配色**：金黄橙 `#f59e0b`（hover `#d97706`）+ 深藏青字，CSS 变量在 `src/assets/css/site.css` 的 `:root`（`--catalog` / `--catalog-dark`）。改色只改这两个变量。
+- **为何在首页而非顶栏**：早期放共享顶栏导致菜单拥挤且间距难调，故移到首页首屏（`homeBody()` 里用绝对定位渲染，右边缘与首屏大图对齐）。
 
 ## SEO 说明
 

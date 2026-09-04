@@ -50,6 +50,7 @@ wolflag-site/
   "logo": "/assets/media/logo.webp",
   "nav": [ { "label": "Home", "url": "/", "external": false }, ... ],   // 菜单；external=true 开新窗
   "contactButton": { "text": "Contact Us", "url": "mailto:tony@wolflag.com" },
+  "catalogButton": { "text": "Download Catalog (PDF)", "file": "/assets/media/wolflag-catalog.pdf" },  // 首页首屏"下载手册"按钮(仅首页显示)；file=PDF路径
   "footer": {
     "sections": [ { "heading": "Wolflag factory", "lines": ["JianAn Rd., Fengjing Town,", "Jinshan District, Shanghai CHINA"] },
                   { "heading": "Hangzhou Loyal Import & Export co, ltd", "lines": ["Room 620, ...", "hangzhou China"] } ],
@@ -79,6 +80,17 @@ wolflag-site/
 现有产品细节不要动，除非用户要求：feather 4 款（Feather/Leaf/Rectangle/Teardrop，Rect size 6.56ft*2.62ft、Teardrop 11.8ft*3.9ft；CTA 是**纯文本**非链接）；national-flags 6 旗（China/USA/EU/Malaysia/Kuwait/UN；**尺寸映射已验证**：China 3.15*2.1/4.72*3.15/6.3*4.2、USA 1.9*1/2.8*1.5/3.78*2、EU 3*5/3.3*6.6/4*6、Malaysia=Kuwait 2*1/4*2/6*3/8*4、UN 2*3/3*5/4*6）；banners 6 款（材质统一 comstom size/100% knitted polyester=原站拼写，**保留原拼写**）；pole 主卡2+配件6。
 
 ### 2.4 pages/*.json（新增类目页模板，见 §5）
+
+> ⚠️ 只认 `.json`：`pages/` 与 `products/` 下的文件**必须**是 `.json`。后台已配置 `format: json`，正常会存成 `.json`；若看到 `.md` 说明格式不对，页面会被构建引擎**静默忽略、不生成**。
+
+### 2.5 首页"下载产品手册"按钮（Download Catalog PDF）
+
+- **只出现在首页**（`homeBody()`），**不在**共享顶栏。由 `settings.catalogButton` 驱动：
+  `{ "text": "Download Catalog (PDF)", "file": "/assets/media/wolflag-catalog.pdf" }`
+- 渲染为 `.hero-catalog-btn`，**绝对定位**（首页右上角、紧贴 Contact Us 下方，约 23px 缝隙，右边缘与首屏大图对齐）。改它**只在 `homeBody()` + site.css 的 `.home-hero .hero-catalog-btn`**，别动共享的 `header()`。
+- PDF 放 `media/`（当前 `wolflag-catalog.pdf`，13.6MB），网站引用 `/assets/media/<file>.pdf`。
+- **后台上传入口**：`/admin/` → 站点设置 → «产品手册下载按钮» → `file` 组件（`widget: file`）上传/替换 PDF，保存后自动生效。
+- 配色=金黄橙：CSS 变量 `--catalog:#f59e0b`、`--catalog-dark:#d97706`（site.css `:root`），文字深藏青 `--navy`。**改色只改这两个变量**。
 
 ---
 
@@ -115,6 +127,8 @@ feather 卡: 淡蓝边框 #d9e2f5 圆角10、size 行15px灰、标题18px/700、
 
 ## 5. 新增类目页（自动发现机制）
 
+> ⚠️ **两条铁律**：① 文件必须 `.json`（后台已配 `format: json`；若存成 `.md` 会被忽略、页面不出现）；② `slug`/`file`/`nav` 一律**英文小写、无空格**（如 `stands-displays`、`stands-displays.html`、`/stands-displays.html`），别用 "Stands & Displays"——否则文件名/网址大小写不匹配 → 404。
+
 三步（用户视角在后台完成；代码侧只需保证机制完整）：
 1. `content/pages/<slug>.json`，结构见 `content/pages/led-display.json`（内置示例，替换内容即可）：
    `slug` + `page{file,layout,nav}` + `seo` + `heading/tagline` + `products[{name,size,material,desc,image}]`
@@ -134,9 +148,11 @@ feather 卡: 淡蓝边框 #d9e2f5 圆角10、size 行15px灰、标题18px/700、
 7. Decap media path = `media_folder: "media"` / `public_folder: "/assets/media"`；改路径约定要三处同步（config.yml + build.mjs 拷贝逻辑 + 内容引用）
 8. 现有 4 类产品 JSON 必须保留 `page` 声明字段（自动发现的钥匙）
 9. JSON 注释不支持；字符串含双引号须 `\"` 转义；UTF-8 保存
-10. **国内网络**：GitHub 直连常断，走代理 `git config http.proxy http://127.0.0.1:26001`（用户代理端口）；pip 用清华源；Playwright 截图用系统 Edge（`channel="msedge"`）无须下载浏览器；Google Fonts 国内可能加载慢（有回退字体兜底，不必强求）
+10. **国内网络**：GitHub 直连常断，走代理 `git config http.proxy http://127.0.0.1:7890`（**实测可用端口=7890**；旧文档写的 26001 已失效——该端口无监听、连不上）；pip 用清华源；Playwright 截图用系统 Edge（`channel="msedge"`）无须下载浏览器；Google Fonts 国内可能加载慢（有回退字体兜底，不必强求）
 11. **不要过度自信"视觉修正"**：本会话模型的图片读取通道不可用，看截图全靠用户贴图+探针测量；用户标注（红圈文字）是最高优先级需求
-12. 改动后回滚出口永远是 Git（`git revert <commit>`），每天渐进提交
+12. **新增类目页曾踩坑 .md**（2026-09-04）：后台把类目页存成 `stands-displays.md`，而构建**只认 `.json`** → 页面静默不生成、产品不显示、菜单指向空页。已修：`admin/config.yml` 的 `pages` collection 加 `format: json`。若再遇"存了不显示"，先看文件是否 `.md` 且 slug 是否小写无空格。
+13. **Download Catalog 按钮只在首页**：由 `settings.catalogButton` 驱动、在 `homeBody()` **绝对定位**渲染（首页右上角、紧贴 Contact Us 下方），**不**进共享 `header()`。改它别动 `header()`；色值用 CSS 变量 `--catalog` / `--catalog-dark`。PDF 放 `media/`，后台用 `widget: file` 上传。
+14. 改动后回滚出口永远是 Git（`git revert <commit>`），每天渐进提交
 
 ---
 
@@ -165,4 +181,4 @@ feather 卡: 淡蓝边框 #d9e2f5 圆角10、size 行15px灰、标题18px/700、
 
 ---
 
-*最后更新：2026-08-24，项目版本号按 git log 追踪。*
+*最后更新：2026-09-04。今日新增：导航改名「Flagpoles & Accessories」；修复并新增「Stands & Displays」类目页（.md→.json + `format: json` 治本）；首页新增「Download Catalog (PDF)」金色按钮 + 后台上传入口。版本号按 git log 追踪。*
