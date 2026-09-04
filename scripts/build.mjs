@@ -129,7 +129,7 @@ function shell({ title, desc, body, active, ogImage, footerMode }) {
   <meta property="og:type" content="website">
   <meta property="og:url" content="${SITE}/">
   ${ogImage ? `<meta property="og:image" content="${esc(ogImage)}">` : ''}
-  <link rel="icon" type="image/png" href="/assets/media/favicon.webp">
+  <link rel="icon" type="image/png" href="/assets/media/favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Catamaran:wght@400;700&family=Antic+Slab&family=Bona+Nova:wght@400;700&family=Rufina&family=Acme&display=swap" rel="stylesheet">

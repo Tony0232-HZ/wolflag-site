@@ -83,6 +83,18 @@ git push -u origin main
 
 > 代理若需要访问私有仓库，修改 decap-proxy 的 `src/index.ts` 中 scope 为 `'repo,user'` 后重新部署。
 
+> **⚠️ 后台登录报错速查（2026-09-04 实测整理，详见仓库 AI-GUIDE.md §9）**
+> 登录出问题时，先用**无痕窗口**打开 `/admin/` 点登录，然后看**地址栏授权 URL**（`client_id=`、`redirect_uri=` 两个值是关键）：
+>
+> - 页面是**沙漠 404**（"This is not the web page you are looking for"）→ **client_id 无效**：去 GitHub 应用页核对 Client ID（应为 `Ov23liV3OrfRG3tL4IlZ`），并把 Worker 密钥 `GITHUB_OAUTH_ID` 同步成它；
+> - 页面是 **⚠️ "Be careful! / Invalid Redirect URI"** → **回调地址不一致**：GitHub 应用页「Redirect URL」必须登记为**纯净**地址 `https://decap.tony222.workers.dev/callback`（去掉 `?provider=github`，本项目 Worker 是改版，只发纯净地址）；
+> - 地址栏 `state=` 每次登录都相同 → **浏览器缓存了旧跳转**，换无痕窗口（Ctrl+Shift+N）重试。
+>
+> 修 Worker 密钥（本机 `CLOUDFLARE_API_TOKEN` 已配好，在 decap-proxy 目录执行）：
+> `echo '<值>' | npx wrangler secret put GITHUB_OAUTH_ID`（`GITHUB_OAUTH_SECRET` 同理，改 GitHub 应用页 secret 后同步）。
+>
+> 注意：Client ID 大小写敏感，务必用 GitHub 页面上的复制按钮；Client Secret 只显示一次。
+
 ### 4. 日常更新内容
 
 1. 打开 `https://<你的域名>/admin/`

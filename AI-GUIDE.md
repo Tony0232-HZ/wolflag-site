@@ -174,11 +174,55 @@ feather 卡: 淡蓝边框 #d9e2f5 圆角10、size 行15px灰、标题18px/700、
 - 视觉基准截图：`screenshots-original/`（原站渲染）、`screenshots-new/`（新版渲染）、人工标注稿在用户桌面（001/004/011/016/019 等）——**用户截图即"标准"**
 - 一次迁移工具 `scripts/extract.py`：含 48 张图的 md5→语义名映射表（改图命名必须同步此表）
 - `admin/index.html`:jsdelivr CDN 载入 decap-cms@3.9.0
-- **后台登录 OAuth 已配置完成并实测通过（2026-08-24）**：GitHub OAuth App `wolflag admin`（Callback 登记**纯净** `https://decap.tony222.workers.dev/callback`，无 `?provider` 尾巴）；Cloudflare Worker `decap`（密钥 GITHUB_OAUTH_ID=Ov23liV3OrfRG3tL4IlZ、GITHUB_OAUTH_SECRET 见 wrangler secret）；config.yml 的 `repo/base_url` 已填实；本地克隆 `H:\工作总集\wolflag 网站信息\2026 公司网站\decap-proxy`（**已修改源码**：handleCallback 删除 provider 检查 + /auth 跳转改 302+no-store + redirect_uri 纯净）——Wrangler 登录用 `CLOUDFLARE_API_TOKEN` 环境变量（api token：Edit Cloudflare Workers 模板、建 token 时删 Zone Resources 行）
-- 登录排障三字诀：client_id（选中复制，连字符/大小写）、callback 登记值、redirect_uri 三处逐字核对；state 不变 = 浏览器缓存旧 301，用无痕窗口
+- **后台登录 OAuth 配置（2026-08-24 生效，2026-09-04 登录失效后实战修复、重新验证通过，最终配置未变）**：GitHub OAuth App `wolflag admin`（账号 Tony0232-HZ；Redirect URL 登记**纯净** `https://decap.tony222.workers.dev/callback`，无 `?provider` 尾巴）；Cloudflare Worker `decap`（密钥 GITHUB_OAUTH_ID=Ov23liV3OrfRG3tL4IlZ、GITHUB_OAUTH_SECRET=2026-09-04 重新生成的值，**勿写入文档**，看 GitHub 应用页）；config.yml 的 `repo/base_url` 已填实；本地克隆 `H:\工作总集\wolflag 网站信息\2026 公司网站\decap-proxy`（**已修改源码且此版本在线上运行**：handleCallback 删除 provider 检查 + /auth 跳转改 302+no-store + redirect_uri 纯净）——Wrangler 登录用 `CLOUDFLARE_API_TOKEN` 环境变量（api token：Edit Cloudflare Workers 模板、建 token 时删 Zone Resources 行）
+- 登录排障三字诀：client_id（选中复制，连字符/大小写）、callback 登记值、redirect_uri 三处逐字核对；state 不变 = 浏览器缓存旧 301，用无痕窗口。**完整排障手册见 §9**（2026-09-04 实战整理，含 GitHub 报错页一眼判定表）
 - 用户是中文母语、非程序员；沟通用中文、给可点击的步骤；一切改动以用户确认图片为准
 - 全站目标对象：海外 B2B 买家（英文站点、询盘全靠邮箱/电话：tony@wolflag.com + tony@wolflagdisplay.com、+86 (571) 28239823）
 
 ---
 
-*最后更新：2026-09-04。今日新增：导航改名「Flagpoles & Accessories」；修复并新增「Stands & Displays」类目页（.md→.json + `format: json` 治本）；首页新增「Download Catalog (PDF)」金色按钮 + 后台上传入口。版本号按 git log 追踪。*
+## 9. 后台登录 OAuth 排障手册（2026-09-04 实战整理，本仓库专用）
+
+> 现象：访问 `/admin/` 点登录后卡在 `github.com/login/oauth/authorize?...` 并报错。
+> 链路：浏览器 → Worker `decap` 的 `/auth` → 302 跳 GitHub 授权页 → 用户授权 → GitHub 回跳 Worker `/callback` → 回传 token。
+> **唯一可靠的现场证据 = 浏览器地址栏里的授权 URL**：`client_id=`、`redirect_uri=`、`state=` 三个参数都是关键线索。
+
+### 9.1 一眼判定 GitHub 报错类型
+
+| 打开的页面 | 含义 | 修法 |
+|---|---|---|
+| 沙漠 404（"This is not the web page you are looking for"） | **client_id 无效**：应用不存在/被删/在别的账号下/复制错 | 去 GitHub 应用页核对 Client ID（现为 `Ov23liV3OrfRG3tL4IlZ`），改 Worker 密钥或重建应用 |
+| ⚠️ "Be careful! Invalid Redirect URI" | 应用认出来了，但 **redirect_uri 与登记值不一致**（多/少 `?provider=github`、大小写、斜杠） | 让「GitHub 应用页登记的 Redirect URL」与「地址栏 redirect_uri」逐字一致 |
+| 正常 GitHub 登录页 | 通过，正常登录授权 | — |
+
+### 9.2 三个环节必须逐字一致
+
+1. **Client ID**：GitHub 应用页显示值 ＝ 授权 URL 的 `client_id=`（大小写敏感，用页面上的复制按钮，别手输）。
+2. **Redirect URL 登记值**：GitHub 应用页「Authorization callback URL / Redirect URL」——本项目登记**纯净** `https://decap.tony222.workers.dev/callback`。
+3. **Worker 实际发出的 redirect_uri**：就是地址栏授权 URL 里的那个值。本项目线上 Worker 跑的是**改版源码**（发出的 redirect_uri 无 `?provider=github` 尾巴，见 §8）——**判定线上 Worker 版本的唯一可靠办法：用无痕窗口全新点一次登录，看地址栏 redirect_uri 带不带 `?provider=github`**。本机 curl/WebFetch 直连 `workers.dev`/`github.com` 受网络/代理干扰，**不可当作判定依据**（2026-09-04 曾因此误判为"原版在跑"）。
+
+### 9.3 标准修法（2026-09-04 实测有效）
+
+1. 打开 https://github.com/settings/developers → OAuth Apps → **wolflag admin**（Tony0232-HZ 账号）核对：
+   - Client ID = `Ov23liV3OrfRG3tL4IlZ`
+   - Redirect URL = `https://decap.tony222.workers.dev/callback`（纯净，无 `?provider=github`）
+   - 若怀疑 Secret 被改过：**Generate a new client secret**（只显示一次）→ 新值去同步给 Worker（第 2 步）
+2. 修 Worker 密钥（本机已配 `CLOUDFLARE_API_TOKEN`，直接能在 decap-proxy 目录跑）：
+   ```bash
+   cd "H:/工作总集/wolflag 网站信息/2026 公司网站/decap-proxy"
+   echo '<GitHub页面上的Client ID>'  | npx wrangler secret put GITHUB_OAUTH_ID
+   echo '<新生成的Client Secret>'     | npx wrangler secret put GITHUB_OAUTH_SECRET
+   ```
+   成功标志：`✨ Success! Uploaded secret ...`
+3. **无痕窗口**（Ctrl+Shift+N）打开 https://www.wolflag.com/admin/ 登录。普通窗口会命中浏览器缓存的旧 301/302，表现为"明明改了却不变、state 每次都是同一个"。
+4. 验证通过后把本次生效值记回 §8（Client ID、Redirect URL、是否重置过 Secret）。
+
+### 9.4 2026-09-04 故障复盘（本次事故）
+
+- **现象**：后台登录跳 GitHub 后 404 沙漠页；用户以为"公司电脑能登、家里电脑不能"——**与电脑完全无关**（服务端配置对所有客户端一致），实为**当天配置被人动过**：Worker 密钥被指向了不存在的 Client ID `Ov23liQr6ymTNQ73b1u2`，而应用真实 ID 是 `Ov23liV3OrfRG3tL4IlZ` → GitHub 对无效 client_id 统一回 404。
+- **修复过程**：① 把 Worker `GITHUB_OAUTH_ID` 改回真实 ID → 404 消失、client_id 对上了，但变成 "Invalid Redirect URI"（此时按"原版 Worker"的错误假设把 GitHub 登记值改成了带 `?provider=github`）；② 无痕窗口再试（state=全新值）发现线上 Worker 实际发出**纯净** redirect_uri（改版在跑）→ 把登记值改回**纯净** → 登录成功。
+- **教训**：① 改任何环节前，先用无痕窗口拿到**当前真实**的授权 URL，以它为准，别拿历史截图/旧记录推断线上状态；② GitHub 的报错页类型（§9.1 表）本身就是定位器：404=ID 问题，Invalid Redirect URI=路径问题；③ Client Secret 只显示一次，改一边必须同步另一边。
+
+---
+
+*最后更新：2026-09-04。今日新增：导航改名「Flagpoles & Accessories」；修复并新增「Stands & Displays」类目页（.md→.json + `format: json` 治本）；首页新增「Download Catalog (PDF)」金色按钮 + 后台上传入口；**后台登录 OAuth 修复实战**（Worker 密钥被错指为不存在的 Client ID → 404；登记回调与线上 Worker 版本不一致 → Invalid Redirect URI；两处对齐 + 重置 Client Secret 后恢复，实测登录通过），并新增 §9 排障手册。版本号按 git log 追踪。*

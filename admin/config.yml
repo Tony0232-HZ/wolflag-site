@@ -12,7 +12,7 @@ backend:
 
 media_folder: "media"                 # 上传图片保存位置（站内图片库）
 public_folder: "/assets/media"        # 网站上图片 URL 前缀
-logo_url: "/assets/media/favicon.webp"
+logo_url: "/assets/media/favicon.png"
 site_url: https://www.wolflag.com
 
 collections:
