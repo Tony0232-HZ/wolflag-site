@@ -73,6 +73,7 @@ function header(active) {
     <ul class="nav-menu">
       ${menu}
     </ul>
+    ${settings.catalogButton ? `<a class="nav-cta nav-cta-catalog" href="${esc(settings.catalogButton.file)}" download>${esc(settings.catalogButton.text)}</a>` : ''}
     <a class="nav-cta" href="${esc(settings.contactButton.url)}">${esc(settings.contactButton.text)}</a>
   </nav>
 </header>`;

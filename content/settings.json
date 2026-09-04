@@ -42,6 +42,10 @@
     "text": "Contact Us",
     "url": "mailto:tony@wolflag.com"
   },
+  "catalogButton": {
+    "text": "Download Catalog (PDF)",
+    "file": "/assets/media/wolflag-catalog.pdf"
+  },
   "footer": {
     "sections": [
       {

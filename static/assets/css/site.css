@@ -6,6 +6,8 @@
 :root {
   --blue: #4c6aff;
   --blue-dark: #364cd9;
+  --catalog: #f59e0b;
+  --catalog-dark: #d97706;
   --navy: #272e47;
   --ink: #1d1d1f;
   --gray-text: #666d80;
@@ -98,6 +100,12 @@ ul { list-style: none; }
   border-bottom: none !important;
 }
 .nav-cta:hover { background: var(--blue-dark); }
+
+.nav-cta-catalog {
+  background: var(--catalog);
+  color: var(--navy) !important;
+}
+.nav-cta-catalog:hover { background: var(--catalog-dark); }
 
 .nav-toggle {
   display: none;

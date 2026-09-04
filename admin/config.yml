@@ -40,6 +40,15 @@ collections:
             fields:
               - { label: 按钮文字, name: text, widget: string }
               - { label: 按钮链接, name: url, widget: string }
+          - label: 产品手册下载按钮
+            name: catalogButton
+            widget: object
+            fields:
+              - { label: 按钮文字, name: text, widget: string }
+              - label: 产品手册文件 (PDF)
+                name: file
+                widget: file
+                hint: 上传或更换产品手册 PDF 文件
           - label: 页脚
             name: footer
             widget: object
