@@ -101,20 +101,19 @@ ul { list-style: none; }
 }
 .nav-cta:hover { background: var(--blue-dark); }
 
-.home-hero .hero-catalog {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 28px;
-}
-.hero-catalog-btn {
+.home-hero { position: relative; }
+.home-hero .hero-catalog-btn {
+  position: absolute;
+  top: 16px;
+  right: max(24px, calc((100vw - 1250px) / 2 + 24px));
   background: var(--catalog);
   color: var(--navy) !important;
   font-weight: 600;
   border-radius: 6px;
-  padding: 10px 18px;
+  padding: 9px 16px;
   display: inline-block;
 }
-.hero-catalog-btn:hover { background: var(--catalog-dark); }
+.home-hero .hero-catalog-btn:hover { background: var(--catalog-dark); }
 
 .nav-toggle {
   display: none;

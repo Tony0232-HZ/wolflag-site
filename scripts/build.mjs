@@ -169,7 +169,7 @@ function homeBody() {
      </a>`).join('\n');
   return `
   <section class="home-hero">
-    ${settings.catalogButton ? `<div class="container hero-catalog"><a class="hero-catalog-btn" href="${esc(settings.catalogButton.file)}" download>${esc(settings.catalogButton.text)}</a></div>` : ''}
+    ${settings.catalogButton ? `<a class="hero-catalog-btn" href="${esc(settings.catalogButton.file)}" download>${esc(settings.catalogButton.text)}</a>` : ''}
     <div class="container hero-row">
       <h1>${esc(home.hero.title)}</h1>
       <p class="hero-text">${esc(home.hero.text)}</p>
