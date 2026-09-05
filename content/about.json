@@ -47,6 +47,10 @@
     {
       "q": "Q. Do you accept files in RGB format?",
       "a": "A. We ideally need CMYK files that will accurately produce the colours you are expecting from your artwork. We can convert RGB for you but there is a small fee for this service."
+    },
+    {
+      "q": "Q. What is your minimum order quantity (MOQ)?",
+      "a": "For flags and banners, our minimum order is only 3 pieces, so you can customize them with great flexibility. Plus, the more you order, the better the price! As for flagpoles and display hardware, the MOQ is around 300 pieces. Please contact our staff for more details!"
     }
   ]
 }
