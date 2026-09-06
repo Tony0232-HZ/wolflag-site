@@ -170,9 +170,9 @@ ul { list-style: none; }
 
 .page-badge { font-size: 16px; font-weight: 500; color: #5b5f6b; letter-spacing: .04em; }
 
-/* Product page: top banner image (optional, feather/national flags) */
+/* Product page: top banner image (optional, feather/national banners/banner page) */
 .page-banner { background: #faf7f5; padding: 40px 0 8px; }
-.page-banner img { display: block; width: 100%; height: auto; }
+.page-banner img { display: block; width: 100%; height: auto; border-radius: 12px; }
 
 @media (max-width: 900px) {
   .page-banner { padding: 20px 0 8px; }
