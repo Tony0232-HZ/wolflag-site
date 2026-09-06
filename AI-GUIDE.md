@@ -172,6 +172,7 @@ feather/national/banner 页横幅: `.page-banner`（米黄 #faf7f5 底、pad 40p
 8. 现有 4 类产品 JSON 必须保留 `page` 声明字段（自动发现的钥匙）
 9. JSON 注释不支持；字符串含双引号须 `\"` 转义；UTF-8 保存
 10. **国内网络**：GitHub 直连常断，走代理 `git config http.proxy http://127.0.0.1:7890`（**实测可用端口=7890**；旧文档写的 26001 已失效——该端口无监听、连不上）；pip 用清华源；Playwright 截图用系统 Edge（`channel="msedge"`）无须下载浏览器；Google Fonts 国内可能加载慢（有回退字体兜底，不必强求）
+10b. **config.yml 内联行（`{...}`）分隔符必须半角逗号 `,`**：全角逗号 `，` 会被当成标量内容 → 后台报 "Flow map contains an unexpected :" 全线瘫痪（2026-09-07 事故：`label: 小图标（上传图），name:` 一行导致整站后台配置解析失败）。改 config.yml 后必做两步：① `python` 用 PyYAML `safe_load` 校验；② Playwright 打开 `/admin/` 确认无 "Error loading the CMS configuration"。全角标点在提示文字（hint/label 值内部）没事，只要不冒充分隔符
 11. **不要过度自信"视觉修正"**：本会话模型的图片读取通道不可用，看截图全靠用户贴图+探针测量；用户标注（红圈文字）是最高优先级需求
 12. **新增类目页曾踩坑 .md**（2026-09-04）：后台把类目页存成 `stands-displays.md`，而构建**只认 `.json`** → 页面静默不生成、产品不显示、菜单指向空页。已修：`admin/config.yml` 的 `pages` collection 加 `format: json`。若再遇"存了不显示"，先看文件是否 `.md` 且 slug 是否小写无空格。
 13. **Download Catalog 按钮只在首页**：由 `settings.catalogButton` 驱动、在 `homeBody()` **绝对定位**渲染（首页右上角、紧贴 Contact Us 下方），**不**进共享 `header()`。改它别动 `header()`；色值用 CSS 变量 `--catalog` / `--catalog-dark`。PDF 放 `media/`，后台用 `widget: file` 上传。

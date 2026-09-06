@@ -387,7 +387,7 @@ collections:
         required: false
         summary: "{{fields.title}}"
         fields:
-          - { label: 小图标（上传图），name: icon, widget: image, required: false }
+          - { label: 小图标（上传图）, name: icon, widget: image, required: false }
           - { label: 卡标题, name: title, widget: string }
           - { label: 卡文字, name: text, widget: text }
       - label: 图文区（三张卡下方的标题+文字+图片）
