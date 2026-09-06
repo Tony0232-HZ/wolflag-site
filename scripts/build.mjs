@@ -229,7 +229,12 @@ function featherBody(data) {
         <p class="f-cta">${esc(data.cta)}</p>
       </div>
     </article>`).join('');
+  const banner = data.bannerImage ? `
+  <section class="feather-banner">
+    <div class="container"><img src="${esc(data.bannerImage)}" alt="Feather flags"></div>
+  </section>` : '';
   return `
+  ${banner}
   <section class="section" style="padding-bottom:0">
     <div class="container"><h1 class="page-badge">${esc(data.badge)}</h1></div>
   </section>

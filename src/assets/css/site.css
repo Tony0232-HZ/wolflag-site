@@ -170,6 +170,14 @@ ul { list-style: none; }
 
 .page-badge { font-size: 16px; font-weight: 500; color: #5b5f6b; letter-spacing: .04em; }
 
+/* Feather page: top banner image (optional) */
+.feather-banner { background: #faf7f5; padding: 40px 0 8px; }
+.feather-banner img { display: block; width: 100%; height: auto; }
+
+@media (max-width: 900px) {
+  .feather-banner { padding: 20px 0 8px; }
+}
+
 /* ==========================================================================
    Home hero
    ========================================================================== */
