@@ -288,6 +288,7 @@ collections:
               - { label: 页面描述, name: description, widget: text }
           - { label: 页面标题, name: heading, widget: string }
           - { label: 标语, name: tagline, widget: string }
+          - { label: 顶部横幅图片, name: bannerImage, widget: image, required: false, hint: 页面顶部的大横幅（可选，不填则无横幅） }
           - label: 产品
             name: products
             widget: list

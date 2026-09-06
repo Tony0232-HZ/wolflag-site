@@ -207,7 +207,12 @@ function nfBody(data) {
         <span class="p-chip">${esc(p.printing)}</span>
       </div>
     </article>`).join('');
+  const banner = data.bannerImage ? `
+  <section class="page-banner">
+    <div class="container"><img src="${esc(data.bannerImage)}" alt="National flags"></div>
+  </section>` : '';
   return `
+  ${banner}
   <section class="page-hero">
     <div class="container"><h1>${esc(data.tagline)}</h1></div>
   </section>
@@ -230,7 +235,7 @@ function featherBody(data) {
       </div>
     </article>`).join('');
   const banner = data.bannerImage ? `
-  <section class="feather-banner">
+  <section class="page-banner">
     <div class="container"><img src="${esc(data.bannerImage)}" alt="Feather flags"></div>
   </section>` : '';
   return `
