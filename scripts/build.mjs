@@ -417,7 +417,7 @@ for (const p of PAGES) {
     body,
     active: p.nav,
     ogImage: home.hero.image,
-    footerMode: p.file === 'index.html' || p.file === 'about-us.html' ? 'full' : 'minimal',
+    footerMode: 'full', // 2026-09-06: 用户要求全站页面统一完整页脚（联系方式+地址）
   });
   writeFileSync(join(STATIC, p.file), html);
   console.log('built', p.file, '→ layout:', p.layout || 'home');

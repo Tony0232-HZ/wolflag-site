@@ -52,8 +52,8 @@ wolflag-site/
   "contactButton": { "text": "Contact Us", "url": "mailto:tony@wolflag.com" },
   "catalogButton": { "text": "Download Catalog (PDF)", "file": "/assets/media/wolflag-catalog.pdf" },  // 首页首屏"下载手册"按钮(仅首页显示)；file=PDF路径
   "footer": {
-    "sections": [ { "heading": "Wolflag factory", "lines": ["JianAn Rd., Fengjing Town,", "Jinshan District, Shanghai CHINA"] },
-                  { "heading": "Hangzhou Loyal Import & Export co, ltd", "lines": ["Room 620, ...", "hangzhou China"] } ],
+    "sections": [ { "heading": "Wolflag factory", "lines": ["No 7 Weisan Road Zhapu Town", "Pinghu City Zhejiang Province CHINA"] },
+                  { "heading": "Hangzhou Loyal Import & Export co, ltd", "lines": ["Room 620, Jinshaju Building 2,xuezheng St.", "hangzhou China"] } ],
     "phones": ["+86 (571) 28239823", "+86 159 9018 9075"],
     "email": "tony@wolflag.com",                 // 兼容字段
     "emails": ["tony@wolflag.com", "tony@wolflagdisplay.com"],
@@ -100,7 +100,7 @@ wolflag-site/
 2. **注册页**：固定 `index.html` + `about-us.html`；其余每个 JSON → 按 `page` 声明生成条目（`file/slug/layout/nav`）
 3. **渲染**：`SITE` 常量（当前 `https://www.wolflag.com`，影响 sitemap/OG，改域名要同步改）；layout 分派函数：
    - `feather` → featherBody（横卡+CTA 文本）；`bannerCards` → bannerBody；`flags` → nfBody；`pole` → poleBody；**默认/未知 → simpleBody**（通用 3 列网格：名称/尺寸/材质/描述/图片）
-4. **页脚策略**：`index.html` 与 `about-us.html` 用**完整页脚**；其余页用 **minimalFooter**（#212327、精确 384px 高、仅版权行——这是**原站行为**，不要"好心"统一成完整页脚）
+4. **页脚策略**：**全站统一完整页脚**（2026-09-06 用户要求，见坑 #6）；`build.mjs` 中 `footerMode: 'full'` 对所有页面一视同仁；`minimalFooter()` 函数保留但已不被使用
 5. **产物**：清理旧 html/assets/admin/sitemap/robots → 写 html → 拷贝 `src/`（css/js）、`media/`→`static/assets/media/`、`admin/`→`static/admin/` → 生成 sitemap.xml + robots.txt
 6. `esc()` HTML 转义；导航 `.active` 由 `settings.nav[].url` 匹配 `page.nav`
 
@@ -145,7 +145,7 @@ feather/national/banner 页横幅: `.page-banner`（米黄 #faf7f5 底、pad 40p
 3. **产品文案保留原站拼写/大小写**（如 `comstom size`、`silksreen`、`40"` 里的转义引号）——用户要的是复刻，不是修正
 4. **全局 `img{max-width:100%}`** 会把负边距全宽图钳小（典型症状：图片左右有白边）→ 该图加 `max-width:none + display:block + flex-shrink:0`
 5. `static/` 是构建产物，手改无效且会被覆盖；改完内容**必须**重建
-6. **产品页页脚就是极简版权带**（minimal footer），与首页完整页脚并存是**原站正确行为**，不要统一
+6. **页面页脚**：产品页曾按原站保持极简版权带（minimal footer）；**2026-09-06 用户取消该行为，要求全站每个页面都显示完整页脚（公司+地址+电话+邮箱）**——现在 `footerMode` 全为 `'full'`，勿再改回 minimal
 7. Decap media path = `media_folder: "media"` / `public_folder: "/assets/media"`；改路径约定要三处同步（config.yml + build.mjs 拷贝逻辑 + 内容引用）
 8. 现有 4 类产品 JSON 必须保留 `page` 声明字段（自动发现的钥匙）
 9. JSON 注释不支持；字符串含双引号须 `\"` 转义；UTF-8 保存
@@ -226,4 +226,4 @@ feather/national/banner 页横幅: `.page-banner`（米黄 #faf7f5 底、pad 40p
 
 ---
 
-*最后更新：2026-09-06。今日新增：Feather flag 页顶部横幅（`bannerImage` 字段，后台「羽毛旗产品页→顶部横幅图片」可换，素材 media/feather-banner.webp 2000×825）；National Flag 页同款横幅（media/national-banner.webp 2000×837）；Banner 页同款横幅（media/banners-banner.webp 1952×806）；CSS 类统一为 `.page-banner`（原 `.feather-banner` 改名）；三页横幅加 12px 圆角；About 页工厂图下新增拼图（media/about-collage.webp，段距调 36px 使左右两列高度≈对齐 792/791px）；随线上后台更新同步拉取 12 提交并重建 static。前次：2026-09-04 导航改名「Flagpoles & Accessories」；修复并新增「Stands & Displays」类目页（.md→.json + `format: json` 治本）；首页新增「Download Catalog (PDF)」金色按钮 + 后台上传入口；**后台登录 OAuth 修复实战**（Worker 密钥被错指为不存在的 Client ID → 404；登记回调与线上 Worker 版本不一致 → Invalid Redirect URI；两处对齐 + 重置 Client Secret 后恢复，实测登录通过），并新增 §9 排障手册。版本号按 git log 追踪。*
+*最后更新：2026-09-06。今日新增：Feather flag 页顶部横幅（`bannerImage` 字段，后台「羽毛旗产品页→顶部横幅图片」可换，素材 media/feather-banner.webp 2000×825）；National Flag 页同款横幅（media/national-banner.webp 2000×837）；Banner 页同款横幅（media/banners-banner.webp 1952×806）；CSS 类统一为 `.page-banner`（原 `.feather-banner` 改名）；三页横幅加 12px 圆角；About 页工厂图下新增拼图（段距调 36px 使左右两列高度≈对齐）、工厂图 12px 圆角；页脚原地址已由后台改为 No 7 Weisan Road Zhapu Town（Zhapu/平湖）；**全站页脚统一完整页脚**（页脚策略变更，见 §3/坑 #6）；随线上后台更新同步拉取并重建 static。前次：2026-09-04 导航改名「Flagpoles & Accessories」；修复并新增「Stands & Displays」类目页（.md→.json + `format: json` 治本）；首页新增「Download Catalog (PDF)」金色按钮 + 后台上传入口；**后台登录 OAuth 修复实战**（Worker 密钥被错指为不存在的 Client ID → 404；登记回调与线上 Worker 版本不一致 → Invalid Redirect URI；两处对齐 + 重置 Client Secret 后恢复，实测登录通过），并新增 §9 排障手册。版本号按 git log 追踪。*
