@@ -452,7 +452,7 @@ function blogListBody(blogs, page, totalPages) {
   const cards = (blogs || []).map((b) => blogCard(b)).join('');
   return `
   <section class="page-hero">
-    <div class="container"><h1>Blog</h1></div>
+    <div class="container"><h1>${esc(settings.blogTitle || 'Blog')}</h1></div>
   </section>
   <section class="section">
     <div class="container">
