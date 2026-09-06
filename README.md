@@ -123,8 +123,19 @@ git push -u origin main
 > ②「文件标识(slug)」、文件名、网址都**英文小写、无空格**（如 `stands-displays`，别用 "Stands & Displays"）；
 > ③ 页面没重新生成——后台保存会自动触发 Cloudflare 重新构建，约 1-3 分钟。
 
-> 排版模板选择：`simple` 通用网格 | `flags` 国旗式 | `feather` 横卡式 | `bannerCards` 横幅式 | `pole` 旗杆展架式。
+> 排版模板选择（7 种）：`simple` 通用网格 | `flags` 国旗式 | `feather` 横卡式 | `bannerCards` 横幅式 | `pole` 旗杆展架式 | `detail` 产品详情 | `flex` 通用图文。
 > 参考：`content/pages/led-display.json`（仓库里已内置 LED 示例页，可直接替换内容）。
+
+## 产品详情页（detail 模板）与 Products 子菜单
+
+**两种页面入口的区别（用哪个）**：
+- **新增类目页**（`content/pages/`）→ 类目/列表型页面：一个页面放一类产品，每个产品配 1 张图（名称/尺寸/材质/描述），模板可 7 选。如 Stands & Displays、Products 合集页。
+- **产品详情页**（`content/product-details/` 目录，后台「产品详情页」栏目）→ 单款产品详情：**多张实拍图**（点击缩略图切换）+ 品名/面料材质/印刷方式/尺寸 + **数量↔价格表**（阶梯价）+ 最小起订量 + 交期 + 页面底部 3 张可编辑服务小卡 + 图文区。例：`/car-flags.html`。
+- ⚠️ 注意：「新增类目页」的模板下拉里也有 detail，但该表单字段是通用版（无多图/价格表输入框）——要详情功能请去「产品详情页」栏目建。
+
+**导航子菜单**：顶部菜单现在支持下拉子菜单（如 Products ▾ → Banners / Car Flags）。配置：`/admin/` → 站点设置 → 导航菜单 → 菜单项展开可「+ 添加 子菜单」（子菜单文字 + 链接）。新增子页面后，用此入口挂到 Products 下。
+
+**Products 合集页**：`/products.html`（`content/pages/products.json`）：顶部横幅 `bannerImage` + 产品卡可点击跳转（每卡填 `link` 字段）——通用 simple 模板的页面都支持这两项。
 
 ## 产品手册下载按钮（Download Catalog PDF）
 
