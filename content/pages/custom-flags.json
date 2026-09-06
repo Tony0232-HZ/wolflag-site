@@ -1,0 +1,38 @@
+{
+  "slug": "custom-flags",
+  "page": {
+    "file": "custom-flags.html",
+    "layout": "flex",
+    "nav": "/custom-flags.html"
+  },
+  "seo": {
+    "title": "Custom Flags - WOLFLAG",
+    "description": "Custom flag service: design, digital/silkscreen printing, and production at our factory in China. From artwork to delivery."
+  },
+  "heading": "Custom Flags",
+  "tagline": "Your design, our factory",
+  "sections": [
+    {
+      "title": "1. Send us your artwork",
+      "text": "Share your logo, colors or sketch. We accept CorelDRAW, Adobe Illustrator, Photoshop files, or high-resolution PDF. Our designers check the artwork and send you a free digital proof before production.",
+      "images": [
+        "/assets/media/home-printing.webp"
+      ]
+    },
+    {
+      "title": "2. We produce at our factory",
+      "text": "More than 23 years of experience in flag production. Digital printing or silkscreen printing on quality fabric with a wide range of materials, sizes and finishing options.",
+      "images": [
+        "/assets/media/home-factory.webp",
+        "/assets/media/home-workshop.webp"
+      ]
+    },
+    {
+      "title": "3. Worldwide delivery",
+      "text": "From our factory directly to your door — we arrange sea or air shipping and handle customs clearance for you. Get factory-direct prices without middlemen.",
+      "images": [
+        "/assets/media/home-hero.webp"
+      ]
+    }
+  ]
+}

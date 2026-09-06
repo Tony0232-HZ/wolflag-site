@@ -1,0 +1,60 @@
+{
+  "slug": "car-flags",
+  "page": {
+    "file": "car-flags.html",
+    "layout": "detail",
+    "nav": "/car-flags.html"
+  },
+  "seo": {
+    "title": "Car Flags - WOLFLAG",
+    "description": "Custom car flags with full-color printing, multiple sizes and factory-direct wholesale prices. MOQ from only 3 pieces."
+  },
+  "heading": "Car Flags",
+  "tagline": "Show your brand on the road",
+  "products": [
+    {
+      "name": "Custom Car Flag",
+      "desc": "Custom printed car flags for promotions, sports events, dealerships and corporate branding. Fits standard car windows with an easy clip mount.",
+      "images": [
+        "/assets/media/flag-02.webp",
+        "/assets/media/flag-03.webp",
+        "/assets/media/flag-06.webp"
+      ],
+      "fabric": "110g knitted polyester / 100D polyester",
+      "printing": "digital printing / silkscreen printing",
+      "size": "12\"x18\" / 18\"x22\" / custom sizes",
+      "prices": [
+        { "qty": "100 pcs", "price": "$0.85" },
+        { "qty": "500 pcs", "price": "$0.65" },
+        { "qty": "1000 pcs", "price": "$0.55" }
+      ],
+      "moq": "3 pieces",
+      "leadTime": "7-10 days"
+    }
+  ],
+  "serviceCards": [
+    {
+      "icon": "/assets/media/svc-support.svg",
+      "title": "24/7 Customer Service",
+      "text": "If you have any questions about ordering or customization, email us any time — our team replies around the clock."
+    },
+    {
+      "icon": "/assets/media/svc-shipping.svg",
+      "title": "Factory-Direct Prices",
+      "text": "We ship directly from our factory with no middlemen, so you get the best factory-direct price."
+    },
+    {
+      "icon": "/assets/media/svc-returns.svg",
+      "title": "Easy & Free Returns",
+      "text": "Changed your mind? Just let us know — our return policy is easy and designed to keep things simple."
+    }
+  ],
+  "textImg": {
+    "title": "Why Choose WOLFLAG Car Flags",
+    "text": "Full-color printing on quality fabric, waterproof and fade-resistant. From artwork proof to production and shipping, our team manages your entire order — packed for every car, bumper or window display.",
+    "images": [
+      "/assets/media/home-printing.webp",
+      "/assets/media/home-factory.webp"
+    ]
+  }
+}

@@ -32,6 +32,18 @@
     });
   });
 
+  // product detail gallery: click thumbnail to swap main image
+  document.querySelectorAll('.pd-gallery').forEach(function (g) {
+    var main = g.querySelector('.pd-main img');
+    g.querySelectorAll('.pd-thumb').forEach(function (t) {
+      t.addEventListener('click', function () {
+        main.src = t.getAttribute('data-src');
+        g.querySelectorAll('.pd-thumb.on').forEach(function (o) { o.classList.remove('on'); });
+        t.classList.add('on');
+      });
+    });
+  });
+
   // blog article sidebar: All Posts 分页（20 条/页）
   (function () {
     var box = document.getElementById('all-posts');

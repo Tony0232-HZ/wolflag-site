@@ -1,0 +1,37 @@
+{
+  "slug": "products",
+  "page": {
+    "file": "products.html",
+    "layout": "simple",
+    "nav": "/products.html"
+  },
+  "seo": {
+    "title": "Products - WOLFLAG",
+    "description": "Explore WOLFLAG products: banners, car flags, hand flags, scarves, table flags, pennants and more. Factory-direct wholesale from China."
+  },
+  "heading": "Products",
+  "tagline": "Where to buy our diverse range of flags and banners",
+  "products": [
+    {
+      "name": "Banners",
+      "size": "",
+      "material": "",
+      "desc": "Street pole banners, swallowtail, hook, grommet, tassel banners and banner stands.",
+      "image": "/assets/media/banner-1.webp"
+    },
+    {
+      "name": "Car Flags",
+      "size": "",
+      "material": "",
+      "desc": "Custom car flags with full-color printing, multiple sizes and factory-direct pricing.",
+      "image": "/assets/media/flag-02.webp"
+    },
+    {
+      "name": "Custom Flags",
+      "size": "",
+      "material": "",
+      "desc": "Custom flag design, printing and production service — from artwork to delivery.",
+      "image": "/assets/media/home-printing.webp"
+    }
+  ]
+}

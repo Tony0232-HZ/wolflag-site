@@ -22,8 +22,8 @@ const settings = j(join(CONTENT, 'settings.json'));
 const home = j(join(CONTENT, 'home.json'));
 const about = j(join(CONTENT, 'about.json'));
 
-/* 自动发现：content/products/* 与 content/pages/* 均注册为产品页 */
-const PAGE_DIRS = ['products', 'pages'];
+/* 自动发现：content/products/* 与 content/pages/* 与 content/product-details/* 均注册为页面 */
+const PAGE_DIRS = ['products', 'pages', 'product-details'];
 const pageFiles = {};   // key: json 文件名(不带扩展) -> 内容
 for (const dir of PAGE_DIRS) {
   const abs = join(CONTENT, dir);
@@ -60,9 +60,23 @@ const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').
 
 function header(active) {
   const menu = settings.nav.map((item) => {
+    const children = item.children || [];
     const cls = item.url === active ? 'active' : item.external ? 'more' : '';
     const ext = item.external ? ' target="_blank" rel="noopener"' : '';
-    return `<a class="${cls}" href="${esc(item.url)}"${ext}>${esc(item.label)}</a>`;
+    if (!children.length) {
+      return `<li><a class="${cls}" href="${esc(item.url)}"${ext}>${esc(item.label)}</a></li>`;
+    }
+    const sub = children.map((c) => {
+      const cCls = c.url === active ? 'active' : '';
+      const cExt = c.external ? ' target="_blank" rel="noopener"' : '';
+      return `<li><a class="${cCls}" href="${esc(c.url)}"${cExt}>${esc(c.label)}</a></li>`;
+    }).join('\n          ');
+    return `<li class="has-children">
+        <a class="${cls}" href="${esc(item.url)}"${ext}>${esc(item.label)}<span class="caret" aria-hidden="true">&#9662;</span></a>
+        <ul class="nav-drop">
+          ${sub}
+        </ul>
+      </li>`;
   }).join('\n      ');
   return `<header class="site-header">
   <nav class="navbar">
@@ -399,12 +413,102 @@ function simpleBody(data) {
   </section>`;
 }
 
+/* ---------------- 产品详情布局（detail）+ 通用图文布局（flex） ---------------- */
+const DEFAULT_CARDS = [
+  { icon: '/assets/media/svc-support.svg', title: '24/7 Customer Service', text: 'If you have any questions about ordering or customization, email us any time — our team replies around the clock.' },
+  { icon: '/assets/media/svc-shipping.svg', title: 'Factory-Direct Prices', text: 'We ship directly from our factory with no middlemen, so you get the best factory-direct price.' },
+  { icon: '/assets/media/svc-returns.svg', title: 'Easy & Free Returns', text: 'Changed your mind? Just let us know — our return policy is easy and designed to keep things simple.' },
+];
+
+function detailBody(data) {
+  const products = (data.products || []).map((p) => {
+    const imgs = (p.images && p.images.length ? p.images : (p.image ? [p.image] : [])) || [];
+    const main = imgs[0] || home.hero.image;
+    const thumbs = imgs.map((im, j) => `
+          <button class="pd-thumb${j === 0 ? ' on' : ''}" data-src="${esc(im)}" aria-label="Image ${j + 1}"><img src="${esc(im)}" alt="" loading="lazy" decoding="async"></button>`).join('\n');
+    let specs = '';
+    if (p.fabric) specs += `<tr><th>Fabric</th><td>${esc(p.fabric)}</td></tr>\n      `;
+    if (p.printing) specs += `<tr><th>Printing</th><td>${esc(p.printing)}</td></tr>\n      `;
+    if (p.size) specs += `<tr><th>Size</th><td>${esc(p.size)}</td></tr>\n      `;
+    const priceRows = (p.prices || []).map((r) => `<tr><td>${esc(r.qty)}</td><td>${esc(r.price)}</td></tr>`).join('\n        ');
+    const metas = [];
+    if (p.moq) metas.push(`<li><strong>MOQ:&nbsp;&nbsp;</strong>${esc(p.moq)}</li>`);
+    if (p.leadTime) metas.push(`<li><strong>Lead Time:&nbsp;&nbsp;</strong>${esc(p.leadTime)}</li>`);
+    const metasHtml = metas.length ? `<ul class="pd-meta">${metas.map((m) => `\n      ${m}`).join('')}\n    </ul>` : '';
+    return `
+  <section class="pd-block">
+    <div class="container pd-cols">
+      <div class="pd-gallery">
+        ${imgs.length > 1 ? `<div class="pd-main"><img src="${esc(main)}" alt="${esc(p.name)}"></div>
+      <div class="pd-thumbs">${thumbs}</div>` : `<div class="pd-main"><img src="${esc(main)}" alt="${esc(p.name)}"></div>`}
+      </div>
+      <div class="pd-info">
+        <h2 class="pd-name">${esc(p.name)}</h2>
+        ${p.desc ? `<p class="pd-desc">${esc(p.desc)}</p>` : ''}
+        ${specs ? `<table class="pd-spec">${specs}</table>` : ''}
+        ${priceRows ? `<h3 class="pd-sub">Price List</h3>
+      <table class="pd-price"><thead><tr><th>Quantity</th><th>Price</th></tr></thead><tbody>
+        ${priceRows}
+      </tbody></table>` : ''}
+        ${metasHtml}
+      </div>
+    </div>
+  </section>`;
+  }).join('\n');
+  const svcCards = ((data.serviceCards && data.serviceCards.length) ? data.serviceCards : DEFAULT_CARDS).map((c) => `
+    <div class="svc-card">
+      ${c.icon ? `<img class="svc-icon" src="${esc(c.icon)}" alt="">` : ''}
+      <h4>${esc(c.title)}</h4>
+      <p>${esc(c.text)}</p>
+    </div>`).join('');
+  const ti = data.textImg || {};
+  const tiImgs = (ti.images || []).map((im) => `<img src="${esc(im)}" alt="" loading="lazy" decoding="async">`).join('');
+  const textImg = (ti.title || ti.text || tiImgs) ? `
+  <section class="pd-textimg">
+    <div class="container">
+      ${ti.title ? `<h2>${esc(ti.title)}</h2>` : ''}
+      ${ti.text ? `<p class="ti-text">${esc(ti.text)}</p>` : ''}
+      ${tiImgs ? `<div class="ti-imgs">${tiImgs}</div>` : ''}
+    </div>
+  </section>` : '';
+  return `
+  <section class="page-hero">
+    <div class="container"><h1>${esc(data.heading || '')}</h1>${data.tagline ? `<p class="tagline" style="letter-spacing:0;text-transform:none">${esc(data.tagline)}</p>` : ''}</div>
+  </section>
+  ${products}
+  <section class="section pd-services">
+    <div class="container svc-grid">${svcCards}</div>
+  </section>
+  ${textImg}`;
+}
+
+function flexBody(data) {
+  const sections = (data.sections || []).map((s) => {
+    const imgs = (s.images || []).map((im) => `<img src="${esc(im)}" alt="" loading="lazy" decoding="async">`).join('');
+    return `
+  <section class="flex-section">
+    <div class="container">
+      ${s.title ? `<h2>${esc(s.title)}</h2>` : ''}
+      ${s.text ? `<p class="flex-text">${esc(s.text)}</p>` : ''}
+      ${imgs ? `<div class="flex-imgs">${imgs}</div>` : ''}
+    </div>
+  </section>`;
+  }).join('\n');
+  return `
+  <section class="page-hero">
+    <div class="container"><h1>${esc(data.heading || '')}</h1>${data.tagline ? `<p class="tagline" style="letter-spacing:0;text-transform:none">${esc(data.tagline)}</p>` : ''}</div>
+  </section>
+  ${sections}`;
+}
+
 /** 按 layout 分派 body 渲染 */
 function renderBody(p) {
   if (p.layout === 'feather') return featherBody(p.data);
   if (p.layout === 'bannerCards') return bannerBody(p.data);
   if (p.layout === 'flags') return nfBody(p.data);
   if (p.layout === 'pole') return poleBody(p.data);
+  if (p.layout === 'detail') return detailBody(p.data);
+  if (p.layout === 'flex') return flexBody(p.data);
   return simpleBody(p.data); // 默认通用布局（新类目页）
 }
 

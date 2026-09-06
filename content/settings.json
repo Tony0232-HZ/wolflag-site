@@ -13,9 +13,26 @@
       "external": false
     },
     {
-      "label": "Banner",
-      "url": "/banner.html",
-      "external": false
+      "label": "Products",
+      "url": "/products.html",
+      "external": false,
+      "children": [
+        {
+          "label": "Banners",
+          "url": "/banner.html",
+          "external": false
+        },
+        {
+          "label": "Car Flags",
+          "url": "/car-flags.html",
+          "external": false
+        },
+        {
+          "label": "Custom Flags",
+          "url": "/custom-flags.html",
+          "external": false
+        }
+      ]
     },
     {
       "label": "National Flag",

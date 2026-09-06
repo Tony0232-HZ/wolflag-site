@@ -34,6 +34,15 @@ collections:
               - { label: 菜单文字, name: label, widget: string }
               - { label: 链接, name: url, widget: string }
               - { label: 外链(新窗口打开), name: external, widget: boolean, default: false }
+              - label: 子菜单（可留空；添加后菜单项显示下拉列表）
+                name: children
+                widget: list
+                required: false
+                summary: "{{fields.label}} → {{fields.url}}"
+                fields:
+                  - { label: 子菜单文字, name: label, widget: string }
+                  - { label: 链接, name: url, widget: string }
+                  - { label: 外链(新窗口打开), name: external, widget: boolean, default: false }
           - label: 联系按钮
             name: contactButton
             widget: object
@@ -198,9 +207,9 @@ collections:
           - label: 排版模板
             name: layout
             widget: select
-            options: [simple, flags, feather, bannerCards, pole]
+            options: [simple, flags, feather, bannerCards, pole, detail, flex]
             default: simple
-            hint: simple=通用网格；flags=国旗式；feather=横卡式；bannerCards=横幅式；pole=旗杆展架式
+            hint: simple=通用网格；flags=国旗式；feather=横卡式；bannerCards=横幅式；pole=旗杆展架式；detail=产品详情（多图+规格+价格表）；flex=通用图文（标题+文字+图片组合）
           - { label: 导航地址，如 /led-display.html, name: nav, widget: string }
       - label: SEO
         name: seo
@@ -210,9 +219,10 @@ collections:
           - { label: 页面描述, name: description, widget: text }
       - { label: 页面主标题, name: heading, widget: string }
       - { label: 标语（可选）, name: tagline, widget: string, required: false }
-      - label: 产品列表
+      - label: 产品列表（通用/国旗/横幅/羽毛旗/旗杆等模板用）
         name: products
         widget: list
+        required: false
         summary: "{{fields.name}}"
         fields:
           - { label: 名称, name: name, widget: string }
@@ -220,6 +230,19 @@ collections:
           - { label: 材质（可选）, name: material, widget: string, required: false }
           - { label: 描述, name: desc, widget: text, required: false }
           - { label: 图片, name: image, widget: image }
+      - label: 图文区块（flex 通用图文模板用，可按顺序多组）
+        name: sections
+        widget: list
+        required: false
+        summary: "{{fields.title}}"
+        fields:
+          - { label: 小标题, name: title, widget: string, required: false }
+          - { label: 文字, name: text, widget: text, required: false }
+          - label: 图片（可多张）
+            name: images
+            widget: list
+            required: false
+            field: { label: 图片, name: image, widget: image }
 
   # ---------- 产品：羽毛旗 ----------
   - name: feather-flags
@@ -305,6 +328,78 @@ collections:
               - { label: 材质, name: material, widget: string }
               - { label: 印刷工艺, name: printing, widget: string }
               - { label: 图片, name: image, widget: image }
+
+  # ---------- 产品详情页（多图 + 规格 + 价格表 + 服务卡 + 图文区） ----------
+  - name: product-details
+    label: 产品详情页
+    folder: content/product-details
+    create: true
+    format: json
+    slug: "{{fields.slug}}"
+    summary: "{{fields.heading}}"
+    identifier_field: slug
+    fields:
+      - { label: 文件标识（英文小写，如 car-flags）, name: slug, widget: string, hint: 用于网址命名，发布后不建议再改 }
+      - label: 页面声明
+        name: page
+        widget: object
+        fields:
+          - { label: 页面文件名（含 .html）, name: file, widget: string, hint: 如 car-flags.html }
+          - { label: 导航地址，如 /car-flags.html, name: nav, widget: string }
+      - label: SEO
+        name: seo
+        widget: object
+        fields:
+          - { label: 页面标题, name: title, widget: string }
+          - { label: 页面描述, name: description, widget: text }
+      - { label: 页面主标题, name: heading, widget: string }
+      - { label: 标语（可选）, name: tagline, widget: string, required: false }
+      - label: 产品（一个页面可放多个，每个产品独立图库+信息栏）
+        name: products
+        widget: list
+        summary: "{{fields.name}}"
+        fields:
+          - { label: 品名, name: name, widget: string }
+          - { label: 描述（可选）, name: desc, widget: text, required: false }
+          - label: 产品图片（多张，第一张为主图）
+            name: images
+            widget: list
+            required: false
+            field: { label: 图片, name: image, widget: image }
+          - { label: 面料材质 Fabric, name: fabric, widget: string, required: false }
+          - { label: 印刷方式 Printing, name: printing, widget: string, required: false }
+          - { label: 尺寸 Size, name: size, widget: string, required: false }
+          - label: 价格表（按数量分成多行）
+            name: prices
+            widget: list
+            required: false
+            summary: "{{fields.qty}} → {{fields.price}}"
+            fields:
+              - { label: 数量（如 100 pcs）, name: qty, widget: string }
+              - { label: 价格（如 $0.85）, name: price, widget: string }
+          - { label: 最小起订量 MOQ, name: moq, widget: string, required: false }
+          - { label: 交期 Lead Time, name: leadTime, widget: string, required: false }
+      - label: 服务小卡片（默认 3 张，可增删改；图标可上传更换）
+        name: serviceCards
+        widget: list
+        required: false
+        summary: "{{fields.title}}"
+        fields:
+          - { label: 小图标（上传图），name: icon, widget: image, required: false }
+          - { label: 卡标题, name: title, widget: string }
+          - { label: 卡文字, name: text, widget: text }
+      - label: 图文区（三张卡下方的标题+文字+图片）
+        name: textImg
+        widget: object
+        required: false
+        fields:
+          - { label: 大标题, name: title, widget: string, required: false }
+          - { label: 文字, name: text, widget: text, required: false }
+          - label: 图片（可多张）
+            name: images
+            widget: list
+            required: false
+            field: { label: 图片, name: image, widget: image }
 
   # ---------- 产品：旗杆展架 ----------
   - name: pole-display
