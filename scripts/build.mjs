@@ -261,7 +261,12 @@ function bannerBody(data) {
         <p class="p-desc">${esc(p.detail)}</p>
       </div>
     </article>`).join('');
+  const banner = data.bannerImage ? `
+  <section class="page-banner">
+    <div class="container"><img src="${esc(data.bannerImage)}" alt="Banners"></div>
+  </section>` : '';
   return `
+  ${banner}
   <section class="page-hero">
     <div class="container"><h1>${esc(data.tagline)}</h1></div>
   </section>

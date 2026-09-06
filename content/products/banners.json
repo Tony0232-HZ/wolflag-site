@@ -5,6 +5,7 @@
   },
   "heading": "Banner",
   "tagline": "Make your custom banners look just the way you want",
+  "bannerImage": "/assets/media/banners-banner.webp",
   "products": [
     {
       "name": "street pole banner",
