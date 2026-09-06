@@ -1,0 +1,30 @@
+{
+  "slug": "welcome-to-wolflag-blog",
+  "title": "Welcome to the WOLFLAG Blog",
+  "date": "2026-09-06",
+  "coverImage": "/assets/media/feather-banner.webp",
+  "summary": "WOLFLAG is launching its official blog. Stay tuned for new products, company news, trade announcements and milestones from our factory.",
+  "draft": false,
+  "blocks": [
+    {
+      "type": "p",
+      "text": "Welcome to the new WOLFLAG blog! We are a professional manufacturer of flags, banners, feather flags, flag poles and display kits, proudly serving clients around the world for 23 years. This blog is where we will share company news, product launches, trade insights and everything happening at our factory."
+    },
+    {
+      "type": "h2",
+      "text": "What you will find here"
+    },
+    {
+      "type": "p",
+      "text": "Product news: new flags, banners and display solutions we add to our catalog. Company news and announcements: exhibitions, new facilities, and team activities. Industry knowledge: guides to help you choose the right flag, banner or display for your business."
+    },
+    {
+      "type": "h2",
+      "text": "Stay in touch"
+    },
+    {
+      "type": "p",
+      "text": "Follow our blog to keep updated, or contact us directly by email at tony@wolflag.com or tony@wolflagdisplay.com. We are always happy to discuss your custom flag and banner projects."
+    }
+  ]
+}

@@ -401,9 +401,60 @@ function renderBody(p) {
   return simpleBody(p.data); // 默认通用布局（新类目页）
 }
 
+/* ---------------- blog（列表页 /blog.html + 文章页 /blog/<slug>.html） ---------------- */
+const BLOG_DIR = join(CONTENT, 'blog');
+
+function scanBlogs() {
+  if (!existsSync(BLOG_DIR)) return [];
+  return readdirSync(BLOG_DIR)
+    .filter((f) => f.endsWith('.json'))
+    .map((f) => j(join(BLOG_DIR, f)))
+    .filter((b) => b && b.slug && !b.draft)
+    .sort((a, b) => String(b.date).localeCompare(String(a.date)));
+}
+
+function blogListBody(blogs) {
+  const cards = blogs.map((b) => `
+    <article class="blog-card">
+      <a class="blog-thumb" href="/blog/${esc(b.slug)}.html"><img src="${esc(b.coverImage || home.hero.image)}" alt="${esc(b.title)}" loading="lazy" decoding="async"></a>
+      <div class="blog-body">
+        <p class="blog-meta">${esc(b.date)}</p>
+        <h2 class="blog-title"><a href="/blog/${esc(b.slug)}.html">${esc(b.title)}</a></h2>
+        ${b.summary ? `<p class="blog-sum">${esc(b.summary)}</p>` : ''}
+        <a class="blog-more" href="/blog/${esc(b.slug)}.html">Read More</a>
+      </div>
+    </article>`).join('');
+  return `
+  <section class="page-hero">
+    <div class="container"><h1>Blog</h1></div>
+  </section>
+  <section class="section">
+    <div class="container">
+      <div class="blog-grid">${cards || '<p class="blog-empty">No posts yet. Check back soon!</p>'}</div>
+    </div>
+  </section>`;
+}
+
+function blogPostBody(b) {
+  const blocks = (b.blocks || []).map((bl) =>
+    bl.type === 'h2' ? `<h2>${esc(bl.text)}</h2>` : `<p>${esc(bl.text)}</p>`).join('\n');
+  return `
+  <section class="page-hero">
+    <div class="container"><h1>${esc(b.title)}</h1></div>
+  </section>
+  <article class="blog-post">
+    <div class="container">
+      <p class="blog-meta">${esc(b.date)}</p>
+      ${b.coverImage ? `<img class="blog-cover" src="${esc(b.coverImage)}" alt="${esc(b.title)}">` : ''}
+      <div class="blog-content">${blocks}</div>
+      <p class="blog-back"><a href="/blog.html">&larr; Back to Blog</a></p>
+    </div>
+  </article>`;
+}
+
 /* wipe old html */
 for (const f of readdirSync(STATIC)) {
-  if (f.endsWith('.html') || f === 'assets' || f === 'admin' || f === 'sitemap.xml' || f === 'robots.txt') {
+  if (f.endsWith('.html') || f === 'assets' || f === 'admin' || f === 'sitemap.xml' || f === 'robots.txt' || f === 'blog') {
     rmSync(join(STATIC, f), { recursive: true, force: true });
   }
 }
@@ -423,6 +474,32 @@ for (const p of PAGES) {
   console.log('built', p.file, '→ layout:', p.layout || 'home');
 }
 
+/* blog: listing + article pages */
+const blogs = scanBlogs();
+writeFileSync(join(STATIC, 'blog.html'), shell({
+  title: 'Blog - WOLFLAG',
+  desc: 'WOLFLAG news, product releases, announcements and company updates.',
+  body: blogListBody(blogs),
+  active: '/blog.html',
+  ogImage: home.hero.image,
+  footerMode: 'full',
+}));
+console.log('built blog.html → layout: blog');
+const BLOG_OUT = join(STATIC, 'blog');
+mkdirSync(BLOG_OUT, { recursive: true });
+for (const b of blogs) {
+  const html = shell({
+    title: `${b.title} - WOLFLAG`,
+    desc: `${b.summary || b.title} — WOLFLAG blog`,
+    body: blogPostBody(b),
+    active: '/blog.html',
+    ogImage: b.coverImage || home.hero.image,
+    footerMode: 'full',
+  });
+  writeFileSync(join(BLOG_OUT, `${b.slug}.html`), html);
+  console.log('built blog/' + b.slug + '.html');
+}
+
 /* static assets (css/js sources) */
 const SRC = join(ROOT, 'src');
 if (existsSync(SRC)) cpSync(SRC, STATIC, { recursive: true });
@@ -434,9 +511,11 @@ if (existsSync(MEDIA)) cpSync(MEDIA, join(STATIC, 'assets', 'media'), { recursiv
 if (existsSync(ADMIN)) cpSync(ADMIN, join(STATIC, 'admin'), { recursive: true });
 
 /* sitemap */
+const blogUrls = [`${SITE}/blog.html`, ...blogs.map((b) => `${SITE}/blog/${b.slug}.html`)];
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${PAGES.map((p) => `  <url><loc>${SITE}${p.slug}</loc><changefreq>weekly</changefreq></url>`).join('\n')}
+${blogUrls.map((u) => `  <url><loc>${u}</loc><changefreq>weekly</changefreq></url>`).join('\n')}
 </urlset>`;
 writeFileSync(join(STATIC, 'sitemap.xml'), sitemap);
 

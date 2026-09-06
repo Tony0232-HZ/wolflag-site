@@ -343,3 +343,32 @@ collections:
                   - { label: 名称, name: name, widget: string }
                   - { label: 描述, name: desc, widget: text }
                   - { label: 图片, name: image, widget: image }
+
+  # ---------- 博客文章（新闻/产品/公告/公司大事） ----------
+  - name: blog
+    label: 博客文章
+    folder: content/blog
+    create: true
+    format: json
+    slug: "{{fields.slug}}"
+    summary: "{{fields.title}}"
+    identifier_field: slug
+    fields:
+      - { label: 文件标识（英文小写，如 our-new-product）, name: slug, widget: string, hint: 用于网址命名，发布后不建议再改 }
+      - { label: 文章标题, name: title, widget: string }
+      - label: 发布日期
+        name: date
+        widget: datetime
+        date_format: YYYY-MM-DD
+        time_format: false
+        hint: 列表按日期排列（新的在前）
+      - { label: 封面图片, name: coverImage, widget: image, required: false }
+      - { label: 摘要（列表页显示）, name: summary, widget: text, required: false }
+      - label: 正文内容
+        name: blocks
+        widget: list
+        summary: "{{fields.type}}"
+        fields:
+          - { label: 类型, name: type, widget: select, options: [p, h2], default: p, hint: p=普通段落，h2=小标题 }
+          - { label: 文本, name: text, widget: text }
+      - { label: 草稿（勾选则不上线）, name: draft, widget: boolean, default: false, required: false }

@@ -36,6 +36,11 @@
       "label": "About Us",
       "url": "/about-us.html",
       "external": false
+    },
+    {
+      "label": "Blog",
+      "url": "/blog.html",
+      "external": false
     }
   ],
   "contactButton": {
