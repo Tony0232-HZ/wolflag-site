@@ -75,9 +75,18 @@
     "email": "tony@wolflag.com",
     "logo": "/assets/media/1.png",
     "icons": [
-      "/assets/media/footer-icon-1.webp",
-      "/assets/media/footer-icon-2.webp",
-      "/assets/media/footer-icon-3.webp"
+      {
+        "icon": "/assets/media/footer-icon-1.webp",
+        "url": ""
+      },
+      {
+        "icon": "/assets/media/footer-icon-2.webp",
+        "url": ""
+      },
+      {
+        "icon": "/assets/media/footer-icon-3.webp",
+        "url": ""
+      }
     ],
     "copyright": "© 2011 WOLFLAG. All Rights Reserved.",
     "emails": [

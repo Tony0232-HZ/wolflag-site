@@ -58,7 +58,7 @@ wolflag-site/
     "email": "tony@wolflag.com",                 // 兼容字段
     "emails": ["tony@wolflag.com", "tony@wolflagdisplay.com"],
     "logo": "/assets/media/footer-logo.webp",
-    "icons": ["/assets/media/footer-icon-1.webp", "-2", "-3"],           // 社交图标
+    "icons": [{ "icon": "/assets/media/footer-icon-1.webp", "url": "" }, ...],  // 社交图标 {icon,url}（2026-09-06 起支持链接；url 空→回退 mailto；旧纯字符串格式兼容）
     "copyright": "© 2011 WOLFLAG. All Rights Reserved." } }   // 2026-09-06 用户改为创办年份 2011（外贸始于 2011）
 ```
 

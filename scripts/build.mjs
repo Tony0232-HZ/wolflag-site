@@ -88,7 +88,14 @@ function footer() {
     `<p><a href="mailto:${e}" style="color:inherit">${esc(e)}</a></p>`).join('\n');
   const phoneRows = settings.footer.phones.slice(1).map((p) =>
     `<p><a href="tel:${p.replace(/[^+\d]/g, '')}" style="color:inherit">${esc(p)}</a></p>`).join('\n');
-  const socialIcons = settings.footer.icons.map((i) => `<a href="mailto:${settings.footer.email}" aria-label="Contact us"><img src="${i}" alt=""></a>`).join('\n');
+  // 社交图标：新格式 {icon,url}（url 为空则回退 mailto）；兼容旧格式字符串
+  const socialIcons = settings.footer.icons.map((i) => {
+    const url = i && typeof i === 'object' ? i.url : '';
+    const src = i && typeof i === 'object' ? i.icon : i;
+    const href = url ? esc(url) : `mailto:${settings.footer.email}`;
+    const ext = url ? ' target="_blank" rel="noopener"' : '';
+    return `<a href="${href}"${ext} aria-label="Social media"><img src="${esc(src)}" alt=""></a>`;
+  }).join('\n');
   return `<footer class="site-footer">
   <div class="container">
     <div class="footer-grid">

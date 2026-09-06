@@ -75,7 +75,10 @@ collections:
               - label: 社交图标
                 name: icons
                 widget: list
-                field: { label: 图标, name: icon, widget: image }
+                summary: "{{fields.url}}"
+                fields:
+                  - { label: 图标图片, name: icon, widget: image }
+                  - { label: 链接地址, name: url, widget: string, required: false, hint: 粘贴社交平台链接，如 https://www.facebook.com/xxx；留空则点击发邮件 }
               - { label: 版权行, name: copyright, widget: string }
 
   # ---------- 首页 ----------
