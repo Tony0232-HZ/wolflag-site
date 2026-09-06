@@ -5,10 +5,16 @@
   "coverImage": "/assets/media/feather-banner.webp",
   "summary": "WOLFLAG is launching its official blog. Stay tuned for new products, company news, trade announcements and milestones from our factory.",
   "draft": false,
+  "pinned": true,
   "blocks": [
     {
       "type": "p",
       "text": "Welcome to the new WOLFLAG blog! We are a professional manufacturer of flags, banners, feather flags, flag poles and display kits, proudly serving clients around the world for 23 years. This blog is where we will share company news, product launches, trade insights and everything happening at our factory."
+    },
+    {
+      "type": "image",
+      "image": "/assets/media/national-banner.webp",
+      "text": "National flags in our showroom"
     },
     {
       "type": "h2",

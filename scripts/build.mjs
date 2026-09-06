@@ -403,6 +403,7 @@ function renderBody(p) {
 
 /* ---------------- blog（列表页 /blog.html + 文章页 /blog/<slug>.html） ---------------- */
 const BLOG_DIR = join(CONTENT, 'blog');
+const BLOG_PER = 20; // 列表每页 20 篇 / 侧栏 All Posts 每页 20 条
 
 function scanBlogs() {
   if (!existsSync(BLOG_DIR)) return [];
@@ -410,20 +411,38 @@ function scanBlogs() {
     .filter((f) => f.endsWith('.json'))
     .map((f) => j(join(BLOG_DIR, f)))
     .filter((b) => b && b.slug && !b.draft)
-    .sort((a, b) => String(b.date).localeCompare(String(a.date)));
+    .sort((a, b) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0) || String(b.date).localeCompare(String(a.date)));
 }
 
-function blogListBody(blogs) {
-  const cards = blogs.map((b) => `
+function pinnedTag() { return '<span class="blog-flag">PINNED</span> '; }
+
+function blogCard(b) {
+  return `
     <article class="blog-card">
       <a class="blog-thumb" href="/blog/${esc(b.slug)}.html"><img src="${esc(b.coverImage || home.hero.image)}" alt="${esc(b.title)}" loading="lazy" decoding="async"></a>
       <div class="blog-body">
-        <p class="blog-meta">${esc(b.date)}</p>
+        <p class="blog-meta">${b.pinned ? pinnedTag() : ''}${esc(b.date)}</p>
         <h2 class="blog-title"><a href="/blog/${esc(b.slug)}.html">${esc(b.title)}</a></h2>
         ${b.summary ? `<p class="blog-sum">${esc(b.summary)}</p>` : ''}
         <a class="blog-more" href="/blog/${esc(b.slug)}.html">Read More</a>
       </div>
-    </article>`).join('');
+    </article>`;
+}
+
+function blogPager(page, totalPages) {
+  if (totalPages <= 1) return '';
+  let h = '<nav class="blog-pager">';
+  h += page > 1 ? `<a class="pager-arrow" href="/blog${page > 2 ? '-' + (page - 1) : ''}.html">&larr; Prev</a>` : '';
+  for (let i = 1; i <= totalPages; i++) {
+    const href = i === 1 ? '/blog.html' : `/blog-${i}.html`;
+    h += i === page ? `<span class="pager-num active">${i}</span>` : `<a class="pager-num" href="${href}">${i}</a>`;
+  }
+  h += page < totalPages ? `<a class="pager-arrow" href="/blog-${page + 1}.html">Next &rarr;</a>` : '';
+  return h + '</nav>';
+}
+
+function blogListBody(blogs, page, totalPages) {
+  const cards = (blogs || []).map((b) => blogCard(b)).join('');
   return `
   <section class="page-hero">
     <div class="container"><h1>Blog</h1></div>
@@ -431,25 +450,52 @@ function blogListBody(blogs) {
   <section class="section">
     <div class="container">
       <div class="blog-grid">${cards || '<p class="blog-empty">No posts yet. Check back soon!</p>'}</div>
+      ${blogPager(page, totalPages)}
     </div>
   </section>`;
 }
 
-function blogPostBody(b) {
-  const blocks = (b.blocks || []).map((bl) =>
-    bl.type === 'h2' ? `<h2>${esc(bl.text)}</h2>` : `<p>${esc(bl.text)}</p>`).join('\n');
+function recentItem(b) {
+  return `<div class="recent-item">
+    <img src="${esc(b.coverImage || home.hero.image)}" alt="" loading="lazy" decoding="async">
+    <div class="rt">
+      <a href="/blog/${esc(b.slug)}.html">${esc(b.title)}</a>
+      ${b.pinned ? pinnedTag() : ''}
+      <div class="rd">${esc(b.date)}</div>
+    </div>
+  </div>`;
+}
+
+function blogPostBody(b, blogs) {
+  const blocks = (b.blocks || []).map((bl) => {
+    if (bl.type === 'image') return `<img class="blog-img" src="${esc(bl.image)}" alt="${esc(bl.text || '')}">`;
+    if (bl.type === 'h2') return `<h2>${esc(bl.text)}</h2>`;
+    return `<p>${esc(bl.text)}</p>`;
+  }).join('\n');
+  // 侧边「All Posts」：静态渲染前 20 条（无 JS 兜底），JS 用 blog-index JSON 分页
+  const index = blogs.map((x) => ({ t: x.title, s: x.slug, d: x.date, i: x.coverImage || '', p: !!x.pinned }));
   return `
   <section class="page-hero">
     <div class="container"><h1>${esc(b.title)}</h1></div>
   </section>
   <article class="blog-post">
-    <div class="container">
-      <p class="blog-meta">${esc(b.date)}</p>
-      ${b.coverImage ? `<img class="blog-cover" src="${esc(b.coverImage)}" alt="${esc(b.title)}">` : ''}
-      <div class="blog-content">${blocks}</div>
-      <p class="blog-back"><a href="/blog.html">&larr; Back to Blog</a></p>
+    <div class="container blog-post-cols">
+      <div class="blog-main">
+        <p class="blog-meta">${b.pinned ? pinnedTag() : ''}${esc(b.date)}</p>
+        ${b.coverImage ? `<img class="blog-cover" src="${esc(b.coverImage)}" alt="${esc(b.title)}">` : ''}
+        <div class="blog-content">${blocks}</div>
+        <p class="blog-back"><a href="/blog.html">&larr; Back to Blog</a></p>
+      </div>
+      <aside class="blog-aside">
+        <div class="recent-box">
+          <h2>All Posts</h2>
+          <div id="all-posts">${blogs.slice(0, BLOG_PER).map((x) => recentItem(x)).join('\n')}</div>
+          <nav class="recent-pager" id="all-pager"></nav>
+        </div>
+      </aside>
     </div>
-  </article>`;
+  </article>
+  <script id="blog-index" type="application/json">${JSON.stringify(index).replace(/</g, '\\u003c')}</script>`;
 }
 
 /* wipe old html */
@@ -474,24 +520,31 @@ for (const p of PAGES) {
   console.log('built', p.file, '→ layout:', p.layout || 'home');
 }
 
-/* blog: listing + article pages */
+/* blog: listing（分页 20/页） + article pages */
 const blogs = scanBlogs();
-writeFileSync(join(STATIC, 'blog.html'), shell({
-  title: 'Blog - WOLFLAG',
-  desc: 'WOLFLAG news, product releases, announcements and company updates.',
-  body: blogListBody(blogs),
-  active: '/blog.html',
-  ogImage: home.hero.image,
-  footerMode: 'full',
-}));
-console.log('built blog.html → layout: blog');
+const listingPages = [];
+for (let i = 0; i < blogs.length; i += BLOG_PER) listingPages.push(blogs.slice(i, i + BLOG_PER));
+if (listingPages.length === 0) listingPages.push([]);
+listingPages.forEach((chunk, idx) => {
+  const page = idx + 1;
+  const file = page === 1 ? 'blog.html' : `blog-${page}.html`;
+  writeFileSync(join(STATIC, file), shell({
+    title: page === 1 ? 'Blog - WOLFLAG' : `Blog - Page ${page} - WOLFLAG`,
+    desc: 'WOLFLAG news, product releases, announcements and company updates.',
+    body: blogListBody(chunk, page, listingPages.length),
+    active: '/blog.html',
+    ogImage: home.hero.image,
+    footerMode: 'full',
+  }));
+  console.log('built', file, '→ layout: blog(p' + page + ')');
+});
 const BLOG_OUT = join(STATIC, 'blog');
 mkdirSync(BLOG_OUT, { recursive: true });
 for (const b of blogs) {
   const html = shell({
     title: `${b.title} - WOLFLAG`,
     desc: `${b.summary || b.title} — WOLFLAG blog`,
-    body: blogPostBody(b),
+    body: blogPostBody(b, blogs),
     active: '/blog.html',
     ogImage: b.coverImage || home.hero.image,
     footerMode: 'full',
@@ -511,7 +564,10 @@ if (existsSync(MEDIA)) cpSync(MEDIA, join(STATIC, 'assets', 'media'), { recursiv
 if (existsSync(ADMIN)) cpSync(ADMIN, join(STATIC, 'admin'), { recursive: true });
 
 /* sitemap */
-const blogUrls = [`${SITE}/blog.html`, ...blogs.map((b) => `${SITE}/blog/${b.slug}.html`)];
+const blogUrls = [
+  ...listingPages.map((_, i) => `${SITE}${i === 0 ? '/blog.html' : `/blog-${i + 1}.html`}`),
+  ...blogs.map((b) => `${SITE}/blog/${b.slug}.html`),
+];
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${PAGES.map((p) => `  <url><loc>${SITE}${p.slug}</loc><changefreq>weekly</changefreq></url>`).join('\n')}

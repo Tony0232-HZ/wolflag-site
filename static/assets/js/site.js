@@ -31,4 +31,44 @@
       }
     });
   });
+
+  // blog article sidebar: All Posts 分页（20 条/页）
+  (function () {
+    var box = document.getElementById('all-posts');
+    var pager = document.getElementById('all-pager');
+    var dataEl = document.getElementById('blog-index');
+    if (!box || !pager || !dataEl) return;
+    var posts = JSON.parse(dataEl.textContent);
+    var PER = 20;
+    var cur = 1;
+    var pages = Math.max(1, Math.ceil(posts.length / PER));
+
+    function esc(s) {
+      return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+    function item(p) {
+      return '<div class="recent-item">' +
+        '<img src="' + esc(p.i || '/assets/media/home-hero.webp') + '" alt="" loading="lazy">' +
+        '<div class="rt"><a href="/blog/' + esc(p.s) + '.html">' + esc(p.t) + '</a>' +
+        (p.p ? '<span class="blog-flag">PINNED</span> ' : '') +
+        '<div class="rd">' + esc(p.d) + '</div></div></div>';
+    }
+    function render() {
+      box.innerHTML = posts.slice((cur - 1) * PER, cur * PER).map(item).join('');
+      var h = '';
+      if (pages > 1) {
+        h += cur > 1 ? '<a href="#" data-p="' + (cur - 1) + '" aria-label="Previous">&larr;</a>' : '';
+        for (var i = 1; i <= pages; i++) {
+          h += i === cur ? '<span class="active">' + i + '</span>' : '<a href="#" data-p="' + i + '">' + i + '</a>';
+        }
+        h += cur < pages ? '<a href="#" data-p="' + (cur + 1) + '" aria-label="Next">&rarr;</a>' : '';
+      }
+      pager.innerHTML = h;
+    }
+    pager.addEventListener('click', function (e) {
+      var a = e.target.closest('a[data-p]');
+      if (a) { e.preventDefault(); cur = parseInt(a.getAttribute('data-p'), 10) || 1; render(); }
+    });
+    render();
+  })();
 })();

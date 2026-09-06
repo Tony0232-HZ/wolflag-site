@@ -85,11 +85,14 @@ wolflag-site/
 
 ### 2.5 博客（blog，2026-09-06 新增）
 
-- `content/blog/*.json` **自动发现**（类似 pages/，但独立目录）：每文件一篇，`draft:true` 不生成；按 `date`（YYYY-MM-DD 字符串比较）倒序
-- 字段：`slug`（网址标识）、`title`、`date`、`coverImage`（可选）、`summary`（列表摘要）、`blocks[{type:p|h2,text}]`（正文，**纯文本 ESC 转义**，不支持 Markdown）、`draft`
-- 页面：列表 `/blog.html`（卡片网格：封面/日期/标题/摘要/Read More）+ 文章 `/blog/<slug>.html`（标题/日期/封面/正文/← Back to Blog），均在 sitemap
-- 后台：config.yml `blog` collection（folder `content/blog`、`format: json`）——slug 英文小写无空格；**改 slug = 旧链接失效**，发布后勿改
-- CSS 块：`.blog-grid/.blog-card/.blog-meta/.blog-title/.blog-sum/.blog-more/.blog-cover/.blog-content`（卡片圆角 12px）；导航项由 settings.nav 控制（当前在 About Us 之后）
+- `content/blog/*.json` **自动发现**（类似 pages/，但独立目录）：每文件一篇，`draft:true` 不生成；排序规则：**`pinned` 置顶优先，多个置顶之间按 `date` 倒序（新置顶在前），未置顶按 `date` 倒序**
+- 字段：`slug`（网址标识）、`title`、`date`、`coverImage`（可选）、`summary`（列表摘要）、`blocks[{type:p|h2|image,text,image}]`（正文：段落/小标题/插图块，**插图块任意位置数量不限**；纯文本 ESC 转义，非 Markdown）、`pinned`（置顶，2026-09-06 新增）、`draft`
+- 页面：
+  - 列表 `/blog.html`、`/blog-2.html`…（**每页 20 篇**，脚本按 BLOG_PER=20 分块静态生成，底部 blogPager 页码条）
+  - 文章 `/blog/<slug>.html`：两栏布局（`.blog-post-cols`）——左正文（标题/日期/封面/内容/← Back to Blog），右侧 **All Posts 侧栏**（`.recent-box`：缩略图+标题+日期+置顶徽章；**每页 20 条**，首页静态渲染兜底，翻页由 site.js 读取 `<script id="blog-index">` JSON 客户端分页）
+- 后台：config.yml `blog` collection（folder `content/blog`、`format: json`）——slug 英文小写无空格；**改 slug = 旧链接失效**，发布后勿改；`pinned` 勾选即置顶（取消勾选自动回到时间序）
+- sitemap：列表页（含分页页）+ 全部文章页都在其中（2026-09-06 改动后 blogUrls 由 listingPages + 文章生成）
+- CSS 块：`.blog-grid/.blog-card/.blog-meta/.blog-title/.blog-sum/.blog-more/.blog-cover/.blog-content/.blog-flag/.blog-pager/.blog-post-cols/.blog-aside/.recent-*/.blog-img`；导航项由 settings.nav 控制（当前在 About Us 之后）
 
 ### 2.6 首页"下载产品手册"按钮（Download Catalog PDF）
 
@@ -234,4 +237,4 @@ feather/national/banner 页横幅: `.page-banner`（米黄 #faf7f5 底、pad 40p
 
 ---
 
-*最后更新：2026-09-06。今日新增：**Blog 博客模块**（列表页 /blog.html + 文章页 /blog/<slug>.html，content/blog/*.json 自动发现、draft 草稿开关、后台「博客文章」栏目、自动进 sitemap，详见 §2.5）；最新导航：…About Us / Blog / Contact Us 按钮；Feather flag 页顶部横幅（`bannerImage` 字段，后台「羽毛旗产品页→顶部横幅图片」可换，素材 media/feather-banner.webp 2000×825）；National Flag 页同款横幅（media/national-banner.webp 2000×837）；Banner 页同款横幅（media/banners-banner.webp 1952×806）；CSS 类统一为 `.page-banner`（原 `.feather-banner` 改名）；三页横幅加 12px 圆角；About 页工厂图下新增拼图（段距调 36px 使左右两列高度≈对齐）、工厂图 12px 圆角；页脚原地址已由后台改为 No 7 Weisan Road Zhapu Town（Zhapu/平湖）；**全站页脚统一完整页脚**（页脚策略变更，见 §3/坑 #6）；随线上后台更新同步拉取并重建 static。前次：2026-09-04 导航改名「Flagpoles & Accessories」；修复并新增「Stands & Displays」类目页（.md→.json + `format: json` 治本）；首页新增「Download Catalog (PDF)」金色按钮 + 后台上传入口；**后台登录 OAuth 修复实战**（Worker 密钥被错指为不存在的 Client ID → 404；登记回调与线上 Worker 版本不一致 → Invalid Redirect URI；两处对齐 + 重置 Client Secret 后恢复，实测登录通过），并新增 §9 排障手册。版本号按 git log 追踪。*
+*最后更新：2026-09-06。今日新增：**Blog 博客模块增强**：正文插图块（type:image，数量不限）；文章页右侧 All Posts 侧栏（所有文章、20 条/页、JS 翻页）；列表分页 20 篇/页（/blog-2.html…）；置顶 `pinned`（多置顶按时间倒序、取消即回时间序）+ PINNED 徽章；**Blog 博客模块**（列表页 /blog.html + 文章页 /blog/<slug>.html，content/blog/*.json 自动发现、draft 草稿开关、后台「博客文章」栏目、自动进 sitemap，详见 §2.5）；最新导航：…About Us / Blog / Contact Us 按钮；Feather flag 页顶部横幅（`bannerImage` 字段，后台「羽毛旗产品页→顶部横幅图片」可换，素材 media/feather-banner.webp 2000×825）；National Flag 页同款横幅（media/national-banner.webp 2000×837）；Banner 页同款横幅（media/banners-banner.webp 1952×806）；CSS 类统一为 `.page-banner`（原 `.feather-banner` 改名）；三页横幅加 12px 圆角；About 页工厂图下新增拼图（段距调 36px 使左右两列高度≈对齐）、工厂图 12px 圆角；页脚原地址已由后台改为 No 7 Weisan Road Zhapu Town（Zhapu/平湖）；**全站页脚统一完整页脚**（页脚策略变更，见 §3/坑 #6）；随线上后台更新同步拉取并重建 static。前次：2026-09-04 导航改名「Flagpoles & Accessories」；修复并新增「Stands & Displays」类目页（.md→.json + `format: json` 治本）；首页新增「Download Catalog (PDF)」金色按钮 + 后台上传入口；**后台登录 OAuth 修复实战**（Worker 密钥被错指为不存在的 Client ID → 404；登记回调与线上 Worker 版本不一致 → Invalid Redirect URI；两处对齐 + 重置 Client Secret 后恢复，实测登录通过），并新增 §9 排障手册。版本号按 git log 追踪。*
