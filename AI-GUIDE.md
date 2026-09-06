@@ -72,7 +72,7 @@ wolflag-site/
 
 | 文件 | file | layout | 特有字段 |
 |---|---|---|---|
-| feather-flags.json | feather-flag.html | `feather` | badge(徽标行), products[{name,size,material,desc,image}], cta |
+| feather-flags.json | feather-flag.html | `feather` | badge(徽标行), bannerImage(顶部横幅,**可选**,不填则无横幅), products[{name,size,material,desc,image}], cta |
 | banners.json | banner.html | `bannerCards` | tagline, products[{name,desc,material,detail,image}] |
 | national-flags.json | national-flag.html | `flags` | tagline, products[{name,size,material,printing,image}] |
 | pole-display.json | pole-display.html | `pole` | subheading, subtext, featured[2]{name,desc,detail,tag,image}, ingredients{title,subtitle,items[6]{name,desc,image}} |
@@ -116,7 +116,8 @@ wolflag-site/
 | 简介区 | 标题 54px/1.1 #272e47；副文案 18px/1.7 #282f48；药丸 328×60/radius30/填充 #04101b、描边 #cfd3da（文字18px）；三图列 388fr/360fr/388fr 底对齐，侧图480高、中列(药丸+320图) justify:space-between，`.tag-pills{margin:-11px 0 0}` |
 | 主产品 | eyebrow 36px/800 大字距 uppercase；导语 18px/24px uppercase #6b7280 max640；**卡片 600×384 #f9fafb 圆角10**（grid margin 0 -15px, gap 32），图 40%、title 20px/700 uppercase 无下划线 mb36、desc 14px/22px uppercase #6b7280 |
 | 产品卡 | grid3: 卡 #f7f7f7、标题 Antic Slab 20px、尺寸14px、材质13px、印刷工艺 chip 描边；**
-feather 卡: 淡蓝边框 #d9e2f5 圆角10、size 行15px灰、标题18px/700、描述+CTA 12px**（用户要求非链接） |
+feather 卡: 淡蓝边框 #d9e2f5 圆角10、size 行15px灰、标题18px/700、描述+CTA 12px**（用户要求非链接）；
+feather 页横幅: `.feather-banner`（米黄 #faf7f5 底、pad 40px 0 8px）渲染于徽标行之上，图 `width:100%; height:auto` 全幅不裁剪；移动端 pad 20px；字段在 `featherBody()` 顶部判断 `data.bannerImage` 存在才输出 |
 | Pole | 46px/700 #1c1c1c 居中页头 + 16px 副文；大卡=**#f5f7ff 圆角12 554×614**、标题24px、desc15px、tag14px/700、图553×368 贴底全宽（负 margin -30px + max-width:none + flex-shrink:0）;BETTER INGREDIENTS = Bona Nova 28px/700 字距.18em；配件卡=无底色、图320×320 圆角16、标题 Rufina 20px、desc16px #272e47、列320px gap 94/75 居中 |
 | About | hero 图 215px 高 cover（margin-top12）；marquee = **Acme 40px/700 #f15d49**（Quality Factory - 22 Years of Excellence，38s 循环），与正文同处 #f8f8f8 带内（pad 80px）；正文列 580px/16px/24px #272e47 段距0-8、图列 480×400 + margin-top161；客户区白底：label16px/700 #6b7280、tagline36px/45px #1f2937 max341、logo 128×86 4列 gap 31/16；FAQ #dfe3e2：标题44px、Q=Acme 20px/30px、A 16px/27px #545a6e、**箭头：关闭▼(rotate180)、展开▲(rotate0)** |
 | 页脚 | 4等宽列（pad 0 6px）；h4 18px/500 #d6dfff（第3列15px）；p 14px #8395a0 行高29；首电话18px/500 #d6dfff；版权 14px #7d8085 + 上边框线 + pad 27/40；padding-top 100px |
@@ -225,4 +226,4 @@ feather 卡: 淡蓝边框 #d9e2f5 圆角10、size 行15px灰、标题18px/700、
 
 ---
 
-*最后更新：2026-09-04。今日新增：导航改名「Flagpoles & Accessories」；修复并新增「Stands & Displays」类目页（.md→.json + `format: json` 治本）；首页新增「Download Catalog (PDF)」金色按钮 + 后台上传入口；**后台登录 OAuth 修复实战**（Worker 密钥被错指为不存在的 Client ID → 404；登记回调与线上 Worker 版本不一致 → Invalid Redirect URI；两处对齐 + 重置 Client Secret 后恢复，实测登录通过），并新增 §9 排障手册。版本号按 git log 追踪。*
+*最后更新：2026-09-06。今日新增：Feather flag 页顶部横幅（`bannerImage` 字段，后台「羽毛旗产品页→顶部横幅图片」可换，素材 media/feather-banner.webp 2000×825，CSS `.feather-banner`）；随线上后台更新同步拉取 12 提交并重建 static。前次：2026-09-04 导航改名「Flagpoles & Accessories」；修复并新增「Stands & Displays」类目页（.md→.json + `format: json` 治本）；首页新增「Download Catalog (PDF)」金色按钮 + 后台上传入口；**后台登录 OAuth 修复实战**（Worker 密钥被错指为不存在的 Client ID → 404；登记回调与线上 Worker 版本不一致 → Invalid Redirect URI；两处对齐 + 重置 Client Secret 后恢复，实测登录通过），并新增 §9 排障手册。版本号按 git log 追踪。*
