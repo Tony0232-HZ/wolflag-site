@@ -366,6 +366,8 @@ collections:
         date_format: YYYY-MM-DD
         time_format: false
         hint: 列表按日期排列（新的在前）
+      - { label: 置顶（勾选后排在最前）, name: pinned, widget: boolean, default: false, required: false, hint: 勾选置顶后排在列表最前；多个置顶按时间排；取消勾选回到时间顺序 }
+      - { label: 草稿（勾选则不上线）, name: draft, widget: boolean, default: false, required: false }
       - { label: 封面图片, name: coverImage, widget: image, required: false }
       - { label: 摘要（列表页显示）, name: summary, widget: text, required: false }
       - label: 正文内容
@@ -376,5 +378,3 @@ collections:
           - { label: 类型, name: type, widget: select, options: [p, h2, image], default: p, hint: p=普通段落，h2=小标题，image=插图（任意位置、数量不限） }
           - { label: 文本（段落/小标题内容；图片类型时为描述文字）, name: text, widget: text, required: false }
           - { label: 图片（类型选 image 时上传）, name: image, widget: image, required: false }
-      - { label: 置顶（勾选后排在最前）, name: pinned, widget: boolean, default: false, required: false, hint: 勾选置顶后排在列表最前；多个置顶按时间排；取消勾选回到时间顺序 }
-      - { label: 草稿（勾选则不上线）, name: draft, widget: boolean, default: false, required: false }
