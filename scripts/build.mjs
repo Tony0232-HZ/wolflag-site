@@ -339,7 +339,8 @@ function aboutBody(data) {
     <div class="about-copy">
       ${paras}
     </div>
-    <div class="about-img"><img src="${data.factoryImage}" alt="WOLFLAG factory building" loading="lazy" decoding="async" width="1259" height="944"></div>
+    <div class="about-img"><img src="${data.factoryImage}" alt="WOLFLAG factory building" loading="lazy" decoding="async" width="1259" height="944">${data.collageImage ? `
+      <img class="about-img-2" src="${esc(data.collageImage)}" alt="WOLFLAG team and factory scene" loading="lazy" decoding="async">` : ''}</div>
   </div>
   </section>
   <section class="clients">

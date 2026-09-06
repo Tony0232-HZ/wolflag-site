@@ -700,20 +700,32 @@ ul { list-style: none; }
   margin-bottom: 0;
 }
 
+.about-body .about-copy p + p {
+  margin-top: 36px;
+}
+
 .about-body .about-img img {
   width: 480px;
   height: 400px;
   object-fit: cover;
-  margin-top: 161px;
+  margin-top: 0;
+}
+
+.about-body .about-img img.about-img-2 {
+  width: 480px;
+  height: auto;
+  margin-top: 32px;
 }
 
 @media (max-width: 1180px) {
   .about-body { grid-template-columns: 1fr 420px; gap: 60px; }
   .about-body .about-img img { width: 420px; height: 350px; }
+  .about-body .about-img img.about-img-2 { width: 420px; height: auto; }
 }
 @media (max-width: 980px) {
   .about-body { grid-template-columns: 1fr; }
   .about-body .about-img img { width: 100%; height: auto; }
+  .about-body .about-img img.about-img-2 { width: 100%; height: auto; }
 }
 
 /* Clients */

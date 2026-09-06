@@ -155,6 +155,7 @@ collections:
             widget: list
             field: { label: 段落, name: text, widget: text }
           - { label: 工厂图片, name: factoryImage, widget: image }
+          - { label: 工厂下方补充图片, name: collageImage, widget: image, required: false, hint: 显示在工厂图片下方（可选，不填则不显示） }
           - label: 客户
             name: clients
             widget: object

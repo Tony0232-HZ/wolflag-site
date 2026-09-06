@@ -64,7 +64,7 @@ wolflag-site/
 
 ### 2.2 home.json / about.json
 - `home.json`：`seo{title,description}`、`hero{title,text,image,features[2]}`（features=两个药丸 Professional/Reliable）、`intro{title,text,images[3]}`（**顺序敏感**：0=缝纫车间(home-factory)、1=旗帜喷印全景(home-workshop，中列药丸下方)、2=黄色印刷机(home-printing)；曾因 DOM 顺序≠视觉顺序而返工）、`categories{title,intro,items[4]}`（items：National flag→/national-flag.html、banner→/banner.html、Feather flag→/feather-flag.html、pole kits→/pole-display.html；**首页没有用 `factory` 字段，忽略它**）
-- `about.json`：`seo`、`hero{title,subtitle,image}`（image=about-hero 顶部横幅）、`paragraphs[5]`、`factoryImage`（about-factory 480×400 右列）、`clients{title:"Our Clients",tagline:"Trusted by over 70+ clients",subtitle,logos[8]}`（8 张 client-01..08）、`faq[4]{q,a}`
+- `about.json`：`seo`、`hero{title,subtitle,image}`（image=about-hero 顶部横幅）、`paragraphs[5]`、`factoryImage`（about-factory 480×400 右列）、`collageImage`（**可选**，工厂图下方拼图，≈483×360，后台「工厂下方补充图片」）、`clients{title:"Our Clients",tagline:"Trusted by over 70+ clients",subtitle,logos[8]}`（8 张 client-01..08）、`faq[4]{q,a}`
 
 ### 2.3 products/*.json（4 个专用类）+ page 声明
 
@@ -119,7 +119,7 @@ wolflag-site/
 feather 卡: 淡蓝边框 #d9e2f5 圆角10、size 行15px灰、标题18px/700、描述+CTA 12px**（用户要求非链接）；
 feather/national/banner 页横幅: `.page-banner`（米黄 #faf7f5 底、pad 40px 0 8px）渲染于徽标行/标语之上，图 `width:100%; height:auto` 全幅不裁剪 + **border-radius: 12px 圆角**（用户 2026-09-06 要求）；移动端 pad 20px；`featherBody()/nfBody()/bannerBody()` 判断 `data.bannerImage` 存在才输出；对应 config.yml 的「顶部横幅图片」字段（image 组件，feather-flags / national-flags / banners 三个 collection 均有） |
 | Pole | 46px/700 #1c1c1c 居中页头 + 16px 副文；大卡=**#f5f7ff 圆角12 554×614**、标题24px、desc15px、tag14px/700、图553×368 贴底全宽（负 margin -30px + max-width:none + flex-shrink:0）;BETTER INGREDIENTS = Bona Nova 28px/700 字距.18em；配件卡=无底色、图320×320 圆角16、标题 Rufina 20px、desc16px #272e47、列320px gap 94/75 居中 |
-| About | hero 图 215px 高 cover（margin-top12）；marquee = **Acme 40px/700 #f15d49**（Quality Factory - 22 Years of Excellence，38s 循环），与正文同处 #f8f8f8 带内（pad 80px）；正文列 580px/16px/24px #272e47 段距0-8、图列 480×400 + margin-top161；客户区白底：label16px/700 #6b7280、tagline36px/45px #1f2937 max341、logo 128×86 4列 gap 31/16；FAQ #dfe3e2：标题44px、Q=Acme 20px/30px、A 16px/27px #545a6e、**箭头：关闭▼(rotate180)、展开▲(rotate0)** |
+| About | hero 图 215px 高 cover（margin-top12）；marquee = **Acme 40px/700 #f15d49**（Quality Factory - 22 Years of Excellence，38s 循环），与正文同处 #f8f8f8 带内（pad 80px）；正文列 580px/16px/24px #272e47 **段距 36px**（`p + p`，2026-09-06 自 0-8 调大以对齐图列高度）、图列 480×400 **margin-top 0**（原 161px，自 2026-09-06 上移对齐首行文字）+ 拼图 480×自动高/间隔 32px（`.about-img-2`）；客户区白底：label16px/700 #6b7280、tagline36px/45px #1f2937 max341、logo 128×86 4列 gap 31/16；FAQ #dfe3e2：标题44px、Q=Acme 20px/30px、A 16px/27px #545a6e、**箭头：关闭▼(rotate180)、展开▲(rotate0)** |
 | 页脚 | 4等宽列（pad 0 6px）；h4 18px/500 #d6dfff（第3列15px）；p 14px #8395a0 行高29；首电话18px/500 #d6dfff；版权 14px #7d8085 + 上边框线 + pad 27/40；padding-top 100px |
 | 字体 | Catamaran(home h1)/Antic Slab(国旗卡题)/Bona Nova(BETTER)/Rufina(配件题)/Acme(marquee+FAQ题)；Google Fonts link 在 shell()，离线回退 Arial/Georgia |
 | 图片资产语义 | home-hero/workshop/printing/factory；home-cat-national|banner|feather|polekit；flag-01..06；banner-1..6；feather-1..4；pole-01..08；client-01..08；logo/footer-logo/footer-icon-1..3/favicon；about-hero/factory；pole-03..08 实物映射（03镀铬十字/04水罐/05水袋/06地钉/07方座/08张力展架） |
@@ -226,4 +226,4 @@ feather/national/banner 页横幅: `.page-banner`（米黄 #faf7f5 底、pad 40p
 
 ---
 
-*最后更新：2026-09-06。今日新增：Feather flag 页顶部横幅（`bannerImage` 字段，后台「羽毛旗产品页→顶部横幅图片」可换，素材 media/feather-banner.webp 2000×825）；National Flag 页同款横幅（media/national-banner.webp 2000×837）；Banner 页同款横幅（media/banners-banner.webp 1952×806）；CSS 类统一为 `.page-banner`（原 `.feather-banner` 改名）；三页横幅加 12px 圆角；随线上后台更新同步拉取 12 提交并重建 static。前次：2026-09-04 导航改名「Flagpoles & Accessories」；修复并新增「Stands & Displays」类目页（.md→.json + `format: json` 治本）；首页新增「Download Catalog (PDF)」金色按钮 + 后台上传入口；**后台登录 OAuth 修复实战**（Worker 密钥被错指为不存在的 Client ID → 404；登记回调与线上 Worker 版本不一致 → Invalid Redirect URI；两处对齐 + 重置 Client Secret 后恢复，实测登录通过），并新增 §9 排障手册。版本号按 git log 追踪。*
+*最后更新：2026-09-06。今日新增：Feather flag 页顶部横幅（`bannerImage` 字段，后台「羽毛旗产品页→顶部横幅图片」可换，素材 media/feather-banner.webp 2000×825）；National Flag 页同款横幅（media/national-banner.webp 2000×837）；Banner 页同款横幅（media/banners-banner.webp 1952×806）；CSS 类统一为 `.page-banner`（原 `.feather-banner` 改名）；三页横幅加 12px 圆角；About 页工厂图下新增拼图（media/about-collage.webp，段距调 36px 使左右两列高度≈对齐 792/791px）；随线上后台更新同步拉取 12 提交并重建 static。前次：2026-09-04 导航改名「Flagpoles & Accessories」；修复并新增「Stands & Displays」类目页（.md→.json + `format: json` 治本）；首页新增「Download Catalog (PDF)」金色按钮 + 后台上传入口；**后台登录 OAuth 修复实战**（Worker 密钥被错指为不存在的 Client ID → 404；登记回调与线上 Worker 版本不一致 → Invalid Redirect URI；两处对齐 + 重置 Client Secret 后恢复，实测登录通过），并新增 §9 排障手册。版本号按 git log 追踪。*
