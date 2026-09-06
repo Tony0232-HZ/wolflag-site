@@ -476,6 +476,12 @@ ul { list-style: none; }
 .product-card .p-size { color: #384252; font-size: 14px; line-height: 1.5; margin-bottom: 4px; }
 .product-card .p-material { color: #6b7280; font-size: 13px; margin-bottom: 14px; }
 
+/* 通用卡片可点击（simple 布局 p.link） */
+.product-card a.p-link { color: inherit; text-decoration: none; display: block; }
+.product-card a.p-link img { transition: opacity .2s; }
+.product-card a.p-link:hover img { opacity: .85; }
+.product-card a.p-link:hover .p-name { color: var(--blue); }
+
 .p-chip {
   display: inline-block;
   border: 1px solid #191a19;

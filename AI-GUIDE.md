@@ -100,9 +100,10 @@ wolflag-site/
 - **detail（产品详情模板）**：字段在 config.yml 的 `product-details` collection——`products[{name,desc,images[]（多图，第一张主图，JS 切换）,fabric,printing,size,prices[{qty,price}],moq,leadTime}]`（一个页面可放多个产品，上下排列）、`serviceCards[{icon,title,text}]`（3 张小卡，图标可传图；留空用 `DEFAULT_CARDS` 默认值：svc-support/shipping/returns.svg）、`textImg{title,text,images[]}`（三卡下方图文区）；**无购物车、无 Show Off 区**（用户要求，参考站 参考新页面.htm 裁切）
 - **flex（通用图文模板）**：`sections[{title,text,images[]}]` 按顺序多组（标题+文字+多图），适合定制流程/公司介绍类页面；页面建在 `content/pages/*.json`（pages collection 已加 sections 字段）
 - **导航子菜单**：`settings.nav[].children[{label,url,external?}]`；build 的 `header()` 渲染 `li.has-children > a + ul.nav-drop`（桌面悬停/焦点显示，移动端展开为静态缩进列表）；子菜单子项命中 `active` 也高亮
-- **示例**：`content/pages/products.json`（Products 合集 hub，simple 布局）、`content/pages/custom-flags.json`（flex：定制流程 3 步）、`content/product-details/car-flags.json`（detail：Car Flags）
-- 导航现状：Home / Feather flag / **Products（子菜单：Banners=banner.html、Car Flags、Custom Flags）** / National Flag / Stands & Displays / Flagpoles & Accessories / About Us / Blog / Contact Us 按钮
-- CSS：`.pd-cols/.pd-gallery/.pd-thumb/.pd-spec/.pd-price/.pd-meta/.pd-services/.svc-grid/.svc-card/.pd-textimg/.ti-imgs/.flex-section/.flex-imgs/.nav-drop`；JS：site.js 的 `pd-thumb` 点击换主图
+- **示例**：`content/pages/products.json`（Products 合集 hub，simple 布局，含 bannerImage 横幅 + 卡片 link 可点击）、`content/product-details/car-flags.json`（detail：Car Flags）；flex 示例页 custom-flags **2026-09-06 已按用户要求删除**（模板仍可选）
+- **simpleBody 增强**（2026-09-06）：支持可选 `bannerImage`（页面顶部横幅，同 `.page-banner`）与产品 `link` 字段（卡片图片/标题变可点击链接，`.p-link`）
+- 导航现状：Home / Feather flag / **Products（子菜单：Banners=banner.html、Car Flags）** / National Flag / Stands & Displays / Flagpoles & Accessories / About Us / Blog / Contact Us 按钮
+- CSS：`.pd-cols/.pd-gallery/.pd-thumb/.pd-spec/.pd-price/.pd-meta/.pd-services/.svc-grid/.svc-card/.pd-textimg/.ti-imgs/.flex-section/.flex-imgs/.nav-drop/.p-link`；JS：site.js 的 `pd-thumb` 点击换主图
 
 ### 2.7 首页"下载产品手册"按钮（Download Catalog PDF）
 

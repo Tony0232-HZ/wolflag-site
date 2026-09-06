@@ -219,6 +219,7 @@ collections:
           - { label: 页面描述, name: description, widget: text }
       - { label: 页面主标题, name: heading, widget: string }
       - { label: 标语（可选）, name: tagline, widget: string, required: false }
+      - { label: 顶部横幅图片, name: bannerImage, widget: image, required: false, hint: 页面顶部的大横幅（可选，不填则无横幅） }
       - label: 产品列表（通用/国旗/横幅/羽毛旗/旗杆等模板用）
         name: products
         widget: list
@@ -226,6 +227,7 @@ collections:
         summary: "{{fields.name}}"
         fields:
           - { label: 名称, name: name, widget: string }
+          - { label: 跳转链接（可选，填了图片和标题就可点击）, name: link, widget: string, required: false, hint: 如 /banner.html }
           - { label: 尺寸（可选）, name: size, widget: string, required: false }
           - { label: 材质（可选）, name: material, widget: string, required: false }
           - { label: 描述, name: desc, widget: text, required: false }

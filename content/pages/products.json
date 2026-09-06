@@ -11,9 +11,11 @@
   },
   "heading": "Products",
   "tagline": "Where to buy our diverse range of flags and banners",
+  "bannerImage": "/assets/media/home-hero.webp",
   "products": [
     {
       "name": "Banners",
+      "link": "/banner.html",
       "size": "",
       "material": "",
       "desc": "Street pole banners, swallowtail, hook, grommet, tassel banners and banner stands.",
@@ -21,17 +23,11 @@
     },
     {
       "name": "Car Flags",
+      "link": "/car-flags.html",
       "size": "",
       "material": "",
       "desc": "Custom car flags with full-color printing, multiple sizes and factory-direct pricing.",
       "image": "/assets/media/flag-02.webp"
-    },
-    {
-      "name": "Custom Flags",
-      "size": "",
-      "material": "",
-      "desc": "Custom flag design, printing and production service — from artwork to delivery.",
-      "image": "/assets/media/home-printing.webp"
     }
   ]
 }

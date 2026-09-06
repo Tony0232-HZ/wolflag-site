@@ -26,11 +26,6 @@
           "label": "Car Flags",
           "url": "/car-flags.html",
           "external": false
-        },
-        {
-          "label": "Custom Flags",
-          "url": "/custom-flags.html",
-          "external": false
         }
       ]
     },

@@ -386,20 +386,35 @@ function aboutBody(data) {
 
 /* ---------------- render ---------------- */
 
-/** 通用产品页布局：标题+标语+产品网格（name/desc/image/specs 均可选） */
+/** 通用产品页布局：标题+标语+产品网格（name/desc/image/specs 均可选；bannerImage 可选横幅；p.link 让卡片可点击） */
 function simpleBody(data) {
-  const products = (data.products || []).map((p) => `
+  const banner = data.bannerImage ? `
+  <section class="page-banner">
+    <div class="container"><img src="${esc(data.bannerImage)}" alt="${esc(data.heading || '')}"></div>
+  </section>` : '';
+  const products = (data.products || []).map((p) => {
+    const nameStyle = data.titleFontSerif ? '' : 'style="font-family:Arial;font-weight:700;font-size:14px;letter-spacing:0;text-transform:none"';
+    const link = p.link ? `class="p-link" href="${esc(p.link)}"` : '';
+    const img = p.link
+      ? `<a ${link}><img src="${esc(p.image)}" alt="${esc(p.name)}" loading="lazy" decoding="async" width="600" height="600"></a>`
+      : `<img src="${esc(p.image)}" alt="${esc(p.name)}" loading="lazy" decoding="async" width="600" height="600">`;
+    const name = p.link
+      ? `<a ${link}><h2 class="p-name" ${nameStyle}>${esc(p.name)}</h2></a>`
+      : `<h2 class="p-name" ${nameStyle}>${esc(p.name)}</h2>`;
+    return `
     <article class="product-card">
-      <span class="p-img"><img src="${p.image}" alt="${esc(p.name)}" loading="lazy" decoding="async" width="600" height="600"></span>
+      <span class="p-img">${img}</span>
       <div class="p-body">
-        <h2 class="p-name" ${data.titleFontSerif ? '' : 'style="font-family:Arial;font-weight:700;font-size:14px;letter-spacing:0;text-transform:none"'}>${esc(p.name)}</h2>
+        ${name}
         ${p.size ? `<p class="p-size">${esc(p.size)}</p>` : ''}
         ${p.material ? `<p class="p-material">${esc(p.material)}</p>` : ''}
         ${p.desc ? `<p class="p-desc">${esc(p.desc)}</p>` : ''}
         ${(p.specs || []).map((sp) => `<p class="p-material">${esc(sp)}</p>`).join('')}
       </div>
-    </article>`).join('');
+    </article>`;
+  }).join('');
   return `
+  ${banner}
   <section class="page-hero">
     <div class="container">
       <h1>${esc(data.heading || '')}</h1>
