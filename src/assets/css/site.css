@@ -709,12 +709,14 @@ ul { list-style: none; }
   height: 400px;
   object-fit: cover;
   margin-top: 0;
+  border-radius: 12px;
 }
 
 .about-body .about-img img.about-img-2 {
   width: 480px;
   height: auto;
   margin-top: 32px;
+  border-radius: 0;
 }
 
 @media (max-width: 1180px) {
