@@ -14,11 +14,26 @@
   "products": [
     {
       "specs": [
-        { "label": "Fabric", "value": "110g knitted polyester / 100D polyester" },
-        { "label": "Printing", "value": "digital printing / silkscreen printing" },
-        { "label": "Size", "value": "12\"x18\" / 18\"x22\" / custom sizes" },
-        { "label": "MOQ", "value": "3 pieces" },
-        { "label": "Lead Time", "value": "7-10 days" }
+        {
+          "label": "Fabric",
+          "value": "110g knitted polyester / 100D polyester"
+        },
+        {
+          "label": "Printing",
+          "value": "digital printing / silkscreen printing"
+        },
+        {
+          "label": "Size",
+          "value": "12\"x18\" / 18\"x22\" / custom sizes"
+        },
+        {
+          "label": "MOQ",
+          "value": "3 pieces"
+        },
+        {
+          "label": "Lead Time",
+          "value": "7-10 days"
+        }
       ],
       "prices": [],
       "name": "Custom Car Flag",
@@ -49,10 +64,7 @@
   ],
   "textImg": {
     "title": "Why Choose WOLFLAG Car Flags",
-    "text": "Full-color printing on quality fabric, waterproof and fade-resistant. From artwork proof to production and shipping, our team manages your entire order — packed for every car, bumper or window display.",
-    "images": [
-      "/assets/media/home-printing.webp",
-      "/assets/media/home-factory.webp"
-    ]
+    "text": "We're a professional flag factory, and car flags are one of our regular products. We have plenty of experience making car flags to meet all kinds of customer needs.\nFull-color printing on quality fabric, waterproof and fade-resistant. From artwork proof to production and shipping, our team manages your entire order — packed for every car, bumper or window display.",
+    "images": []
   }
 }
