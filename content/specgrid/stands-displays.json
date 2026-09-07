@@ -16,8 +16,14 @@
       "name": "Roll Up Banner Stands",
       "subtitle": "Ultra-Sharp Display:  600 DPI UV full-color printing for maximum visual impact. Ready on the Go:   Lightweight and compact for effortless transport and storage.",
       "specs": [
-        { "label": "Size", "value": "60*160cm /80*200cm /85*200cm /100*200cm /120*200cm" },
-        { "label": "Material", "value": "Aluminum alloy / U-PVC" }
+        {
+          "label": "Size",
+          "value": "60*160cm /80*200cm /85*200cm /100*200cm /120*200cm"
+        },
+        {
+          "label": "Material",
+          "value": "Aluminum alloy / U-PVC"
+        }
       ],
       "image": "/assets/media/易拉宝02.webp"
     },
@@ -25,8 +31,14 @@
       "name": "X Stand Banners",
       "subtitle": "1. Affordable one-time investment with easily interchangeable banners for repeated use. 2. Robust structure provides high-end, flat graphic visibility with minimal maintenance needs. 3. Simple assembly and disassembly save valuable time during events.",
       "specs": [
-        { "label": "Size", "value": "60*160cm / 80*180cm / 80*200cm" },
-        { "label": "Material", "value": "Aluminum, fiberglass pole + ABS connectors" }
+        {
+          "label": "Size",
+          "value": "60*160cm / 80*180cm / 80*200cm"
+        },
+        {
+          "label": "Material",
+          "value": "Aluminum, fiberglass pole + ABS connectors"
+        }
       ],
       "image": "/assets/media/x展架08.jpg"
     },
@@ -34,8 +46,14 @@
       "name": "A-Frame Signs",
       "subtitle": "Custom A-frame signs boost storefront and event visibility with single or double-sided options. Select lightweight metal or heavy-duty frames, customizable with custom art or templates. Add accessories like carrying cases and solar lights for durable, all-weather promotion.",
       "specs": [
-        { "label": "Size", "value": "60*90cm / 80*120cm / 90*120cm /100*150cm " },
-        { "label": "Material", "value": "Aluminum alloy" }
+        {
+          "label": "Size",
+          "value": "60*90cm / 80*120cm / 90*120cm /100*150cm "
+        },
+        {
+          "label": "Material",
+          "value": "Aluminum alloy"
+        }
       ],
       "image": "/assets/media/a型展架-remax.jpg"
     },
@@ -43,8 +61,14 @@
       "name": "Real Estate A-Frame",
       "subtitle": "Available in Black & White. Features a secure top clip to keep your posters firmly in place without slipping. Fits double-sided Coroplast signs to grab attention from both directions. Includes a dedicated rider clamp, making it effortless to add and secure custom promotions or updates.",
       "specs": [
-        { "label": "Size", "value": "56.5*68cm  weight: 2.25kg   /  72*80cm  weight: 2.65kg" },
-        { "label": "Material", "value": "Material: Steel" }
+        {
+          "label": "Size",
+          "value": "56.5*68cm  weight: 2.25kg   /  72*80cm  weight: 2.65kg"
+        },
+        {
+          "label": "Material",
+          "value": "Material: Steel"
+        }
       ],
       "image": "/assets/media/a-frame-08.webp"
     },
@@ -52,8 +76,14 @@
       "name": "Solar Light Box",
       "subtitle": "Light Source: High-CRI LED  /  Battery: High-Capacity Lithium Battery  / Protection: IP65 Waterproof  / double-sided light box brings bright, off-grid advertising to any outdoor space. It offers hassle-free, low-maintenance visibility with automated timer controls and easy-to-swap, durable graphics.",
       "specs": [
-        { "label": "Size", "value": "200*100cm / 180*80cm 20W Solar LED Strip " },
-        { "label": "Material", "value": "Aluminum Alloy & Tempered Glass" }
+        {
+          "label": "Size",
+          "value": "200*100cm / 180*80cm 20W Solar LED Strip "
+        },
+        {
+          "label": "Material",
+          "value": "Aluminum Alloy & Tempered Glass"
+        }
       ],
       "image": "/assets/media/太阳能-灯箱-网站图.webp"
     },
@@ -61,10 +91,17 @@
       "name": "H-Stakes & Yard Signs",
       "subtitle": "1,High-precision UV Flatbed Printing (Option for single-sided or double-sided printing) 2, Designs, dimensions, thickness, and other specifications can be tailored to your needs 3,Waterproof and moisture-resistant; high-precision UV printing; long-lasting durability 4, Ideal for outdoor use-more durable, resistant to fading, with vibrant, long-lasting colors, helping to reduce costs.",
       "specs": [
-        { "label": "Size", "value": "H-stake: 60*25cm " },
-        { "label": "Material", "value": "PP Hollow Board  / steel" }
+        {
+          "label": "Size",
+          "value": "H-stake: 60*25cm "
+        },
+        {
+          "label": "Material",
+          "value": "PP Hollow Board  / steel"
+        }
       ],
       "image": "/assets/media/h-stake-网站图.webp"
     }
-  ]
+  ],
+  "bannerImage": "/assets/media/banners-banner.webp"
 }
