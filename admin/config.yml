@@ -207,9 +207,9 @@ collections:
           - label: 排版模板
             name: layout
             widget: select
-            options: [simple, flags, feather, bannerCards, pole, detail, flex, specGrid]
+            options: [simple, flags, feather, bannerCards, pole, detail, flex]
             default: simple
-            hint: simple=通用网格；flags=国旗式；feather=横卡式；bannerCards=横幅式；pole=旗杆展架式；detail=产品详情（多图+规格+价格表）；flex=通用图文（标题+文字+图片组合）；specGrid=属性网格（品名+宣传语+自由规格表，悬停完整弹出/图放大）
+            hint: simple=通用网格；flags=国旗式；feather=横卡式；bannerCards=横幅式；pole=旗杆展架式；detail=产品详情（多图+规格+价格表）；flex=通用图文（标题+文字+图片组合）。注：属性网格(specGrid)类页面请在「属性网格类目页」栏目里建
           - { label: 导航地址，如 /led-display.html, name: nav, widget: string }
       - label: SEO
         name: seo
@@ -231,15 +231,6 @@ collections:
           - { label: 尺寸（可选）, name: size, widget: string, required: false }
           - { label: 材质（可选）, name: material, widget: string, required: false }
           - { label: 描述, name: desc, widget: text, required: false }
-          - { label: 宣传语（可选，品名下方那句话，specGrid 属性网格模板用）, name: subtitle, widget: string, required: false }
-          - label: 产品属性（可自由新增/编辑/删除；specGrid 模板显示为规格表，如 尺寸、材质、颜色、工艺 等）
-            name: specs
-            widget: list
-            required: false
-            summary: "{{fields.label}}: {{fields.value}}"
-            fields:
-              - { label: 属性名（如 尺寸/Size、材质/Material、颜色）, name: label, widget: string }
-              - { label: 属性值（如 90*160cm、铝合金、红/蓝）, name: value, widget: string }
           - { label: 图片, name: image, widget: image }
       - label: 图文区块（flex 通用图文模板用，可按顺序多组）
         name: sections
@@ -254,6 +245,51 @@ collections:
             widget: list
             required: false
             field: { label: 图片, name: image, widget: image }
+
+  # ---------- 属性网格类目页（specGrid）----------
+  - name: specgrid
+    label: 属性网格类目页（规格表）
+    folder: content/specgrid
+    create: true
+    format: json
+    slug: "{{fields.slug}}"
+    summary: "{{fields.heading}}"
+    identifier_field: slug
+    fields:
+      - { label: 文件标识（英文小写，如 stands-displays）, name: slug, widget: string, hint: 用于网址命名 }
+      - label: 页面声明
+        name: page
+        widget: object
+        fields:
+          - { label: 页面文件名（含 .html）, name: file, widget: string, hint: 如 stands-displays.html }
+          - { label: 排版模板, name: layout, widget: select, options: [specGrid], default: specGrid }
+          - { label: 导航地址，如 /stands-displays.html, name: nav, widget: string }
+      - label: SEO
+        name: seo
+        widget: object
+        fields:
+          - { label: 页面标题, name: title, widget: string }
+          - { label: 页面描述, name: description, widget: text }
+      - { label: 页面主标题, name: heading, widget: string }
+      - { label: 标语（可选）, name: tagline, widget: string, required: false }
+      - { label: 顶部横幅图片, name: bannerImage, widget: image, required: false, hint: 页面顶部的大横幅（可选，不填则无横幅） }
+      - label: 产品列表
+        name: products
+        widget: list
+        required: false
+        summary: "{{fields.name}}"
+        fields:
+          - { label: 品名, name: name, widget: string }
+          - { label: 宣传语（品名下方那句话，可选；可用 **词** 加粗）, name: subtitle, widget: string, required: false }
+          - label: 产品属性（可自由新增/编辑/删除，显示为规格表）
+            name: specs
+            widget: list
+            required: false
+            summary: "{{fields.label}}: {{fields.value}}"
+            fields:
+              - { label: 属性名（如 Size/Material/颜色）, name: label, widget: string }
+              - { label: 属性值（如 90*160cm、铝合金、红/蓝）, name: value, widget: string }
+          - { label: 图片, name: image, widget: image }
 
   # ---------- 产品：羽毛旗 ----------
   - name: feather-flags

@@ -23,7 +23,7 @@ const home = j(join(CONTENT, 'home.json'));
 const about = j(join(CONTENT, 'about.json'));
 
 /* 自动发现：content/products/* 与 content/pages/* 与 content/product-details/* 均注册为页面 */
-const PAGE_DIRS = ['products', 'pages', 'product-details'];
+const PAGE_DIRS = ['products', 'pages', 'product-details', 'specgrid'];
 const pageFiles = {};   // key: json 文件名(不带扩展) -> 内容
 for (const dir of PAGE_DIRS) {
   const abs = join(CONTENT, dir);
