@@ -361,13 +361,16 @@ function renderAboutBlock(b) {
     const rt = String(b.ratio || '50:50').split(':');
     const t = parseInt(rt[0], 10) || 50;
     const i = parseInt(rt[1], 10) || 50;
-    const off = parseInt(b.imageOffset, 10) || 0;
-    const imgs = (b.images || []).map((im) => `<img src="${esc(im)}" alt="" loading="lazy" decoding="async">`).join('');
+    const imgs = (b.images || []).map((im) => {
+      const src = (typeof im === 'string') ? im : (im.image || '');
+      const off = (im && typeof im === 'object') ? (parseInt(im.offset, 10) || 0) : 0;
+      return `<img src="${esc(src)}" alt="" loading="lazy" decoding="async" style="margin-top:${off}px">`;
+    }).join('');
     return `
     <section class="about-grey about-mod"><div class="container">
       <div class="about-it about-it-${dir}" style="--it-t:${t};--it-i:${i};">
         <div class="about-it-text">${b.title ? `<h4>${esc(b.title)}</h4>` : ''}${b.text ? `\n        ${aboutParas(b.text)}` : ''}</div>
-        <div class="about-it-imgs" style="margin-top:${off}px">${imgs}</div>
+        <div class="about-it-imgs">${imgs}</div>
       </div>
     </div></section>`;
   }
