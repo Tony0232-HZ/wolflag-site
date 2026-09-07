@@ -171,19 +171,19 @@ collections:
                 name: text
                 summary: "文字段落"
                 fields:
-                  - { label: 背景色, name: bg, widget: color, default: "#f8f8f8", hint: 点开选颜色（下方显示色块）；极简色：白#ffffff/米白#fafaf9/淡灰#f8f8f8/浅沙#f5f0e8/米黄#faf7f5/灰绿#dfe3e2/鼠尾草#e8ece2/雾蓝#eef1f4/藕粉#f6f0ee/浅炭#f1f1ef }
+                  - { label: 背景色, name: bg, widget: color, default: "#f8f8f8", hint: "点开选颜色（下方显示色块）。常用极简色：\n白 #ffffff\n米白 #fafaf9\n淡灰 #f8f8f8\n浅沙 #f5f0e8\n米黄 #faf7f5\n灰绿 #dfe3e2\n鼠尾草 #e8ece2\n雾蓝 #eef1f4\n藕粉 #f6f0ee\n浅炭 #f1f1ef" }
                   - { label: 文字（可用 **词** 加粗）, name: text, widget: text }
               - label: 图片
                 name: image
                 summary: "图片"
                 fields:
-                  - { label: 背景色, name: bg, widget: color, default: "#f8f8f8", hint: 点开选颜色（下方显示色块）；极简色：白#ffffff/米白#fafaf9/淡灰#f8f8f8/浅沙#f5f0e8/米黄#faf7f5/灰绿#dfe3e2/鼠尾草#e8ece2/雾蓝#eef1f4/藕粉#f6f0ee/浅炭#f1f1ef }
+                  - { label: 背景色, name: bg, widget: color, default: "#f8f8f8", hint: "点开选颜色（下方显示色块）。常用极简色：\n白 #ffffff\n米白 #fafaf9\n淡灰 #f8f8f8\n浅沙 #f5f0e8\n米黄 #faf7f5\n灰绿 #dfe3e2\n鼠尾草 #e8ece2\n雾蓝 #eef1f4\n藕粉 #f6f0ee\n浅炭 #f1f1ef" }
                   - { label: 图片, name: image, widget: image }
               - label: 图文组合
                 name: textImg
                 summary: "图文组合"
                 fields:
-                  - { label: 背景色, name: bg, widget: color, default: "#f8f8f8", hint: 点开选颜色（下方显示色块）；极简色：白#ffffff/米白#fafaf9/淡灰#f8f8f8/浅沙#f5f0e8/米黄#faf7f5/灰绿#dfe3e2/鼠尾草#e8ece2/雾蓝#eef1f4/藕粉#f6f0ee/浅炭#f1f1ef }
+                  - { label: 背景色, name: bg, widget: color, default: "#f8f8f8", hint: "点开选颜色（下方显示色块）。常用极简色：\n白 #ffffff\n米白 #fafaf9\n淡灰 #f8f8f8\n浅沙 #f5f0e8\n米黄 #faf7f5\n灰绿 #dfe3e2\n鼠尾草 #e8ece2\n雾蓝 #eef1f4\n藕粉 #f6f0ee\n浅炭 #f1f1ef" }
                   - { label: 排版方向, name: direction, widget: select, options: [textLeft, textRight, textTop], default: textLeft, hint: textLeft=文左图右；textRight=文右图左；textTop=文上图下 }
                   - { label: 文字/图片比例, name: ratio, widget: select, options: ["50:50", "40:60", "60:40", "30:70"], default: "50:50", hint: 前面数字=文字占比，后面=图片占比 }
                   - { label: 标题（可选）, name: title, widget: string, required: false }
@@ -200,7 +200,7 @@ collections:
                 name: clients
                 summary: "客户区块 · {{fields.title}}"
                 fields:
-                  - { label: 背景色, name: bg, widget: color, default: "#ffffff", hint: 点开选颜色（下方显示色块）；极简色：白#ffffff/米白#fafaf9/淡灰#f8f8f8/浅沙#f5f0e8/米黄#faf7f5/灰绿#dfe3e2/鼠尾草#e8ece2/雾蓝#eef1f4/藕粉#f6f0ee/浅炭#f1f1ef }
+                  - { label: 背景色, name: bg, widget: color, default: "#ffffff", hint: "点开选颜色（下方显示色块）。常用极简色：\n白 #ffffff\n米白 #fafaf9\n淡灰 #f8f8f8\n浅沙 #f5f0e8\n米黄 #faf7f5\n灰绿 #dfe3e2\n鼠尾草 #e8ece2\n雾蓝 #eef1f4\n藕粉 #f6f0ee\n浅炭 #f1f1ef" }
                   - { label: 区块标题, name: title, widget: string }
                   - { label: 大标题, name: tagline, widget: string }
                   - { label: 副文案, name: subtitle, widget: string }
@@ -209,7 +209,7 @@ collections:
                 name: faq
                 summary: "FAQ 区块"
                 fields:
-                  - { label: 背景色, name: bg, widget: color, default: "#dfe3e2", hint: 点开选颜色（下方显示色块）；极简色：白#ffffff/米白#fafaf9/淡灰#f8f8f8/浅沙#f5f0e8/米黄#faf7f5/灰绿#dfe3e2/鼠尾草#e8ece2/雾蓝#eef1f4/藕粉#f6f0ee/浅炭#f1f1ef }
+                  - { label: 背景色, name: bg, widget: color, default: "#dfe3e2", hint: "点开选颜色（下方显示色块）。常用极简色：\n白 #ffffff\n米白 #fafaf9\n淡灰 #f8f8f8\n浅沙 #f5f0e8\n米黄 #faf7f5\n灰绿 #dfe3e2\n鼠尾草 #e8ece2\n雾蓝 #eef1f4\n藕粉 #f6f0ee\n浅炭 #f1f1ef" }
                   - { label: 问题/答案, name: items, widget: list, summary: "{{fields.q}}", fields: [ { label: 问题, name: q, widget: string }, { label: 答案, name: a, widget: text } ] }
 
   # ---------- 新增类目页（通用模板） ----------
