@@ -435,21 +435,30 @@ const DEFAULT_CARDS = [
   { icon: '/assets/media/svc-returns.svg', title: 'Easy & Free Returns', text: 'Changed your mind? Just let us know — our return policy is easy and designed to keep things simple.' },
 ];
 
+/** 汇总某产品的规格表行：优先用自由属性的 specs 数组；旧字段(fabric/printing/size/moq/leadTime)作兜底，保证兼容 */
+function productSpecRows(p) {
+  if (p.specs && p.specs.length) return p.specs.filter((s) => s.label || s.value);
+  const rows = [];
+  if (p.fabric) rows.push({ label: 'Fabric', value: p.fabric });
+  if (p.printing) rows.push({ label: 'Printing', value: p.printing });
+  if (p.size) rows.push({ label: 'Size', value: p.size });
+  if (p.moq) rows.push({ label: 'MOQ', value: p.moq });
+  if (p.leadTime) rows.push({ label: 'Lead Time', value: p.leadTime });
+  return rows;
+}
+
 function detailBody(data) {
   const products = (data.products || []).map((p) => {
     const imgs = (p.images && p.images.length ? p.images : (p.image ? [p.image] : [])) || [];
     const main = imgs[0] || home.hero.image;
     const thumbs = imgs.map((im, j) => `
           <button class="pd-thumb${j === 0 ? ' on' : ''}" data-src="${esc(im)}" aria-label="Image ${j + 1}"><img src="${esc(im)}" alt="" loading="lazy" decoding="async"></button>`).join('\n');
+    const specRows = productSpecRows(p);
     let specs = '';
-    if (p.fabric) specs += `<tr><th>Fabric</th><td>${esc(p.fabric)}</td></tr>\n      `;
-    if (p.printing) specs += `<tr><th>Printing</th><td>${esc(p.printing)}</td></tr>\n      `;
-    if (p.size) specs += `<tr><th>Size</th><td>${esc(p.size)}</td></tr>\n      `;
+    if (specRows.length) {
+      specs = specRows.map((r) => `<tr><th>${esc(r.label)}</th><td>${esc(r.value)}</td></tr>`).join('\n      ');
+    }
     const priceRows = (p.prices || []).map((r) => `<tr><td>${esc(r.qty)}</td><td>${esc(r.price)}</td></tr>`).join('\n        ');
-    const metas = [];
-    if (p.moq) metas.push(`<li><strong>MOQ:&nbsp;&nbsp;</strong>${esc(p.moq)}</li>`);
-    if (p.leadTime) metas.push(`<li><strong>Lead Time:&nbsp;&nbsp;</strong>${esc(p.leadTime)}</li>`);
-    const metasHtml = metas.length ? `<ul class="pd-meta">${metas.map((m) => `\n      ${m}`).join('')}\n    </ul>` : '';
     return `
   <section class="pd-block">
     <div class="container pd-cols">
@@ -465,7 +474,6 @@ function detailBody(data) {
       <table class="pd-price"><thead><tr><th>Quantity</th><th>Price</th></tr></thead><tbody>
         ${priceRows}
       </tbody></table>` : ''}
-        ${metasHtml}
       </div>
     </div>
   </section>`;

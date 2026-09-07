@@ -368,9 +368,14 @@ collections:
             widget: list
             required: false
             field: { label: 图片, name: image, widget: image }
-          - { label: 面料材质 Fabric, name: fabric, widget: string, required: false }
-          - { label: 印刷方式 Printing, name: printing, widget: string, required: false }
-          - { label: 尺寸 Size, name: size, widget: string, required: false }
+          - label: 产品属性（可自由新增/编辑/删除，如 Fabric、颜色、缝纫方式、特殊工艺、MOQ、交期 等）
+            name: specs
+            widget: list
+            required: false
+            summary: "{{fields.label}}: {{fields.value}}"
+            fields:
+              - { label: 属性名（如 Fabric / 颜色 / MOQ / Lead Time）, name: label, widget: string }
+              - { label: 属性值（如 110g knitted polyester / 红 / 3 pieces）, name: value, widget: string }
           - label: 价格表（按数量分成多行）
             name: prices
             widget: list
@@ -379,8 +384,6 @@ collections:
             fields:
               - { label: 数量（如 100 pcs）, name: qty, widget: string }
               - { label: 价格（如 $0.85）, name: price, widget: string }
-          - { label: 最小起订量 MOQ, name: moq, widget: string, required: false }
-          - { label: 交期 Lead Time, name: leadTime, widget: string, required: false }
       - label: 服务小卡片（默认 3 张，可增删改；图标可上传更换）
         name: serviceCards
         widget: list
