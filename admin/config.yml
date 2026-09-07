@@ -163,20 +163,23 @@ collections:
               - { label: 标题, name: title, widget: string }
               - { label: 副标题, name: subtitle, widget: string }
               - { label: 页头图片, name: image, widget: image }
-          - label: 页面模块（可拖动手柄调整顺序，可 + 添加、删除）
+          - label: 页面模块（可拖动手柄调整顺序，可 + 添加、删除；点每条左边的 ＞ 可展开看到内容）
             name: blocks
             widget: list
             types:
               - label: 文字段落
                 name: text
+                summary: "文字段落"
                 fields:
                   - { label: 文字（可用 **词** 加粗）, name: text, widget: text }
               - label: 图片
                 name: image
+                summary: "图片"
                 fields:
                   - { label: 图片, name: image, widget: image }
               - label: 图文组合
                 name: textImg
+                summary: "图文组合"
                 fields:
                   - { label: 排版方向, name: direction, widget: select, options: [textLeft, textRight, textTop], default: textLeft, hint: textLeft=文左图右；textRight=文右图左；textTop=文上图下 }
                   - { label: 文字/图片比例, name: ratio, widget: select, options: ["50:50", "40:60", "60:40", "30:70"], default: "50:50", hint: 前面数字=文字占比，后面=图片占比 }
@@ -192,6 +195,7 @@ collections:
                       - { label: 上下位置（像素，正数下移/负数上移，可选）, name: offset, widget: number, required: false, default: 0, hint: 例：填 60=这张图往下移 60px；填 -40=往上移 40px }
               - label: 客户区块
                 name: clients
+                summary: "客户区块 · {{fields.title}}"
                 fields:
                   - { label: 区块标题, name: title, widget: string }
                   - { label: 大标题, name: tagline, widget: string }
@@ -199,6 +203,7 @@ collections:
                   - { label: 客户 Logo, name: logos, widget: list, field: { label: Logo, name: logo, widget: image } }
               - label: FAQ 区块
                 name: faq
+                summary: "FAQ 区块"
                 fields:
                   - { label: 问题/答案, name: items, widget: list, summary: "{{fields.q}}", fields: [ { label: 问题, name: q, widget: string }, { label: 答案, name: a, widget: text } ] }
 
