@@ -129,13 +129,19 @@ git push -u origin main
 ## 产品详情页（detail 模板）与 Products 子菜单
 
 **两种页面入口的区别（用哪个）**：
-- **新增类目页**（`content/pages/`）→ 类目/列表型页面：一个页面放一类产品，每个产品配 1 张图（名称/尺寸/材质/描述），模板可 7 选。如 Stands & Displays、Products 合集页。
+- **新增类目页**（`content/pages/`）→ 类目/列表型页面：一个页面放一类产品，每个产品配 1 张图（名称/尺寸/材质/描述），模板可选（simple/flags/feather/bannerCards/pole/flex）。如 Products 合集页。注：Stands & Displays 现在用的是「**属性网格类目页**」栏目（见下）。
 - **产品详情页**（`content/product-details/` 目录，后台「产品详情页」栏目）→ 单款产品详情：**多张实拍图**（点击缩略图切换）+ 品名 + **自由增删的『产品属性』**（面料 / 印刷 / 尺寸 / MOQ / 交期作为默认行，可加颜色、缝纫方式等）+ **数量↔价格表**（阶梯价）+ 页面底部 3 张可编辑服务小卡 + 图文区。例：`/car-flags.html`。
 - ⚠️ 注意：「新增类目页」的模板下拉里也有 detail，但该表单字段是通用版（无多图/价格表输入框）——要详情功能请去「产品详情页」栏目建。
 
 **导航子菜单**：顶部菜单现在支持下拉子菜单（如 Products ▾ → Banners / Car Flags）。配置：`/admin/` → 站点设置 → 导航菜单 → 菜单项展开可「+ 添加 子菜单」（子菜单文字 + 链接）。新增子页面后，用此入口挂到 Products 下。
 
 **Products 合集页**：`/products.html`（`content/pages/products.json`）：顶部横幅 `bannerImage` + 产品卡可点击跳转（每卡填 `link` 字段）——通用 simple 模板的页面都支持这两项。
+
+## 属性网格类目页（specGrid 模板）与全站图片放大
+
+**属性网格类目页**（`content/specgrid/`，后台「**属性网格类目页**」栏目）→ 卡片式产品：**品名（加粗居中）+ 自由增删的『产品属性』表 + 宣传语 + 图片**。后台字段只有这 4 项，干净且与页面完全匹配。例：`/stands-displays.html`（`content/specgrid/stands-displays.json`）。
+
+**全站产品图片点击放大**（所有产品页面通用）：鼠标放到产品图上 → 右上角出现**放大镜**图标；**点击 → 弹出全屏大图**；再点一下（或点 ✕、按 Esc）→ 恢复原图。首页分类卡、产品合集跳转卡这类"点图去别的页面"的链接图**保持跳转**，不触发放大。
 
 ## 产品手册下载按钮（Download Catalog PDF）
 
