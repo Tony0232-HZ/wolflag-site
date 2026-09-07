@@ -1024,6 +1024,34 @@ ul { list-style: none; }
   .blog-grid { grid-template-columns: 1fr; }
 }
 
+/* ===== About 模块化布局：文字/图片/图文（可拖排序、可增删） ===== */
+.about-grey.about-mod { padding: 40px 0; margin-top: 0; }
+.about-mod + .about-mod { margin-top: 0; }
+.about-text { color: #272e47; font-size: 16px; line-height: 1.6; max-width: 860px; }
+.about-text p + p { margin-top: 24px; }
+.about-img-solo { width: 100%; max-width: 100%; border-radius: 12px; display: block; height: auto; }
+
+/* 图文组合：方向 + 比例（文左图右成一行，图片在右边不换行；文字与图间距加大） */
+.about-it { display: flex; flex-wrap: wrap; gap: 60px; align-items: flex-start; }
+.about-it-text { flex: 1 1 calc(var(--it-t, 55) * 1% - 30px); }
+.about-it-imgs { flex: 1 1 calc(var(--it-i, 45) * 1% - 30px); }
+.about-it-text h4 { font-size: 28px; font-weight: 700; margin: 0 0 14px; color: #272e47; }
+.about-it-text p + p { margin-top: 36px; }   /* 段落间距（与原版一致） */
+/* 文右图左 */
+.about-it-textRight .about-it-text { order: 2; }
+.about-it-textRight .about-it-imgs { order: 1; }
+/* 文上图下 */
+.about-it-textTop { flex-direction: column; }
+.about-it-textTop .about-it-text, .about-it-textTop .about-it-imgs { flex: 0 0 100%; }
+/* 图片区：纵向堆叠（和原版一致），文上图下时改多列网格 */
+.about-it-imgs { display: grid; grid-template-columns: 1fr; gap: 20px; }
+.about-it-imgs img { width: 100%; height: auto; border-radius: 12px; display: block; }
+.about-it-textTop .about-it-imgs { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+@media (max-width: 760px) {
+  .about-it { flex-direction: column; gap: 24px; }
+  .about-it-text, .about-it-imgs { flex: 0 0 100% !important; order: 0 !important; }
+}
+
 /* Clients */
 .clients {
   background: #fff;
@@ -1060,6 +1088,7 @@ ul { list-style: none; }
   grid-template-columns: repeat(4, 128px);
   gap: 16px 31px;
   align-items: center;
+  justify-content: end;   /* 右对齐，让最右一个 Logo 与上方工厂图右边缘对齐 */
 }
 
 .clients .cl-logos img {
@@ -1070,10 +1099,10 @@ ul { list-style: none; }
 
 @media (max-width: 1000px) {
   .clients .container { grid-template-columns: 1fr; gap: 40px; }
-  .clients .cl-logos { grid-template-columns: repeat(3, 128px); }
+  .clients .cl-logos { grid-template-columns: repeat(3, 128px); justify-content: end; }
 }
 @media (max-width: 560px) {
-  .clients .cl-logos { grid-template-columns: repeat(2, 128px); }
+  .clients .cl-logos { grid-template-columns: repeat(2, 128px); justify-content: end; }
 }
 
 /* FAQ */

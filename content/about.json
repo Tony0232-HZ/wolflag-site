@@ -8,54 +8,44 @@
     "subtitle": "23 Years of Excellence",
     "image": "/assets/media/横幅-关于我们.webp"
   },
-  "paragraphs": [
-    "**WOLFLAG** is the China's leading manufacturer and supplier of flags, banners, bunting, flagpoles, exhibition stands, temporary signage and promotional displays. We are also Official Flag Suppliers to the China Government. Using our extensive experience, a wide range of materials including PVC, knitted polyester, canvas, vinyl and paper, and the latest in printing technology, we help businesses to get noticed with creative, eye catching and high impact promotional and advertising solutions.",
-    "Whether you're organising a product launch or promotional campaign, running an event or attending an exhibition or ensuring your corporate image is displayed to maximum effect, WOLFLAG's complete, customer focused service and varied, yet concentrated, product range, will provide you with a professional display solution suited to your environment, brand image and budget.",
-    "Our foreign trade sales headquarters is located in Hangzhou (**Hangzhou Loyal Import & Export Co., Ltd**) and boasts an excellent sales team, offering highly experienced services to global flag purchasers. With other two offices in Jiaxing and Yuyao we are always on hand to discuss your requirements and advise on the right solution for you. From design and print at our Jiaxing site, to deliver to your site, your flag, flag pole, banner, building wrap or promotional display order will be project managed from start to finish.",
-    "We, as a factory, ship our products directly to you with very low shipping cost. There are no distributors or \"middle-men\" involved, so you get the lowest price each and every time you buy. This will save you money compared to your local shop.",
-    "A wide range of national flags, table flags, flag poles, bunting and hand wavers are available from our website. If for any reason you are unable to find exactly what you are looking for, call one of our knowledgeable customer service representatives who will be happy to assist."
-  ],
-  "factoryImage": "/assets/media/about-factory.webp",
-  "collageImage": "/assets/media/about-us-picture-5.webp",
-  "clients": {
-    "title": "Our Clients",
-    "tagline": "Trusted by over 70+ clients",
-    "subtitle": "We bring solutions to make business easier for our customers.",
-    "logos": [
-      "/assets/media/client-01.webp",
-      "/assets/media/client-02.webp",
-      "/assets/media/client-03.webp",
-      "/assets/media/client-04.webp",
-      "/assets/media/client-05.webp",
-      "/assets/media/client-06.webp",
-      "/assets/media/client-07.webp",
-      "/assets/media/client-08.webp"
-    ]
-  },
-  "faq": [
+  "blocks": [
     {
-      "q": "Q. I have no experience with sourcing from Chinese factories or international trade. Can you help me?",
-      "a": "Rest assured, we are here to guide you every step of the way! We’ll help you smoothly customize your products and ensure they arrive at your location safely and on schedule. We have rich professional experience in cross-border trade, including chartering, sea/air shipping, and customs clearance. Our sales reps speak excellent English, majored in International Trade, and bring 10+ years of hands-on experience. We're always happy to help with any questions or concerns!"
+      "type": "textImg",
+      "direction": "textLeft",
+      "ratio": "55:45",
+      "title": "",
+      "text": "**WOLFLAG** is the China's leading manufacturer and supplier of flags, banners, bunting, flagpoles, exhibition stands, temporary signage and promotional displays. We are also Official Flag Suppliers to the China Government. Using our extensive experience, a wide range of materials including PVC, knitted polyester, canvas, vinyl and paper, and the latest in printing technology, we help businesses to get noticed with creative, eye catching and high impact promotional and advertising solutions.\n\nWhether you're organising a product launch or promotional campaign, running an event or attending an exhibition or ensuring your corporate image is displayed to maximum effect, WOLFLAG's complete, customer focused service and varied, yet concentrated, product range, will provide you with a professional display solution suited to your environment, brand image and budget.\n\nOur foreign trade sales headquarters is located in Hangzhou (**Hangzhou Loyal Import & Export Co., Ltd**) and boasts an excellent sales team, offering highly experienced services to global flag purchasers. With other two offices in Jiaxing and Yuyao we are always on hand to discuss your requirements and advise on the right solution for you. From design and print at our Jiaxing site, to deliver to your site, your flag, flag pole, banner, building wrap or promotional display order will be project managed from start to finish.\n\nWe, as a factory, ship our products directly to you with very low shipping cost. There are no distributors or \"middle-men\" involved, so you get the lowest price each and every time you buy. This will save you money compared to your local shop.\n\nA wide range of national flags, table flags, flag poles, bunting and hand wavers are available from our website. If for any reason you are unable to find exactly what you are looking for, call one of our knowledgeable customer service representatives who will be happy to assist.",
+      "images": [
+        "/assets/media/about-factory.webp",
+        "/assets/media/about-us-picture-5.webp"
+      ]
     },
     {
-      "q": "Q. What is your minimum order quantity (MOQ)?",
-      "a": "For flags and banners, our minimum order is only 3 pieces, so you can customize them with great flexibility. Plus, the more you order, the better the price! As for flagpoles and display hardware, the MOQ is around 300 pieces. Please contact our staff for more details!"
+      "type": "clients",
+      "title": "Our Clients",
+      "tagline": "Trusted by over 70+ clients",
+      "subtitle": "We bring solutions to make business easier for our customers.",
+      "logos": [
+        "/assets/media/client-01.webp",
+        "/assets/media/client-02.webp",
+        "/assets/media/client-03.webp",
+        "/assets/media/client-04.webp",
+        "/assets/media/client-05.webp",
+        "/assets/media/client-06.webp",
+        "/assets/media/client-07.webp",
+        "/assets/media/client-08.webp"
+      ]
     },
     {
-      "q": "Q. What type of files do you need for my artwork?",
-      "a": "A. We prefer CorelDRAW, Adobe Illustrator, Adobe Photoshop. Please Make sure you supply your files as .eps or high res .pdf format."
-    },
-    {
-      "q": "Q. Will the colours be the same as my monitor?",
-      "a": "A. It is very difficult to get an exact match. Getting accurate colours requires matching with pantone or CMYK pantone reference guides."
-    },
-    {
-      "q": "Q. What size should we prepare artwork?",
-      "a": "A. At least 25% of original size – or more ideally 50% of original size. Please contact us to discuss this if you are unsure."
-    },
-    {
-      "q": "Q. Do you accept files in RGB format?",
-      "a": "A. We ideally need CMYK files that will accurately produce the colours you are expecting from your artwork. We can convert RGB for you but there is a small fee for this service."
+      "type": "faq",
+      "items": [
+        { "q": "Q. I have no experience with sourcing from Chinese factories or international trade. Can you help me?", "a": "Rest assured, we are here to guide you every step of the way! We’ll help you smoothly customize your products and ensure they arrive at your location safely and on schedule. We have rich professional experience in cross-border trade, including chartering, sea/air shipping, and customs clearance. Our sales reps speak excellent English, majored in International Trade, and bring 10+ years of hands-on experience. We're always happy to help with any questions or concerns!" },
+        { "q": "Q. What is your minimum order quantity (MOQ)?", "a": "For flags and banners, our minimum order is only 3 pieces, so you can customize them with great flexibility. Plus, the more you order, the better the price! As for flagpoles and display hardware, the MOQ is around 300 pieces. Please contact our staff for more details!" },
+        { "q": "Q. What type of files do you need for my artwork?", "a": "A. We prefer CorelDRAW, Adobe Illustrator, Adobe Photoshop. Please Make sure you supply your files as .eps or high res .pdf format." },
+        { "q": "Q. Will the colours be the same as my monitor?", "a": "A. It is very difficult to get an exact match. Getting accurate colours requires matching with pantone or CMYK pantone reference guides." },
+        { "q": "Q. What size should we prepare artwork?", "a": "A. At least 25% of original size – or more ideally 50% of original size. Please contact us to discuss this if you are unsure." },
+        { "q": "Q. Do you accept files in RGB format?", "a": "A. We ideally need CMYK files that will accurately produce the colours you are expecting from your artwork. We can convert RGB for you but there is a small fee for this service." }
+      ]
     }
   ]
 }

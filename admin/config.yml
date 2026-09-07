@@ -163,30 +163,38 @@ collections:
               - { label: 标题, name: title, widget: string }
               - { label: 副标题, name: subtitle, widget: string }
               - { label: 页头图片, name: image, widget: image }
-          - label: 介绍段落
-            name: paragraphs
+          - label: 页面模块（可拖动手柄调整顺序，可 + 添加、删除）
+            name: blocks
             widget: list
-            field: { label: 段落, name: text, widget: text }
-          - { label: 工厂图片, name: factoryImage, widget: image }
-          - { label: 工厂下方补充图片, name: collageImage, widget: image, required: false, hint: 显示在工厂图片下方（可选，不填则不显示） }
-          - label: 客户
-            name: clients
-            widget: object
-            fields:
-              - { label: 区块标题, name: title, widget: string }
-              - { label: 大标题, name: tagline, widget: string }
-              - { label: 副文案, name: subtitle, widget: string }
-              - label: 客户 Logo
-                name: logos
-                widget: list
-                field: { label: Logo, name: logo, widget: image }
-          - label: 常见问题 (FAQ)
-            name: faq
-            widget: list
-            summary: "{{fields.q}}"
-            fields:
-              - { label: 问题, name: q, widget: string }
-              - { label: 答案, name: a, widget: text }
+            types:
+              - label: 文字段落
+                name: text
+                fields:
+                  - { label: 文字（可用 **词** 加粗）, name: text, widget: text }
+              - label: 图片
+                name: image
+                fields:
+                  - { label: 图片, name: image, widget: image }
+              - label: 图文组合
+                name: textImg
+                fields:
+                  - { label: 排版方向, name: direction, widget: select, options: [textLeft, textRight, textTop], default: textLeft, hint: textLeft=文左图右；textRight=文右图左；textTop=文上图下 }
+                  - { label: 文字/图片比例, name: ratio, widget: select, options: ["50:50", "40:60", "60:40", "30:70"], default: "50:50", hint: 前面数字=文字占比，后面=图片占比 }
+                  - { label: 标题（可选）, name: title, widget: string, required: false }
+                  - { label: 文字（可用 **词** 加粗，多段用空行分隔）, name: text, widget: text, required: false }
+                  - { label: 图片（可多张，纵向堆叠）, name: images, widget: list, required: false, field: { label: 图片, name: image, widget: image } }
+                  - { label: 图片上下位置（像素，正数下移/负数上移，可选）, name: imageOffset, widget: number, required: false, default: 0, hint: 例：填 60=图片往下移 60px；填 -40=往上移 40px }
+              - label: 客户区块
+                name: clients
+                fields:
+                  - { label: 区块标题, name: title, widget: string }
+                  - { label: 大标题, name: tagline, widget: string }
+                  - { label: 副文案, name: subtitle, widget: string }
+                  - { label: 客户 Logo, name: logos, widget: list, field: { label: Logo, name: logo, widget: image } }
+              - label: FAQ 区块
+                name: faq
+                fields:
+                  - { label: 问题/答案, name: items, widget: list, summary: "{{fields.q}}", fields: [ { label: 问题, name: q, widget: string }, { label: 答案, name: a, widget: text } ] }
 
   # ---------- 新增类目页（通用模板） ----------
   - name: pages

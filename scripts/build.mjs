@@ -346,52 +346,81 @@ function poleBody(data) {
   </section>`;
 }
 
+/** 把多段文字按空行拆成多个 <p>，支持 **词** 加粗 */
+function aboutParas(text) {
+  return String(text || '').split(/\n+/).map((p) => p.trim()).filter(Boolean).map((p) => `<p>${bold(p)}</p>`).join('\n      ');
+}
+
+/** 逐模块渲染 About 页（blocks 列表，可拖排序/增删） */
+function renderAboutBlock(b) {
+  if (!b) return '';
+  if (b.type === 'text') return `<section class="about-grey about-mod"><div class="container"><div class="about-text">\n      ${aboutParas(b.text)}\n    </div></div></section>`;
+  if (b.type === 'image') return `<section class="about-grey about-mod"><div class="container"><img class="about-img-solo" src="${esc(b.image)}" alt="" loading="lazy" decoding="async"></div></section>`;
+  if (b.type === 'textImg') {
+    const dir = b.direction || 'textLeft';
+    const rt = String(b.ratio || '50:50').split(':');
+    const t = parseInt(rt[0], 10) || 50;
+    const i = parseInt(rt[1], 10) || 50;
+    const off = parseInt(b.imageOffset, 10) || 0;
+    const imgs = (b.images || []).map((im) => `<img src="${esc(im)}" alt="" loading="lazy" decoding="async">`).join('');
+    return `
+    <section class="about-grey about-mod"><div class="container">
+      <div class="about-it about-it-${dir}" style="--it-t:${t};--it-i:${i};">
+        <div class="about-it-text">${b.title ? `<h4>${esc(b.title)}</h4>` : ''}${b.text ? `\n        ${aboutParas(b.text)}` : ''}</div>
+        <div class="about-it-imgs" style="margin-top:${off}px">${imgs}</div>
+      </div>
+    </div></section>`;
+  }
+  if (b.type === 'clients') {
+    const c = b;
+    return `
+    <section class="clients">
+      <div class="container">
+        <div>
+          <p class="cl-label">${esc(c.title)}</p>
+          <h2>${esc(c.tagline)}</h2>
+          <p class="cl-sub">${esc(c.subtitle)}</p>
+        </div>
+        <div class="cl-logos">
+          ${(c.logos || []).map((l) => `<img src="${esc(l)}" alt="Client logo" loading="lazy" decoding="async" width="128" height="86">`).join('\n        ')}
+        </div>
+      </div>
+    </section>`;
+  }
+  if (b.type === 'faq') {
+    const items = (b.items || []).map((f, idx) => `
+      <div class="faq-item ${idx === 0 ? 'open' : ''}">
+        <button class="faq-q" aria-expanded="${idx === 0}">
+          <span>${esc(f.q)}</span>
+          <span class="chev" aria-hidden="true">&#9660;</span>
+        </button>
+        <div class="faq-a"><p>${esc(f.a)}</p></div>
+      </div>`).join('');
+    return `
+    <section class="faq-section">
+      <div class="container">
+        <h2>FAQ</h2>
+        ${items}
+      </div>
+    </section>`;
+  }
+  return '';
+}
+
 function aboutBody(data) {
-  const paras = data.paragraphs.map((p) => `<p>${bold(p)}</p>`).join('\n      ');
-  const faqItems = data.faq.map((f, i) => `
-    <div class="faq-item ${i === 0 ? 'open' : ''}">
-      <button class="faq-q" aria-expanded="${i === 0}">
-        <span>${esc(f.q)}</span>
-        <span class="chev" aria-hidden="true">&#9660;</span>
-      </button>
-      <div class="faq-a"><p>${esc(f.a)}</p></div>
-    </div>`).join('');
+  const blocks = (data.blocks || []).map(renderAboutBlock).join('\n');
   return `
   <div class="about-hero">
     <img src="${data.hero.image}" alt="WOLFLAG factory workshop" width="1500" height="575">
   </div>
   <section class="about-grey">
-  <div class="about-marquee" aria-hidden="true">
-    <div class="track">
-      ${`<span>${esc(data.hero.title)}</span>`.repeat(8)}
-    </div>
-  </div>
-  <div class="container about-body">
-    <div class="about-copy">
-      ${paras}
-    </div>
-    <div class="about-img"><img src="${data.factoryImage}" alt="WOLFLAG factory building" loading="lazy" decoding="async" width="1259" height="944">${data.collageImage ? `
-      <img class="about-img-2" src="${esc(data.collageImage)}" alt="WOLFLAG team and factory scene" loading="lazy" decoding="async">` : ''}</div>
-  </div>
-  </section>
-  <section class="clients">
-    <div class="container">
-      <div>
-        <p class="cl-label">${esc(data.clients.title)}</p>
-        <h2>${esc(data.clients.tagline)}</h2>
-        <p class="cl-sub">${esc(data.clients.subtitle)}</p>
-      </div>
-      <div class="cl-logos">
-        ${data.clients.logos.map((l) => `<img src="${l}" alt="Client logo" loading="lazy" decoding="async" width="128" height="86">`).join('\n        ')}
+    <div class="about-marquee" aria-hidden="true">
+      <div class="track">
+        ${`<span>${esc(data.hero.title)}</span>`.repeat(8)}
       </div>
     </div>
   </section>
-  <section class="faq-section">
-    <div class="container">
-      <h2>FAQ</h2>
-      ${faqItems}
-    </div>
-  </section>`;
+  ${blocks}`;
 }
 
 /* ---------------- render ---------------- */
