@@ -207,9 +207,9 @@ collections:
           - label: 排版模板
             name: layout
             widget: select
-            options: [simple, flags, feather, bannerCards, pole, detail, flex]
+            options: [simple, flags, feather, bannerCards, pole, detail, flex, specGrid]
             default: simple
-            hint: simple=通用网格；flags=国旗式；feather=横卡式；bannerCards=横幅式；pole=旗杆展架式；detail=产品详情（多图+规格+价格表）；flex=通用图文（标题+文字+图片组合）
+            hint: simple=通用网格；flags=国旗式；feather=横卡式；bannerCards=横幅式；pole=旗杆展架式；detail=产品详情（多图+规格+价格表）；flex=通用图文（标题+文字+图片组合）；specGrid=属性网格（品名+宣传语+自由规格表，悬停完整弹出/图放大）
           - { label: 导航地址，如 /led-display.html, name: nav, widget: string }
       - label: SEO
         name: seo
@@ -231,6 +231,15 @@ collections:
           - { label: 尺寸（可选）, name: size, widget: string, required: false }
           - { label: 材质（可选）, name: material, widget: string, required: false }
           - { label: 描述, name: desc, widget: text, required: false }
+          - { label: 宣传语（可选，品名下方那句话，specGrid 属性网格模板用）, name: subtitle, widget: string, required: false }
+          - label: 产品属性（可自由新增/编辑/删除；specGrid 模板显示为规格表，如 尺寸、材质、颜色、工艺 等）
+            name: specs
+            widget: list
+            required: false
+            summary: "{{fields.label}}: {{fields.value}}"
+            fields:
+              - { label: 属性名（如 尺寸/Size、材质/Material、颜色）, name: label, widget: string }
+              - { label: 属性值（如 90*160cm、铝合金、红/蓝）, name: value, widget: string }
           - { label: 图片, name: image, widget: image }
       - label: 图文区块（flex 通用图文模板用，可按顺序多组）
         name: sections

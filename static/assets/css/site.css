@@ -1420,6 +1420,123 @@ p strong, .blog-content strong, .pd-desc strong, .ti-text strong {
   color: inherit;
 }
 
+/* ========== specGrid 属性网格模板：品名(加粗居中)+宣传语+规格表；信息像原卡一样直接完整显示；图悬停大图浮窗；手机全显 ========== */
+.sg-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; }
+.sg-card {
+  position: relative;
+  background: var(--card-bg);
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+/* 图片：正方形、满宽（和原来一样大） */
+.sg-img {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: #f0f0f0;
+}
+.sg-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* 信息区：直接完整显示（像原卡一样），不裁剪不弹层 */
+.sg-info {
+  padding: 16px 18px 20px;
+  text-align: center;
+}
+.sg-name {
+  font-weight: 700;
+  font-size: 20px;
+  text-align: center;
+  color: #191a19;
+  margin: 0 0 10px;
+}
+.sg-sub {
+  color: #444c58;
+  font-size: 14px;
+  line-height: 1.6;
+  text-align: center;
+  margin: 18px 0 0;             /* 与属性表隔开约一行 */
+  padding-top: 16px;            /* 分隔线下方留白 */
+  border-top: 1px solid #e3e7ee;  /* 浅灰分隔线 */
+}
+.sg-spec {
+  width: 100%;
+  font-size: 13px;
+  border-collapse: collapse;
+  margin-top: 12px;
+}
+.sg-spec th { width: 96px; background: #f5f7fb; color: #2b3550; font-weight: 700; }
+.sg-spec th, .sg-spec td {
+  border: 1px solid #e2e6ee;
+  padding: 7px 10px;
+  text-align: left;
+  vertical-align: top;
+}
+
+/* 图悬停：整张大图浮到最上层（跳出卡片），只在这个 specGrid 模板（当前仅 Stands & Displays 页）生效 */
+/* ========== 全站产品图片放大：悬停显示放大镜，点击弹出大图浮窗 ========== */
+.zoom-wrap { position: relative; }
+.zoom-wrap .zoom-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 32px;
+  height: 32px;
+  padding: 6px;
+  background: rgba(0,0,0,.5);
+  border-radius: 50%;
+  box-sizing: border-box;
+  opacity: 0;
+  transition: opacity .2s;
+  pointer-events: none;         /* 仅视觉提示，点击仍在图上 */
+  z-index: 3;
+}
+.zoom-wrap:hover .zoom-badge { opacity: 1; }
+
+.site-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  background: rgba(0,0,0,.82);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .2s;
+  cursor: zoom-out;             /* 点一下恢复原图 */
+}
+.site-lightbox img {
+  max-width: 92vw;
+  max-height: 86vh;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 12px 40px rgba(0,0,0,.5);
+}
+.site-lightbox.show { opacity: 1; visibility: visible; }
+.sl-close {
+  position: absolute;
+  top: 18px;
+  right: 22px;
+  font-size: 30px;
+  line-height: 1;
+  color: #fff;
+  cursor: pointer;
+  z-index: 2;
+  opacity: .85;
+}
+.sl-close:hover { opacity: 1; }
+
+/* 手机/平板：无鼠标，直接全显、不浮窗 */
+@media (max-width: 980px) {
+  .sg-grid { grid-template-columns: repeat(2, 1fr); gap: 22px; }
+}
+@media (max-width: 760px) {
+  .sg-grid { grid-template-columns: 1fr; }
+}
+
 @media (max-width: 980px) {
   .pd-cols { grid-template-columns: 1fr; gap: 28px; }
   .svc-grid { grid-template-columns: 1fr; }

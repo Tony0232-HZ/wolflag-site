@@ -7,3 +7,6 @@ Thumbs.db
 
 # local preview
 *.log
+
+# playwright-cli 临时浏览器配置
+.playwright-cli/

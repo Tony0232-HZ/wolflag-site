@@ -171,6 +171,7 @@ ${header(active)}
 ${body}
 </main>
 ${footerMode === 'minimal' ? minimalFooter() : footer()}
+<div class="site-lightbox" id="site-lightbox"><span class="sl-close" aria-hidden="true">✕</span><img src="" alt=""></div>
 <script src="/assets/js/site.js"></script>
 </body>
 </html>`;
@@ -437,6 +438,45 @@ function simpleBody(data) {
   </section>`;
 }
 
+/** specGrid 属性网格模板：品名(加粗居中)+宣传语+规格表(specs)；桌面统一卡片高度、超出隐藏、悬停完整弹出+图放大；手机全显 */
+function specGridBody(data) {
+  const banner = data.bannerImage ? `
+  <section class="page-banner">
+    <div class="container"><img src="${esc(data.bannerImage)}" alt="${esc(data.heading || '')}"></div>
+  </section>` : '';
+  const products = (data.products || []).map((p) => {
+    const specRows = (p.specs || []).filter((sp) => sp.label || sp.value);
+    const specHtml = specRows.length
+      ? `<table class="sg-spec">\n      ` + specRows.map((sp) => `<tr><th>${esc(sp.label)}</th><td>${esc(sp.value)}</td></tr>`).join('\n      ') + '\n    </table>'
+      : '';
+    const info = `
+      <div class="sg-body">
+        <h3 class="sg-name">${esc(p.name)}</h3>
+        ${specHtml}
+        ${p.subtitle ? `<p class="sg-sub">${bold(p.subtitle)}</p>` : ''}
+      </div>`;
+    const img = p.image ? `<img src="${esc(p.image)}" alt="${esc(p.name)}" loading="lazy" decoding="async">` : '';
+    return `
+    <article class="sg-card">
+      <div class="sg-img">${img}</div>
+      <div class="sg-info">${info}</div>
+    </article>`;
+  }).join('');
+  return `
+  ${banner}
+  <section class="page-hero">
+    <div class="container">
+      <h1>${esc(data.heading || '')}</h1>
+      ${data.tagline ? `<p class="tagline" style="letter-spacing:0;text-transform:none">${esc(data.tagline)}</p>` : ''}
+    </div>
+  </section>
+  <section class="section">
+    <div class="container">
+      <div class="sg-grid">${products}</div>
+    </div>
+  </section>`;
+}
+
 /* ---------------- 产品详情布局（detail）+ 通用图文布局（flex） ---------------- */
 const DEFAULT_CARDS = [
   { icon: '/assets/media/svc-support.svg', title: '24/7 Customer Service', text: 'If you have any questions about ordering or customization, email us any time — our team replies around the clock.' },
@@ -541,6 +581,7 @@ function renderBody(p) {
   if (p.layout === 'pole') return poleBody(p.data);
   if (p.layout === 'detail') return detailBody(p.data);
   if (p.layout === 'flex') return flexBody(p.data);
+  if (p.layout === 'specGrid') return specGridBody(p.data);
   return simpleBody(p.data); // 默认通用布局（新类目页）
 }
 

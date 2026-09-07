@@ -83,4 +83,34 @@
     });
     render();
   })();
+
+  // 全站产品图片放大：悬停显示放大镜，点击弹出大图浮窗；再点一下（或 Esc）恢复原图。
+  // 链接卡（首页分类/合集跳转的图）保留点击跳转，不加放大。
+  var ZOOM_SEL = '.cat-img, .p-img, .f-img, .sg-img, .pd-main, .feat-card, .ing-card';
+  document.querySelectorAll(ZOOM_SEL).forEach(function (w) {
+    if (w.closest('a') || w.querySelector('a')) return;   // 链接图不加放大
+    w.classList.add('zoom-wrap');
+    var b = document.createElement('span');
+    b.className = 'zoom-badge';
+    b.setAttribute('aria-hidden', 'true');
+    b.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6"/><path d="M15 15 L20 20"/></svg>';
+    w.appendChild(b);
+  });
+
+  var lb = document.getElementById('site-lightbox');
+  var lbImg = lb && lb.querySelector('img');
+  document.addEventListener('click', function (e) {
+    var img = e.target.closest('.zoom-wrap img');
+    if (img && !img.closest('a') && lb) {
+      lbImg.src = img.getAttribute('src');
+      lb.classList.add('show');
+      e.preventDefault();
+    }
+  });
+  if (lb) {
+    lb.addEventListener('click', function () { lb.classList.remove('show'); });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') lb.classList.remove('show');
+    });
+  }
 })();
