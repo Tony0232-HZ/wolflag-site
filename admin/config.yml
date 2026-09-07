@@ -280,7 +280,6 @@ collections:
         summary: "{{fields.name}}"
         fields:
           - { label: 品名, name: name, widget: string }
-          - { label: 宣传语（品名下方那句话，可选；可用 **词** 加粗）, name: subtitle, widget: string, required: false }
           - label: 产品属性（可自由新增/编辑/删除，显示为规格表）
             name: specs
             widget: list
@@ -289,6 +288,7 @@ collections:
             fields:
               - { label: 属性名（如 Size/Material/颜色）, name: label, widget: string }
               - { label: 属性值（如 90*160cm、铝合金、红/蓝）, name: value, widget: string }
+          - { label: 宣传语（品名下方那句话，可选；多行文本框可显示完整文字；可用 **词** 加粗）, name: subtitle, widget: text, required: false }
           - { label: 图片, name: image, widget: image }
 
   # ---------- 产品：羽毛旗 ----------
