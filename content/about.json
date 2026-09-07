@@ -11,7 +11,7 @@
   "blocks": [
     {
       "type": "textImg",
-      "bg": "grey",
+      "bg": "#f8f8f8",
       "direction": "textLeft",
       "ratio": "55:45",
       "title": "",
@@ -23,7 +23,7 @@
     },
     {
       "type": "clients",
-      "bg": "white",
+      "bg": "#ffffff",
       "title": "Our Clients",
       "tagline": "Trusted by over 70+ clients",
       "subtitle": "We bring solutions to make business easier for our customers.",
@@ -40,7 +40,7 @@
     },
     {
       "type": "faq",
-      "bg": "green",
+      "bg": "#dfe3e2",
       "items": [
         { "q": "Q. I have no experience with sourcing from Chinese factories or international trade. Can you help me?", "a": "Rest assured, we are here to guide you every step of the way! We’ll help you smoothly customize your products and ensure they arrive at your location safely and on schedule. We have rich professional experience in cross-border trade, including chartering, sea/air shipping, and customs clearance. Our sales reps speak excellent English, majored in International Trade, and bring 10+ years of hands-on experience. We're always happy to help with any questions or concerns!" },
         { "q": "Q. What is your minimum order quantity (MOQ)?", "a": "For flags and banners, our minimum order is only 3 pieces, so you can customize them with great flexibility. Plus, the more you order, the better the price! As for flagpoles and display hardware, the MOQ is around 300 pieces. Please contact our staff for more details!" },

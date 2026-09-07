@@ -365,7 +365,10 @@ const ABOUT_BG = {
   charcoal: '#f1f1ef',  // 浅炭
 };
 function aboutBg(b) {
-  if (b.bg && ABOUT_BG[b.bg]) return ABOUT_BG[b.bg];
+  if (b.bg) {
+    if (ABOUT_BG[b.bg]) return ABOUT_BG[b.bg];
+    if (/^#/.test(b.bg)) return b.bg;   // 颜色选择器存的是十六进制，直接使用
+  }
   if (b.type === 'clients') return ABOUT_BG.white;
   if (b.type === 'faq') return ABOUT_BG.green;
   return ABOUT_BG.grey;
