@@ -58,6 +58,15 @@ for (const [key, data] of Object.entries(pageFiles)) {
 /* ---------------- helpers ---------------- */
 const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
+/** 正文加粗标记：**文字** -> <strong>文字</strong>；其余内容仍做 HTML 转义以保安全（无标记时等价 esc()）。
+ *  规则：一对 ** 视为加粗段（中间不含星号、可含空格），可多处加粗混排。 */
+const bold = (s) => String(s ?? '').split(/(\*\*[^*]+\*\*)/g).map((part) => {
+  if (part.startsWith('**') && part.endsWith('**') && part.length > 4) {
+    return `<strong>${esc(part.slice(2, -2))}</strong>`;
+  }
+  return esc(part);
+}).join('');
+
 function header(active) {
   const menu = settings.nav.map((item) => {
     const children = item.children || [];
@@ -337,7 +346,7 @@ function poleBody(data) {
 }
 
 function aboutBody(data) {
-  const paras = data.paragraphs.map((p) => `<p>${esc(p)}</p>`).join('\n      ');
+  const paras = data.paragraphs.map((p) => `<p>${bold(p)}</p>`).join('\n      ');
   const faqItems = data.faq.map((f, i) => `
     <div class="faq-item ${i === 0 ? 'open' : ''}">
       <button class="faq-q" aria-expanded="${i === 0}">
@@ -603,8 +612,8 @@ function recentItem(b) {
 function blogPostBody(b, blogs) {
   const blocks = (b.blocks || []).map((bl) => {
     if (bl.type === 'image') return `<img class="blog-img" src="${esc(bl.image)}" alt="${esc(bl.text || '')}">`;
-    if (bl.type === 'h2') return `<h2>${esc(bl.text)}</h2>`;
-    return `<p>${esc(bl.text)}</p>`;
+    if (bl.type === 'h2') return `<h2>${bold(bl.text)}</h2>`;
+    return `<p>${bold(bl.text)}</p>`;
   }).join('\n');
   // 侧边「All Posts」：静态渲染前 20 条（无 JS 兜底），JS 用 blog-index JSON 分页
   const index = blogs.map((x) => ({ t: x.title, s: x.slug, d: x.date, i: x.coverImage || '', p: !!x.pinned }));
