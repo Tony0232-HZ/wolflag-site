@@ -13,23 +13,19 @@
   "tagline": "Show your brand on the road",
   "products": [
     {
-      "name": "Custom Car Flag",
-      "desc": "Custom printed car flags for promotions, sports events, dealerships and corporate branding. Fits standard car windows with an easy clip mount.",
-      "images": [
-        "/assets/media/flag-02.webp",
-        "/assets/media/flag-03.webp",
-        "/assets/media/flag-06.webp"
-      ],
-      "fabric": "110g knitted polyester / 100D polyester",
-      "printing": "digital printing / silkscreen printing",
       "size": "12\"x18\" / 18\"x22\" / custom sizes",
-      "prices": [
-        { "qty": "100 pcs", "price": "$0.85" },
-        { "qty": "500 pcs", "price": "$0.65" },
-        { "qty": "1000 pcs", "price": "$0.55" }
-      ],
+      "fabric": "110g knitted polyester / 100D polyester",
+      "leadTime": "7-10 days",
+      "prices": [],
+      "name": "Custom Car Flag",
       "moq": "3 pieces",
-      "leadTime": "7-10 days"
+      "desc": "Custom printed car flags for promotions, sports events, dealerships and corporate branding. Fits standard car windows with an easy clip mount.",
+      "printing": "digital printing / silkscreen printing",
+      "images": [
+        "/assets/media/car-flag-米黄背景.png",
+        "/assets/media/car-flag-01.png",
+        "/assets/media/car-flag-02.png"
+      ]
     }
   ],
   "serviceCards": [
