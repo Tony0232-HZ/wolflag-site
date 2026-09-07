@@ -351,11 +351,31 @@ function aboutParas(text) {
   return String(text || '').split(/\n+/).map((p) => p.trim()).filter(Boolean).map((p) => `<p>${bold(p)}</p>`).join('\n      ');
 }
 
+/** 模块可选背景色映射（后台 bg 下拉，国际极简风色板，低饱和高级中性色） */
+const ABOUT_BG = {
+  white: '#ffffff',     // 纯白
+  offwhite: '#fafaf9',  // 米白
+  grey: '#f8f8f8',      // 淡灰
+  sand: '#f5f0e8',      // 浅沙(暖)
+  cream: '#faf7f5',     // 米黄
+  green: '#dfe3e2',     // 灰绿
+  sage: '#e8ece2',      // 鼠尾草
+  mist: '#eef1f4',      // 雾蓝(冷)
+  blush: '#f6f0ee',     // 藕粉
+  charcoal: '#f1f1ef',  // 浅炭
+};
+function aboutBg(b) {
+  if (b.bg && ABOUT_BG[b.bg]) return ABOUT_BG[b.bg];
+  if (b.type === 'clients') return ABOUT_BG.white;
+  if (b.type === 'faq') return ABOUT_BG.green;
+  return ABOUT_BG.grey;
+}
+
 /** 逐模块渲染 About 页（blocks 列表，可拖排序/增删） */
 function renderAboutBlock(b) {
   if (!b) return '';
-  if (b.type === 'text') return `<section class="about-grey about-mod"><div class="container"><div class="about-text">\n      ${aboutParas(b.text)}\n    </div></div></section>`;
-  if (b.type === 'image') return `<section class="about-grey about-mod"><div class="container"><img class="about-img-solo" src="${esc(b.image)}" alt="" loading="lazy" decoding="async"></div></section>`;
+  if (b.type === 'text') return `<section class="about-grey about-mod" style="background:${aboutBg(b)}"><div class="container"><div class="about-text">\n      ${aboutParas(b.text)}\n    </div></div></section>`;
+  if (b.type === 'image') return `<section class="about-grey about-mod" style="background:${aboutBg(b)}"><div class="container"><img class="about-img-solo" src="${esc(b.image)}" alt="" loading="lazy" decoding="async"></div></section>`;
   if (b.type === 'textImg') {
     const dir = b.direction || 'textLeft';
     const rt = String(b.ratio || '50:50').split(':');
@@ -367,7 +387,7 @@ function renderAboutBlock(b) {
       return `<img src="${esc(src)}" alt="" loading="lazy" decoding="async" style="margin-top:${off}px">`;
     }).join('');
     return `
-    <section class="about-grey about-mod"><div class="container">
+    <section class="about-grey about-mod" style="background:${aboutBg(b)}"><div class="container">
       <div class="about-it about-it-${dir}" style="--it-t:${t};--it-i:${i};">
         <div class="about-it-text">${b.title ? `<h4>${esc(b.title)}</h4>` : ''}${b.text ? `\n        ${aboutParas(b.text)}` : ''}</div>
         <div class="about-it-imgs">${imgs}</div>
@@ -377,7 +397,7 @@ function renderAboutBlock(b) {
   if (b.type === 'clients') {
     const c = b;
     return `
-    <section class="clients">
+    <section class="clients" style="background:${aboutBg(b)}">
       <div class="container">
         <div>
           <p class="cl-label">${esc(c.title)}</p>
@@ -400,7 +420,7 @@ function renderAboutBlock(b) {
         <div class="faq-a"><p>${esc(f.a)}</p></div>
       </div>`).join('');
     return `
-    <section class="faq-section">
+    <section class="faq-section" style="background:${aboutBg(b)}">
       <div class="container">
         <h2>FAQ</h2>
         ${items}
