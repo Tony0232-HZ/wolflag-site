@@ -16,6 +16,26 @@
 
 ---
 
+## 0.5 ⚠️ 会话开场前必须先主动询问的两件事（2026-09-07 用户要求）
+
+> 本仓库的数据更新，**用户通过后台（Decap CMS）改的是 GitHub 仓库**（=线上网站的数据源），本地通常**落后于线上**。
+> 因此每次开始工作前，**必须先主动问用户这两件事，得到批准后再动手**——只"询问+提示"，绝不擅自执行。
+
+1. **要不要把网站上的更新同步到本地？**
+   - 主动措辞："网站最近有没有更新？需要我把网站上的内容同步到本地吗？"
+   - 同步操作 = `git fetch && git pull origin main`（本地工作区干净时为快进，安全；应先看 `git fetch` 后的 `git status -sb` 落后几个提交再决定）。
+   - **必须先得到批准**才拉取/同步，避免覆盖/冲突用户本地的改动。
+
+2. **要不要把网站新上传的图片转成 WebP 格式？**
+   - 主动措辞："网站新上传的图片要不要转成 WebP 格式（更小、加载更快）？"
+   - 只对**新上传/新出现且是大体积 PNG** 的 `media/` 图值得转；已是 WebP 或本就很小的一律不动。
+   - 转换步骤 = Pillow 转 `.webp`（quality 80、尺寸不变）→ 更新引用该图的 JSON（`.png`→`.webp`）→ `node scripts/build.mjs` 重建。
+   - **必须先得到批准**才转换。原 PNG 在 git 历史中可找回，删除安全。
+
+> 两条都以**用户明确批准**为前提。若用户已在本条对话内批准过相同操作，可视为已授权，无需重复询问。
+
+---
+
 ## 1. 目录结构（每个目录的角色）
 
 ```
@@ -250,4 +270,4 @@ feather/national/banner 页横幅: `.page-banner`（米黄 #faf7f5 底、pad 40p
 
 ---
 
-*最后更新：2026-09-07。今日：**config.yml 全角逗号导致后台全线崩溃，已修（坑 10b）**；Products 合集页加 bannerImage 横幅 + 卡片 p.link 可点击；删除 Custom Flags 示例页（用户不要 flex 页，模板保留）；「产品详情页 vs 新增类目页」定位确认（见 §2.6）。前次：2026-09-06 **Products 合集页 + 导航子菜单 + 两个新模板（detail 产品详情：多图画廊/规格表/价格表/MOQ/交期/3 张可编辑服务卡/图文区；flex 通用图文）**，Banner 改为 Products 子菜单项（详见 §2.6）；**Blog 博客模块增强**：正文插图块（type:image，数量不限）；文章页右侧 All Posts 侧栏（所有文章、20 条/页、JS 翻页）；列表分页 20 篇/页（/blog-2.html…）；置顶 `pinned`（多置顶按时间倒序、取消即回时间序）+ PINNED 徽章；**Blog 博客模块**（列表页 /blog.html + 文章页 /blog/<slug>.html，content/blog/*.json 自动发现、draft 草稿开关、后台「博客文章」栏目、自动进 sitemap，详见 §2.5）；最新导航：…About Us / Blog / Contact Us 按钮；Feather flag 页顶部横幅（`bannerImage` 字段，后台「羽毛旗产品页→顶部横幅图片」可换，素材 media/feather-banner.webp 2000×825）；National Flag 页同款横幅（media/national-banner.webp 2000×837）；Banner 页同款横幅（media/banners-banner.webp 1952×806）；CSS 类统一为 `.page-banner`（原 `.feather-banner` 改名）；三页横幅加 12px 圆角；About 页工厂图下新增拼图（段距调 36px 使左右两列高度≈对齐）、工厂图 12px 圆角；页脚原地址已由后台改为 No 7 Weisan Road Zhapu Town（Zhapu/平湖）；**全站页脚统一完整页脚**（页脚策略变更，见 §3/坑 #6）；随线上后台更新同步拉取并重建 static。前次：2026-09-04 导航改名「Flagpoles & Accessories」；修复并新增「Stands & Displays」类目页（.md→.json + `format: json` 治本）；首页新增「Download Catalog (PDF)」金色按钮 + 后台上传入口；**后台登录 OAuth 修复实战**（Worker 密钥被错指为不存在的 Client ID → 404；登记回调与线上 Worker 版本不一致 → Invalid Redirect URI；两处对齐 + 重置 Client Secret 后恢复，实测登录通过），并新增 §9 排障手册。版本号按 git log 追踪。*
+*最后更新：2026-09-07。今日：新增 §0.5「**会话开场前必须先主动询问的两件事**」（① 网站更新要不要同步到本地；② 新上传图片要不要转 WebP；均以用户批准为前提，2026-09-07 用户要求）；**config.yml 全角逗号导致后台全线崩溃，已修（坑 10b）**；Products 合集页加 bannerImage 横幅 + 卡片 p.link 可点击；删除 Custom Flags 示例页（用户不要 flex 页，模板保留）；「产品详情页 vs 新增类目页」定位确认（见 §2.6）。前次：2026-09-06 **Products 合集页 + 导航子菜单 + 两个新模板（detail 产品详情：多图画廊/规格表/价格表/MOQ/交期/3 张可编辑服务卡/图文区；flex 通用图文）**，Banner 改为 Products 子菜单项（详见 §2.6）；**Blog 博客模块增强**：正文插图块（type:image，数量不限）；文章页右侧 All Posts 侧栏（所有文章、20 条/页、JS 翻页）；列表分页 20 篇/页（/blog-2.html…）；置顶 `pinned`（多置顶按时间倒序、取消即回时间序）+ PINNED 徽章；**Blog 博客模块**（列表页 /blog.html + 文章页 /blog/<slug>.html，content/blog/*.json 自动发现、draft 草稿开关、后台「博客文章」栏目、自动进 sitemap，详见 §2.5）；最新导航：…About Us / Blog / Contact Us 按钮；Feather flag 页顶部横幅（`bannerImage` 字段，后台「羽毛旗产品页→顶部横幅图片」可换，素材 media/feather-banner.webp 2000×825）；National Flag 页同款横幅（media/national-banner.webp 2000×837）；Banner 页同款横幅（media/banners-banner.webp 1952×806）；CSS 类统一为 `.page-banner`（原 `.feather-banner` 改名）；三页横幅加 12px 圆角；About 页工厂图下新增拼图（段距调 36px 使左右两列高度≈对齐）、工厂图 12px 圆角；页脚原地址已由后台改为 No 7 Weisan Road Zhapu Town（Zhapu/平湖）；**全站页脚统一完整页脚**（页脚策略变更，见 §3/坑 #6）；随线上后台更新同步拉取并重建 static。前次：2026-09-04 导航改名「Flagpoles & Accessories」；修复并新增「Stands & Displays」类目页（.md→.json + `format: json` 治本）；首页新增「Download Catalog (PDF)」金色按钮 + 后台上传入口；**后台登录 OAuth 修复实战**（Worker 密钥被错指为不存在的 Client ID → 404；登记回调与线上 Worker 版本不一致 → Invalid Redirect URI；两处对齐 + 重置 Client Secret 后恢复，实测登录通过），并新增 §9 排障手册。版本号按 git log 追踪。*
