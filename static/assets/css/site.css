@@ -223,7 +223,8 @@ ul { list-style: none; }
 
 .page-hero .tagline { margin-top: 12px; color: #556; font-size: 14px; letter-spacing: .12em; text-transform: uppercase; }
 
-.page-badge { font-size: 16px; font-weight: 500; color: #5b5f6b; letter-spacing: .04em; }
+/* 羽毛旗徽标行：2026-09-08 与国家旗页标语(page-hero h1)统一 20px/700/#38513f/.02em（字体不变） */
+.page-badge { font-size: 20px; font-weight: 700; color: #38513f; letter-spacing: .02em; }
 
 /* Product page: top banner image (optional, feather/national banners/banner page) */
 .page-banner { background: #faf7f5; padding: 40px 0 8px; }
