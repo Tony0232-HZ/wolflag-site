@@ -530,7 +530,8 @@ function simpleBody(data) {
     <div class="container">
       <div class="product-grid-3">${products}</div>
     </div>
-  </section>`;
+  </section>
+  ${sectionsBlock(data)}`;
 }
 
 /** specGrid 属性网格模板：品名(加粗居中)+宣传语+规格表(specs)；桌面统一卡片高度、超出隐藏、悬停完整弹出+图放大；手机全显 */
@@ -650,10 +651,13 @@ function detailBody(data) {
   ${textImg}`;
 }
 
-function flexBody(data) {
-  const sections = (data.sections || []).map((s) => {
-    const imgs = (s.images || []).map((im) => `<img src="${esc(im)}" alt="" loading="lazy" decoding="async">`).join('');
-    return `
+// 图文区块（sections，flex 通用图文）：遍历渲染，show!==false 且至少一项有内容才输出该块；2026-09-08 支持显示/隐藏
+function sectionsBlock(data) {
+  const list = (data && data.sections) || [];
+  return list.filter((s) => s && s.show !== false && (s.title || s.text || (s.images && s.images.length)))
+    .map((s) => {
+      const imgs = (s.images || []).map((im) => `<img src="${esc(im)}" alt="" loading="lazy" decoding="async">`).join('');
+      return `
   <section class="flex-section">
     <div class="container">
       ${s.title ? `<h2>${esc(s.title)}</h2>` : ''}
@@ -661,12 +665,15 @@ function flexBody(data) {
       ${imgs ? `<div class="flex-imgs">${imgs}</div>` : ''}
     </div>
   </section>`;
-  }).join('\n');
+    }).join('\n');
+}
+
+function flexBody(data) {
   return `
   <section class="page-hero">
     <div class="container"><h1>${esc(data.heading || '')}</h1>${data.tagline ? `<p class="tagline" style="letter-spacing:0;text-transform:none">${esc(data.tagline)}</p>` : ''}</div>
   </section>
-  ${sections}`;
+  ${sectionsBlock(data)}`;
 }
 
 /** 按 layout 分派 body 渲染 */

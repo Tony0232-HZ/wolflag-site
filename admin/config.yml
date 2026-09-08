@@ -270,8 +270,9 @@ collections:
         name: sections
         widget: list
         required: false
-        summary: "{{fields.title}}"
+        summary: "{{fields.title || '图文区块'}}"
         fields:
+          - { label: 显示此图文区块, name: show, widget: boolean, default: true, hint: 取消勾选即隐藏（内容会保留，重新勾选即可恢复） }
           - { label: 小标题, name: title, widget: string, required: false }
           - { label: 文字, name: text, widget: text, required: false }
           - label: 图片（可多张）
