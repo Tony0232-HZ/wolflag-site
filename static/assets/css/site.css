@@ -74,9 +74,9 @@ ul { list-style: none; }
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  gap: 31px;
+  gap: 24px;
   flex: 1;
-  margin: 0 8px 0 32px;
+  margin: 0 8px 0 20px;
 }
 
 .nav-menu a {
@@ -84,6 +84,7 @@ ul { list-style: none; }
   color: #272e47;
   padding: 6px 2px;
   border-bottom: 2px solid transparent;
+  white-space: nowrap; /* 防止多词菜单名被压成两行（2026-09-08） */
 }
 
 .nav-menu a:hover { color: var(--blue); }
@@ -159,7 +160,7 @@ ul { list-style: none; }
   color: var(--navy);
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1200px) {
   .nav-toggle { display: block; }
   .nav-menu {
     display: none;
