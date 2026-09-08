@@ -206,6 +206,7 @@ function homeBody() {
        </span>
      </a>`).join('\n');
   const supplement = supplementSection(home);
+  const heroImgs = (home.hero.images && home.hero.images.length ? home.hero.images : (home.hero.image ? [home.hero.image] : []));
   return `
   <section class="home-hero">
     ${settings.catalogButton ? `<a class="hero-catalog-btn" href="${esc(settings.catalogButton.file)}" download>${esc(settings.catalogButton.text)}</a>` : ''}
@@ -214,7 +215,9 @@ function homeBody() {
       <p class="hero-text">${esc(home.hero.text)}</p>
     </div>
     <div class="container hero-image">
-      <img src="${home.hero.image}" alt="Flags of the world at WOLFLAG flags showroom" width="1259" height="562">
+      <div class="hero-slider" data-interval="${esc(String(home.hero.interval || 5))}" data-mode="${esc(home.hero.mode || 'carousel')}">
+        ${heroImgs.map((src, i) => `<img class="hero-slide${i === 0 ? ' is-active' : ''}" src="${esc(src)}" alt="WOLFLAG factory and products" ${i === 0 ? 'width="1259" height="562"' : 'loading="lazy"'} decoding="async">`).join('\n        ')}
+      </div>
     </div>
   </section>
 

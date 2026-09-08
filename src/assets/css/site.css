@@ -271,18 +271,79 @@ ul { list-style: none; }
   margin-top: 64px;
 }
 
-.home-hero .hero-image img {
-  width: 100%;
+/* 首页 hero 横幅：多图轮播（淡入淡出 + 悬停箭头 + 底部圆点；2026-09-08） */
+.home-hero .hero-slider {
+  position: relative;
   height: 419px;
-  object-fit: cover;
+  overflow: hidden;
 }
+.home-hero .hero-slider .hero-slide {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity .8s ease;
+}
+.home-hero .hero-slider .hero-slide.is-active { opacity: 1; }
+/* 左右箭头：仅悬停时淡入 */
+.home-hero .hero-slider .hero-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(0,0,0,.35);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity .25s, background .2s;
+  z-index: 2;
+}
+.home-hero .hero-slider:hover .hero-arrow { opacity: 1; }
+.home-hero .hero-slider .hero-arrow:hover { background: rgba(0,0,0,.55); }
+.home-hero .hero-slider .hero-prev { left: 16px; }
+.home-hero .hero-slider .hero-next { right: 16px; }
+/* 底部圆点：一直显示 */
+.home-hero .hero-slider .hero-dots {
+  position: absolute;
+  bottom: 12px;
+  left: 0;
+  right: 0;
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  z-index: 2;
+}
+.home-hero .hero-slider .hero-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.55);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: background .2s, transform .2s;
+}
+.home-hero .hero-slider .hero-dot.is-active { background: #fff; transform: scale(1.2); }
 
 @media (max-width: 900px) {
   .home-hero { padding-top: 40px; }
   .home-hero .hero-row { grid-template-columns: 1fr; gap: 18px; }
   .home-hero h1 { font-size: 28px; }
   .home-hero .hero-image { margin-top: 28px; }
-  .home-hero .hero-image img { height: auto; }
+  .home-hero .hero-slider { height: auto; aspect-ratio: 1259 / 562; }
+  .home-hero .hero-slider .hero-arrow { width: 34px; height: 34px; font-size: 16px; }
+  .home-hero .hero-slider .hero-prev { left: 8px; }
+  .home-hero .hero-slider .hero-next { right: 8px; }
 }
 
 /* ==========================================================================

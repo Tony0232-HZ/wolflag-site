@@ -111,7 +111,14 @@ collections:
             fields:
               - { label: 大标题, name: title, widget: string }
               - { label: 副文案, name: text, widget: text }
-              - { label: 横幅图片, name: image, widget: image }
+              - { label: 横幅图片（用于兼容/默认）, name: image, widget: image }
+              - label: 轮播图片（可多张；第一张为默认，拖动手柄调顺序；只有 1 张时静止显示单图）
+                name: images
+                widget: list
+                required: false
+                field: { label: 图片, name: image, widget: image }
+              - { label: 图片模式, name: mode, widget: select, options: [carousel, single], default: carousel, hint: carousel=多图轮播；single=只显示第一张（固定） }
+              - { label: 轮播间隔（秒）, name: interval, widget: number, default: 5, value_type: "int", min: 1, hint: 自动换图间隔秒数，如填 5 }
               - label: 特性标签
                 name: features
                 widget: list
