@@ -281,6 +281,19 @@ function featherBody(data) {
   <section class="page-banner">
     <div class="container"><img src="${esc(data.bannerImage)}" alt="Feather flags"></div>
   </section>` : '';
+  // 补充模块（可选：图片 + 标题 + 文字，显示在产品列表下方；2026-09-08）
+  const supplement = data.supplement && (data.supplement.text || data.supplement.title || data.supplement.image) ? `
+  <section class="section">
+    <div class="container">
+      <div class="f-supp${data.supplement.image ? '' : ' f-supp-txt'}">
+        ${data.supplement.image ? `<div class="f-supp-img"><img src="${esc(data.supplement.image)}" alt="" decoding="async"></div>` : ''}
+        <div class="f-supp-body">
+          ${data.supplement.title ? `<h2 class="f-supp-title">${esc(data.supplement.title)}</h2>` : ''}
+          <div class="f-supp-text">${bold(data.supplement.text || '')}</div>
+        </div>
+      </div>
+    </div>
+  </section>` : '';
   return `
   ${banner}
   <section class="section" style="padding-bottom:0">
@@ -290,7 +303,7 @@ function featherBody(data) {
     <div class="container">
       <div class="product-grid-2">${cards}</div>
     </div>
-  </section>`;
+  </section>${supplement}`;
 }
 
 function bannerBody(data) {

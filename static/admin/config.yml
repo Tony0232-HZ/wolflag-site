@@ -348,6 +348,14 @@ collections:
                   - { label: 属性值（如 110g knitted polyester、红/蓝）, name: value, widget: string }
               - { label: 宣传语（品名下方那句话，可选；多行；可用 **词** 加粗）, name: subtitle, widget: text, required: false }
               - { label: 图片, name: image, widget: image }
+          - label: 补充模块（可选：图 + 标题 + 文字，显示在产品列表下方）
+            name: supplement
+            widget: object
+            required: false
+            fields:
+              - { label: 标题（可选）, name: title, widget: string, required: false }
+              - { label: 文字（可用 **词** 加粗）, name: text, widget: text, required: false }
+              - { label: 图片（可选）, name: image, widget: image, required: false }
 
   # ---------- 产品：横幅 ----------
   - name: banners
