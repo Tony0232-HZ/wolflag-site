@@ -255,16 +255,21 @@ function nfBody(data) {
 }
 
 function featherBody(data) {
-  const cards = data.products.map((p) => `
+  const cards = data.products.map((p) => {
+    const specRows = productSpecRows(p);
+    const specHtml = specRows.length
+      ? '<table class="f-spec">' + specRows.map((sp) => '<tr><th>' + esc(sp.label) + '</th><td>' + esc(sp.value) + '</td></tr>').join('') + '</table>'
+      : '';
+    return `
     <article class="f-card">
       <span class="f-img"><img src="${p.image}" alt="${esc(p.name)}" loading="lazy" decoding="async" width="280" height="320"></span>
       <div class="f-body">
-        ${p.size ? `<p class="f-name-lite">${esc(p.size)}</p>` : ''}
         <h2 class="f-title">${esc(p.name)}</h2>
-        <p class="f-desc">${esc(p.material)}<br>${esc(p.desc)}</p>
-        <p class="f-cta">${esc(data.cta)}</p>
+        ${specHtml}
+        ${p.subtitle ? `<p class="f-sub">${bold(p.subtitle)}</p>` : ''}
       </div>
-    </article>`).join('');
+    </article>`;
+  }).join('');
   const banner = data.bannerImage ? `
   <section class="page-banner">
     <div class="container"><img src="${esc(data.bannerImage)}" alt="Feather flags"></div>
