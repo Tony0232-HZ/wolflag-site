@@ -1,15 +1,15 @@
 {
-  "slug": "products",
+  "slug": "full products",
   "page": {
     "file": "products.html",
     "layout": "simple",
     "nav": "/products.html"
   },
   "seo": {
-    "title": "Products - WOLFLAG",
+    "title": "Full Products - WOLFLAG",
     "description": "Explore WOLFLAG products: banners, car flags, hand flags, scarves, table flags, pennants and more. Factory-direct wholesale from China."
   },
-  "heading": "Products",
+  "heading": "Full Products",
   "tagline": "Where to buy our diverse range of flags and banners",
   "bannerImage": "/assets/media/product横幅-.jpg",
   "products": [
