@@ -239,16 +239,22 @@ function homeBody() {
 }
 
 function nfBody(data) {
-  const cards = data.products.map((p) => `
-    <article class="product-card">
+  // 2026-09-08: 国家旗卡片改为品名(加粗居中) + 属性表(specs, 雾蓝/米白/3px 新样式) + 可选宣传语
+  const cards = data.products.map((p) => {
+    const specRows = productSpecRows(p);
+    const specHtml = specRows.length
+      ? '<table class="p-spec">' + specRows.map((sp) => '<tr><th>' + esc(sp.label) + '</th><td>' + esc(sp.value) + '</td></tr>').join('') + '</table>'
+      : '';
+    return `
+    <article class="product-card nf-card">
       <span class="p-img"><img src="${p.image}" alt="${esc(p.name)}" loading="lazy" decoding="async" width="332" height="332"></span>
       <div class="p-body">
         <h2 class="p-name">${esc(p.name)}</h2>
-        <p class="p-size">${esc(p.size)}</p>
-        <p class="p-material">${esc(p.material)}</p>
-        <span class="p-chip">${esc(p.printing)}</span>
+        ${specHtml}
+        ${p.subtitle ? `<p class="p-sub">${bold(p.subtitle)}</p>` : ''}
       </div>
-    </article>`).join('');
+    </article>`;
+  }).join('');
   const banner = data.bannerImage ? `
   <section class="page-banner">
     <div class="container"><img src="${esc(data.bannerImage)}" alt="National flags"></div>

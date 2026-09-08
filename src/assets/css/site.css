@@ -558,6 +558,9 @@ ul { list-style: none; }
   margin-bottom: 12px;
 }
 
+/* 国家旗卡片（nf 布局 2026-09-08：品名加粗居中 + 属性表） */
+.nf-card .p-name { text-align: center; font-weight: 700; }
+
 .product-card .p-desc { color: #444c58; font-size: 14px; margin-bottom: 12px; }
 .product-card .p-size { color: #384252; font-size: 14px; line-height: 1.5; margin-bottom: 4px; }
 .product-card .p-material { color: #6b7280; font-size: 13px; margin-bottom: 14px; }
