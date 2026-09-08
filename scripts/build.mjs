@@ -281,8 +281,8 @@ function featherBody(data) {
   <section class="page-banner">
     <div class="container"><img src="${esc(data.bannerImage)}" alt="Feather flags"></div>
   </section>` : '';
-  // 补充模块（可选：图片 + 标题 + 文字，显示在产品列表下方；2026-09-08）
-  const supplement = data.supplement && (data.supplement.text || data.supplement.title || data.supplement.image) ? `
+  // 补充模块（可选：图 + 标题 + 文字；show 勾选则显示、去掉则隐藏；2026-09-08）
+  const supplement = data.supplement && data.supplement.show !== false && (data.supplement.text || data.supplement.title || data.supplement.image) ? `
   <section class="section">
     <div class="container">
       <div class="f-supp${data.supplement.image ? '' : ' f-supp-txt'}">

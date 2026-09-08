@@ -353,6 +353,7 @@ collections:
             widget: object
             required: false
             fields:
+              - { label: 显示此补充模块, name: show, widget: boolean, default: true, hint: 取消勾选即隐藏（已填内容会保留，重新勾选即可恢复） }
               - { label: 标题（可选）, name: title, widget: string, required: false }
               - { label: 文字（可用 **词** 加粗）, name: text, widget: text, required: false }
               - { label: 图片（可选）, name: image, widget: image, required: false }

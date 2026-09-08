@@ -10,8 +10,14 @@
     {
       "name": "Feather shape",
       "specs": [
-        { "label": "Size", "value": "6.75ft*2.2ft / 11.15ft*2.62ft" },
-        { "label": "Material", "value": "110g Knitted Polyester / digital printing or silkscreen printing" }
+        {
+          "label": "Size",
+          "value": "6.75ft*2.2ft / 11.15ft*2.62ft"
+        },
+        {
+          "label": "Material",
+          "value": "110g Knitted Polyester / digital printing or silkscreen printing"
+        }
       ],
       "subtitle": "Flags are portable and easy to install. The flag is made of high-quality durable fabric with an optional carbon composite fiber stand.",
       "image": "/assets/media/digital-printing-feather-flag.jpg"
@@ -19,8 +25,14 @@
     {
       "name": "Open house feather flag",
       "specs": [
-        { "label": "Size", "value": "flag: 206*67cm  Pole: 3m" },
-        { "label": "Material", "value": "110g knitted polyester / digital printing or silkscreen printing" }
+        {
+          "label": "Size",
+          "value": "flag: 206*67cm  Pole: 3m"
+        },
+        {
+          "label": "Material",
+          "value": "110g knitted polyester / digital printing or silkscreen printing"
+        }
       ],
       "subtitle": "High Visibility: Tall, moving flags catch eyes instantly from afar.\nCost-Effective: Inexpensive, durable, and reusable for every listing.\nPortable & Easy Setup: Lightweight, fast to assemble, and simple to transport.",
       "image": "/assets/media/feather-open-house.webp"
@@ -28,8 +40,14 @@
     {
       "name": "Leaf shape",
       "specs": [
-        { "label": "Size", "value": "7.38ft*2.62ft" },
-        { "label": "Material", "value": "110g Knitted Polyester / digital printing or silkscreen printing" }
+        {
+          "label": "Size",
+          "value": "7.38ft*2.62ft"
+        },
+        {
+          "label": "Material",
+          "value": "110g Knitted Polyester / digital printing or silkscreen printing"
+        }
       ],
       "subtitle": "Leaf-shaped flag, very unique, eye-catching, supported by two fiberglass rods. Easy to install and carry.",
       "image": "/assets/media/leaf-shape-feather-flag.jpg"
@@ -37,8 +55,14 @@
     {
       "name": "Rectangle shape",
       "specs": [
-        { "label": "Size", "value": "6.56ft*2.62ft" },
-        { "label": "Material", "value": "110g Knitted Polyester / digital printing or silkscreen printing" }
+        {
+          "label": "Size",
+          "value": "6.56ft*2.62ft"
+        },
+        {
+          "label": "Material",
+          "value": "110g Knitted Polyester / digital printing or silkscreen printing"
+        }
       ],
       "subtitle": "The easiest to install, with the smoothest flag surface, your advertising slogan is displayed in full view. It is more like a standing banner.",
       "image": "/assets/media/rectangular-flag.jpg"
@@ -46,8 +70,14 @@
     {
       "name": "Teardrop Shape",
       "specs": [
-        { "label": "Size", "value": "11.8ft*3.9ft" },
-        { "label": "Material", "value": "110g Knitted Polyester / digital printing or silkscreen printing" }
+        {
+          "label": "Size",
+          "value": "11.8ft*3.9ft"
+        },
+        {
+          "label": "Material",
+          "value": "110g Knitted Polyester / digital printing or silkscreen printing"
+        }
       ],
       "subtitle": "The coolest and most beautiful shape, often seen in major shopping malls and sports venues, people can't help but take a few more glances.",
       "image": "/assets/media/水滴型沙滩旗02.webp"
@@ -55,14 +85,21 @@
     {
       "name": "Pinpoint Flags",
       "specs": [
-        { "label": "Size", "value": "71cm W × 110cm H / total: 145cm H" },
-        { "label": "Material", "value": "110g knitted polyesyer / Durable fiberglass and aluminum construction" }
+        {
+          "label": "Size",
+          "value": "71cm W × 110cm H / total: 145cm H"
+        },
+        {
+          "label": "Material",
+          "value": "110g knitted polyesyer / Durable fiberglass and aluminum construction"
+        }
       ],
       "subtitle": "Turn heads from every angle with a rotating, two-sided display that never misses a customer. Swap your prints in seconds to keep your message fresh and ready for any event. Easy to carry, quick to set up, and stands strong anywhere—indoors or out.",
       "image": "/assets/media/pinpoint-flag.jpg"
     }
   ],
   "supplement": {
+    "show": true,
     "title": "Bring Your Design to Life",
     "text": "**Tell us your idea** — our team will help you customize your feather flags, with factory-direct pricing and fast turnaround. Email us anytime for a free quote.",
     "image": "/assets/media/about-factory.webp"
