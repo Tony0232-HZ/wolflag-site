@@ -287,16 +287,21 @@ function featherBody(data) {
 }
 
 function bannerBody(data) {
-  const cards = data.products.map((p) => `
+  const cards = data.products.map((p) => {
+    const specRows = productSpecRows(p);
+    const specHtml = specRows.length
+      ? '<table class="p-spec">' + specRows.map((sp) => '<tr><th>' + esc(sp.label) + '</th><td>' + esc(sp.value) + '</td></tr>').join('') + '</table>'
+      : '';
+    return `
     <article class="product-card">
       <span class="p-img"><img src="${p.image}" alt="${esc(p.name)}" loading="lazy" decoding="async" width="332" height="332"></span>
       <div class="p-body">
         <h2 class="p-name">${esc(p.name)}</h2>
-        <p class="p-desc">${esc(p.desc)}</p>
-        <p class="p-material">${esc(p.material)}</p>
-        <p class="p-desc">${esc(p.detail)}</p>
+        ${specHtml}
+        ${p.subtitle ? `<p class="p-sub">${bold(p.subtitle)}</p>` : ''}
       </div>
-    </article>`).join('');
+    </article>`;
+  }).join('');
   const banner = data.bannerImage ? `
   <section class="page-banner">
     <div class="container"><img src="${esc(data.bannerImage)}" alt="Banners"></div>

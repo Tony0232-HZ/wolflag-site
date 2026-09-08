@@ -477,6 +477,28 @@ ul { list-style: none; }
 .product-card .p-size { color: #384252; font-size: 14px; line-height: 1.5; margin-bottom: 4px; }
 .product-card .p-material { color: #6b7280; font-size: 13px; margin-bottom: 14px; }
 
+/* 属性表 + 宣传语（2026-09-08：横幅页说明模块改为 Stands & Displays 同款：品名 → 属性表 → 宣传语） */
+.product-card .p-spec {
+  width: 100%;
+  font-size: 13px;
+  border-collapse: collapse;
+  margin: 4px 0 0;
+}
+.product-card .p-spec th { width: 78px; background: #f5f7fb; color: #2b3550; font-weight: 700; }
+.product-card .p-spec th, .product-card .p-spec td {
+  border: 1px solid #e2e6ee;
+  padding: 7px 10px;
+  text-align: left;
+  vertical-align: top;
+}
+.product-card .p-sub {
+  color: #444c58;
+  font-size: 13px;
+  line-height: 1.6;
+  margin: 14px 0 0;
+  white-space: pre-line;
+}
+
 /* 通用卡片可点击（simple 布局 p.link） */
 .product-card a.p-link { color: inherit; text-decoration: none; display: block; }
 .product-card a.p-link img { transition: opacity .2s; }
