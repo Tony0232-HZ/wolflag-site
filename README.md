@@ -128,6 +128,8 @@ git push -u origin main
 > 排版模板选择（7 种）：`simple` 通用网格 | `flags` 国旗式 | `feather` 横卡式 | `bannerCards` 横幅式 | `pole` 旗杆展架式 | `detail` 产品详情 | `flex` 通用图文。
 > 参考：`content/pages/led-display.json`（仓库里已内置 LED 示例页，可直接替换内容）。
 
+> **图文区块（可加多组，每组可显隐，2026-09-08）**：新增类目页底部可加多组"图文区块"（小标题 + 文字 + 多张图）。每组顶部有「**显示此图文区块**」勾选框：勾上=显示、取消=隐藏（内容保留）。`simple` 与 `flex` 两种布局都会在产品列表下方渲染这些图文区块（例：Full Products 页）。
+
 ## 产品详情页（detail 模板）与 Products 子菜单
 
 **两种页面入口的区别（用哪个）**：
