@@ -234,6 +234,11 @@ feather/national/banner 页横幅: `.page-banner`（米黄 #faf7f5 底、pad 40p
 13. **Download Catalog 按钮只在首页**：由 `settings.catalogButton` 驱动、在 `homeBody()` **绝对定位**渲染（首页右上角、紧贴 Contact Us 下方），**不**进共享 `header()`。改它别动 `header()`；色值用 CSS 变量 `--catalog` / `--catalog-dark`。PDF 放 `media/`，后台用 `widget: file` 上传。
 14. 改动后回滚出口永远是 Git（`git revert <commit>`），每天渐进提交
 15. **导航菜单多词名称折行**（2026-09-08）：菜单名改长（如 Products→Full Products、Feather flag→Feather flags）后，`.nav-menu` flex 空间不足会把词断到下一行叠起来。`site.css` 的 `.nav-menu a` 加 `white-space:nowrap` 强制单行；并收紧菜单间距（gap 31→24、margin-left 32→20），汉堡断点 `@media (max-width:1200px)`（原 900px）保证窄屏时「Contact Us」不被挤出屏幕。**教训**：改动体量较大的菜单文字后，一定要用 Playwright 在 1280 和偏窄宽度各截图，确认既不折行、也不溢出挤掉按钮
+16. **Decap config.yml 字段缩进层级错误（2026-09-08 事故：specgrid 补充模块"消失"）**：给不同 collection 加同一个字段时，**`files:` 型与 `folder:` 型的字段缩进层级不同**——`files:` 型（home / feather-flags / banners / national-flags / pole-display 等）字段缩进为 **10 空格**（位于 `files[0].fields` 下）；`folder:` 型（specgrid / pages / product-details / blog 等）字段缩进为 **6 空格**（位于 collection 顶层 `fields` 下）。**若直接复制 `files:` 型字段块到 `folder:` 型而不改缩进，字段会被当成上一个字段（如 products）list 的**子字段**而静默嵌套**，后台表现为"这个栏目看不到 XX 字段"，但构建不报错、PyYAML 也解析通过——最隐蔽。**必须遵守**：
+   - 改 config.yml 前，先确认该 collection 是 `files:` 还是 `folder:`，据此确定新字段体的缩进；
+   - 加完后必做：① PyYAML `safe_load` 通过（坑 #10b）；② **用 python 打印该 collection 顶层字段名**，确认新字段在顶层、且没被嵌进 products 等 list 的 `fields`（`python -c "..."` 遍历 `collections`，files 型取 `files[0].fields`、folder 型取 `fields`，列出各字段 name）；③ 有 Playwright 就打开 `/admin/` 确认该栏目出现对应字段；
+   - 现象判断：后台某个字段"突然不见/只看到一部分"→ 多半是缩进层级把它嵌进了上一字段，**先查 config.yml 层级，别先怀疑部署或缓存**；
+   - 本例：specgrid 的 `supplement` 误用 10 空格嵌进 products → Stands & Displays 后台看不到"补充模块"；已改回 6 空格顶层字段修复。判断字段是否"在顶层"的脚本见 §7 自检。
 
 ---
 
@@ -246,6 +251,8 @@ feather/national/banner 页横幅: `.page-banner`（米黄 #faf7f5 底、pad 40p
 5. 内容回路验证：改 JSON → build → curl/渲染确认出现
 6. 上线：`git add -A && git commit -m "..." && git push` → CF Pages 自动部署 → 1-3 分钟访问线上复查
 7. 涉及域名/sitemap：同步 `SITE` 常量
+8. 若改 `admin/config.yml`（加字段/改 collection）：① PyYAML `safe_load` 通过（坑 #10b）；② 用下面脚本确认新字段在**顶层**、没被嵌套进 products 等 list 的 `fields`（坑 #16）：
+   `python -X utf8 -c "import yaml; c=[x for x in yaml.safe_load(open('admin/config.yml',encoding='utf-8'))['collections'] if x.get('name')=='<栏目名>'][0]; fs=c.get('fields') or c['files'][0]['fields']; print([f.get('name') for f in fs])"` → 输出的顶层字段列表**应含**新字段；且该 list 字段（如 products）的 `fields` 子字段列表里**不应**有它；③ 有 Playwright 就开 `/admin/` 核对（坑 #10b/#16）。
 
 ---
 
