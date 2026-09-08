@@ -55,7 +55,5 @@
     "title": "Wolflag factory",
     "image": "/assets/media/about-factory.webp"
   },
-  "supplement": {
-    "show": false
-  }
+  "supplement": []
 }

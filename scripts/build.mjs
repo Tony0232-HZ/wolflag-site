@@ -263,22 +263,23 @@ function nfBody(data) {
   </section>${supplement}`;
 }
 
-// 补充模块（可选：图 + 标题 + 文字；show!==false 且至少一项有内容才渲染；2026-09-08 全站通用）
+// 补充模块（可加多个：每个 图 + 标题 + 文字；show!==false 且至少一项有内容才渲染；兼容旧版单对象；2026-09-08 全站通用）
 function supplementSection(data) {
-  const s = data && data.supplement;
-  if (!s || s.show === false || !(s.text || s.title || s.image)) return '';
-  return `
-  <section class="section">
-    <div class="container">
-      <div class="f-supp${s.image ? '' : ' f-supp-txt'}">
-        ${s.image ? `<div class="f-supp-img"><img src="${esc(s.image)}" alt="" decoding="async"></div>` : ''}
-        <div class="f-supp-body">
-          ${s.title ? `<h2 class="f-supp-title">${esc(s.title)}</h2>` : ''}
-          <div class="f-supp-text">${bold(s.text || '')}</div>
+  const raw = data && data.supplement;
+  const items = Array.isArray(raw) ? raw : (raw ? [raw] : []);
+  return items.filter((s) => s && s.show !== false && (s.text || s.title || s.image))
+    .map((s) => `
+    <section class="section">
+      <div class="container">
+        <div class="f-supp${s.image ? '' : ' f-supp-txt'}">
+          ${s.image ? `<div class="f-supp-img"><img src="${esc(s.image)}" alt="" decoding="async"></div>` : ''}
+          <div class="f-supp-body">
+            ${s.title ? `<h2 class="f-supp-title">${esc(s.title)}</h2>` : ''}
+            <div class="f-supp-text">${bold(s.text || '')}</div>
+          </div>
         </div>
       </div>
-    </div>
-  </section>`;
+    </section>`).join('');
 }
 
 function featherBody(data) {

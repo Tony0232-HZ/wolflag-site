@@ -10,8 +10,14 @@
     {
       "name": "street pole banner",
       "specs": [
-        { "label": "Size", "value": "comstom size" },
-        { "label": "Material", "value": "100% knitted polyester" }
+        {
+          "label": "Size",
+          "value": "comstom size"
+        },
+        {
+          "label": "Material",
+          "value": "100% knitted polyester"
+        }
       ],
       "subtitle": "attract the attention of passersby\na sleeve at both the top and bottom.",
       "image": "/assets/media/banner-1.webp"
@@ -19,8 +25,14 @@
     {
       "name": "Swallowtail banner",
       "specs": [
-        { "label": "Size", "value": "comstom size" },
-        { "label": "Material", "value": "100% knitted polyester" }
+        {
+          "label": "Size",
+          "value": "comstom size"
+        },
+        {
+          "label": "Material",
+          "value": "100% knitted polyester"
+        }
       ],
       "subtitle": "A unique shape, like a beautiful landscape.\na sleeve at both the top and 2 grommets at bottom.",
       "image": "/assets/media/banner-2.webp"
@@ -28,8 +40,14 @@
     {
       "name": "Hook banner",
       "specs": [
-        { "label": "Size", "value": "comstom size" },
-        { "label": "Material", "value": "100% knitted polyester" }
+        {
+          "label": "Size",
+          "value": "comstom size"
+        },
+        {
+          "label": "Material",
+          "value": "100% knitted polyester"
+        }
       ],
       "subtitle": "Customizable sizes to fit various spaces\nThe left side is inlaid with sturdy hooks, easily securing it in your desired position",
       "image": "/assets/media/banner-3.webp"
@@ -37,8 +55,14 @@
     {
       "name": "grommet banner",
       "specs": [
-        { "label": "Size", "value": "comstom size" },
-        { "label": "Material", "value": "100% knitted polyester" }
+        {
+          "label": "Size",
+          "value": "comstom size"
+        },
+        {
+          "label": "Material",
+          "value": "100% knitted polyester"
+        }
       ],
       "subtitle": "provide reinforced holes through ropes, hooks, or ties\nmetal rings inserted along the let edges, can be easily tied in various locations",
       "image": "/assets/media/banner-4.webp"
@@ -46,8 +70,14 @@
     {
       "name": "tassel banner",
       "specs": [
-        { "label": "Size", "value": "comstom size" },
-        { "label": "Material", "value": "100% knitted polyester" }
+        {
+          "label": "Size",
+          "value": "comstom size"
+        },
+        {
+          "label": "Material",
+          "value": "100% knitted polyester"
+        }
       ],
       "subtitle": "adorned with tassels on its three edges\nTassels make the banner stand out, providing a more elegant look",
       "image": "/assets/media/banner-5.webp"
@@ -55,16 +85,20 @@
     {
       "name": "Banner stand",
       "specs": [
-        { "label": "Size", "value": "5.05ft*2ft" },
-        { "label": "Material", "value": "100% knitted polyester" }
+        {
+          "label": "Size",
+          "value": "5.05ft*2ft"
+        },
+        {
+          "label": "Material",
+          "value": "100% knitted polyester"
+        }
       ],
       "subtitle": "ideal for trade shows, exhibitions and promotion\neasy to set up and dismantle, Banner stands take up minimal floor space",
       "image": "/assets/media/banner-6.webp"
     }
   ],
-  "supplement": {
-    "show": false
-  },
+  "supplement": [],
   "page": {
     "file": "banner.html",
     "layout": "bannerCards",

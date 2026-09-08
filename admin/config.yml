@@ -141,12 +141,13 @@ collections:
                   - { label: 卡片文案, name: text, widget: text }
                   - { label: 图片, name: image, widget: image }
                   - { label: 跳转链接, name: link, widget: string }
-          - label: 补充模块（可选：图 + 标题 + 文字，显示在首页底部）
+          - label: 补充模块（可添加多个；每个：图 + 标题 + 文字）
             name: supplement
-            widget: object
+            widget: list
             required: false
+            summary: "{{fields.title || '补充模块'}}"
             fields:
-              - { label: 显示此补充模块, name: show, widget: boolean, default: true, hint: 取消勾选即隐藏（已填内容会保留，重新勾选即可恢复） }
+              - { label: 显示此补充模块, name: show, widget: boolean, default: true, hint: 取消勾选即隐藏（内容会保留，重新勾选即可恢复） }
               - { label: 标题（可选）, name: title, widget: string, required: false }
               - { label: 文字（可用 **词** 加粗）, name: text, widget: text, required: false }
               - { label: 图片（可选）, name: image, widget: image, required: false }
@@ -323,12 +324,13 @@ collections:
               - { label: 属性值（如 90*160cm、铝合金、红/蓝）, name: value, widget: string }
           - { label: 宣传语（品名下方那句话，可选；多行文本框可显示完整文字；可用 **词** 加粗）, name: subtitle, widget: text, required: false }
           - { label: 图片, name: image, widget: image }
-          - label: 补充模块（可选：图 + 标题 + 文字，显示在产品列表下方）
+          - label: 补充模块（可添加多个；每个：图 + 标题 + 文字）
             name: supplement
-            widget: object
+            widget: list
             required: false
+            summary: "{{fields.title || '补充模块'}}"
             fields:
-              - { label: 显示此补充模块, name: show, widget: boolean, default: true, hint: 取消勾选即隐藏（已填内容会保留，重新勾选即可恢复） }
+              - { label: 显示此补充模块, name: show, widget: boolean, default: true, hint: 取消勾选即隐藏（内容会保留，重新勾选即可恢复） }
               - { label: 标题（可选）, name: title, widget: string, required: false }
               - { label: 文字（可用 **词** 加粗）, name: text, widget: text, required: false }
               - { label: 图片（可选）, name: image, widget: image, required: false }
@@ -366,12 +368,13 @@ collections:
                   - { label: 属性值（如 110g knitted polyester、红/蓝）, name: value, widget: string }
               - { label: 宣传语（品名下方那句话，可选；多行；可用 **词** 加粗）, name: subtitle, widget: text, required: false }
               - { label: 图片, name: image, widget: image }
-          - label: 补充模块（可选：图 + 标题 + 文字，显示在产品列表下方）
+          - label: 补充模块（可添加多个；每个：图 + 标题 + 文字）
             name: supplement
-            widget: object
+            widget: list
             required: false
+            summary: "{{fields.title || '补充模块'}}"
             fields:
-              - { label: 显示此补充模块, name: show, widget: boolean, default: true, hint: 取消勾选即隐藏（已填内容会保留，重新勾选即可恢复） }
+              - { label: 显示此补充模块, name: show, widget: boolean, default: true, hint: 取消勾选即隐藏（内容会保留，重新勾选即可恢复） }
               - { label: 标题（可选）, name: title, widget: string, required: false }
               - { label: 文字（可用 **词** 加粗）, name: text, widget: text, required: false }
               - { label: 图片（可选）, name: image, widget: image, required: false }
@@ -409,12 +412,13 @@ collections:
                   - { label: 属性值（如 comstom size、100% knitted polyester）, name: value, widget: string }
               - { label: 宣传语（品名下方那句话，可选；多行；可用 **词** 加粗）, name: subtitle, widget: text, required: false }
               - { label: 图片, name: image, widget: image }
-          - label: 补充模块（可选：图 + 标题 + 文字，显示在产品列表下方）
+          - label: 补充模块（可添加多个；每个：图 + 标题 + 文字）
             name: supplement
-            widget: object
+            widget: list
             required: false
+            summary: "{{fields.title || '补充模块'}}"
             fields:
-              - { label: 显示此补充模块, name: show, widget: boolean, default: true, hint: 取消勾选即隐藏（已填内容会保留，重新勾选即可恢复） }
+              - { label: 显示此补充模块, name: show, widget: boolean, default: true, hint: 取消勾选即隐藏（内容会保留，重新勾选即可恢复） }
               - { label: 标题（可选）, name: title, widget: string, required: false }
               - { label: 文字（可用 **词** 加粗）, name: text, widget: text, required: false }
               - { label: 图片（可选）, name: image, widget: image, required: false }
@@ -446,12 +450,13 @@ collections:
               - { label: 材质, name: material, widget: string }
               - { label: 印刷工艺, name: printing, widget: string }
               - { label: 图片, name: image, widget: image }
-          - label: 补充模块（可选：图 + 标题 + 文字，显示在产品列表下方）
+          - label: 补充模块（可添加多个；每个：图 + 标题 + 文字）
             name: supplement
-            widget: object
+            widget: list
             required: false
+            summary: "{{fields.title || '补充模块'}}"
             fields:
-              - { label: 显示此补充模块, name: show, widget: boolean, default: true, hint: 取消勾选即隐藏（已填内容会保留，重新勾选即可恢复） }
+              - { label: 显示此补充模块, name: show, widget: boolean, default: true, hint: 取消勾选即隐藏（内容会保留，重新勾选即可恢复） }
               - { label: 标题（可选）, name: title, widget: string, required: false }
               - { label: 文字（可用 **词** 加粗）, name: text, widget: text, required: false }
               - { label: 图片（可选）, name: image, widget: image, required: false }

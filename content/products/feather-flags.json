@@ -98,12 +98,14 @@
       "image": "/assets/media/pinpoint-flag.jpg"
     }
   ],
-  "supplement": {
-    "show": false,
-    "title": "Bring Your Design to Life",
-    "text": "**Tell us your idea** — our team will help you customize your feather flags, with factory-direct pricing and fast turnaround. Email us anytime for a free quote.",
-    "image": "/assets/media/about-factory.webp"
-  },
+  "supplement": [
+    {
+      "show": false,
+      "title": "Bring Your Design to Life",
+      "text": "**Tell us your idea** — our team will help you customize your feather flags, with factory-direct pricing and fast turnaround. Email us anytime for a free quote.",
+      "image": "/assets/media/about-factory.webp"
+    }
+  ],
   "page": {
     "file": "feather-flag.html",
     "layout": "feather",

@@ -50,9 +50,7 @@
       "image": "/assets/media/flag-06.webp"
     }
   ],
-  "supplement": {
-    "show": false
-  },
+  "supplement": [],
   "page": {
     "file": "national-flag.html",
     "layout": "flags",
