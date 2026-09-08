@@ -141,6 +141,15 @@ collections:
                   - { label: 卡片文案, name: text, widget: text }
                   - { label: 图片, name: image, widget: image }
                   - { label: 跳转链接, name: link, widget: string }
+          - label: 补充模块（可选：图 + 标题 + 文字，显示在首页底部）
+            name: supplement
+            widget: object
+            required: false
+            fields:
+              - { label: 显示此补充模块, name: show, widget: boolean, default: true, hint: 取消勾选即隐藏（已填内容会保留，重新勾选即可恢复） }
+              - { label: 标题（可选）, name: title, widget: string, required: false }
+              - { label: 文字（可用 **词** 加粗）, name: text, widget: text, required: false }
+              - { label: 图片（可选）, name: image, widget: image, required: false }
 
   # ---------- 关于我们 ----------
   - name: about
@@ -314,6 +323,15 @@ collections:
               - { label: 属性值（如 90*160cm、铝合金、红/蓝）, name: value, widget: string }
           - { label: 宣传语（品名下方那句话，可选；多行文本框可显示完整文字；可用 **词** 加粗）, name: subtitle, widget: text, required: false }
           - { label: 图片, name: image, widget: image }
+          - label: 补充模块（可选：图 + 标题 + 文字，显示在产品列表下方）
+            name: supplement
+            widget: object
+            required: false
+            fields:
+              - { label: 显示此补充模块, name: show, widget: boolean, default: true, hint: 取消勾选即隐藏（已填内容会保留，重新勾选即可恢复） }
+              - { label: 标题（可选）, name: title, widget: string, required: false }
+              - { label: 文字（可用 **词** 加粗）, name: text, widget: text, required: false }
+              - { label: 图片（可选）, name: image, widget: image, required: false }
 
   # ---------- 产品：羽毛旗 ----------
   - name: feather-flags
@@ -391,6 +409,15 @@ collections:
                   - { label: 属性值（如 comstom size、100% knitted polyester）, name: value, widget: string }
               - { label: 宣传语（品名下方那句话，可选；多行；可用 **词** 加粗）, name: subtitle, widget: text, required: false }
               - { label: 图片, name: image, widget: image }
+          - label: 补充模块（可选：图 + 标题 + 文字，显示在产品列表下方）
+            name: supplement
+            widget: object
+            required: false
+            fields:
+              - { label: 显示此补充模块, name: show, widget: boolean, default: true, hint: 取消勾选即隐藏（已填内容会保留，重新勾选即可恢复） }
+              - { label: 标题（可选）, name: title, widget: string, required: false }
+              - { label: 文字（可用 **词** 加粗）, name: text, widget: text, required: false }
+              - { label: 图片（可选）, name: image, widget: image, required: false }
 
   # ---------- 产品：国旗 ----------
   - name: national-flags
@@ -419,6 +446,15 @@ collections:
               - { label: 材质, name: material, widget: string }
               - { label: 印刷工艺, name: printing, widget: string }
               - { label: 图片, name: image, widget: image }
+          - label: 补充模块（可选：图 + 标题 + 文字，显示在产品列表下方）
+            name: supplement
+            widget: object
+            required: false
+            fields:
+              - { label: 显示此补充模块, name: show, widget: boolean, default: true, hint: 取消勾选即隐藏（已填内容会保留，重新勾选即可恢复） }
+              - { label: 标题（可选）, name: title, widget: string, required: false }
+              - { label: 文字（可用 **词** 加粗）, name: text, widget: text, required: false }
+              - { label: 图片（可选）, name: image, widget: image, required: false }
 
   # ---------- 产品详情页（多图 + 规格 + 价格表 + 服务卡 + 图文区） ----------
   - name: product-details

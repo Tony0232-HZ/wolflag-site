@@ -62,6 +62,9 @@
       "image": "/assets/media/banner-6.webp"
     }
   ],
+  "supplement": {
+    "show": false
+  },
   "page": {
     "file": "banner.html",
     "layout": "bannerCards",

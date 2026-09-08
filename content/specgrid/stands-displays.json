@@ -103,5 +103,8 @@
       "image": "/assets/media/h-stake-网站图.webp"
     }
   ],
-  "bannerImage": "/assets/media/banners-banner.webp"
+  "bannerImage": "/assets/media/banners-banner.webp",
+  "supplement": {
+    "show": false
+  }
 }

@@ -205,6 +205,7 @@ function homeBody() {
          <span class="cat-desc">${esc(c.text)}</span>
        </span>
      </a>`).join('\n');
+  const supplement = supplementSection(home);
   return `
   <section class="home-hero">
     ${settings.catalogButton ? `<a class="hero-catalog-btn" href="${esc(settings.catalogButton.file)}" download>${esc(settings.catalogButton.text)}</a>` : ''}
@@ -231,7 +232,7 @@ function homeBody() {
       <p class="intro">${esc(home.categories.intro)}</p>
       <div class="cat-grid">${cards}</div>
     </div>
-  </section>`;
+  </section>${supplement}`;
 }
 
 function nfBody(data) {
@@ -249,6 +250,7 @@ function nfBody(data) {
   <section class="page-banner">
     <div class="container"><img src="${esc(data.bannerImage)}" alt="National flags"></div>
   </section>` : '';
+  const supplement = supplementSection(data);
   return `
   ${banner}
   <section class="page-hero">
@@ -257,6 +259,24 @@ function nfBody(data) {
   <section class="section">
     <div class="container">
       <div class="product-grid-3">${cards}</div>
+    </div>
+  </section>${supplement}`;
+}
+
+// 补充模块（可选：图 + 标题 + 文字；show!==false 且至少一项有内容才渲染；2026-09-08 全站通用）
+function supplementSection(data) {
+  const s = data && data.supplement;
+  if (!s || s.show === false || !(s.text || s.title || s.image)) return '';
+  return `
+  <section class="section">
+    <div class="container">
+      <div class="f-supp${s.image ? '' : ' f-supp-txt'}">
+        ${s.image ? `<div class="f-supp-img"><img src="${esc(s.image)}" alt="" decoding="async"></div>` : ''}
+        <div class="f-supp-body">
+          ${s.title ? `<h2 class="f-supp-title">${esc(s.title)}</h2>` : ''}
+          <div class="f-supp-text">${bold(s.text || '')}</div>
+        </div>
+      </div>
     </div>
   </section>`;
 }
@@ -281,19 +301,7 @@ function featherBody(data) {
   <section class="page-banner">
     <div class="container"><img src="${esc(data.bannerImage)}" alt="Feather flags"></div>
   </section>` : '';
-  // 补充模块（可选：图 + 标题 + 文字；show 勾选则显示、去掉则隐藏；2026-09-08）
-  const supplement = data.supplement && data.supplement.show !== false && (data.supplement.text || data.supplement.title || data.supplement.image) ? `
-  <section class="section">
-    <div class="container">
-      <div class="f-supp${data.supplement.image ? '' : ' f-supp-txt'}">
-        ${data.supplement.image ? `<div class="f-supp-img"><img src="${esc(data.supplement.image)}" alt="" decoding="async"></div>` : ''}
-        <div class="f-supp-body">
-          ${data.supplement.title ? `<h2 class="f-supp-title">${esc(data.supplement.title)}</h2>` : ''}
-          <div class="f-supp-text">${bold(data.supplement.text || '')}</div>
-        </div>
-      </div>
-    </div>
-  </section>` : '';
+  const supplement = supplementSection(data);
   return `
   ${banner}
   <section class="section" style="padding-bottom:0">
@@ -326,6 +334,7 @@ function bannerBody(data) {
   <section class="page-banner">
     <div class="container"><img src="${esc(data.bannerImage)}" alt="Banners"></div>
   </section>` : '';
+  const supplement = supplementSection(data);
   return `
   ${banner}
   <section class="page-hero">
@@ -335,7 +344,7 @@ function bannerBody(data) {
     <div class="container">
       <div class="product-grid-3">${cards}</div>
     </div>
-  </section>`;
+  </section>${supplement}`;
 }
 
 function poleBody(data) {
@@ -547,6 +556,7 @@ function specGridBody(data) {
       <div class="sg-info">${info}</div>
     </article>`;
   }).join('');
+  const supplement = supplementSection(data);
   return `
   ${banner}
   <section class="page-hero">
@@ -559,7 +569,7 @@ function specGridBody(data) {
     <div class="container">
       <div class="sg-grid">${products}</div>
     </div>
-  </section>`;
+  </section>${supplement}`;
 }
 
 /* ---------------- 产品详情布局（detail）+ 通用图文布局（flex） ---------------- */
