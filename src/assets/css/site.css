@@ -1335,13 +1335,14 @@ ul { list-style: none; }
 
 .footer-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 0;
+  /* 2026-09-08: 三块内容(工厂/杭州/电话邮箱)间距均匀拉开；末列 auto 收内容宽度并自然贴容器右缘（与上方内容方框右对齐）；
+     0.8fr 收窄 Logo 列，保证地址行(Room 620... 约275px+图标)在 1fr 列内不折行 */
+  grid-template-columns: 0.8fr 1fr 1fr auto;
+  column-gap: 48px;
   padding-bottom: 34px;
 }
 
-.footer-col { padding: 0 6px; }
-.footer-col:first-child { padding-left: 0; }
+.footer-col { padding: 0; }
 
 .footer-col .f-brand { display: flex; align-items: center; margin-bottom: 28px; }
 .footer-col .f-brand img { width: 115px; }
@@ -1390,7 +1391,7 @@ ul { list-style: none; }
 }
 
 @media (max-width: 900px) {
-  .footer-grid { grid-template-columns: repeat(2, 1fr); gap: 26px 0; }
+  .footer-grid { grid-template-columns: repeat(2, 1fr); gap: 26px 32px; }
 }
 @media (max-width: 560px) {
   .footer-grid { grid-template-columns: 1fr; }
