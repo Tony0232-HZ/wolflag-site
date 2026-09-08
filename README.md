@@ -153,6 +153,8 @@ git push -u origin main
 
 布局说明（2026-09-08）：菜单项用 `white-space:nowrap` 强制单行展示，不会因名称变长而折成两行；屏幕宽度 ≤1200px 时会自动收起为汉堡菜单，顶部「Contact Us」按钮始终可见、不会被挤出屏幕。
 
+交互效果（2026-09-08）：鼠标悬停或选中（当前页）某个菜单项时，显示**浅沙色 #f5f0e8 圆角胶囊高亮 + 加粗文字**（与页面浅色系一致）；主按钮「Contact Us」和「Download Catalog (PDF)」悬停时会轻微上移 2px 并带柔色阴影。
+
 ## 产品手册下载按钮（Download Catalog PDF）
 
 首页首屏右上角有一个金色「Download Catalog (PDF)」按钮（**只出现在首页**），点击可下载产品手册。相关配置：

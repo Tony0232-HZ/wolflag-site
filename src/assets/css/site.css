@@ -89,12 +89,12 @@ ul { list-style: none; }
   transition: background-color .2s ease, color .2s ease;
 }
 
-/* 产品名称悬停/选中：米黄圆角胶囊背景 + 加粗（2026-09-08，与 hero 米黄 #faf7f5 一致）；用负边距抵消内边距，避免撑宽导航、挤开相邻菜单项 */
+/* 产品名称悬停/选中：浅沙色圆角胶囊背景 + 加粗（2026-09-08，#f5f0e8，柔和浅沙色）；用负边距抵消内边距，避免撑宽导航、挤开相邻菜单项 */
 .nav-menu a:hover,
 .nav-menu a.active {
   color: var(--navy);
   font-weight: 700;
-  background: #faf7f5;
+  background: #f5f0e8;
   border-bottom-color: transparent;
   padding: 6px 12px;
   margin: 0 -10px;
