@@ -8,7 +8,9 @@
     "text": "We are delighted to enhance the quality of products and services for our customers. Honesty and integrity are the qualities we adhere to.",
     "image": "/assets/media/home-hero.webp",
     "images": [
-      "/assets/media/home-hero.webp"
+      "/assets/media/home-hero.webp",
+      "/assets/media/banners-banner.webp",
+      "/assets/media/feather-banner.webp"
     ],
     "interval": 5,
     "mode": "carousel",
