@@ -566,16 +566,20 @@ ul { list-style: none; }
 .product-card .p-spec {
   width: 100%;
   font-size: 13px;
-  border-collapse: collapse;
+  /* 2026-09-08: 单元格间留 4px 空白线，每个底色单独成块（block） */
+  border-collapse: separate;
+  border-spacing: 3px;
   margin: 4px 0 0;
 }
-.product-card .p-spec th { width: 78px; background: #f5f7fb; color: #2b3550; font-weight: 700; }
+/* 2026-09-08: 去掉单元格线框(卡片已有外框)，左栏雾蓝/右栏米白两块底色（极简色板，蓝色系呼应品牌色） */
+.product-card .p-spec th { width: 78px; background: #eef1f4; color: #2b3550; font-weight: 700; }
 .product-card .p-spec th, .product-card .p-spec td {
-  border: 1px solid #e2e6ee;
+  border: none;
   padding: 7px 10px;
   text-align: left;
   vertical-align: top;
 }
+.product-card .p-spec td { background: #fafaf9; }
 .product-card .p-sub {
   color: #444c58;
   font-size: 13px;
@@ -646,16 +650,18 @@ ul { list-style: none; }
 .f-card .f-spec {
   width: 100%;
   font-size: 13px;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 3px;
   margin: 4px 0 0;
 }
-.f-card .f-spec th { width: 78px; background: #f5f7fb; color: #2b3550; font-weight: 700; }
+.f-card .f-spec th { width: 78px; background: #eef1f4; color: #2b3550; font-weight: 700; }
 .f-card .f-spec th, .f-card .f-spec td {
-  border: 1px solid #e2e6ee;
+  border: none;
   padding: 7px 10px;
   text-align: left;
   vertical-align: top;
 }
+.f-card .f-spec td { background: #fafaf9; }
 .f-card .f-sub {
   color: #444c58;
   font-size: 13px;
@@ -1452,6 +1458,8 @@ ul { list-style: none; }
   margin: 0 0 18px;
 }
 
+/* 产品详情页（detail 模板）规格表/价格表：保持原线框样式（用户 2026-09-08 明确要求，勿改成属性表新样式；
+   详情模板新页面也一律保持此旧样式，见 AI-GUIDE §2.6） */
 .pd-spec {
   width: 100%;
   font-size: 14px;
@@ -1649,16 +1657,18 @@ p strong, .blog-content strong, .pd-desc strong, .ti-text strong {
 .sg-spec {
   width: 100%;
   font-size: 13px;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 3px;
   margin-top: 12px;
 }
-.sg-spec th { width: 96px; background: #f5f7fb; color: #2b3550; font-weight: 700; }
+.sg-spec th { width: 96px; background: #eef1f4; color: #2b3550; font-weight: 700; }
 .sg-spec th, .sg-spec td {
-  border: 1px solid #e2e6ee;
+  border: none;
   padding: 7px 10px;
   text-align: left;
   vertical-align: top;
 }
+.sg-spec td { background: #fafaf9; }
 
 /* 图悬停：整张大图浮到最上层（跳出卡片），只在这个 specGrid 模板（当前仅 Stands & Displays 页）生效 */
 /* ========== 全站产品图片放大：悬停显示放大镜，点击弹出大图浮窗 ========== */
