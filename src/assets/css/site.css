@@ -328,10 +328,19 @@ ul { list-style: none; }
   border-radius: 30px;
   font-size: 18px;
   font-weight: 400;
+  transition: transform .25s ease, box-shadow .25s ease, background-color .25s ease, border-color .25s ease;
 }
 
 .tag-pill.fill  { background: #04101b; color: #fff; }
 .tag-pill.line { background: #fff; color: var(--navy); border: 1.5px solid #cfd3da; }
+
+/* 信任药丸悬停：上浮 2px + 柔影；fill 略变浅、line 浮现浅沙底（2026-09-08，与按钮/导航胶囊同一套语言） */
+.tag-pill:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(23, 32, 59, .10);
+}
+.tag-pill.fill:hover  { background: #16263b; }
+.tag-pill.line:hover { background: #f5f0e8; border-color: #d8cfc0; }
 
 .intro-photos {
   display: grid;
