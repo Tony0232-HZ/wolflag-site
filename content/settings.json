@@ -8,12 +8,12 @@
       "external": false
     },
     {
-      "label": "Feather flag",
+      "label": "Feather flags",
       "url": "/feather-flag.html",
       "external": false
     },
     {
-      "label": "Products",
+      "label": "Full Products",
       "url": "/products.html",
       "external": false,
       "children": [
@@ -30,7 +30,7 @@
       ]
     },
     {
-      "label": "National Flag",
+      "label": "National Flags",
       "url": "/national-flag.html",
       "external": false
     },
