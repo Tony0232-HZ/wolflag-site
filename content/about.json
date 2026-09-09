@@ -14,11 +14,20 @@
     "bg": "#faf7f5",
     "color": "#272e47",
     "pause": 12,
-    "scroll": 7,
+    "scroll": 10,
     "items": [
-      { "icon": "/assets/media/icon-factory.svg", "text": "Quality Factory - 23 Years of Excellence" },
-      { "icon": "/assets/media/icon-globe.svg", "text": "The Source Manufacturer Behind Global Sign Shops & Display Brands" },
-      { "icon": "/assets/media/icon-email.svg", "text": "tony@wolflag.com / tony_flag123@hotmail.com" }
+      {
+        "icon": "/assets/media/icon-factory.svg",
+        "text": "Quality Factory - 23 Years of Excellence"
+      },
+      {
+        "icon": "/assets/media/icon-globe.svg",
+        "text": "The Source Manufacturer Behind Global Sign Shops & Display Brands"
+      },
+      {
+        "icon": "/assets/media/icon-email.svg",
+        "text": "tony@wolflag.com   /   tony_flag123@hotmail.com"
+      }
     ]
   },
   "blocks": [
