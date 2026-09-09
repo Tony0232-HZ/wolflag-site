@@ -185,7 +185,7 @@ wolflag-site/
 - **渲染**：`build.mjs` 的 `announceBar(ann)`（复用）→ `.announce.announce-page`（`data-mode / data-pause / data-scroll`）> `.announce-bound`（=`.container` 左缘对齐）> `.announce-viewport`（定高 44px、overflow hidden、**左对齐**）> `.announce-track` > `.announce-item`
 - **JS**：site.js `document.querySelectorAll('.announce')`，按 `data-mode` 分支：
   - `inout` → `play(el)`：transform W→0（滚进）→（`scroll+pause` 后）→-W（滚出）→（`+gap` 后）下一条
-  - `slide` → `cycle()`：`outLeft(当前)` 与 `show(下一条)` 同时（重叠）。`W=vp.clientWidth`
+  - `slide` → `cycle()`：`outLeft(当前)` 与 `show(下一条)` 同时（重叠）。`W=vp.clientWidth`。⚠️ **slide 需 ≥2 条消息**（About 3 条正常）；**只有 1 条时自动回退 inout**（site.js 判定 `mode==='slide' && items.length>=2`，否则走 inout）——否则单条 slide 会"同一元素被 outLeft/show 轮番操作 → 闪跳、越来越快"（2026-09-09 用户发现的 bug，已修）
 - **样式**：`.announce{--ann-bg/--ann-fg,font-size:20px}`、`.announce-page{margin:8px 0 10px}`（原 24px 缩到 8px + `.home-hero{padding:76px 0 24px}`（原 71px 底带）→ 首页栏目图→公告条间距 95→32px）、`.announce-bound{max-width:var(--container);margin:0 auto;padding:0 24px}`、`.announce-item{justify-content:flex-start}`（左对齐）
 - **后台**：`admin/config.yml` 的 `home`、`about` 两个 collection（files 型）各自 `announce` object：显示 / 播放模式(inout|slide) / 背景色 / 文字色 / 每条停留秒数 / 滚进滚出时长 / 公告内容(items=文字+小图标)。⚠️ 在后台编辑公告内容时，Decap 会按配置字段重写该对象——**`mode` 是配置字段之一（已加），别删它**，否则 slide 模式会回落成 inout。
 

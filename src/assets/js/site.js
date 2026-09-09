@@ -224,7 +224,7 @@
       setTimeout(function () { el.style.opacity = '0'; }, scroll);
     }
 
-    if (mode === 'slide') {
+    if (mode === 'slide' && items.length >= 2) {
       // 重叠：当前开始滚出时，下一条同步滚进
       var cur = 0;
       function cycle() {
