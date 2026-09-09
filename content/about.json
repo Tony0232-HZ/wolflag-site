@@ -14,7 +14,7 @@
     "bg": "#faf7f5",
     "color": "#272e47",
     "pause": 12,
-    "scroll": 10,
+    "scroll": 8,
     "items": [
       {
         "icon": "/assets/media/icon-factory.svg",
