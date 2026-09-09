@@ -32,7 +32,7 @@
       "bg": "#ffffff",
       "title": "Our Journey",
       "autoPlay": true,
-      "interval": 5,
+      "interval": 8,
       "items": [
         {
           "year": "2003",
