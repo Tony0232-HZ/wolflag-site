@@ -48,6 +48,14 @@
 
 > 补充：`后台管理操作说明书.html` 在**本仓库之外**（用户本机 `E:\wolflag 网站信息\2026 公司网站\` 下），如需补写/同步也要一并提醒用户。此规则仅为「询问+提示」，最终由用户拍板是否落笔。
 
+## 0.7 🔒 铁律：AI 严禁自行推送，必须得到用户明确批准（2026-09-09 用户强调）
+
+> ⚠️⚠️ 最高优先级，违反 = 严重错误。**AI 在任何情况下都不得自行执行 `git push` / 推送上线 / 部署**——即使改动已经完成、已验证、已写好文档，也**必须先得到用户明确说"可以推送 / 推上线 / push"**，得到批准后才能推送。未获批准时，只能把改动留在本地、展示给用户看。
+
+> - 用户若只说「改 / 做 / 修 / 写文档」，并未明确说「推送 / 上线 / push」→ **不要推送**。改完把改动和效果告诉用户，并问一句「要推送上线吗？」。
+> - 推送前先 `git fetch` + `git status -sb`，确认本地不落后/不冲突；若落后于 `origin/main`（通常是后台 Decap 有编辑），先 `git pull --rebase` 合并（有冲突则按用户意图解决），再确认无误后推送。
+> - 2026-09-09 曾有 AI 未经许可自行 push 的行为，被用户提醒纠正。**今后一律先请示、后推送。**
+
 ---
 
 ## 1. 目录结构（每个目录的角色）
@@ -185,7 +193,7 @@ wolflag-site/
 - **渲染**：`build.mjs` 的 `announceBar(ann)`（复用）→ `.announce.announce-page`（`data-mode / data-pause / data-scroll`）> `.announce-bound`（=`.container` 左缘对齐）> `.announce-viewport`（定高 44px、overflow hidden、**左对齐**）> `.announce-track` > `.announce-item`
 - **JS**：site.js `document.querySelectorAll('.announce')`，按 `data-mode` 分支：
   - `inout` → `play(el)`：transform W→0（滚进）→（`scroll+pause` 后）→-W（滚出）→（`+gap` 后）下一条
-  - `slide` → `cycle()`：`outLeft(当前)` 与 `show(下一条)` 同时（重叠）。`W=vp.clientWidth`。⚠️ **slide 需 ≥2 条消息**（About 3 条正常）；**只有 1 条时自动回退 inout**（site.js 判定 `mode==='slide' && items.length>=2`，否则走 inout）——否则单条 slide 会"同一元素被 outLeft/show 轮番操作 → 闪跳、越来越快"（2026-09-09 用户发现的 bug，已修）
+  - `slide` → `cycle()`：`outLeft(当前)` 与 `show(下一条)` 同时（重叠）。`W=vp.clientWidth`。⚠️ **slide 需 ≥2 条消息**（About 3 条正常）；**只有 1 条时自动回退 inout**（site.js 判定 `mode==='slide' && items.length>=2`，否则走 inout）——否则单条 slide 会"同一元素被 outLeft/show 轮番操作 → 闪跳、越来越快"（2026-09-09 用户发现的 bug，已修）。⚠️ **slide 停留时长的坑（2026-09-09 用户发现）**：原 `setTimeout(cycle, pause)` 是从**切换开始**计时，消息滑入还要花 `scroll` 秒，所以**完整停留 = pause - scroll**；当 `scroll > pause`（如首页 scroll 10 > pause 6）时停留为**负** → 消息**还没滚进完就被下一条顶掉**，表现为"从右边出来就消失、不像往左滚出"。**修复**：`setTimeout(cycle, scroll + pause)`（先滑入 scroll，完整停留 pause，再滚出）。**注意事项**：`pause`（停留）应 **> scroll**（滚动时长），否则消息来不及完整显示；建议 `pause ≥ scroll+1`。
 - **样式**：`.announce{--ann-bg/--ann-fg,font-size:20px}`、`.announce-page{margin:8px 0 10px}`（原 24px 缩到 8px + `.home-hero{padding:76px 0 24px}`（原 71px 底带）→ 首页栏目图→公告条间距 95→32px）、`.announce-bound{max-width:var(--container);margin:0 auto;padding:0 24px}`、`.announce-item{justify-content:flex-start}`（左对齐）
 - **后台**：`admin/config.yml` 的 `home`、`about` 两个 collection（files 型）各自 `announce` object：显示 / 播放模式(inout|slide) / 背景色 / 文字色 / 每条停留秒数 / 滚进滚出时长 / 公告内容(items=文字+小图标)。⚠️ 在后台编辑公告内容时，Decap 会按配置字段重写该对象——**`mode` 是配置字段之一（已加），别删它**，否则 slide 模式会回落成 inout。
 
