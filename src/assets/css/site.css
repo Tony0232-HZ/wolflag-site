@@ -1212,6 +1212,72 @@ ul { list-style: none; }
   .about-it-text, .about-it-imgs { flex: 0 0 100% !important; order: 0 !important; }
 }
 
+/* ===== About 时间轴（年份大事记，2026-09-09） ===== */
+.tl-section { padding: 60px 0; border-bottom: 2px solid #f8f8f8; }
+.tl-title { font-size: 36px; font-weight: 700; color: #272e47; text-align: left; margin: 0 0 44px; font-family: var(--display); }
+.tl { max-width: none; margin: 0; }
+.tl-track {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 12px 6px 18px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;          /* 隐藏横向滚动条（避免右侧竖条 + 裁圆点） */
+}
+.tl-track::-webkit-scrollbar { width: 0; height: 0; display: none; }
+.tl-track::before {
+  content: "";
+  position: absolute;
+  left: 6px; right: 6px;
+  top: 55px;
+  height: 3px;
+  background: #dfe3e2;
+  border-radius: 2px;
+}
+.tl-year {
+  position: relative; z-index: 1;
+  flex: 0 0 auto;
+  display: flex; flex-direction: column; align-items: center;
+  padding: 0; background: none; border: 0; cursor: pointer;
+  white-space: nowrap;
+}
+.tl-year-txt { font-size: 14px; line-height: 20px; height: 20px; color: #6b7280; font-family: var(--display); transition: color .2s; }
+.tl-dot {
+  width: 18px; height: 18px; border-radius: 50%;
+  margin-top: 16px;
+  background: #fff; border: 2px solid #dfe3e2;
+  transition: transform .2s, background .2s, border-color .2s, box-shadow .2s;
+}
+/* 悬停：圆圈变大、年份微微上跳，颜色与上方 marquee 鲑红 #f15d49 一致；鼠标移开恢复 */
+.tl-year:hover .tl-year-txt { color: #f15d49; font-weight: 700; animation: tlJiggle .4s ease; }
+.tl-year:hover .tl-dot { transform: scale(1.35); background: #f15d49; border-color: #f15d49; }
+/* 选中（当前年份）：鲑红点放大高亮 + 文字加粗 */
+.tl-year.is-active .tl-year-txt { color: #f15d49; font-weight: 700; }
+.tl-year.is-active .tl-dot {
+  background: #f15d49;
+  border-color: #f15d49;
+  box-shadow: 0 0 0 6px rgba(241, 93, 73, .15);
+  transform: scale(1.15);
+}
+@keyframes tlJiggle {
+  0%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-5px); }
+}
+.tl-panels { position: relative; margin-top: 34px; min-height: 110px; }
+.tl-panel { display: none; animation: tlFade .35s ease; }
+.tl-panel.is-active { display: flex; align-items: center; }
+@keyframes tlFade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+.tl-big { font-family: var(--display); font-size: 64px; font-weight: 800; line-height: 1; color: #272e47; flex: 0 0 auto; min-width: 170px; text-align: left; }
+.tl-text { color: #39445c; font-size: 16px; line-height: 1.7; margin-left: auto; max-width: 640px; text-align: right; }
+@media (max-width: 700px) {
+  .tl-big { font-size: 44px; }
+  .tl-title { font-size: 28px; }
+  .tl-panel.is-active { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .tl-text { margin-left: 0; text-align: left; max-width: none; }
+}
+
 /* Clients */
 .clients {
   background: #fff;

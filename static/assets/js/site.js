@@ -165,4 +165,36 @@
     go(0);
     start();
   })();
+
+  // About 时间轴：点击切换 + 自动播放（默认开启，可后台关/改间隔；到末尾循环回第一个）
+  document.querySelectorAll('.tl').forEach(function (tl) {
+    var years = tl.querySelectorAll('.tl-year');
+    var panels = tl.querySelectorAll('.tl-panel');
+    if (!years.length) return;
+    var autoplay = tl.getAttribute('data-autoplay') !== 'off';
+    var intervalMs = (parseInt(tl.getAttribute('data-interval'), 10) || 5) * 1000;
+    var cur = 0, timer = null, hovering = false;
+
+    function go(i) {
+      cur = (i + years.length) % years.length;   // 循环：到末尾自动回到第一个
+      years.forEach(function (b, j) {
+        b.classList.toggle('is-active', j === cur);
+        b.setAttribute('aria-expanded', j === cur ? 'true' : 'false');
+      });
+      panels.forEach(function (p, j) { p.classList.toggle('is-active', j === cur); });
+    }
+    function start() { if (autoplay && !timer) timer = setInterval(function () { go(cur + 1); }, intervalMs); }
+    function stop() { if (timer) { clearInterval(timer); timer = null; } }
+    function restart() { stop(); if (!hovering) start(); }   // 悬停中不自动恢复
+
+    years.forEach(function (btn, i) {
+      btn.addEventListener('click', function () { go(i); restart(); });   // 手动点某年 → 跳过去并重新计时
+      // 悬停在某个年份上 → 暂停自动播放；移开 → 恢复（2026-09-09 用户要求）
+      btn.addEventListener('mouseenter', function () { hovering = true; stop(); });
+      btn.addEventListener('mouseleave', function () { hovering = false; start(); });
+    });
+
+    go(0);
+    start();
+  });
 })();

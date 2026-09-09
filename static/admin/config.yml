@@ -228,6 +228,21 @@ collections:
                 fields:
                   - { label: 背景色, name: bg, widget: color, default: "#dfe3e2", hint: "点开选颜色（下方显示色块）。常用极简色：\n白 #ffffff\n米白 #fafaf9\n淡灰 #f8f8f8\n浅沙 #f5f0e8\n米黄 #faf7f5\n灰绿 #dfe3e2\n鼠尾草 #e8ece2\n雾蓝 #eef1f4\n藕粉 #f6f0ee\n浅炭 #f1f1ef" }
                   - { label: 问题/答案, name: items, widget: list, summary: "{{fields.q}}", fields: [ { label: 问题, name: q, widget: string }, { label: 答案, name: a, widget: text } ] }
+              - label: 时间轴（年份大事记）
+                name: timeline
+                summary: "时间轴 · {{fields.title}}"
+                fields:
+                  - { label: 背景色, name: bg, widget: color, default: "#f8f8f8", hint: "点开选颜色（下方显示色块）。常用极简色：\n白 #ffffff\n米白 #fafaf9\n淡灰 #f8f8f8\n浅沙 #f5f0e8\n米黄 #faf7f5\n灰绿 #dfe3e2\n鼠尾草 #e8ece2\n雾蓝 #eef1f4\n藕粉 #f6f0ee\n浅炭 #f1f1ef" }
+                  - { label: 标题（可选，如 Our Journey）, name: title, widget: string, required: false }
+                  - { label: 自动播放（开启=每隔几秒自动跳到下一年；关闭=手动）, name: autoPlay, widget: boolean, default: true, required: false }
+                  - { label: 自动切换间隔（秒）, name: interval, widget: number, default: 5, required: false, hint: 填 5 = 每 5 秒跳一次；填 7 = 每 7 秒；建议 5~8 之间" }
+                  - label: 里程碑（每一条 = 一个年份 + 当年大事；可拖顺序、增删）
+                    name: items
+                    widget: list
+                    summary: "{{fields.year}}"
+                    fields:
+                      - { label: 年份, name: year, widget: string }
+                      - { label: 当年的大事（英文，面向海外买家，可用 **词** 加粗）, name: text, widget: text }
 
   # ---------- 新增类目页（通用模板） ----------
   - name: pages

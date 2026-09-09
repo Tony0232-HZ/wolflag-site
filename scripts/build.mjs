@@ -479,6 +479,33 @@ function renderAboutBlock(b) {
       </div>
     </section>`;
   }
+  if (b.type === 'timeline') {
+    // 自动按年份从小到大排序（最早在最左、最晚在最右），后台无论填什么顺序都不会错
+    const items = (b.items || []).filter((it) => it && it.year).sort((a, b) => (parseInt(a.year, 10) || 0) - (parseInt(b.year, 10) || 0));
+    if (!items.length) return '';
+    const track = items.map((it, i) => `
+        <button type="button" class="tl-year${i === 0 ? ' is-active' : ''}" data-i="${i}" aria-expanded="${i === 0}">
+          <span class="tl-year-txt">${esc(it.year)}</span>
+          <span class="tl-dot" aria-hidden="true"></span>
+        </button>`).join('');
+    const panels = items.map((it, i) => `
+        <div class="tl-panel${i === 0 ? ' is-active' : ''}" data-i="${i}">
+          <div class="tl-big">${esc(it.year)}</div>
+          <p class="tl-text">${bold(it.text)}</p>
+        </div>`).join('');
+    return `
+    <section class="about-grey about-mod tl-section" style="background:${aboutBg(b)}"><div class="container">
+      ${b.title ? `<h2 class="tl-title">${esc(b.title)}</h2>` : ''}
+      <div class="tl" data-timeline data-autoplay="${b.autoPlay === false ? 'off' : 'on'}" data-interval="${parseInt(b.interval, 10) || 5}">
+        <div class="tl-track">
+          ${track}
+        </div>
+        <div class="tl-panels">
+          ${panels}
+        </div>
+      </div>
+    </div></section>`;
+  }
   return '';
 }
 
