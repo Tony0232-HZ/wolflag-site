@@ -186,7 +186,7 @@ wolflag-site/
   - `mode`：`inout`（首页：滚进→停→滚出→空窗→下一条，单条循环）/ `slide`（关于：**当前滚出时下一条同步滚进**，重叠无缝）
   - `pause`=每条停留秒数；`scroll`=滚进/滚出时长（越长越慢）；`items`=每条文字+可选小图标
   - ⚠️ `gap`（空窗秒数）已从后台移除——慢滚动下"空窗"实际由滚出/滚进主导（首页 scroll=10s 时可见约 6~7s 无字，用户已接受属预期）
-  - 图标：`media/icon-*-.svg`（藏青线框 `#272e47`、20px、与文字同色；当前有 megaphone/factory/globe/email）
+  - 图标：`media/icon-*.svg`（藏青线框 `#272e47`、20px、与文字同色；**2026-09-09 起后台「小图标」为 select 下拉**，内置 16 项：无 / 🔊喇叭megaphone / 🏭工厂factory / 🌐地球globe / ✉信封email / 🤝握手handshake / ❤️爱心heart / 🛡️盾勾shield-check / ⭐星星star / ✔️圆圈勾check-circle / 🏅奖杯award / 🚚卡车truck / 🕐时钟clock / 📦包裹package / 💡灯泡lightbulb / 👍点赞thumbs-up）。图标字段值是路径（`/assets/media/icon-*.svg`），build 渲染 `<img class="announce-ico" src="${icon}">`；选「无」则纯文字。新增图标=做 `media/icon-xxx.svg` + config.yml select options 加一项。
 - **位置**：
   - 首页：`homeBody()` 里 `<section class="home-hero">` 之后、`<section class="section section-center">`（intro=「Flags, Banners and Pole Kits」）之前，`${announceBar(home.announce)}`
   - 关于：`aboutBody()` 里 `<div class="about-hero">` 之后、`${blocks}` 之前，替换掉原 `.about-marquee`（**marquee 已删除**），`${announceBar(data.announce)}`

@@ -74,7 +74,8 @@
         "text": "Our website is currently being upgraded! More products and resources are coming soon."
       },
       {
-        "text": "Crafting flags with dedication, serving clients with sincerity, and guiding every deal to success."
+        "text": "Crafting flags with dedication, serving clients with sincerity, and guiding every deal to success.",
+        "icon": "/assets/media/icon-handshake.svg"
       }
     ],
     "mode": "slide"

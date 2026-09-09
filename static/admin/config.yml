@@ -176,7 +176,27 @@ collections:
                 summary: "{{fields.text}}"
                 fields:
                   - { label: "文字", name: text, widget: string }
-                  - { label: "小图标（可选）", name: icon, widget: image, required: false }
+                  - label: "小图标（可选，从常用图标里选）"
+                    name: icon
+                    widget: select
+                    required: false
+                    options:
+                      - { label: "无", value: "" }
+                      - { label: "🔊 喇叭(公告/通知)", value: "/assets/media/icon-megaphone.svg" }
+                      - { label: "🏭 工厂(制造商)", value: "/assets/media/icon-factory.svg" }
+                      - { label: "🌐 地球(全球)", value: "/assets/media/icon-globe.svg" }
+                      - { label: "✉ 信封(邮箱/联系)", value: "/assets/media/icon-email.svg" }
+                      - { label: "🤝 握手(合作/信任/成单)", value: "/assets/media/icon-handshake.svg" }
+                      - { label: "❤️ 爱心(真诚/用心)", value: "/assets/media/icon-heart.svg" }
+                      - { label: "🛡️ 盾勾(值得信赖/品质)", value: "/assets/media/icon-shield-check.svg" }
+                      - { label: "⭐ 星星(品质/荣誉)", value: "/assets/media/icon-star.svg" }
+                      - { label: "✔️ 圆圈勾(认证/靠谱)", value: "/assets/media/icon-check-circle.svg" }
+                      - { label: "🏅 奖杯(荣誉/获奖)", value: "/assets/media/icon-award.svg" }
+                      - { label: "🚚 卡车(快速发货/物流)", value: "/assets/media/icon-truck.svg" }
+                      - { label: "🕐 时钟(及时/效率)", value: "/assets/media/icon-clock.svg" }
+                      - { label: "📦 包裹(发货/包装)", value: "/assets/media/icon-package.svg" }
+                      - { label: "💡 灯泡(创新/点子)", value: "/assets/media/icon-lightbulb.svg" }
+                      - { label: "👍 点赞(认可/好评)", value: "/assets/media/icon-thumbs-up.svg" }
 
   # ---------- 关于我们 ----------
   - name: about
@@ -217,7 +237,27 @@ collections:
                 summary: "{{fields.text}}"
                 fields:
                   - { label: "文字", name: text, widget: string }
-                  - { label: "小图标（可选）", name: icon, widget: image, required: false }
+                  - label: "小图标（可选，从常用图标里选）"
+                    name: icon
+                    widget: select
+                    required: false
+                    options:
+                      - { label: "无", value: "" }
+                      - { label: "🔊 喇叭(公告/通知)", value: "/assets/media/icon-megaphone.svg" }
+                      - { label: "🏭 工厂(制造商)", value: "/assets/media/icon-factory.svg" }
+                      - { label: "🌐 地球(全球)", value: "/assets/media/icon-globe.svg" }
+                      - { label: "✉ 信封(邮箱/联系)", value: "/assets/media/icon-email.svg" }
+                      - { label: "🤝 握手(合作/信任/成单)", value: "/assets/media/icon-handshake.svg" }
+                      - { label: "❤️ 爱心(真诚/用心)", value: "/assets/media/icon-heart.svg" }
+                      - { label: "🛡️ 盾勾(值得信赖/品质)", value: "/assets/media/icon-shield-check.svg" }
+                      - { label: "⭐ 星星(品质/荣誉)", value: "/assets/media/icon-star.svg" }
+                      - { label: "✔️ 圆圈勾(认证/靠谱)", value: "/assets/media/icon-check-circle.svg" }
+                      - { label: "🏅 奖杯(荣誉/获奖)", value: "/assets/media/icon-award.svg" }
+                      - { label: "🚚 卡车(快速发货/物流)", value: "/assets/media/icon-truck.svg" }
+                      - { label: "🕐 时钟(及时/效率)", value: "/assets/media/icon-clock.svg" }
+                      - { label: "📦 包裹(发货/包装)", value: "/assets/media/icon-package.svg" }
+                      - { label: "💡 灯泡(创新/点子)", value: "/assets/media/icon-lightbulb.svg" }
+                      - { label: "👍 点赞(认可/好评)", value: "/assets/media/icon-thumbs-up.svg" }
           - label: 页面模块（可拖动手柄调整顺序，可 + 添加、删除；点每条左边的 ＞ 可展开看到内容）
             name: blocks
             widget: list
