@@ -326,6 +326,10 @@ ul { list-style: none; }
   opacity: 0;
   transition: opacity .8s ease;
 }
+/* 第 1 张保持原样(cover 裁边)；第 2 张及以后：完整显示、压缩/拉伸填满同一显示框、不裁剪（2026-09-09 用户要求） */
+.home-hero .hero-slider .hero-slide:not(:first-child) {
+  object-fit: fill;
+}
 .home-hero .hero-slider .hero-slide.is-active { opacity: 1; }
 /* 左右箭头：仅悬停时淡入 */
 .home-hero .hero-slider .hero-arrow {
