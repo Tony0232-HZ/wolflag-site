@@ -75,10 +75,10 @@
       },
       {
         "text": "Crafting flags with dedication, serving clients with sincerity, and guiding every deal to success.",
-        "icon": "/assets/media/icon-handshake.svg"
+        "icon": "/assets/media/icon-star.svg"
       }
     ],
-    "mode": "slide"
+    "mode": "inout"
   },
   "supplement": []
 }
