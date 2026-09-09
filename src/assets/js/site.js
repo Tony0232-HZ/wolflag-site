@@ -209,6 +209,17 @@
     var gap = (parseFloat(bar.getAttribute('data-gap')) || 1.5) * 1000;   // 空窗秒数（后台可调）
     var W = vp.clientWidth || 600;
 
+    // 容器高度自适应：长句换行后比 44px 高，让视口高度随最高一条内容撑高，避免多行被裁切（2026-09-09 手机端修复）
+    function sizeVp() {
+      var maxH = 44;
+      items.forEach(function (el) { maxH = Math.max(maxH, el.scrollHeight); });   // scrollHeight：内容换行后的真实高度（不被 44px 限制）
+      vp.style.height = maxH + 'px';
+    }
+    sizeVp();
+    window.addEventListener('resize', sizeVp);          // 横竖屏切换/缩放时重算
+    window.addEventListener('load', sizeVp);            // 图片/字体加载完后重算
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(sizeVp);   // 字体加载会改行高
+
     function show(el) {
       el.style.transition = 'none';
       el.style.opacity = '0';
