@@ -72,9 +72,12 @@
       {
         "icon": "/assets/media/icon-megaphone.svg",
         "text": "Our website is currently being upgraded! More products and resources are coming soon."
+      },
+      {
+        "text": "Crafting flags with dedication, serving clients with sincerity, and guiding every deal to success."
       }
     ],
-    "mode": "inout"
+    "mode": "slide"
   },
   "supplement": []
 }
