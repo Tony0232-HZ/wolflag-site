@@ -229,11 +229,11 @@
       var cur = 0;
       function cycle() {
         setTimeout(function () {
-          outLeft(items[cur % items.length]);               // 当前滚出
+          outLeft(items[cur % items.length]);               // 当前滚出（滚出期间与下一条重叠）
           cur = (cur + 1) % items.length;
           show(items[cur]);                                 // 下一条同时滚进
           cycle();
-        }, pause);
+        }, scroll + pause);   // 先滑入 scroll → 完整停留 pause → 再滚出（修：之前用 pause 导致停留= pause-scroll）
       }
       show(items[0]);
       cycle();
