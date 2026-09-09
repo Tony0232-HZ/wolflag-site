@@ -67,6 +67,18 @@ const bold = (s) => String(s ?? '').split(/(\*\*[^*]+\*\*)/g).map((part) => {
   return esc(part);
 }).join('');
 
+// 页面内公告条（独立可编辑；一次一条居中、滚进→停→滚下一条→循环；ann=页面 JSON 的 announce 对象）
+function announceBar(ann) {
+  if (!ann || ann.enabled === false) return '';
+  const items = (ann.items || []).filter((i) => i && i.text);
+  if (!items.length) return '';
+  const itemHtml = (it) => `<div class="announce-item">${it.icon ? `<img class="announce-ico" src="${esc(it.icon)}" alt="" loading="lazy">` : ''}<span class="announce-txt">${esc(it.text)}</span></div>`;
+  const itms = items.map(itemHtml).join('');
+  return `<div class="announce announce-page" data-mode="${ann.mode || 'inout'}" data-pause="${parseInt(ann.pause, 10) || 5}" data-scroll="${parseFloat(ann.scroll) || 7}" data-gap="${parseFloat(ann.gap) || 1.5}" style="--ann-bg:${esc(ann.bg || '#faf7f5')};--ann-fg:${esc(ann.color || '#272e47')}">
+    <div class="announce-bound"><div class="announce-viewport"><div class="announce-track">${itms}</div></div></div>
+  </div>`;
+}
+
 function header(active) {
   const menu = settings.nav.map((item) => {
     const children = item.children || [];
@@ -220,6 +232,8 @@ function homeBody() {
       </div>
     </div>
   </section>
+
+  ${announceBar(home.announce)}
 
   <section class="section section-center">
     <div class="container">
@@ -515,13 +529,7 @@ function aboutBody(data) {
   <div class="about-hero">
     <img src="${data.hero.image}" alt="WOLFLAG factory workshop" width="1500" height="575">
   </div>
-  <section class="about-grey">
-    <div class="about-marquee" aria-hidden="true">
-      <div class="track">
-        ${`<span>${esc(data.hero.title)}</span>`.repeat(8)}
-      </div>
-    </div>
-  </section>
+  ${announceBar(data.announce)}
   ${blocks}`;
 }
 

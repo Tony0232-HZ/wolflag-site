@@ -158,6 +158,25 @@ collections:
               - { label: 标题（可选）, name: title, widget: string, required: false }
               - { label: 文字（可用 **词** 加粗）, name: text, widget: text, required: false }
               - { label: 图片（可选）, name: image, widget: image, required: false }
+          - label: "页面公告条（首页页面里的滚动公告条；显示/隐藏、颜色、内容、图标都在这里）"
+            name: announce
+            widget: object
+            required: false
+            fields:
+              - { label: "显示此公告条", name: enabled, widget: boolean, default: true, required: false }
+              - { label: "播放模式", name: mode, widget: select, options: [inout, slide], default: inout, required: false, hint: "inout=滚进→停→滚出→空档；slide=当前滚出时下一条同步滚进（重叠无缝）" }
+              - { label: "背景色", name: bg, widget: color, default: "#faf7f5", required: false, hint: "默认米黄 #faf7f5；点开色块可换其它浅色" }
+              - { label: "文字颜色", name: color, widget: color, default: "#272e47", required: false }
+              - { label: "每条停留秒数（显示完整后停几秒再滚下一条）", name: pause, widget: number, default: 6, required: false, hint: "6 = 每条显示完整后停 6 秒再滚下一条；数字越大停越久（建议 3~8）" }
+              - { label: "滚进/滚出时长（秒，越长滚动越慢）", name: scroll, widget: number, default: 7, required: false, hint: "7 = 从右侧滚进来、再滚出去各花 7 秒；数字越大滚动越慢（建议 4~8）" }
+              - label: "公告内容（每条 = 一段文字 + 可选小图标；一次只滚一条，可加多条）"
+                name: items
+                widget: list
+                required: false
+                summary: "{{fields.text}}"
+                fields:
+                  - { label: "文字", name: text, widget: string }
+                  - { label: "小图标（可选）", name: icon, widget: image, required: false }
 
   # ---------- 关于我们 ----------
   - name: about
@@ -180,6 +199,25 @@ collections:
               - { label: 标题, name: title, widget: string }
               - { label: 副标题, name: subtitle, widget: string }
               - { label: 页头图片, name: image, widget: image }
+          - label: "页面公告条（关于我们页顶部的那条滚动公告；显示/隐藏、颜色、内容、图标都在这里）"
+            name: announce
+            widget: object
+            required: false
+            fields:
+              - { label: "显示此公告条", name: enabled, widget: boolean, default: true, required: false }
+              - { label: "播放模式", name: mode, widget: select, options: [inout, slide], default: inout, required: false, hint: "inout=滚进→停→滚出→空档；slide=当前滚出时下一条同步滚进（重叠无缝）" }
+              - { label: "背景色", name: bg, widget: color, default: "#faf7f5", required: false, hint: "默认米黄 #faf7f5；点开色块可换其它浅色" }
+              - { label: "文字颜色", name: color, widget: color, default: "#272e47", required: false }
+              - { label: "每条停留秒数（显示完整后停几秒再滚下一条）", name: pause, widget: number, default: 12, required: false, hint: "12 = 每条显示完整后停 12 秒再滚下一条；数字越大停越久（建议 3~8，示例页为 12）" }
+              - { label: "滚进/滚出时长（秒，越长滚动越慢）", name: scroll, widget: number, default: 7, required: false, hint: "7 = 从右侧滚进来、再滚出去各花 7 秒；数字越大滚动越慢（建议 4~8）" }
+              - label: "公告内容（每条 = 一段文字 + 可选小图标；一次只滚一条，可加多条）"
+                name: items
+                widget: list
+                required: false
+                summary: "{{fields.text}}"
+                fields:
+                  - { label: "文字", name: text, widget: string }
+                  - { label: "小图标（可选）", name: icon, widget: image, required: false }
           - label: 页面模块（可拖动手柄调整顺序，可 + 添加、删除；点每条左边的 ＞ 可展开看到内容）
             name: blocks
             widget: list

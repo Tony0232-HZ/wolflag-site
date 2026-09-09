@@ -67,6 +67,45 @@ ul { list-style: none; }
   padding: 0 24px;
 }
 
+/* 页面内公告条（单条进出式：一条从右滚进→停→滚出→下一条，绝不会同时出两条；2026-09-09） */
+.announce {
+  background: var(--ann-bg, #faf7f5);
+  color: var(--ann-fg, #272e47);
+  overflow: hidden;
+  font-size: 20px;
+  line-height: 1;
+}
+.announce.announce-page { margin: 8px 0 10px; }
+.announce-bound {
+  max-width: var(--container, 1250px);
+  margin: 0 auto;
+  padding: 0 24px;            /* 与页面内容 .container 左缘对齐 */
+}
+.announce-viewport {
+  position: relative;
+  height: 44px;              /* 固定高度（absolute 条目不撑高） */
+  overflow: hidden;
+}
+.announce-track { position: relative; height: 100%; }
+.announce-item {
+  position: absolute;
+  top: 0; left: 0; height: 100%;
+  width: max-content;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;   /* 左对齐：文字从内容左缘开始 */
+  gap: 8px;
+  white-space: nowrap;
+  font-weight: 700;
+  opacity: 0;
+  will-change: transform;
+}
+.announce-txt { display: inline-block; }
+.announce-ico { width: 20px; height: 20px; flex-shrink: 0; }
+@media (max-width: 640px) {
+  .announce { font-size: 15px; }
+}
+
 .nav-logo { flex-shrink: 0; display: block; width: 36px; height: 36px; }
 .nav-logo img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; }
 
@@ -240,7 +279,7 @@ ul { list-style: none; }
 
 .home-hero {
   background: #faf7f5;
-  padding: 76px 0 71px;
+  padding: 76px 0 24px;
 }
 
 .home-hero .hero-row {

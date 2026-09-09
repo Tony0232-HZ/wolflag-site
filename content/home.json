@@ -62,5 +62,15 @@
     "title": "Wolflag factory",
     "image": "/assets/media/about-factory.webp"
   },
+  "announce": {
+    "enabled": true,
+    "bg": "#faf7f5",
+    "color": "#272e47",
+    "pause": 6,
+    "scroll": 10,
+    "items": [
+      { "icon": "/assets/media/icon-megaphone.svg", "text": "Our website is currently being upgraded! More products and resources are coming soon." }
+    ]
+  },
   "supplement": []
 }

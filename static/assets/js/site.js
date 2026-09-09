@@ -197,4 +197,58 @@
     go(0);
     start();
   });
+
+  // 页面内公告条：inout=滚进→停→滚出→空档→下一条；slide=当前滚出时下一条同步滚进（重叠）
+  document.querySelectorAll('.announce').forEach(function (bar) {
+    var vp = bar.querySelector('.announce-viewport');
+    var items = bar.querySelectorAll('.announce-item');
+    if (!vp || !items.length) return;
+    var mode = bar.getAttribute('data-mode') || 'inout';
+    var pause = (parseInt(bar.getAttribute('data-pause'), 10) || 5) * 1000;
+    var scroll = (parseFloat(bar.getAttribute('data-scroll')) || 7) * 1000;
+    var gap = (parseFloat(bar.getAttribute('data-gap')) || 1.5) * 1000;   // 空窗秒数（后台可调）
+    var W = vp.clientWidth || 600;
+
+    function show(el) {
+      el.style.transition = 'none';
+      el.style.opacity = '0';
+      el.style.transform = 'translateX(' + W + 'px)';    // 放到右侧外
+      void el.offsetWidth;
+      el.style.transition = 'transform ' + scroll + 'ms ease, opacity ' + Math.min(scroll, 400) + 'ms ease';
+      el.style.opacity = '1';
+      requestAnimationFrame(function () { el.style.transform = 'translateX(0)'; });   // 从右滚进
+    }
+    function outLeft(el) {
+      el.style.transition = 'transform ' + scroll + 'ms ease';
+      el.style.transform = 'translateX(' + (-W) + 'px)';   // 滚出到左
+      setTimeout(function () { el.style.opacity = '0'; }, scroll);
+    }
+
+    if (mode === 'slide') {
+      // 重叠：当前开始滚出时，下一条同步滚进
+      var cur = 0;
+      function cycle() {
+        setTimeout(function () {
+          outLeft(items[cur % items.length]);               // 当前滚出
+          cur = (cur + 1) % items.length;
+          show(items[cur]);                                 // 下一条同时滚进
+          cycle();
+        }, pause);
+      }
+      show(items[0]);
+      cycle();
+    } else {
+      // inout：滚进→停→滚出→空档→下一条
+      var i = 0;
+      function play(el) {
+        el.style.transition = 'none'; el.style.transform = 'translateX(' + W + 'px)'; void el.offsetWidth;
+        el.style.transition = 'transform ' + scroll + 'ms ease'; el.style.opacity = '1';
+        requestAnimationFrame(function () { el.style.transform = 'translateX(0)'; });
+        setTimeout(function () { el.style.transform = 'translateX(' + (-W) + 'px)'; }, scroll + pause);
+        setTimeout(function () { el.style.opacity = '0'; }, scroll + pause + scroll);
+        setTimeout(function () { i = (i + 1) % items.length; play(items[i]); }, scroll + pause + scroll + gap);
+      }
+      play(items[0]);
+    }
+  });
 })();
