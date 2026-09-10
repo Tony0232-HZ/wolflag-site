@@ -293,7 +293,7 @@ collections:
                   - { label: 文字/图片比例, name: ratio, widget: select, options: ["50:50", "40:60", "60:40", "30:70"], default: "50:50", hint: 前面数字=文字占比，后面=图片占比 }
                   - { label: 标题（可选）, name: title, widget: string, required: false }
                   - { label: 文字（可用 **词** 加粗，多段用空行分隔）, name: text, widget: text, required: false }
-                  - label: 图片（每张可单独调上下位置，多张纵向堆叠）
+                  - label: 固定图片（不轮播；每张可单独调上下位置，多张纵向堆叠）
                     name: images
                     widget: list
                     required: false
@@ -302,6 +302,21 @@ collections:
                       - { label: 图片, name: image, widget: image }
                       - { label: 图片说明(alt), name: imageAlt, widget: string, required: false, hint: 图片说明（alt，建议英文，含产品关键词；留空则自动用品名） }
                       - { label: 上下位置（像素，正数下移/负数上移，可选）, name: offset, widget: number, required: false, default: 0, hint: 例：填 60=这张图往下移 60px；填 -40=往上移 40px }
+                  - label: 轮播图片（2026-09-10 新增；放在固定图片下方，可自动轮播展示多张图）
+                    name: carousel
+                    widget: object
+                    required: false
+                    fields:
+                      - { label: 启用轮播, name: enabled, widget: boolean, default: true, hint: 勾上=轮播区显示；取消勾选=隐藏整个轮播区（内容保留） }
+                      - { label: 轮播间隔（秒）, name: interval, widget: number, required: false, default: 5, value_type: "int", min: 1, hint: 自动换图间隔秒数，如填 5（参照首页轮播，默认 5 秒） }
+                      - label: 轮播图片（可加多张；只有 1 张时不轮播，静止显示）
+                        name: images
+                        widget: list
+                        required: false
+                        summary: "{{fields.image}}"
+                        fields:
+                          - { label: 图片, name: image, widget: image }
+                          - { label: 图片说明(alt), name: imageAlt, widget: string, required: false, hint: 图片说明（alt，建议英文，含产品关键词；留空则自动用品名） }
               - label: 客户区块
                 name: clients
                 summary: "客户区块 · {{fields.title}}"

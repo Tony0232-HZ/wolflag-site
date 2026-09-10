@@ -696,17 +696,38 @@ function renderAboutBlock(b) {
     const rt = String(b.ratio || '50:50').split(':');
     const t = parseInt(rt[0], 10) || 50;
     const i = parseInt(rt[1], 10) || 50;
+    const fallbackAlt = b.title || 'WOLFLAG custom flags and displays';
+
+    // ① 固定图片（不轮播）：沿用原逻辑，多张纵向堆叠、可各自调 offset
     const imgs = (b.images || []).map((im) => {
       const src = (typeof im === 'string') ? im : (im.image || '');
       const off = (im && typeof im === 'object') ? (parseInt(im.offset, 10) || 0) : 0;
       // alt 取该图自己的 imageAlt，没填则回退到所在图文块的标题，再回退到兜底文案
-      return `<img src="${esc(src)}" alt="${altOf(im, b.title || 'WOLFLAG custom flags and displays')}" loading="lazy" decoding="async" style="margin-top:${off}px">`;
+      return `<img src="${esc(src)}" alt="${altOf(im, fallbackAlt)}" loading="lazy" decoding="async" style="margin-top:${off}px">`;
     }).join('');
+
+    // ② 轮播区（2026-09-10 新增）：位于固定图片下方；只有 1 张时静止显示，≥2 张才轮播
+    const car = b.carousel || {};
+    const carImgs = (car.images || []).filter((x) => x && (typeof x === 'string' ? x : x.image));
+    let carousel = '';
+    if (car.enabled !== false && carImgs.length) {
+      const slides = carImgs.map((im, n) => {
+        const src = typeof im === 'string' ? im : im.image;
+        return `<img class="it-slide${n === 0 ? ' is-active' : ''}" src="${esc(src)}" alt="${altOf(im, fallbackAlt)}" loading="lazy" decoding="async">`;
+      }).join('\n          ');
+      const multi = carImgs.length > 1;
+      // ≥2 张才带 data-interval；单张时不输出，JS 直接静止显示
+      carousel = `
+        <div class="it-carousel${multi ? '' : ' is-single'}"${multi ? ` data-interval="${parseInt(car.interval, 10) || 5}"` : ''}>
+          ${slides}
+        </div>`;
+    }
+
     return `
     <section class="about-grey about-mod" style="background:${aboutBg(b)}"><div class="container">
       <div class="about-it about-it-${dir}" style="--it-t:${t};--it-i:${i};">
         <div class="about-it-text">${b.title ? `<h4>${esc(b.title)}</h4>` : ''}${b.text ? `\n        ${aboutParas(b.text)}` : ''}</div>
-        <div class="about-it-imgs">${imgs}</div>
+        <div class="about-it-imgs">${imgs}${carousel}</div>
       </div>
     </div></section>`;
   }

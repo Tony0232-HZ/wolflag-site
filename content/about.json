@@ -42,12 +42,18 @@
         {
           "image": "/assets/media/about-factory.webp",
           "offset": 0
-        },
-        {
-          "image": "/assets/media/about-us-picture-5.webp",
-          "offset": 0
         }
-      ]
+      ],
+      "carousel": {
+        "enabled": true,
+        "interval": 8,
+        "images": [
+          {
+            "image": "/assets/media/about-us-picture-5.webp",
+            "offset": 0
+          }
+        ]
+      }
     },
     {
       "type": "timeline",

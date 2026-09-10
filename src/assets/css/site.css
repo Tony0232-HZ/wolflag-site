@@ -1255,6 +1255,68 @@ ul { list-style: none; }
   .about-it-text, .about-it-imgs { flex: 0 0 100% !important; order: 0 !important; }
 }
 
+/* ===== About 图文组合 · 轮播区（2026-09-10 新增）=====
+   位置：固定图片（.about-it-imgs 内）之下；沿用首页轮播的淡入淡出思路，
+   但尺寸随内容自适应（不写死高度），以免与左右栏比例冲突。 */
+.it-carousel {
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  margin-top: 20px;                 /* 与上方固定图片的间距，同 .about-it-imgs 的 gap */
+  aspect-ratio: 1200 / 899;         /* 与固定图同比例，避免加载时高度跳动 */
+  background: #f1f1ef;              /* 图片未加载时的占位底色 */
+}
+.it-carousel .it-slide {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity .8s ease;
+  border-radius: 12px;
+  display: block;
+}
+.it-carousel .it-slide.is-active { opacity: 1; }
+/* 单张图（无轮播）：静止显示，隐藏圆点 */
+.it-carousel.is-single .it-slide { opacity: 1; position: relative; }
+.it-carousel.is-single { aspect-ratio: auto; }
+
+/* 底部圆点（≥2 张时才由 JS 生成） */
+.it-carousel .it-dots {
+  position: absolute; bottom: 12px; left: 0; right: 0;
+  display: flex; justify-content: center; gap: 8px;
+  z-index: 2;
+}
+.it-carousel .it-dot {
+  width: 10px; height: 10px; border-radius: 50%; padding: 0;
+  border: none; cursor: pointer;
+  background: rgba(255,255,255,.55);
+  transition: background .2s, transform .2s;
+}
+.it-carousel .it-dot.is-active { background: #fff; transform: scale(1.2); }
+
+/* 左右箭头：悬停淡入（与首页轮播一致的交互） */
+.it-carousel .it-arrow {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  width: 40px; height: 40px; border-radius: 50%; padding: 0;
+  border: none; cursor: pointer; z-index: 2;
+  background: rgba(0,0,0,.32); color: #fff; font-size: 18px; line-height: 1;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transition: opacity .25s, background .2s;
+}
+.it-carousel:hover .it-arrow { opacity: 1; }
+.it-carousel .it-arrow:hover { background: rgba(0,0,0,.55); }
+.it-carousel .it-prev { left: 12px; }
+.it-carousel .it-next { right: 12px; }
+
+/* 手机上箭头常显（没有 hover），尺寸缩小以免挡图 */
+@media (max-width: 760px) {
+  .it-carousel .it-arrow { opacity: .85; width: 34px; height: 34px; font-size: 15px; }
+  .it-carousel .it-prev { left: 8px; }
+  .it-carousel .it-next { right: 8px; }
+}
+
 /* ===== About 时间轴（年份大事记，2026-09-09） ===== */
 .tl-section { padding: 60px 0; border-bottom: 2px solid #f8f8f8; }
 .tl-title { font-size: 36px; font-weight: 700; color: #272e47; text-align: left; margin: 0 0 44px; font-family: var(--display); }

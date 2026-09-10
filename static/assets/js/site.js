@@ -166,6 +166,62 @@
     start();
   })();
 
+  // About 图文组合 · 轮播区（2026-09-10 新增）
+  // 与首页 hero 轮播同思路：淡入淡出 + 自动切换 + 悬停暂停 + 圆点 + 悬停箭头
+  // 单个 .it-carousel 只有 1 张图时：静止显示，不生成圆点/箭头、不启动定时器
+  document.querySelectorAll('.it-carousel').forEach(function (box) {
+    var slides = box.querySelectorAll('.it-slide');
+    if (slides.length < 2) return;                    // 单张 → 静止
+
+    var interval = (parseInt(box.getAttribute('data-interval'), 10) || 5) * 1000;
+    var idx = 0, timer = null;
+
+    // 底部圆点
+    var dotsWrap = document.createElement('div');
+    dotsWrap.className = 'it-dots';
+    var dots = [];
+    for (var i = 0; i < slides.length; i++) {
+      (function (n) {
+        var d = document.createElement('button');
+        d.className = 'it-dot' + (n === 0 ? ' is-active' : '');
+        d.setAttribute('aria-label', '第 ' + (n + 1) + ' 张');
+        d.addEventListener('click', function () { go(n); restart(); });
+        dotsWrap.appendChild(d);
+        dots.push(d);
+      })(i);
+    }
+    box.appendChild(dotsWrap);
+
+    // 左右箭头（悬停淡入；手机常显）
+    var prev = document.createElement('button');
+    prev.className = 'it-arrow it-prev';
+    prev.setAttribute('aria-label', '上一张');
+    prev.innerHTML = '&#10094;';
+    var next = document.createElement('button');
+    next.className = 'it-arrow it-next';
+    next.setAttribute('aria-label', '下一张');
+    next.innerHTML = '&#10095;';
+    box.appendChild(prev);
+    box.appendChild(next);
+
+    function go(n) {
+      idx = (n + slides.length) % slides.length;
+      slides.forEach(function (sl, k) { sl.classList.toggle('is-active', k === idx); });
+      dots.forEach(function (d, k) { d.classList.toggle('is-active', k === idx); });
+    }
+    function start() { if (!timer) timer = setInterval(function () { go(idx + 1); }, interval); }
+    function stop() { if (timer) { clearInterval(timer); timer = null; } }
+    function restart() { stop(); start(); }
+
+    prev.addEventListener('click', function () { go(idx - 1); restart(); });
+    next.addEventListener('click', function () { go(idx + 1); restart(); });
+    box.addEventListener('mouseenter', stop);          // 悬停暂停（方便细看）
+    box.addEventListener('mouseleave', start);
+
+    go(0);
+    start();
+  });
+
   // About 时间轴：点击切换 + 自动播放（默认开启，可后台关/改间隔；到末尾循环回第一个）
   document.querySelectorAll('.tl').forEach(function (tl) {
     var years = tl.querySelectorAll('.tl-year');
