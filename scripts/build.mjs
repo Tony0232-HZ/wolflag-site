@@ -100,6 +100,91 @@ function announceBar(ann) {
   </div>`;
 }
 
+/* ---------------- 自动读取图片真实尺寸（2026-09-10，零依赖）
+ *  背景：此前全站 HTML 把产品图尺寸写死成 width="280" height="320"（比例 0.875），
+ *  但用户 2026-09-08 在后台把羽毛旗首图换成了 1536×2048 的竖图（比例 0.750）。
+ *  声明与实际不符 → 浏览器按错误比例预留占位框，配合 object-fit:cover，
+ *  在**慢速手机**上图片加载完成前产生严重视觉畸变（用户看到"旋转 90°"），
+ *  快网/已缓存时加载极快，故电脑与另一台手机看不出问题。
+ *  修法：构建时读取每张图的真实宽高，HTML 里填真值 —— 用户以后换任何图都自动适配。
+ *  → 详见 AI-GUIDE.md §10.12 */
+const imgSizeCache = new Map();
+
+/** 读取图片真实尺寸。支持 WebP / JPEG / PNG / GIF；SVG 返回 null（矢量图不需要）。
+ *  只读文件头几十字节，不整文件解码，构建开销可忽略。找不到或读不出返回 null。 */
+function readImageSize(urlPath) {
+  if (!urlPath || typeof urlPath !== 'string') return null;
+  if (/\.svg$/i.test(urlPath)) return null;
+  if (imgSizeCache.has(urlPath)) return imgSizeCache.get(urlPath);
+
+  let result = null;
+  // 内容里写的是 /assets/media/x.webp，磁盘上是 media/x.webp
+  const rel = urlPath.replace(/^\/assets\/media\//, '').replace(/^\//, '');
+  const abs = join(MEDIA, rel);
+  try {
+    if (existsSync(abs)) {
+      const buf = readFileSync(abs);
+      result = parseImageSize(buf);
+    }
+  } catch { result = null; }
+  imgSizeCache.set(urlPath, result);
+  return result;
+}
+
+/** 从图片字节里解析宽高（纯 Node，无依赖） */
+function parseImageSize(buf) {
+  if (buf.length < 24) return null;
+  // PNG: 89 50 4E 47 0D 0A 1A 0A，IHDR 紧跟其后
+  if (buf[0] === 0x89 && buf[1] === 0x50 && buf[2] === 0x4e && buf[3] === 0x47) {
+    return { w: buf.readUInt32BE(16), h: buf.readUInt32BE(20) };
+  }
+  // GIF
+  if (buf[0] === 0x47 && buf[1] === 0x49 && buf[2] === 0x46) {
+    return { w: buf.readUInt16LE(6), h: buf.readUInt16LE(8) };
+  }
+  // WebP: RIFF....WEBP
+  if (buf.toString('ascii', 0, 4) === 'RIFF' && buf.toString('ascii', 8, 12) === 'WEBP') {
+    const fmt = buf.toString('ascii', 12, 16);
+    if (fmt === 'VP8 ') {          // 有损：帧头里 14 位宽高
+      return { w: buf.readUInt16LE(26) & 0x3fff, h: buf.readUInt16LE(28) & 0x3fff };
+    }
+    if (fmt === 'VP8L') {          // 无损：位打包
+      const b = buf.readUInt32LE(21);
+      return { w: (b & 0x3fff) + 1, h: ((b >> 14) & 0x3fff) + 1 };
+    }
+    if (fmt === 'VP8X') {          // 扩展：24 位宽高减一
+      const w = (buf[24] | (buf[25] << 8) | (buf[26] << 16)) + 1;
+      const h = (buf[27] | (buf[28] << 8) | (buf[29] << 16)) + 1;
+      return { w, h };
+    }
+    return null;
+  }
+  // JPEG: 逐段扫描 SOF0/1/2 标记
+  if (buf[0] === 0xff && buf[1] === 0xd8) {
+    let i = 2;
+    while (i < buf.length - 9) {
+      if (buf[i] !== 0xff) { i++; continue; }
+      const m = buf[i + 1];
+      if (m >= 0xc0 && m <= 0xcf && m !== 0xc4 && m !== 0xc8 && m !== 0xcc) {
+        return { h: buf.readUInt16BE(i + 5), w: buf.readUInt16BE(i + 7) };
+      }
+      if (m === 0xd8 || m === 0xd9 || (m >= 0xd0 && m <= 0xd7)) { i += 2; continue; }
+      i += 2 + buf.readUInt16BE(i + 2);
+    }
+  }
+  return null;
+}
+
+/** 生成 <img> 的 width/height 属性片段；读不到尺寸就返回空串（退化到旧行为，不会更糟）。
+ *  scale 用于限制输出像素（如卡片图实际只显示 ~340px 宽，没必要写 1536）。 */
+function dimAttrs(urlPath, scale) {
+  const s = readImageSize(urlPath);
+  if (!s || !s.w || !s.h) return '';
+  let w = s.w, h = s.h;
+  if (scale && scale < 1) { w = Math.round(w * scale); h = Math.round(h * scale); }
+  return ` width="${w}" height="${h}"`;
+}
+
 /* ---------------- 结构化数据 Schema.org（2026-09-10 新增）
  *  目的：把"我们是谁/这是什么产品/常见问题"明确告诉 Google，争取富媒体展示。
  *  用户确认：成立 2003；工厂(平湖)+贸易公司(杭州)两个地址都写；产品不写价格。
@@ -367,15 +452,15 @@ function homeBody() {
     `<span class="tag-pill ${i === 0 ? 'fill' : 'line'}">${esc(f)}</span>`).join('');
   const imgs = home.intro.images;
   const photos = `
-      <img src="${imgs[0]}" alt="WOLFLAG printing workshop" loading="lazy" decoding="async" width="1005" height="757">
+      <img src="${imgs[0]}" alt="WOLFLAG printing workshop" loading="lazy" decoding="async"${dimAttrs(imgs[0], 0.5)}>
       <div class="mid">
         <div class="tag-pills">${pills}</div>
-        <img src="${imgs[1]}" alt="Flags printing line" loading="lazy" decoding="async" width="1110" height="758">
+        <img src="${imgs[1]}" alt="Flags printing line" loading="lazy" decoding="async"${dimAttrs(imgs[1], 0.5)}>
       </div>
-      <img src="${imgs[2]}" alt="Banner production machine" loading="lazy" decoding="async" width="960" height="540">`;
+      <img src="${imgs[2]}" alt="Banner production machine" loading="lazy" decoding="async"${dimAttrs(imgs[2], 0.5)}>`;
   const cards = home.categories.items.map((c, i) =>
     `<a class="cat-card ${i % 2 === 1 ? 'flip' : ''}" href="${esc(c.link)}">
-       <span class="cat-img"><img src="${c.image}" alt="${altOf(c, c.title)}" loading="lazy" decoding="async" width="700" height="700"></span>
+       <span class="cat-img"><img src="${c.image}" alt="${altOf(c, c.title)}" loading="lazy" decoding="async"${dimAttrs(c.image, 0.5)}></span>
        <span class="cat-info">
          <span class="cat-title">${esc(c.title)}</span>
          <span class="cat-desc">${esc(c.text)}</span>
@@ -392,7 +477,7 @@ function homeBody() {
     </div>
     <div class="container hero-image">
       <div class="hero-slider" data-interval="${esc(String(home.hero.interval || 5))}" data-mode="${esc(home.hero.mode || 'carousel')}">
-        ${heroImgs.map((src, i) => `<img class="hero-slide${i === 0 ? ' is-active' : ''}" src="${esc(src)}" alt="${altOf(src, 'WOLFLAG factory and products')}" ${i === 0 ? 'width="1259" height="562"' : 'loading="lazy"'} decoding="async">`).join('\n        ')}
+        ${heroImgs.map((src, i) => `<img class="hero-slide${i === 0 ? ' is-active' : ''}" src="${esc(src)}" alt="${altOf(src, 'WOLFLAG factory and products')}" ${i === 0 ? dimAttrs(src, 1).trim() : 'loading="lazy"'} decoding="async">`).join('\n        ')}
       </div>
     </div>
   </section>
@@ -425,7 +510,7 @@ function nfBody(data) {
       : '';
     return `
     <article class="product-card nf-card">
-      <span class="p-img"><img src="${p.image}" alt="${altOf(p, p.name)}" loading="lazy" decoding="async" width="332" height="332"></span>
+      <span class="p-img"><img src="${p.image}" alt="${altOf(p, p.name)}" loading="lazy" decoding="async"${dimAttrs(p.image, 0.5)}></span>
       <div class="p-body">
         <h2 class="p-name">${esc(p.name)}</h2>
         ${specHtml}
@@ -477,7 +562,7 @@ function featherBody(data) {
       : '';
     return `
     <article class="f-card">
-      <span class="f-img"><img src="${p.image}" alt="${altOf(p, p.name)}" loading="lazy" decoding="async" width="280" height="320"></span>
+      <span class="f-img"><img src="${p.image}" alt="${altOf(p, p.name)}" loading="lazy" decoding="async"${dimAttrs(p.image, 0.5)}></span>
       <div class="f-body">
         <h2 class="f-title">${esc(p.name)}</h2>
         ${specHtml}
@@ -510,7 +595,7 @@ function bannerBody(data) {
       : '';
     return `
     <article class="product-card">
-      <span class="p-img"><img src="${p.image}" alt="${altOf(p, p.name)}" loading="lazy" decoding="async" width="332" height="332"></span>
+      <span class="p-img"><img src="${p.image}" alt="${altOf(p, p.name)}" loading="lazy" decoding="async"${dimAttrs(p.image, 0.5)}></span>
       <div class="p-body">
         <h2 class="p-name">${esc(p.name)}</h2>
         ${specHtml}
@@ -544,11 +629,11 @@ function poleBody(data) {
         ${p.detail ? `<p class="feat-desc">${esc(p.detail)}</p>` : ''}
         <p class="feat-tag">${esc(p.tag)}</p>
       </div>
-      <img src="${p.image}" alt="${altOf(p, p.name)}" loading="lazy" decoding="async" width="553" height="368">
+      <img src="${p.image}" alt="${altOf(p, p.name)}" loading="lazy" decoding="async"${dimAttrs(p.image, 0.5)}>
     </article>`).join('');
   const ing = data.ingredients.items.map((p) => `
     <article class="ing-card">
-      <img src="${p.image}" alt="${altOf(p, p.name)}" loading="lazy" decoding="async" width="318" height="318">
+      <img src="${p.image}" alt="${altOf(p, p.name)}" loading="lazy" decoding="async"${dimAttrs(p.image, 0.5)}>
       <h4>${esc(p.name)}</h4>
       <p>${esc(p.desc)}</p>
     </article>`).join('');
@@ -692,7 +777,7 @@ function aboutBody(data) {
   const blocks = (data.blocks || []).map(renderAboutBlock).join('\n');
   return `
   <div class="about-hero">
-    <img src="${data.hero.image}" alt="${altOf(data.hero, 'WOLFLAG factory workshop')}" width="1500" height="575">
+    <img src="${data.hero.image}" alt="${altOf(data.hero, 'WOLFLAG factory workshop')}"${dimAttrs(data.hero.image, 0.5)}>
   </div>
   ${announceBar(data.announce)}
   ${blocks}`;
@@ -710,8 +795,8 @@ function simpleBody(data) {
     const nameStyle = data.titleFontSerif ? '' : 'style="font-family:Arial;font-weight:700;font-size:14px;letter-spacing:0;text-transform:none"';
     const link = p.link ? `class="p-link" href="${esc(p.link)}"` : '';
     const img = p.link
-      ? `<a ${link}><img src="${esc(p.image)}" alt="${altOf(p, p.name)}" loading="lazy" decoding="async" width="600" height="600"></a>`
-      : `<img src="${esc(p.image)}" alt="${altOf(p, p.name)}" loading="lazy" decoding="async" width="600" height="600">`;
+      ? `<a ${link}><img src="${esc(p.image)}" alt="${altOf(p, p.name)}" loading="lazy" decoding="async"${dimAttrs(p.image, 0.5)}></a>`
+      : `<img src="${esc(p.image)}" alt="${altOf(p, p.name)}" loading="lazy" decoding="async"${dimAttrs(p.image, 0.5)}>`;
     const name = p.link
       ? `<a ${link}><h2 class="p-name" ${nameStyle}>${esc(p.name)}</h2></a>`
       : `<h2 class="p-name" ${nameStyle}>${esc(p.name)}</h2>`;
@@ -1028,6 +1113,7 @@ function notFoundBody() {
     </div>
   </section>`;
 }
+
 
 /* wipe old html */
 for (const f of readdirSync(STATIC)) {
