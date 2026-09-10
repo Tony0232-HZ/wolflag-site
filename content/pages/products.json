@@ -3,7 +3,7 @@
   "page": {
     "file": "products.html",
     "layout": "simple",
-    "nav": "/products.html"
+    "nav": "/products"
   },
   "seo": {
     "title": "Full Products - WOLFLAG",
@@ -15,7 +15,7 @@
   "products": [
     {
       "name": "Banners",
-      "link": "/banner.html",
+      "link": "/banner",
       "size": "",
       "material": "",
       "desc": "Street pole banners, swallowtail, hook, grommet, tassel banners and banner stands.",
@@ -23,7 +23,7 @@
     },
     {
       "name": "Car Flags",
-      "link": "/car-flags.html",
+      "link": "/car-flags",
       "size": "",
       "material": "",
       "desc": "Custom car flags with full-color printing, multiple sizes and factory-direct pricing.",

@@ -66,6 +66,6 @@
   "page": {
     "file": "national-flag.html",
     "layout": "flags",
-    "nav": "/national-flag.html"
+    "nav": "/national-flag"
   }
 }

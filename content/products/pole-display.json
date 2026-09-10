@@ -61,6 +61,6 @@
   "page": {
     "file": "pole-display.html",
     "layout": "pole",
-    "nav": "/pole-display.html"
+    "nav": "/pole-display"
   }
 }

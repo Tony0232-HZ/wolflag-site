@@ -3,7 +3,7 @@
   "page": {
     "file": "led-display.html",
     "layout": "simple",
-    "nav": "/led-display.html"
+    "nav": "/led-display"
   },
   "seo": {
     "title": "LED Display - WOLFLAG",

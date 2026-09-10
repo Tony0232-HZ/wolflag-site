@@ -221,6 +221,86 @@ About 页新增「**时间轴**」模块：一条横线+年份圆点，点某个
 - `sitemap.xml`、`robots.txt` 由构建脚本自动生成；域名确定后请修改 `SITE` 常量
 - 图片已压缩为 WebP（原站 60MB → 1.6MB，加载速度大幅提升）
 
+## Google Search Console（2026-09-10 已绑定）
+
+**已完成的配置：**
+
+- **资源类型**：`Domain`（网域），值 `wolflag.com` —— 一次覆盖带/不带 www、http/https 全部版本
+- **验证方式**：DNS TXT 记录，托管在 **35互联**（`https://www.35.com` → 域名管理 → DNS 解析）
+- **状态**：`Ownership verified`（已验证）✅
+- **Sitemap**：`https://www.wolflag.com/sitemap.xml` 已提交，Google 发现页面数 **6 → 12**
+
+**⚠️ 两条注意事项：**
+
+1. **那条 `google-site-verification=...` 的 TXT 记录永远不要删**，删了验证失效需重做。
+2. **DNS 后台里其他记录一条都别动**，尤其 `MX`、`@` 上的 SPF（`v=spf1 include:...`）、`_dmarc`、`default._domainkey` —— 动了企业邮箱会出问题。添加新记录时务必选「**新增**」，**不要选「覆盖」**。
+
+> 完整操作步骤（含截图）见用户本机 `E:\2026 公司网站\SEO操作指南.html`；技术细节见 AI-GUIDE.md §10。
+
+## 🔑 网站网址格式（2026-09-10 调整，重要）
+
+**全站网址已统一为「无后缀」形式。**
+
+| | 网址 |
+|---|---|
+| ✅ 现在的网址 | `https://www.wolflag.com/national-flag` |
+| ❌ 旧网址（会跳转） | `https://www.wolflag.com/national-flag.html` |
+
+**为什么要改**：Cloudflare 对所有 `.html` 网址返回 **308 跳转**到无后缀版本。Google 抓到 `.html` 时只见"跳转页"，判定**不予收录**——这是之前搜不到产品页的技术根因。
+
+> ⚠️ **改了 12 个页面、内部链接、sitemap，页面显示内容零变化**（已逐页比对确认）。
+
+**⚠️ 注意：无后缀网址依赖 Cloudflare 的 "Pretty URLs" 功能（默认开启）。请勿在 Cloudflare 后台关闭它，否则全站会 404。**
+
+### 后台新建页面时的填法
+
+建页面时「**导航地址**」一栏填**无后缀**：
+
+```
+文件标识：    led-display
+页面文件名：  led-display.html     ← 保留 .html（这是实际文件名）
+导航地址：    /led-display         ← 去掉 .html
+```
+
+**为什么搜不到产品词（2026-09-10 体检结论）：**
+
+> 绑定 GSC 只解决「让 Google 能看见」，「能排上去」取决于内容。**修好网址后缀只是拆掉了障碍，不等于排上去。** 当前三个主因：
+
+1. **产品页内容太薄**（首要）——羽毛旗页整页仅 **334 词**、横幅 244、国旗 199；而 `feather flags` / `banners` 是行业竞争最激烈的大词
+2. **外链 = 0** —— 新域名 + 零外链，Google 本就有 3~6 个月观察期
+3. **无结构化数据** —— 全站 0 个 JSON-LD
+
+**待办（尚未动手，动手前会先出方案供确认）：**
+
+| 优先级 | 事项 |
+|---|---|
+| 🔴 P0 | 丰富产品页文字至 500~800 词/页 |
+| 🔴 P0 | 添加 Schema（Organization / Product / FAQPage / BreadcrumbList） |
+| 🔴 P0 | 建设外链（Kompass / Europages / ThomasNet 等 B2B 目录） |
+| 🟡 P1 | 补全图片 alt（全站 140 张图，**57 张为空**） |
+| 🟡 P1 | 图片文件名去中文（`a型展架-remax.jpg` 等 4 个） |
+| 🟢 P2 | 补 about-us 的 H1；改写首页 H1 与各页 title |
+
+> ✅ 已顺手完成：添加全站 `<link rel="canonical">`、修复 `og:url`（原 11 页全写死首页）——均随本次网址调整一并修好。
+
+## ⚠️ 待修：裸域名 `wolflag.com`（不带 www）打不开
+
+**现象**：客户在浏览器输入 `wolflag.com` **打不开**（https 连不上）；输入 `www.wolflag.com` 正常。
+
+**原因**：DNS 里 `@ → A → 154.18.236.136` 指向的是**网易老建站服务器**，那台机器没有 https 证书。网易的建站服务**已过期需付费**，不再续用。
+
+**现状**：该老服务器还在把 `http://wolflag.com` 跳转到 `http://www.wolflag.com`，所以**那条 A 记录暂不能删**（删了 http 也一起废）。
+
+**正确修法**：把域名解析整体迁移到 **Cloudflare**（裸域名可指向 Pages + 自动 SSL，邮箱记录一并搬迁）。这是一个独立的小项目，需单独安排时间，步骤：
+
+1. 备份现有全部 DNS 记录（截图存档）
+2. Cloudflare 建站、导入记录
+3. **逐条核对 MX / DKIM / DMARC / SPF 是否搬齐** ← 最容易漏，漏了邮箱出问题
+4. 改 NS 服务器（35互联 → Cloudflare）
+5. 观察 24~48 小时，确认邮箱与网站均正常
+
+**过渡期约定**：所有对外网址统一使用 **`www.wolflag.com`**（邮件签名、名片、报价单、展会资料、B2B 平台档案）。
+
 ## 与原站差异（均为有意为之）
 
 1. 版权行由 "© 2022 NetEase Zhuyou" 改为 "© 2011 WOLFLAG"（2011=用户外贸起步年份，2026-09-06 由后台改为 2011）

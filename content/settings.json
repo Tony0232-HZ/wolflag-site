@@ -9,49 +9,49 @@
     },
     {
       "label": "Feather flags",
-      "url": "/feather-flag.html",
+      "url": "/feather-flag",
       "external": false
     },
     {
       "label": "Full Products",
-      "url": "/products.html",
+      "url": "/products",
       "external": false,
       "children": [
         {
           "label": "Banners",
-          "url": "/banner.html",
+          "url": "/banner",
           "external": false
         },
         {
           "label": "Car Flags",
-          "url": "/car-flags.html",
+          "url": "/car-flags",
           "external": false
         }
       ]
     },
     {
       "label": "National Flags",
-      "url": "/national-flag.html",
+      "url": "/national-flag",
       "external": false
     },
     {
       "external": false,
       "label": "Stands & Displays",
-      "url": "/stands-displays.html"
+      "url": "/stands-displays"
     },
     {
       "label": "Flagpoles & Accessories",
-      "url": "/pole-display.html",
+      "url": "/pole-display",
       "external": false
     },
     {
       "label": "About Us",
-      "url": "/about-us.html",
+      "url": "/about-us",
       "external": false
     },
     {
       "label": "Blog",
-      "url": "/blog.html",
+      "url": "/blog",
       "external": false
     }
   ],

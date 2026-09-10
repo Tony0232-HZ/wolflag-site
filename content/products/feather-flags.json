@@ -109,6 +109,6 @@
   "page": {
     "file": "feather-flag.html",
     "layout": "feather",
-    "nav": "/feather-flag.html"
+    "nav": "/feather-flag"
   }
 }

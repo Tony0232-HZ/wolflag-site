@@ -102,6 +102,6 @@
   "page": {
     "file": "banner.html",
     "layout": "bannerCards",
-    "nav": "/banner.html"
+    "nav": "/banner"
   }
 }

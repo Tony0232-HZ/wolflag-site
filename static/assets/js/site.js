@@ -61,7 +61,7 @@
     function item(p) {
       return '<div class="recent-item">' +
         '<img src="' + esc(p.i || '/assets/media/home-hero.webp') + '" alt="" loading="lazy">' +
-        '<div class="rt"><a href="/blog/' + esc(p.s) + '.html">' + esc(p.t) + '</a>' +
+        '<div class="rt"><a href="/blog/' + esc(p.s) + '">' + esc(p.t) + '</a>' +
         (p.p ? '<span class="blog-flag">PINNED</span> ' : '') +
         '<div class="rd">' + esc(p.d) + '</div></div></div>';
     }

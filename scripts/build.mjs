@@ -36,21 +36,34 @@ for (const dir of PAGE_DIRS) {
 const SITE = 'https://www.wolflag.com';
 
 /* ---------------- page registry（首页/关于页固定 + 产品页自动发现） ---------------- */
+
+/** 文件在磁盘上仍叫 x.html，但对外公布的网址一律去掉 .html 后缀（2026-09-10）
+ *  原因：Cloudflare Pages 对 /x.html 返回 308 → /x。若 sitemap/内链继续用 .html，
+ *  Google 只能抓到"重定向页"，页面会以 "Page with redirect" 被排除收录。
+ *  → 详见 AI-GUIDE.md §10.8。 */
+const cleanUrl = (f) => {
+  const noSlash = String(f).replace(/^\/+/, '');          // 先去掉前导斜杠（p.nav 可能自带 /）
+  const stripped = noSlash.replace(/index\.html$/, '').replace(/\.html$/, '');
+  return '/' + stripped;                                   // 首页 index.html → '/'
+};
+
 const PAGES = [
   { file: 'index.html', slug: '/', title: home.seo.title, desc: home.seo.description, nav: '/' },
-  { file: 'about-us.html', slug: '/about-us.html', title: about.seo.title, desc: about.seo.description, nav: '/about-us.html' },
+  { file: 'about-us.html', slug: cleanUrl('about-us.html'), title: about.seo.title, desc: about.seo.description, nav: cleanUrl('about-us.html') },
 ];
 for (const [key, data] of Object.entries(pageFiles)) {
   const p = data.page || {};
   const file = p.file || `${key.replace(/-$/, '')}.html`;
   if (!/(^|\.)html$/.test(file)) throw new Error(`bad page.file for ${key}: ${file}`);
+  const url = cleanUrl(file);
   PAGES.push({
     file,
-    slug: '/' + file,
+    slug: url,
     title: (data.seo && data.seo.title) || `${data.heading || key} - WOLFLAG`,
     desc: (data.seo && data.seo.description) || 'WOLFLAG products.',
     layout: p.layout || 'grid3',
-    nav: p.nav || ('/' + file),
+    // nav 用于菜单高亮比对；内容 JSON 的 p.nav 可能仍带 .html（后台旧数据），去掉后缀再比对
+    nav: p.nav ? cleanUrl(p.nav) : url,
     data,
   });
 }
@@ -80,20 +93,22 @@ function announceBar(ann) {
 }
 
 function header(active) {
+  // 菜单/子菜单网址一律走 cleanUrl 输出无后缀（.html → 无后缀，外链原样保留）；2026-09-10
+  const navUrl = (u) => (typeof u === 'string' && u.endsWith('.html') ? cleanUrl(u) : u);
   const menu = settings.nav.map((item) => {
     const children = item.children || [];
-    const cls = item.url === active ? 'active' : item.external ? 'more' : '';
+    const cls = navUrl(item.url) === active ? 'active' : item.external ? 'more' : '';
     const ext = item.external ? ' target="_blank" rel="noopener"' : '';
     if (!children.length) {
-      return `<li><a class="${cls}" href="${esc(item.url)}"${ext}>${esc(item.label)}</a></li>`;
+      return `<li><a class="${cls}" href="${esc(navUrl(item.url))}"${ext}>${esc(item.label)}</a></li>`;
     }
     const sub = children.map((c) => {
-      const cCls = c.url === active ? 'active' : '';
+      const cCls = navUrl(c.url) === active ? 'active' : '';
       const cExt = c.external ? ' target="_blank" rel="noopener"' : '';
-      return `<li><a class="${cCls}" href="${esc(c.url)}"${cExt}>${esc(c.label)}</a></li>`;
+      return `<li><a class="${cCls}" href="${esc(navUrl(c.url))}"${cExt}>${esc(c.label)}</a></li>`;
     }).join('\n          ');
     return `<li class="has-children">
-        <a class="${cls}" href="${esc(item.url)}"${ext}>${esc(item.label)}<span class="caret" aria-hidden="true">&#9662;</span></a>
+        <a class="${cls}" href="${esc(navUrl(item.url))}"${ext}>${esc(item.label)}<span class="caret" aria-hidden="true">&#9662;</span></a>
         <ul class="nav-drop">
           ${sub}
         </ul>
@@ -165,7 +180,9 @@ function minimalFooter() {
 </footer>`;
 }
 
-function shell({ title, desc, body, active, ogImage, footerMode }) {
+function shell({ title, desc, body, active, ogImage, footerMode, path }) {
+  // path = 本页对外网址路径（无后缀）。canonical 与 og:url 均按页输出（2026-09-10）
+  const url = `${SITE}${!path || path === '/' ? '/' : path}`;
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -173,10 +190,11 @@ function shell({ title, desc, body, active, ogImage, footerMode }) {
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>${esc(title)}</title>
   <meta name="description" content="${esc(desc)}">
+  <link rel="canonical" href="${url}">
   <meta property="og:title" content="${esc(title)}">
   <meta property="og:description" content="${esc(desc)}">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="${SITE}/">
+  <meta property="og:url" content="${url}">
   ${ogImage ? `<meta property="og:image" content="${esc(ogImage)}">` : ''}
   <link rel="icon" type="image/png" href="/assets/media/favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -750,12 +768,12 @@ function pinnedTag() { return '<span class="blog-flag">PINNED</span> '; }
 function blogCard(b) {
   return `
     <article class="blog-card">
-      <a class="blog-thumb" href="/blog/${esc(b.slug)}.html"><img src="${esc(b.coverImage || home.hero.image)}" alt="${esc(b.title)}" loading="lazy" decoding="async"></a>
+      <a class="blog-thumb" href="/blog/${esc(b.slug)}"><img src="${esc(b.coverImage || home.hero.image)}" alt="${esc(b.title)}" loading="lazy" decoding="async"></a>
       <div class="blog-body">
         <p class="blog-meta">${b.pinned ? pinnedTag() : ''}${esc(b.date)}</p>
-        <h2 class="blog-title"><a href="/blog/${esc(b.slug)}.html">${esc(b.title)}</a></h2>
+        <h2 class="blog-title"><a href="/blog/${esc(b.slug)}">${esc(b.title)}</a></h2>
         ${b.summary ? `<p class="blog-sum">${esc(b.summary)}</p>` : ''}
-        <a class="blog-more" href="/blog/${esc(b.slug)}.html">Read More</a>
+        <a class="blog-more" href="/blog/${esc(b.slug)}">Read More</a>
       </div>
     </article>`;
 }
@@ -763,12 +781,12 @@ function blogCard(b) {
 function blogPager(page, totalPages) {
   if (totalPages <= 1) return '';
   let h = '<nav class="blog-pager">';
-  h += page > 1 ? `<a class="pager-arrow" href="/blog${page > 2 ? '-' + (page - 1) : ''}.html">&larr; Prev</a>` : '';
+  h += page > 1 ? `<a class="pager-arrow" href="/blog${page > 2 ? '-' + (page - 1) : ''}">&larr; Prev</a>` : '';
   for (let i = 1; i <= totalPages; i++) {
-    const href = i === 1 ? '/blog.html' : `/blog-${i}.html`;
+    const href = i === 1 ? '/blog' : `/blog-${i}`;
     h += i === page ? `<span class="pager-num active">${i}</span>` : `<a class="pager-num" href="${href}">${i}</a>`;
   }
-  h += page < totalPages ? `<a class="pager-arrow" href="/blog-${page + 1}.html">Next &rarr;</a>` : '';
+  h += page < totalPages ? `<a class="pager-arrow" href="/blog-${page + 1}">Next &rarr;</a>` : '';
   return h + '</nav>';
 }
 
@@ -790,7 +808,7 @@ function recentItem(b) {
   return `<div class="recent-item">
     <img src="${esc(b.coverImage || home.hero.image)}" alt="" loading="lazy" decoding="async">
     <div class="rt">
-      <a href="/blog/${esc(b.slug)}.html">${esc(b.title)}</a>
+      <a href="/blog/${esc(b.slug)}">${esc(b.title)}</a>
       ${b.pinned ? pinnedTag() : ''}
       <div class="rd">${esc(b.date)}</div>
     </div>
@@ -815,7 +833,7 @@ function blogPostBody(b, blogs) {
         <p class="blog-meta">${b.pinned ? pinnedTag() : ''}${esc(b.date)}</p>
         ${b.coverImage ? `<img class="blog-cover" src="${esc(b.coverImage)}" alt="${esc(b.title)}">` : ''}
         <div class="blog-content">${blocks}</div>
-        <p class="blog-back"><a href="/blog.html">&larr; Back to Blog</a></p>
+        <p class="blog-back"><a href="/blog">&larr; Back to Blog</a></p>
       </div>
       <aside class="blog-aside">
         <div class="recent-box">
@@ -844,6 +862,7 @@ for (const p of PAGES) {
     desc: p.desc,
     body,
     active: p.nav,
+    path: p.slug,
     ogImage: home.hero.image,
     footerMode: 'full', // 2026-09-06: 用户要求全站页面统一完整页脚（联系方式+地址）
   });
@@ -863,7 +882,8 @@ listingPages.forEach((chunk, idx) => {
     title: page === 1 ? 'Blog - WOLFLAG' : `Blog - Page ${page} - WOLFLAG`,
     desc: 'WOLFLAG news, product releases, announcements and company updates.',
     body: blogListBody(chunk, page, listingPages.length),
-    active: '/blog.html',
+    active: '/blog',
+    path: page === 1 ? '/blog' : `/blog-${page}`,
     ogImage: home.hero.image,
     footerMode: 'full',
   }));
@@ -876,7 +896,8 @@ for (const b of blogs) {
     title: `${b.title} - WOLFLAG`,
     desc: `${b.summary || b.title} — WOLFLAG blog`,
     body: blogPostBody(b, blogs),
-    active: '/blog.html',
+    active: '/blog',
+    path: `/blog/${b.slug}`,
     ogImage: b.coverImage || home.hero.image,
     footerMode: 'full',
   });
@@ -896,8 +917,8 @@ if (existsSync(ADMIN)) cpSync(ADMIN, join(STATIC, 'admin'), { recursive: true })
 
 /* sitemap */
 const blogUrls = [
-  ...listingPages.map((_, i) => `${SITE}${i === 0 ? '/blog.html' : `/blog-${i + 1}.html`}`),
-  ...blogs.map((b) => `${SITE}/blog/${b.slug}.html`),
+  ...listingPages.map((_, i) => `${SITE}${i === 0 ? '/blog' : `/blog-${i + 1}`}`),
+  ...blogs.map((b) => `${SITE}/blog/${b.slug}`),
 ];
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
