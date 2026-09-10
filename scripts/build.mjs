@@ -100,6 +100,129 @@ function announceBar(ann) {
   </div>`;
 }
 
+/* ---------------- 结构化数据 Schema.org（2026-09-10 新增）
+ *  目的：把"我们是谁/这是什么产品/常见问题"明确告诉 Google，争取富媒体展示。
+ *  用户确认：成立 2003；工厂(平湖)+贸易公司(杭州)两个地址都写；产品不写价格。
+ *  → 详见 AI-GUIDE.md §10.12 */
+const ORG_ID = `${SITE}/#organization`;
+const WEBSITE_ID = `${SITE}/#website`;
+
+const ORG_ADDRESS = [
+  { '@type': 'PostalAddress', streetAddress: 'No 7 Weisan Road, Zhapu Town',
+    addressLocality: 'Pinghu', addressRegion: 'Zhejiang', addressCountry: 'CN' },
+  { '@type': 'PostalAddress', streetAddress: 'Room 620, Jinshaju Building 2, Xuezheng St.',
+    addressLocality: 'Hangzhou', addressRegion: 'Zhejiang', addressCountry: 'CN' },
+];
+
+/** 全站 Organization + LocalBusiness：每页都输出 */
+function orgSchema() {
+  const phones = (settings.footer.phones || []).map((p) => p.replace(/[^+\d]/g, ''));
+  const mails = settings.footer.emails || [settings.footer.email];
+  return [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'Organization',
+      '@id': ORG_ID,
+      name: 'WOLFLAG',
+      alternateName: 'Hangzhou Loyal Import & Export Co., Ltd',
+      url: SITE,
+      logo: absUrl(settings.logo),
+      image: absUrl(home.hero.image),
+      foundingDate: '2003',
+      description: 'WOLFLAG is a professional manufacturer of custom flags, banners, feather flags, national flags, flagpoles and display stands, exporting from China since 2011.',
+      address: ORG_ADDRESS,
+      telephone: phones[0] || '',
+      email: mails[0] || '',
+      contactPoint: [{
+        '@type': 'ContactPoint',
+        contactType: 'sales',
+        telephone: phones[0] || '',
+        email: mails[0] || '',
+        availableLanguage: ['en', 'zh'],
+      }],
+      sameAs: (settings.footer.icons || [])
+        .map((i) => (i && typeof i === 'object' ? i.url : ''))
+        .filter(Boolean),
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'WebSite',
+      '@id': WEBSITE_ID,
+      url: SITE,
+      name: 'WOLFLAG',
+      publisher: { '@id': ORG_ID },
+      inLanguage: 'en',
+    },
+  ];
+}
+
+/** 面包屑：首页 > 本页（子页输出；首页自身不输出） */
+function breadcrumbSchema(name, path) {
+  if (!path || path === '/') return null;
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: SITE + '/' },
+      { '@type': 'ListItem', position: 2, name, item: `${SITE}${path}` },
+    ],
+  };
+}
+
+/** 产品列表 → ItemList（B2B 不写价格，只列品名/图/描述） */
+function productListSchema(products, pageName, path) {
+  const items = (products || []).filter((p) => p && p.name);
+  if (!items.length) return null;
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: pageName,
+    url: `${SITE}${path}`,
+    numberOfItems: items.length,
+    itemListElement: items.map((p, i) => {
+      const img = p.image || (Array.isArray(p.images) && p.images[0]) ||
+        (Array.isArray(p.images) && p.images[0] && p.images[0].image);
+      return {
+        '@type': 'ListItem',
+        position: i + 1,
+        item: {
+          '@type': 'Product',
+          name: p.name,
+          ...(p.subtitle || p.desc ? { description: String(p.subtitle || p.desc).slice(0, 300) } : {}),
+          ...(img ? { image: absUrl(typeof img === 'string' ? img : img.image) } : {}),
+          brand: { '@type': 'Brand', name: 'WOLFLAG' },
+          manufacturer: { '@id': ORG_ID },
+        },
+      };
+    }),
+  };
+}
+
+/** FAQ → FAQPage（仅当页面有 FAQ 数据时） */
+function faqSchema(items) {
+  const qs = (items || []).filter((x) => x && x.q && x.a);
+  if (!qs.length) return null;
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: qs.map((x) => ({
+      '@type': 'Question',
+      name: String(x.q).replace(/^Q\.\s*/, ''),
+      acceptedAnswer: { '@type': 'Answer', text: String(x.a).replace(/^A\.\s*/, '') },
+    })),
+  };
+}
+
+/** 由若干 schema 片段组成 @graph（null 自动剔除） */
+function schemaGraph(...parts) {
+  const flat = parts.flat().filter(Boolean);
+  if (!flat.length) return null;
+  return { '@context': 'https://schema.org', '@graph': flat.map((p) => {
+    const { '@context': _c, ...rest } = p;   // 外层统一给 @context，内层去掉
+    return rest;
+  }) };
+}
+
 function header(active) {
   // 菜单/子菜单网址一律走 cleanUrl 输出无后缀（.html → 无后缀，外链原样保留）；2026-09-10
   const navUrl = (u) => (typeof u === 'string' && u.endsWith('.html') ? cleanUrl(u) : u);
@@ -188,9 +311,15 @@ function minimalFooter() {
 </footer>`;
 }
 
-function shell({ title, desc, body, active, ogImage, footerMode, path }) {
+/** 把站内图片路径补成绝对网址（og:image / twitter:image 规范要求绝对网址，否则抓不到）
+ *  2026-09-10：此前 og:image 全站写的是 /assets/... 相对路径 → 微信/LinkedIn/Facebook 分享
+ *  时取不到图、卡片空白。 */
+const absUrl = (u) => (!u ? '' : (/^https?:\/\//i.test(u) ? u : `${SITE}${u.startsWith('/') ? '' : '/'}${u}`));
+
+function shell({ title, desc, body, active, ogImage, footerMode, path, type, schema }) {
   // path = 本页对外网址路径（无后缀）。canonical 与 og:url 均按页输出（2026-09-10）
   const url = `${SITE}${!path || path === '/' ? '/' : path}`;
+  const ogImg = absUrl(ogImage);
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -199,16 +328,25 @@ function shell({ title, desc, body, active, ogImage, footerMode, path }) {
   <title>${esc(title)}</title>
   <meta name="description" content="${esc(desc)}">
   <link rel="canonical" href="${url}">
+  <meta property="og:site_name" content="WOLFLAG">
   <meta property="og:title" content="${esc(title)}">
   <meta property="og:description" content="${esc(desc)}">
-  <meta property="og:type" content="website">
+  <meta property="og:type" content="${type || 'website'}">
   <meta property="og:url" content="${url}">
-  ${ogImage ? `<meta property="og:image" content="${esc(ogImage)}">` : ''}
+  <meta property="og:locale" content="en_US">
+  ${ogImg ? `<meta property="og:image" content="${esc(ogImg)}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">` : ''}
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="${esc(title)}">
+  <meta name="twitter:description" content="${esc(desc)}">
+  ${ogImg ? `<meta name="twitter:image" content="${esc(ogImg)}">` : ''}
   <link rel="icon" type="image/png" href="/assets/media/favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Catamaran:wght@400;700&family=Antic+Slab&family=Bona+Nova:wght@400;700&family=Rufina&family=Acme&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/assets/css/site.css">
+${schema ? `  <script type="application/ld+json">${JSON.stringify(schema, null, 0).replace(/</g, '\\u003c')}</script>` : ''}
 </head>
 <body>
 ${header(active)}
@@ -901,13 +1039,37 @@ for (const f of readdirSync(STATIC)) {
 for (const p of PAGES) {
   const title = p.title || 'WOLFLAG — Professional manufacturer of flags, banners, and poles';
   const body = p.file === 'index.html' ? homeBody() : p.file === 'about-us.html' ? aboutBody(about) : renderBody(p);
+
+  // 页面级 og:image：优先用该页自己的横幅图/首图，回退到首页 hero（2026-09-10 改为按页输出）
+  const d = p.data || {};
+  const firstProd = (d.products || [])[0] || {};
+  const firstProdImg = firstProd.image ||
+    (Array.isArray(firstProd.images) && firstProd.images[0] &&
+      (typeof firstProd.images[0] === 'string' ? firstProd.images[0] : firstProd.images[0].image));
+  const pageOgImage = d.bannerImage || firstProdImg || (d.hero && d.hero.image) || home.hero.image;
+
+  // 结构化数据：每页都带 Organization + WebSite；子页加面包屑；有产品的加 ItemList；有 FAQ 的加 FAQPage
+  const faqItems = (about.blocks || []).filter((b) => b.type === 'faq').flatMap((b) => b.items || []);
+  // 产品数据：多数布局用 products[]；pole-display 用 featured[] + ingredients.items[]
+  const pageProducts = (d.products && d.products.length)
+    ? d.products
+    : [...(d.featured || []), ...((d.ingredients && d.ingredients.items) || [])];
+  const schema = schemaGraph(
+    orgSchema(),
+    breadcrumbSchema(p.title || title, p.slug),
+    productListSchema(pageProducts, d.heading || title, p.slug),
+    p.file === 'about-us.html' ? faqSchema(faqItems) : null,
+  );
+
   const html = shell({
     title,
     desc: p.desc,
     body,
     active: p.nav,
     path: p.slug,
-    ogImage: home.hero.image,
+    ogImage: pageOgImage,
+    type: p.slug === '/blog/welcome-to-wolflag-blog' || /^\/blog\//.test(p.slug || '') ? 'article' : 'website',
+    schema,
     footerMode: 'full', // 2026-09-06: 用户要求全站页面统一完整页脚（联系方式+地址）
   });
   writeFileSync(join(STATIC, p.file), html);
@@ -921,6 +1083,7 @@ writeFileSync(join(STATIC, '404.html'), shell({
   body: notFoundBody(),
   active: '',
   path: '/404',           // canonical 指向自身，避免 404 页被当成首页副本
+  schema: schemaGraph(orgSchema()),
   footerMode: 'full',
 }));
 console.log('built 404.html → layout: notFound');
@@ -940,6 +1103,7 @@ listingPages.forEach((chunk, idx) => {
     active: '/blog',
     path: page === 1 ? '/blog' : `/blog-${page}`,
     ogImage: home.hero.image,
+    schema: schemaGraph(orgSchema(), breadcrumbSchema('Blog', page === 1 ? '/blog' : `/blog-${page}`)),
     footerMode: 'full',
   }));
   console.log('built', file, '→ layout: blog(p' + page + ')');
@@ -953,7 +1117,19 @@ for (const b of blogs) {
     body: blogPostBody(b, blogs),
     active: '/blog',
     path: `/blog/${b.slug}`,
+    type: 'article',
     ogImage: b.coverImage || home.hero.image,
+    schema: schemaGraph(orgSchema(), breadcrumbSchema(b.title, `/blog/${b.slug}`), {
+      '@context': 'https://schema.org',
+      '@type': 'BlogPosting',
+      headline: b.title,
+      description: b.summary || b.title,
+      datePublished: b.date,
+      ...(b.coverImage ? { image: absUrl(b.coverImage) } : {}),
+      author: { '@type': 'Organization', name: 'WOLFLAG', '@id': ORG_ID },
+      publisher: { '@id': ORG_ID },
+      mainEntityOfPage: `${SITE}/blog/${b.slug}`,
+    }),
     footerMode: 'full',
   });
   writeFileSync(join(BLOG_OUT, `${b.slug}.html`), html);
@@ -975,10 +1151,14 @@ const blogUrls = [
   ...listingPages.map((_, i) => `${SITE}${i === 0 ? '/blog' : `/blog-${i + 1}`}`),
   ...blogs.map((b) => `${SITE}/blog/${b.slug}`),
 ];
+/* lastmod：Google 用它判断"这页多久没更新"。
+ * 静态站没有可靠的每页修改时间，这里统一用构建日期（每次部署即刷新）——
+ * 诚实反映"网站整体在更新"，不会被误判为长期不维护。详见 AI-GUIDE.md §10.12 */
+const BUILD_DATE = new Date().toISOString().slice(0, 10);
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${PAGES.map((p) => `  <url><loc>${SITE}${p.slug}</loc><changefreq>weekly</changefreq></url>`).join('\n')}
-${blogUrls.map((u) => `  <url><loc>${u}</loc><changefreq>weekly</changefreq></url>`).join('\n')}
+${PAGES.map((p) => `  <url><loc>${SITE}${p.slug}</loc><lastmod>${BUILD_DATE}</lastmod><changefreq>weekly</changefreq></url>`).join('\n')}
+${blogUrls.map((u) => `  <url><loc>${u}</loc><lastmod>${BUILD_DATE}</lastmod><changefreq>weekly</changefreq></url>`).join('\n')}
 </urlset>`;
 writeFileSync(join(STATIC, 'sitemap.xml'), sitemap);
 
