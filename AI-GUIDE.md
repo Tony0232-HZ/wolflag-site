@@ -173,7 +173,7 @@ wolflag-site/
 - `about.json`：`seo`、`hero{title,subtitle,image}`（页头/顶部横幅，固定）、`blocks[{type,...}]`（**模块列表**，2026-09-07 起替代原 `paragraphs/factoryImage/collageImage/clients/faq` 字段；可拖排序/增删）。块类型：
   - `text`：`{text}`（支持 `**词**` 加粗）
   - `image`：`{image}`
-  - `textImg`（图文组合）：`{direction:textLeft|textRight|textTop, ratio:"50:50"等, title, text(多段用空行分隔), images[{image,offset}](每图独立上下移,px)}`
+  - `textImg`（图文组合）：`{direction:textLeft|textRight|textTop, ratio:"50:50"等, title, text(多段用空行分隔), images[{image,imageAlt,offset}](固定图片，多张纵向堆叠、每图可独立上下移), carousel{enabled, interval, images[{image,imageAlt}]}(**轮播区，2026-09-10 新增**，渲染在固定图片**下方**；≥2 张才自动轮播，1 张时静止显示且不生成圆点/箭头；enabled:false 则整块隐藏)}`
   - `clients`：`{title,tagline,subtitle,logos[]}`（8 logo）
   - `faq`：`{items:[{q,a}]}`
   - `timeline`（年份大事记，2026-09-09 新增）：`{bg, title, autoPlay, interval, items[{year,text}]}`——年份横条+圆点，点年份切换对应大字+文字；**`items` 自动按 `year` 升序排序**（最左=最早、最右=最晚，build 时 `renderAboutBlock` 排好的，后台填错顺序也自动纠正）；`autoPlay`=自动播放开关（默认 true）；`interval`=自动切换间隔（秒，默认 5、建议 5~8）；点年份切换、**悬停在某年份上暂停自动播放、移开恢复**、到末位自动循环回第一个（site.js 的 `go/start/stop/restart`，`data-autoplay`/`data-interval` 属性驱动）；样式见 §4。
@@ -1079,11 +1079,117 @@ const pageProducts = (d.products && d.products.length)
 
 ---
 
-### 10.13 用户交付文档
+### 10.13 🎠 About 图文组合新增轮播区（2026-09-10 新增）
+
+#### 需求
+
+用户在后台看到工厂介绍的「图文组合」模块里有两张图（工厂外景 + 车间内部），要求：
+
+> **第一张工厂图固定不变、静止；第二张图改为轮播，展示工厂内部的更多场景。**
+> 参照首页轮播、**轮播时长要能在后台自己调整**。
+
+#### 数据模型（`content/about.json` → `blocks[type=textImg]`）
+
+**原有** `images[]` 语义收窄为「**固定图片**」，**新增** `carousel` 对象承载轮播：
+
+```json
+{
+  "type": "textImg",
+  "direction": "textLeft",
+  "ratio": "55:45",
+  "text": "...",
+  "images":  [ { "image": "/assets/media/about-factory.webp", "offset": 0 } ],
+  "carousel": {
+    "enabled": true,
+    "interval": 8,
+    "images": [ { "image": "/assets/media/about-us-picture-5.webp" } ]
+  }
+}
+```
+
+> ⚠️ **向后兼容**：`images` 仍支持多张（纵向堆叠）+ `offset`；`carousel` 不存在时**不影响**原有渲染。
+> 本次迁移即：原 `images[0]` → 留在 `images`（固定图）；原 `images[1]` → 移入 `carousel.images`。
+
+#### 后台字段（`admin/config.yml` → about → blocks → textImg）
+
+| 字段 | 类型 | 说明 |
+|---|---|---|
+| `images` | list（**改标签**为「固定图片（不轮播）」） | 子字段不变：`image` / `imageAlt` / `offset` |
+| `carousel` | **object（新增）** | 见下 |
+| `carousel.enabled` | boolean，默认 true | 取消勾选 = 整块轮播区隐藏（内容保留） |
+| `carousel.interval` | number，默认 5 | 秒；**用户要求本次设为 8** |
+| `carousel.images` | list | 子字段：`image` / `imageAlt`（无 offset——轮播图统一尺寸） |
+
+> ⚠️ **`carousel` 必须置于 `textImg` 的 `fields` 顶层**，不能塞进 `images` 的子字段里（坑 #16）。
+> 2026-09-10 已验证：PyYAML 通过、`textImg` 顶层字段为 `[bg, direction, ratio, title, text, images, carousel]`、
+> `images` 的子字段未被污染。
+
+#### 渲染（`build.mjs` → `renderAboutBlock()` 的 `textImg` 分支）
+
+- 固定图：沿用原逻辑（`.about-it-imgs` 内，多张纵向堆叠、各自 `margin-top: offset`）。
+- 轮播区：紧跟固定图之后，输出
+
+  ```html
+  <div class="it-carousel" data-interval="8">      <!-- ≥2 张 -->
+    <img class="it-slide is-active" src="..." alt="...">
+    <img class="it-slide" src="..." alt="...">
+  </div>
+  <div class="it-carousel is-single">              <!-- 1 张：不带 data-interval -->
+    <img class="it-slide is-active" src="..." alt="...">
+  </div>
+  ```
+
+- `alt` 走 `altOf(im, fallbackAlt)`（优先 `imageAlt`，回退模块 `title`，再回退兜底文案）。
+- **单张时不输出 `data-interval`**，JS 据此直接静止。
+
+#### 样式（`site.css` → `.it-carousel*`）
+
+| 选择器 | 要点 |
+|---|---|
+| `.it-carousel` | `position:relative; overflow:hidden; border-radius:12px; margin-top:20px`（与固定图间距同 `.about-it-imgs` 的 gap） |
+| `.it-carousel` | **`aspect-ratio: 1200/899`** —— 与固定图同比例，**避免图片加载时高度跳动**；`background:#f1f1ef` 兜底底色 |
+| `.it-slide` | `position:absolute; inset:0; object-fit:cover; opacity:0; transition:opacity .8s`（淡入淡出） |
+| `.it-slide.is-active` | `opacity:1` |
+| `.is-single` | 覆盖为 `position:relative` + `aspect-ratio:auto`（单张静止、按原始比例显示） |
+| `.it-dots` / `.it-dot` | 底部居中圆点，白色半透明；`.is-active` 变实心并 `scale(1.2)` |
+| `.it-arrow` | 左右箭头，**默认 `opacity:0`，悬停容器淡入**；`@media (max-width:760px)` 下**常显**且缩小到 34px（手机没有 hover） |
+
+#### 交互（`site.js` → `document.querySelectorAll('.it-carousel')`）
+
+与首页 hero 轮播同思路，但**独立实现**（首页那个绑定 `.hero-slider`，与之无耦合）：
+
+- **`if (slides.length < 2) return;`** —— 单张直接返回，**不生成圆点/箭头、不启动定时器**。
+  > 📌 这条很关键：避免出现"只有一个圆点"的怪异观感。
+- 自动切换 `setInterval`（`data-interval` 秒，默认 5）；
+- **`mouseenter` 暂停 / `mouseleave` 恢复**（方便细看）；
+- 圆点可点击跳转；左右箭头切换；
+- 到末位循环（`(n + len) % len`）。
+
+#### 验证（2026-09-10）
+
+| 项目 | 结果 |
+|---|---|
+| 临时加 4 张图实测 | ✅ 每 3 秒自动切换、循环正常，圆点 4 个 / 箭头 2 个 |
+| 恢复为 1 张 | ✅ 容器带 `is-single`，无圆点箭头 |
+| 桌面端 1366px + 手机端 390px 截图 | ✅ 不破版；手机端箭头缩小常显、不挡图 |
+| 12 页可见文字与线上比对 | ✅ **100% 一致**（纯结构变更，未动文字） |
+| 内部链接 / 图片引用 | ✅ 零 404 / 75 个 0 缺失 |
+| 后台配置 | ✅ PyYAML 通过、层级正确（坑 #10b / #16） |
+
+#### ⚠️ 给未来 AI 的提示
+
+- **轮播图与固定图的比例最好接近**（固定图为 1200×899 ≈ 4:3 横图）。轮播区按此比例设了 `aspect-ratio`，
+  加入**竖图**会被 `object-fit:cover` 裁掉较多。**站点已能自动读取图片尺寸（§10.12），故不会出现变形/旋转，最多是裁切不理想。**
+- 用户若反馈"轮播不动了"，**先确认 `carousel.images` 是否 ≥2 张**——1 张时设计上就是静止的，不是 bug。
+- 用户要改间隔：**后台「轮播间隔（秒）」直接改即可**，无需动代码。
+
+---
+
+### 10.14 用户交付文档
 
 - **`E:\2026 公司网站\SEO操作指南.html`**（仓库外，用户本机）——面向用户的中文图文操作指南，含本次全部截图（图片存 `E:\2026 公司网站\SEO操作指南图片\`）。日后 GSC 相关操作变更，应同步更新此文件。
 - **`E:\2026 公司网站\后台管理操作说明书.html`**（仓库外，用户本机）——日常操作手册，第 18 章为本次 SEO 变更。**改动站点的网址 / 收录 / 搜索相关行为后，应同步更新它**（改前先备份，已有 `_20260910备份`）。
 
 ---
 
-*最后更新：2026-09-10。**今日补充（三）：§10.12 图片尺寸自动读取**——用户反馈羽毛旗页黄旗图在部分手机"旋转 90°"而另一台手机/电脑正常；Playwright 实测确诊：该图 2026-09-08 被用户在后台换成 1536×2048 竖图（比例 0.750），但 HTML 仍写死 width=280 height=320（比例 0.875）→ 浏览器按**错误比例**预留占位框，配合 object-fit:cover 在图片加载完成前产生严重视觉畸变；该图 1.5MB，慢网加载数秒故畸变可见，快网/已缓存则仅数十毫秒故看不见——**"两台手机不同"由此解释**。修复：build.mjs 新增零依赖的 readImageSize/parseImageSize(JPEG/PNG/GIF/WebP 三种)/dimAttrs，全站 13 处写死尺寸改为自动读取（保留 2 处固定 UI 尺寸）；**用户以后换任何图尺寸都自动适配**。顺带压缩 4 张大图 6.3MB→411KB（黄旗图 -92%），并修正「.jpg 实为 WebP」的扩展名。验证：6 张图声明比例与真实比例 100% 相符、Playwright 窄屏 attr==natural==rendered、双端截图正常、12 页文字 100% 一致、零 404。⚠️ 教训已写入 §10.12：图片变形/旋转先查 width/height；「只有部分设备出问题」往往指向加载时序，别因电脑正常就以为没事；**用户换图后必须检查尺寸声明是否匹配**。**今日补充：新增 §0.1「本文件是 AI 的记忆」第一条铁律**——用户强调本文件是 AI 跨会话的唯一记忆载体，**默认只增不删**；仅四种情况可删改（已失去作用 / 有害 / 已失去价值 / 用户明确批准）；发现旧内容不准确时应「保留原文 + 加更正注解」而非覆盖（§10.6 即为范例）；**禁止因"看起来乱/不够整洁"而重排或精简**（附当日反面教训：AI 写详细待办时顺手重排了章节号，内容未丢但用户记忆的编号全变，属超出授权）；同步在文件头加醒目提示、在 §10.4 说明「为何待办清单可删而记忆性内容不可删」。今日（两个阶段）：**① 建立 Google Search Console SEO 基础设施**（GSC 以 `Domain` 方式绑定 `wolflag.com`，DNS TXT 验证通过（验证码见 §10.1，**永久保留**）；35互联 DNS 后台**新增** TXT 而非覆盖 → 企业邮箱未受影响，双节点 `nslookup` 复核两条 TXT 并存；重新提交 sitemap（**须填完整网址**，只填 `sitemap.xml` 会报 `Invalid sitemap address`）→ Google 时隔 8 个月重新读取，`Discovered pages` **6 → 12**；产出用户侧图文指南 `E:\2026 公司网站\SEO操作指南.html`）。**② 修复头号收录障碍：全站网址去 `.html` 后缀（§10.7）**——GSC `URL Inspection` 实测发现 Google 对**全站所有 `.html` 网址**拿到 **308 重定向**（Cloudflare Pretty URLs），页面因而被判 `Page with redirect`、**不被收录**；`national-flag`/`pole-display` 命中该状态，`banner`/`feather-flag` 则 `URL is unknown to Google`。修复：`build.mjs` 新增 `cleanUrl()`、菜单/内链/博客/sitemap 全部改输出无后缀，`content/*.json` 的 `nav`/`link` 同步去后缀（**`page.file` 保留 `.html`**）；顺带补上全站缺失的 **`<link rel="canonical">`** 并修复 **`og:url`**（原 11 页全写死首页）。验证：**12 页可见文字与改动前逐页比对 100% 一致**、内部链接与 sitemap 全部 200 零 404、导航高亮逐页正常；新增本地自检工具 `scripts/_preview_server.py`（模拟 Cloudflare clean URL）与 `scripts/_check_links.py`。**纠正 §10.6**：此前误判"URL 混用"为非问题，实测后确认该 AI 这条**说对了**；教训已记入。⚠️ 无后缀依赖 Cloudflare Pretty URLs，**勿关闭该设置**。**⑤ 图片 alt 后台可填（§10.9）**——新增 **22 个 `imageAlt`/`blockImageAlt` 可选字段**（home/about/pages/specgrid/4 个产品页/product-details/pole-display/blog 全覆盖，含轮播图、简介照片、详情页多图等**列表型图片从 `field:` 简写改成 `fields:` 完整写法**，旧纯字符串数据仍兼容）；新增 `build.mjs` 的 **`altOf(对象, 兜底)` 助手**（优先读字段、没填回退品名/标题、兼容旧数据）；**真实内容图空 alt 62 处 → 0 处**（剩 44 处装饰图标 + 12 处 JS 占位图，属**规范上应保持为空**）；PyYAML + 字段层级 + 后台 `/admin/` 打开三项校验通过（无坑 #10b/#16）；**12 页可见文字与线上 100% 一致**；双端截图确认。**⑥ 图片文件名去中文（§10.10）**——12 个中文名 + `1.webp` 全部改为英文语义名（**逐张查看实际内容后命名，非字面直译**，如 `1.webp` 实为页脚 logo）；同步更新 7 个 JSON 引用（`car-flag-米黄背景` 被 2 处引用）；删除无引用的重复文件 `水滴型旗子.jpg`(892KB)；**验证：全站 75 个图片引用全部 200 零缺失、12 页可见文字 100% 一致、媒体库中文名清零**，线上复验通过。**⑦ Schema 结构化数据 + og/Twitter Card + 图片压缩（§10.11）**——此前全站 **0 个 JSON-LD**，现每页输出 Organization+WebSite，子页加 BreadcrumbList、产品页加 ItemList(内嵌 Product，**不写价格**)、About 加 FAQPage(6 条)、博客文章加 BlogPosting（用户确认：**成立 2003**、**工厂+贸易公司两个地址都写**、**不写价格**；⚠️ 2003 与版权行 2011 不一致，用户已知悉）；**og:image 由相对路径改为绝对网址并按页输出**（此前全站同一张相对路径图 → 社交分享卡片空白）、**补 Twitter Card**、**sitemap 加 lastmod**；**压缩 14 张大图**（首页图片 1211KB→991KB，`factory-direct-banner` -93%）；**修掉 9 个「扩展名 .jpg 实为 WebP」的文件**（服务端按扩展名回 image/jpeg 与内容不符）。验证：14 页 JSON-LD 全部合法、75 个图片引用 0 缺失、双端截图正常。另记入待办：`harvard-banner-building.webp`(含哈佛校徽) 与 `teardrop-feather-flag.jpg`(World Food Expo 展会图) 两处**属"换图"而非"改名"，本次未动**。**③ 新增 404.html 修复「软 404」（§10.8）**——实测发现 Cloudflare Pages 在无 `404.html` 时，把任意不存在的路径一律返回**首页内容 + HTTP 200**（`/zzz-nonexistent`、`/about-usweekly`、`pages.dev` 直连均复现），浪费抓取配额、掩盖真实死链；新增由 `notFoundBody()` 生成的 `static/404.html` 后，假路径正确返回 **HTTP 404**，12 个真实页面复检 100% 一致；`_preview_server.py` 同步模拟该行为。**④ 证伪某 AI 对 sitemap 的误判**——该 AI 称「sitemap.xml 格式严重畸变、URL 与 changefreq 拼接（如 `about-usweekly`）」，经 **XML 解析器实测证伪**（12 条 loc/changefreq 完全分离、标签闭合正常、`Content-Type: application/xml`）；其"畸形"实为**阅读工具剥离 XML 标签后的显示假象**（已本地复现），讽刺的是它警告的"大面积 404"恰恰反了——真实毛病是**该 404 时不 404**。另：裸域名 `wolflag.com` https 打不开待修（§10.5）；站内 SEO 待办清单见 **§10.4**（alt、Schema、canonical、og 等**已于同日完成**，详见其后各条；剩余为内容/外链/H1/Title/博客）。前次：2026-09-09。今日：**公告条手机端显示修复**（根因：`announce-item` 用 `white-space:nowrap + width:max-content` 只按电脑宽屏设计，手机窄屏长句被裁一半、滚动距离按视口宽算导致下一条和上一条重叠；已改 `width:100% + white-space:normal` 允许换行、容器高度由 site.js `sizeVp()` 依 `scrollHeight` 自适应；电脑端单行不受影响，双端 Playwright 截图验证通过）+ **新增 §0.8「任何改动必须同时考虑电脑端与手机端显示」最高优先级铁律**（用户 2026-09-09 强调：今后任何修改/改进/新增区块都需兼顾手机，两端难兼顾时先与用户商量）+ **坑 #17**（公告条手机显示教训）。前次：2026-09-09。今日：**公告条重构**（从全站顶部挪进页面内，只在首页/关于我们各一条且**独立配置**；字段 `{enabled,mode,bg,color,pause,scroll,items[{icon,text}]}`，`mode`=inout(首页:滚进停滚出) / slide(关于:当前滚出时下一条同步滚进)；build `announceBar()` 复用渲染、site.js 按 `data-mode` 分支、`.announce*` 样式、`.home-hero` 底带 71→24px 让首页公告条与栏目图间距 95→32px；About 顶部原 `.about-marquee` 删除；后台 home/about collection 各加 announce 字段（含 mode 下拉，防编辑时丢失）；图标 media/icon-megaphone/factory/globe/email.svg；首屏顶部公告已移除；见 §2.9）+ **首页 hero 轮播首张 cover、后张 fill**（`.hero-slide` 默认 cover，`.hero-slide:not(:first-child){object-fit:fill}`→后张完整显示、压缩/拉伸填满同一框、不裁剪，首张保持原样；2026-09-09 用户要求，见 §4）。前次：2026-09-09。今日：**About 页新增时间轴（年份大事记）**（新增第 6 种 About 模块 `timeline`：`{bg,title,autoPlay,interval,items[{year,text}]}`；年份横条+圆点、点年份切对应大字+文字；`items` **build 时自动按 `year` 升序**（最左最早、最右最晚，后台填错顺序也自动纠正）；自动播放**默认开**，每 `interval` 秒（默认5，建议5~8）跳到下一年、**到末位 `%years.length` 循环回第一个**；**悬停在某年份上 `mouseenter` 暂停、`mouseleave` 恢复**；手动点击 `go(i)+restart`；后台 About→页面模块→时间轴：背景色/标题/**自动播放开关**/**间隔秒数**/里程碑增删拖序；悬停/选中=鲑红 #f15d49（同顶部 marquee），线+圆点 #dfe3e2（同 FAQ 底），背景白 + 区块底部浅米黄分隔线 #f8f8f8，FAQ 背景改 #f8f8f8；build.mjs `renderAboutBlock` 加 timeline 分支 + site.js `go/start/stop/restart`（`data-autoplay`/`data-interval` 驱动）+ CSS `.tl-*` + config.yml about blocks `types` 加 timeline（字段校验通过）；见 §2.2/§4）。前次：2026-09-08。今日：**国旗产品页改版**（national-flags 卡片改为 品名加粗居中(.nf-card .p-name)→属性表(specs 自由增删，Size/Fabric/Printing 三行)→可选宣传语；size/material/printing 字段→specs，尺寸值去 "popular size:" 前缀；黑框印刷 chip(p-chip) 移除；后台表单同步更换并校验通过，见 §2.3/§4）+ **属性表改版**（f-spec/p-spec/sg-spec 去掉内层灰线框，改为左栏雾蓝 #eef1f4 + 右栏米白 #fafaf9 双色块、单元格 3px 白色缝隙（border-spacing，每格独立色块）；**pd-spec/pd-price 按用户要求保持原线框样式**，详情模板新页面也保持原样，见 §2.6/§4）+ **页脚间距与右对齐**（`.footer-grid` 改 `0.8fr 1fr 1fr auto` + 48px 列距，三块内容（工厂/杭州/电话邮箱）均匀排开，末列 auto 贴容器右缘=与上方内容框右对齐；原 4×1fr+6px padding 视觉仅 12px 太挤；杭州地址后台误合并成一行 `...St.hangzhou China`，已拆回两行 `St.` / `Hangzhou China`；页脚 logo `1.png`(153KB)→`1.webp`(36KB, quality 80)；见 §2.1/§4）+ **导航栏折行修复**（改复数菜单名后多词被叠成两行；`.nav-menu a` 加 `white-space:nowrap`、菜单间距收紧 gap 31→24、汉堡断点 900→1200px，见 §4/坑#15）+ **导航菜单名改复数**（Feather flag→Feather flags、Products→Full Products、National Flag→National Flags，仅显示文字、URL 不变）+ **羽毛旗 Teardrop 产品图转 WebP**（水滴型沙滩旗02.png 2.2MB→.webp 162KB，并删除旧 PNG）+ **Pinpoint 旗帜图文件名修复**（去掉手误的单引号字符 `pinpoint-旗帜-定版’.jpg`→`pinpoint-flag.jpg`）+ **羽毛旗产品页说明模块改版**（说明模块改为 Stands & Displays 同款：品名→属性表(specs)→宣传语(subtitle)，删 CTA；后台 feather-flags 字段 size/material/desc 改 specs+subtitle，见 §2.3/§4）+ **横幅产品页说明模块改版**（品名→属性表(specs)→宣传语(subtitle)，对照 specGrid；后台 banners 字段 desc/material/detail 改 specs+subtitle，见 §2.3/§4）+ **界面动效**（两个主按钮 Contact Us / Download Catalog 悬停轻微上移 2px + 柔色阴影；导航菜单产品名称悬停/选中=浅沙 #f5f0e8 圆角胶囊 + 加粗（padding 6px 12px + margin 0 -10px 防撑宽导航，移动端整行高亮），见 §4）+ **页脚联系图标**（地址/电话/邮箱前加内嵌SVG线框图标（定位/听筒/信封），地址每区块一图标、续行缩进对齐，见 §2.1/§4）+ **补充模块**（每页底部可加多个图文区（show/title/text/image），铺到首页/羽毛旗/横幅/国旗/Stands & Displays 五页，build.mjs `supplementSection()` 通用函数、后台 5 栏目均为 `widget:list` 可 Add 多个；默认全隐藏，见 §2.8）+ **图文区块显示/隐藏 + simple 布局渲染 sections**（sections 每块加 `show` 开关，`sectionsBlock(data)` 通用函数，`simpleBody`/`flexBody` 都用；products.json 底部可显示图文区块，见 §2.6）+ **首页 hero 多图轮播**（hero 加 `images[]/interval/mode`；淡入淡出+自动5s+悬停暂停+底部圆点+悬停左右箭头；site.js `hero-slider` 逻辑 + CSS `.hero-slider*`，见 §2.2/§4）。前次：2026-09-07。今日：**About 页内容模块化**（blocks 列表：text/image/textImg/clients/faq 五类，每模块可选背景色（Decap `color` 部件、十六进制、极简 10 色板）；图文可调方向/比例/每图独立上下位置；见 §2.2）；**新增 §0.6「改动推送上线并同步本地后，主动询问是否写进 AI-GUIDE/README」准则**；**specGrid 属性网格独立栏目**（content/specgrid、后台「属性网格类目页」、字段仅 品名/宣传语/属性/图片，避免混入他模板字段；宣传语改多行文本并移到产品属性下方）+ **全站产品图片点击放大**（悬停放大镜、点击弹全屏大图、Esc/点击恢复；链接卡保留跳转）；**正文加粗标记**：正文 `**文字**` 自动转 `<strong>`（build.mjs `bold()`，About 段落 + 博客 p/h2 已支持，其余仍转义保安全；CSS `p strong` 同色加粗）；**产品详情页规格表改为「产品属性」自由增删列表**（`specs[{label,value}]` 替代原 fabric/printing/size/moq/leadTime，`productSpecRows()` 兜底兼容；见 §2.6/坑附录）；新增 §0.5「**会话开场前必须先主动询问的两件事**」（① 网站更新要不要同步到本地；② 新上传图片要不要转 WebP；均以用户批准为前提，2026-09-07 用户要求）；**config.yml 全角逗号导致后台全线崩溃，已修（坑 10b）**；Products 合集页加 bannerImage 横幅 + 卡片 p.link 可点击；删除 Custom Flags 示例页（用户不要 flex 页，模板保留）；「产品详情页 vs 新增类目页」定位确认（见 §2.6）。前次：2026-09-06 **Products 合集页 + 导航子菜单 + 两个新模板（detail 产品详情：多图画廊/规格表/价格表/MOQ/交期/3 张可编辑服务卡/图文区；flex 通用图文）**，Banner 改为 Products 子菜单项（详见 §2.6）；**Blog 博客模块增强**：正文插图块（type:image，数量不限）；文章页右侧 All Posts 侧栏（所有文章、20 条/页、JS 翻页）；列表分页 20 篇/页（/blog-2.html…）；置顶 `pinned`（多置顶按时间倒序、取消即回时间序）+ PINNED 徽章；**Blog 博客模块**（列表页 /blog.html + 文章页 /blog/<slug>.html，content/blog/*.json 自动发现、draft 草稿开关、后台「博客文章」栏目、自动进 sitemap，详见 §2.5）；最新导航：…About Us / Blog / Contact Us 按钮；Feather flag 页顶部横幅（`bannerImage` 字段，后台「羽毛旗产品页→顶部横幅图片」可换，素材 media/feather-banner.webp 2000×825）；National Flag 页同款横幅（media/national-banner.webp 2000×837）；Banner 页同款横幅（media/banners-banner.webp 1952×806）；CSS 类统一为 `.page-banner`（原 `.feather-banner` 改名）；三页横幅加 12px 圆角；About 页工厂图下新增拼图（段距调 36px 使左右两列高度≈对齐）、工厂图 12px 圆角；页脚原地址已由后台改为 No 7 Weisan Road Zhapu Town（Zhapu/平湖）；**全站页脚统一完整页脚**（页脚策略变更，见 §3/坑 #6）；随线上后台更新同步拉取并重建 static。前次：2026-09-04 导航改名「Flagpoles & Accessories」；修复并新增「Stands & Displays」类目页（.md→.json + `format: json` 治本）；首页新增「Download Catalog (PDF)」金色按钮 + 后台上传入口；**后台登录 OAuth 修复实战**（Worker 密钥被错指为不存在的 Client ID → 404；登记回调与线上 Worker 版本不一致 → Invalid Redirect URI；两处对齐 + 重置 Client Secret 后恢复，实测登录通过），并新增 §9 排障手册。版本号按 git log 追踪。*
+*最后更新：2026-09-10。**今日补充（四）：§10.13 About 图文组合新增轮播区**——用户要求「工厂介绍第一张图固定不变、第二张图改为轮播展示工厂内部场景，参照首页轮播，且轮播时长要能在后台自己调整」。实现：`content/about.json` 的 textImg 块将原 `images` 语义收窄为「固定图片」，新增 `carousel{enabled, interval, images}`（原第 2 张移入轮播、interval 按用户要求设 8 秒）；`admin/config.yml` 的 textImg 新增 carousel 对象字段（原 images 改名「固定图片（不轮播）」）；`build.mjs` 渲染轮播容器（≥2 张才带 `data-interval`）；`site.css` 新增 `.it-carousel/.it-slide/.it-dot/.it-arrow`（淡入淡出、圆点、悬停淡入箭头、手机端箭头常显且缩小、`aspect-ratio:1200/899` 防高度跳动）；`site.js` 新增独立轮播逻辑（**单张时直接 return，不生成圆点箭头**）；轮播图与固定图均可后台增删改。验证：临时 4 张图实测自动切换正常、恢复单张后无圆点箭头、12 页文字 100% 一致、双端截图不破版、后台配置 PyYAML 与层级校验通过。⚠️ 已提示用户：轮播图比例宜与固定图（4:3 横图）接近，竖图会被裁切较多（但不会变形，因 §10.12 已自动读尺寸）。**今日补充（三）：§10.12 图片尺寸自动读取**——用户反馈羽毛旗页黄旗图在部分手机"旋转 90°"而另一台手机/电脑正常；Playwright 实测确诊：该图 2026-09-08 被用户在后台换成 1536×2048 竖图（比例 0.750），但 HTML 仍写死 width=280 height=320（比例 0.875）→ 浏览器按**错误比例**预留占位框，配合 object-fit:cover 在图片加载完成前产生严重视觉畸变；该图 1.5MB，慢网加载数秒故畸变可见，快网/已缓存则仅数十毫秒故看不见——**"两台手机不同"由此解释**。修复：build.mjs 新增零依赖的 readImageSize/parseImageSize(JPEG/PNG/GIF/WebP 三种)/dimAttrs，全站 13 处写死尺寸改为自动读取（保留 2 处固定 UI 尺寸）；**用户以后换任何图尺寸都自动适配**。顺带压缩 4 张大图 6.3MB→411KB（黄旗图 -92%），并修正「.jpg 实为 WebP」的扩展名。验证：6 张图声明比例与真实比例 100% 相符、Playwright 窄屏 attr==natural==rendered、双端截图正常、12 页文字 100% 一致、零 404。⚠️ 教训已写入 §10.12：图片变形/旋转先查 width/height；「只有部分设备出问题」往往指向加载时序，别因电脑正常就以为没事；**用户换图后必须检查尺寸声明是否匹配**。**今日补充：新增 §0.1「本文件是 AI 的记忆」第一条铁律**——用户强调本文件是 AI 跨会话的唯一记忆载体，**默认只增不删**；仅四种情况可删改（已失去作用 / 有害 / 已失去价值 / 用户明确批准）；发现旧内容不准确时应「保留原文 + 加更正注解」而非覆盖（§10.6 即为范例）；**禁止因"看起来乱/不够整洁"而重排或精简**（附当日反面教训：AI 写详细待办时顺手重排了章节号，内容未丢但用户记忆的编号全变，属超出授权）；同步在文件头加醒目提示、在 §10.4 说明「为何待办清单可删而记忆性内容不可删」。今日（两个阶段）：**① 建立 Google Search Console SEO 基础设施**（GSC 以 `Domain` 方式绑定 `wolflag.com`，DNS TXT 验证通过（验证码见 §10.1，**永久保留**）；35互联 DNS 后台**新增** TXT 而非覆盖 → 企业邮箱未受影响，双节点 `nslookup` 复核两条 TXT 并存；重新提交 sitemap（**须填完整网址**，只填 `sitemap.xml` 会报 `Invalid sitemap address`）→ Google 时隔 8 个月重新读取，`Discovered pages` **6 → 12**；产出用户侧图文指南 `E:\2026 公司网站\SEO操作指南.html`）。**② 修复头号收录障碍：全站网址去 `.html` 后缀（§10.7）**——GSC `URL Inspection` 实测发现 Google 对**全站所有 `.html` 网址**拿到 **308 重定向**（Cloudflare Pretty URLs），页面因而被判 `Page with redirect`、**不被收录**；`national-flag`/`pole-display` 命中该状态，`banner`/`feather-flag` 则 `URL is unknown to Google`。修复：`build.mjs` 新增 `cleanUrl()`、菜单/内链/博客/sitemap 全部改输出无后缀，`content/*.json` 的 `nav`/`link` 同步去后缀（**`page.file` 保留 `.html`**）；顺带补上全站缺失的 **`<link rel="canonical">`** 并修复 **`og:url`**（原 11 页全写死首页）。验证：**12 页可见文字与改动前逐页比对 100% 一致**、内部链接与 sitemap 全部 200 零 404、导航高亮逐页正常；新增本地自检工具 `scripts/_preview_server.py`（模拟 Cloudflare clean URL）与 `scripts/_check_links.py`。**纠正 §10.6**：此前误判"URL 混用"为非问题，实测后确认该 AI 这条**说对了**；教训已记入。⚠️ 无后缀依赖 Cloudflare Pretty URLs，**勿关闭该设置**。**⑤ 图片 alt 后台可填（§10.9）**——新增 **22 个 `imageAlt`/`blockImageAlt` 可选字段**（home/about/pages/specgrid/4 个产品页/product-details/pole-display/blog 全覆盖，含轮播图、简介照片、详情页多图等**列表型图片从 `field:` 简写改成 `fields:` 完整写法**，旧纯字符串数据仍兼容）；新增 `build.mjs` 的 **`altOf(对象, 兜底)` 助手**（优先读字段、没填回退品名/标题、兼容旧数据）；**真实内容图空 alt 62 处 → 0 处**（剩 44 处装饰图标 + 12 处 JS 占位图，属**规范上应保持为空**）；PyYAML + 字段层级 + 后台 `/admin/` 打开三项校验通过（无坑 #10b/#16）；**12 页可见文字与线上 100% 一致**；双端截图确认。**⑥ 图片文件名去中文（§10.10）**——12 个中文名 + `1.webp` 全部改为英文语义名（**逐张查看实际内容后命名，非字面直译**，如 `1.webp` 实为页脚 logo）；同步更新 7 个 JSON 引用（`car-flag-米黄背景` 被 2 处引用）；删除无引用的重复文件 `水滴型旗子.jpg`(892KB)；**验证：全站 75 个图片引用全部 200 零缺失、12 页可见文字 100% 一致、媒体库中文名清零**，线上复验通过。**⑦ Schema 结构化数据 + og/Twitter Card + 图片压缩（§10.11）**——此前全站 **0 个 JSON-LD**，现每页输出 Organization+WebSite，子页加 BreadcrumbList、产品页加 ItemList(内嵌 Product，**不写价格**)、About 加 FAQPage(6 条)、博客文章加 BlogPosting（用户确认：**成立 2003**、**工厂+贸易公司两个地址都写**、**不写价格**；⚠️ 2003 与版权行 2011 不一致，用户已知悉）；**og:image 由相对路径改为绝对网址并按页输出**（此前全站同一张相对路径图 → 社交分享卡片空白）、**补 Twitter Card**、**sitemap 加 lastmod**；**压缩 14 张大图**（首页图片 1211KB→991KB，`factory-direct-banner` -93%）；**修掉 9 个「扩展名 .jpg 实为 WebP」的文件**（服务端按扩展名回 image/jpeg 与内容不符）。验证：14 页 JSON-LD 全部合法、75 个图片引用 0 缺失、双端截图正常。另记入待办：`harvard-banner-building.webp`(含哈佛校徽) 与 `teardrop-feather-flag.jpg`(World Food Expo 展会图) 两处**属"换图"而非"改名"，本次未动**。**③ 新增 404.html 修复「软 404」（§10.8）**——实测发现 Cloudflare Pages 在无 `404.html` 时，把任意不存在的路径一律返回**首页内容 + HTTP 200**（`/zzz-nonexistent`、`/about-usweekly`、`pages.dev` 直连均复现），浪费抓取配额、掩盖真实死链；新增由 `notFoundBody()` 生成的 `static/404.html` 后，假路径正确返回 **HTTP 404**，12 个真实页面复检 100% 一致；`_preview_server.py` 同步模拟该行为。**④ 证伪某 AI 对 sitemap 的误判**——该 AI 称「sitemap.xml 格式严重畸变、URL 与 changefreq 拼接（如 `about-usweekly`）」，经 **XML 解析器实测证伪**（12 条 loc/changefreq 完全分离、标签闭合正常、`Content-Type: application/xml`）；其"畸形"实为**阅读工具剥离 XML 标签后的显示假象**（已本地复现），讽刺的是它警告的"大面积 404"恰恰反了——真实毛病是**该 404 时不 404**。另：裸域名 `wolflag.com` https 打不开待修（§10.5）；站内 SEO 待办清单见 **§10.4**（alt、Schema、canonical、og 等**已于同日完成**，详见其后各条；剩余为内容/外链/H1/Title/博客）。前次：2026-09-09。今日：**公告条手机端显示修复**（根因：`announce-item` 用 `white-space:nowrap + width:max-content` 只按电脑宽屏设计，手机窄屏长句被裁一半、滚动距离按视口宽算导致下一条和上一条重叠；已改 `width:100% + white-space:normal` 允许换行、容器高度由 site.js `sizeVp()` 依 `scrollHeight` 自适应；电脑端单行不受影响，双端 Playwright 截图验证通过）+ **新增 §0.8「任何改动必须同时考虑电脑端与手机端显示」最高优先级铁律**（用户 2026-09-09 强调：今后任何修改/改进/新增区块都需兼顾手机，两端难兼顾时先与用户商量）+ **坑 #17**（公告条手机显示教训）。前次：2026-09-09。今日：**公告条重构**（从全站顶部挪进页面内，只在首页/关于我们各一条且**独立配置**；字段 `{enabled,mode,bg,color,pause,scroll,items[{icon,text}]}`，`mode`=inout(首页:滚进停滚出) / slide(关于:当前滚出时下一条同步滚进)；build `announceBar()` 复用渲染、site.js 按 `data-mode` 分支、`.announce*` 样式、`.home-hero` 底带 71→24px 让首页公告条与栏目图间距 95→32px；About 顶部原 `.about-marquee` 删除；后台 home/about collection 各加 announce 字段（含 mode 下拉，防编辑时丢失）；图标 media/icon-megaphone/factory/globe/email.svg；首屏顶部公告已移除；见 §2.9）+ **首页 hero 轮播首张 cover、后张 fill**（`.hero-slide` 默认 cover，`.hero-slide:not(:first-child){object-fit:fill}`→后张完整显示、压缩/拉伸填满同一框、不裁剪，首张保持原样；2026-09-09 用户要求，见 §4）。前次：2026-09-09。今日：**About 页新增时间轴（年份大事记）**（新增第 6 种 About 模块 `timeline`：`{bg,title,autoPlay,interval,items[{year,text}]}`；年份横条+圆点、点年份切对应大字+文字；`items` **build 时自动按 `year` 升序**（最左最早、最右最晚，后台填错顺序也自动纠正）；自动播放**默认开**，每 `interval` 秒（默认5，建议5~8）跳到下一年、**到末位 `%years.length` 循环回第一个**；**悬停在某年份上 `mouseenter` 暂停、`mouseleave` 恢复**；手动点击 `go(i)+restart`；后台 About→页面模块→时间轴：背景色/标题/**自动播放开关**/**间隔秒数**/里程碑增删拖序；悬停/选中=鲑红 #f15d49（同顶部 marquee），线+圆点 #dfe3e2（同 FAQ 底），背景白 + 区块底部浅米黄分隔线 #f8f8f8，FAQ 背景改 #f8f8f8；build.mjs `renderAboutBlock` 加 timeline 分支 + site.js `go/start/stop/restart`（`data-autoplay`/`data-interval` 驱动）+ CSS `.tl-*` + config.yml about blocks `types` 加 timeline（字段校验通过）；见 §2.2/§4）。前次：2026-09-08。今日：**国旗产品页改版**（national-flags 卡片改为 品名加粗居中(.nf-card .p-name)→属性表(specs 自由增删，Size/Fabric/Printing 三行)→可选宣传语；size/material/printing 字段→specs，尺寸值去 "popular size:" 前缀；黑框印刷 chip(p-chip) 移除；后台表单同步更换并校验通过，见 §2.3/§4）+ **属性表改版**（f-spec/p-spec/sg-spec 去掉内层灰线框，改为左栏雾蓝 #eef1f4 + 右栏米白 #fafaf9 双色块、单元格 3px 白色缝隙（border-spacing，每格独立色块）；**pd-spec/pd-price 按用户要求保持原线框样式**，详情模板新页面也保持原样，见 §2.6/§4）+ **页脚间距与右对齐**（`.footer-grid` 改 `0.8fr 1fr 1fr auto` + 48px 列距，三块内容（工厂/杭州/电话邮箱）均匀排开，末列 auto 贴容器右缘=与上方内容框右对齐；原 4×1fr+6px padding 视觉仅 12px 太挤；杭州地址后台误合并成一行 `...St.hangzhou China`，已拆回两行 `St.` / `Hangzhou China`；页脚 logo `1.png`(153KB)→`1.webp`(36KB, quality 80)；见 §2.1/§4）+ **导航栏折行修复**（改复数菜单名后多词被叠成两行；`.nav-menu a` 加 `white-space:nowrap`、菜单间距收紧 gap 31→24、汉堡断点 900→1200px，见 §4/坑#15）+ **导航菜单名改复数**（Feather flag→Feather flags、Products→Full Products、National Flag→National Flags，仅显示文字、URL 不变）+ **羽毛旗 Teardrop 产品图转 WebP**（水滴型沙滩旗02.png 2.2MB→.webp 162KB，并删除旧 PNG）+ **Pinpoint 旗帜图文件名修复**（去掉手误的单引号字符 `pinpoint-旗帜-定版’.jpg`→`pinpoint-flag.jpg`）+ **羽毛旗产品页说明模块改版**（说明模块改为 Stands & Displays 同款：品名→属性表(specs)→宣传语(subtitle)，删 CTA；后台 feather-flags 字段 size/material/desc 改 specs+subtitle，见 §2.3/§4）+ **横幅产品页说明模块改版**（品名→属性表(specs)→宣传语(subtitle)，对照 specGrid；后台 banners 字段 desc/material/detail 改 specs+subtitle，见 §2.3/§4）+ **界面动效**（两个主按钮 Contact Us / Download Catalog 悬停轻微上移 2px + 柔色阴影；导航菜单产品名称悬停/选中=浅沙 #f5f0e8 圆角胶囊 + 加粗（padding 6px 12px + margin 0 -10px 防撑宽导航，移动端整行高亮），见 §4）+ **页脚联系图标**（地址/电话/邮箱前加内嵌SVG线框图标（定位/听筒/信封），地址每区块一图标、续行缩进对齐，见 §2.1/§4）+ **补充模块**（每页底部可加多个图文区（show/title/text/image），铺到首页/羽毛旗/横幅/国旗/Stands & Displays 五页，build.mjs `supplementSection()` 通用函数、后台 5 栏目均为 `widget:list` 可 Add 多个；默认全隐藏，见 §2.8）+ **图文区块显示/隐藏 + simple 布局渲染 sections**（sections 每块加 `show` 开关，`sectionsBlock(data)` 通用函数，`simpleBody`/`flexBody` 都用；products.json 底部可显示图文区块，见 §2.6）+ **首页 hero 多图轮播**（hero 加 `images[]/interval/mode`；淡入淡出+自动5s+悬停暂停+底部圆点+悬停左右箭头；site.js `hero-slider` 逻辑 + CSS `.hero-slider*`，见 §2.2/§4）。前次：2026-09-07。今日：**About 页内容模块化**（blocks 列表：text/image/textImg/clients/faq 五类，每模块可选背景色（Decap `color` 部件、十六进制、极简 10 色板）；图文可调方向/比例/每图独立上下位置；见 §2.2）；**新增 §0.6「改动推送上线并同步本地后，主动询问是否写进 AI-GUIDE/README」准则**；**specGrid 属性网格独立栏目**（content/specgrid、后台「属性网格类目页」、字段仅 品名/宣传语/属性/图片，避免混入他模板字段；宣传语改多行文本并移到产品属性下方）+ **全站产品图片点击放大**（悬停放大镜、点击弹全屏大图、Esc/点击恢复；链接卡保留跳转）；**正文加粗标记**：正文 `**文字**` 自动转 `<strong>`（build.mjs `bold()`，About 段落 + 博客 p/h2 已支持，其余仍转义保安全；CSS `p strong` 同色加粗）；**产品详情页规格表改为「产品属性」自由增删列表**（`specs[{label,value}]` 替代原 fabric/printing/size/moq/leadTime，`productSpecRows()` 兜底兼容；见 §2.6/坑附录）；新增 §0.5「**会话开场前必须先主动询问的两件事**」（① 网站更新要不要同步到本地；② 新上传图片要不要转 WebP；均以用户批准为前提，2026-09-07 用户要求）；**config.yml 全角逗号导致后台全线崩溃，已修（坑 10b）**；Products 合集页加 bannerImage 横幅 + 卡片 p.link 可点击；删除 Custom Flags 示例页（用户不要 flex 页，模板保留）；「产品详情页 vs 新增类目页」定位确认（见 §2.6）。前次：2026-09-06 **Products 合集页 + 导航子菜单 + 两个新模板（detail 产品详情：多图画廊/规格表/价格表/MOQ/交期/3 张可编辑服务卡/图文区；flex 通用图文）**，Banner 改为 Products 子菜单项（详见 §2.6）；**Blog 博客模块增强**：正文插图块（type:image，数量不限）；文章页右侧 All Posts 侧栏（所有文章、20 条/页、JS 翻页）；列表分页 20 篇/页（/blog-2.html…）；置顶 `pinned`（多置顶按时间倒序、取消即回时间序）+ PINNED 徽章；**Blog 博客模块**（列表页 /blog.html + 文章页 /blog/<slug>.html，content/blog/*.json 自动发现、draft 草稿开关、后台「博客文章」栏目、自动进 sitemap，详见 §2.5）；最新导航：…About Us / Blog / Contact Us 按钮；Feather flag 页顶部横幅（`bannerImage` 字段，后台「羽毛旗产品页→顶部横幅图片」可换，素材 media/feather-banner.webp 2000×825）；National Flag 页同款横幅（media/national-banner.webp 2000×837）；Banner 页同款横幅（media/banners-banner.webp 1952×806）；CSS 类统一为 `.page-banner`（原 `.feather-banner` 改名）；三页横幅加 12px 圆角；About 页工厂图下新增拼图（段距调 36px 使左右两列高度≈对齐）、工厂图 12px 圆角；页脚原地址已由后台改为 No 7 Weisan Road Zhapu Town（Zhapu/平湖）；**全站页脚统一完整页脚**（页脚策略变更，见 §3/坑 #6）；随线上后台更新同步拉取并重建 static。前次：2026-09-04 导航改名「Flagpoles & Accessories」；修复并新增「Stands & Displays」类目页（.md→.json + `format: json` 治本）；首页新增「Download Catalog (PDF)」金色按钮 + 后台上传入口；**后台登录 OAuth 修复实战**（Worker 密钥被错指为不存在的 Client ID → 404；登记回调与线上 Worker 版本不一致 → Invalid Redirect URI；两处对齐 + 重置 Client Secret 后恢复，实测登录通过），并新增 §9 排障手册。版本号按 git log 追踪。*
