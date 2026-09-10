@@ -847,6 +847,41 @@ function blogPostBody(b, blogs) {
   <script id="blog-index" type="application/json">${JSON.stringify(index).replace(/</g, '\\u003c')}</script>`;
 }
 
+/* 404 页面（2026-09-10 新增）
+ * 背景：Cloudflare Pages 在 static/ 找不到 404.html 时，会把「任意不存在的路径」
+ * 一律返回首页内容 + HTTP 200（软 404）。后果：浪费 Google 抓取配额、掩盖真实
+ * 死链、可能被视作重复内容。放一个 404.html 后，Cloudflare 会自动用它处理，
+ * 并正确返回 HTTP 404。详见 AI-GUIDE.md §10.10。 */
+function notFoundBody() {
+  const links = [
+    ['Feather flags', '/feather-flag'],
+    ['Banners', '/banner'],
+    ['National Flags', '/national-flag'],
+    ['Stands & Displays', '/stands-displays'],
+    ['Flagpoles & Accessories', '/pole-display'],
+    ['All Products', '/products'],
+  ].map(([label, url]) => `<li><a href="${esc(url)}">${esc(label)}</a></li>`).join('\n        ');
+  return `
+  <section class="section section-center">
+    <div class="container" style="max-width:760px;text-align:center;padding:70px 0 90px">
+      <p style="font-size:88px;font-weight:800;color:#4c6aff;line-height:1;margin:0 0 8px">404</p>
+      <h1 style="font-size:32px;margin:0 0 16px">Sorry, we couldn't find that page</h1>
+      <p style="font-size:17px;color:#545a6e;margin:0 0 32px">
+        The page you're looking for doesn't exist or may have moved.<br>
+        Here are some popular pages instead:
+      </p>
+      <ul style="list-style:none;padding:0;margin:0 0 36px;display:flex;flex-wrap:wrap;justify-content:center;gap:12px 14px">
+        ${links}
+      </ul>
+      <p><a href="/" style="display:inline-block;background:#4c6aff;color:#fff;padding:12px 28px;border-radius:6px;text-decoration:none;font-weight:600">Back to Home</a></p>
+      <p style="margin-top:36px;font-size:15px;color:#6b7280">
+        Still need help? Email us at
+        <a href="mailto:${esc(settings.footer.email)}" style="color:#4c6aff">${esc(settings.footer.email)}</a>
+      </p>
+    </div>
+  </section>`;
+}
+
 /* wipe old html */
 for (const f of readdirSync(STATIC)) {
   if (f.endsWith('.html') || f === 'assets' || f === 'admin' || f === 'sitemap.xml' || f === 'robots.txt' || f === 'blog') {
@@ -869,6 +904,17 @@ for (const p of PAGES) {
   writeFileSync(join(STATIC, p.file), html);
   console.log('built', p.file, '→ layout:', p.layout || 'home');
 }
+
+/* 404 页面：Cloudflare Pages 检测到 static/404.html 后，会用它对未匹配的路径返回 HTTP 404 */
+writeFileSync(join(STATIC, '404.html'), shell({
+  title: 'Page not found - WOLFLAG',
+  desc: 'The page you are looking for could not be found. Browse WOLFLAG flags, banners, national flags, flagpoles and display products instead.',
+  body: notFoundBody(),
+  active: '',
+  path: '/404',           // canonical 指向自身，避免 404 页被当成首页副本
+  footerMode: 'full',
+}));
+console.log('built 404.html → layout: notFound');
 
 /* blog: listing（分页 20/页） + article pages */
 const blogs = scanBlogs();

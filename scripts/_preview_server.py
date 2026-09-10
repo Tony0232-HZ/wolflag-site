@@ -42,6 +42,16 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             self.send_header('Location', '/')
             self.end_headers()
             return
+        # 模拟 Cloudflare Pages：找不到的路径用 404.html 应答，并返回 HTTP 404
+        local = self.translate_path(p)
+        if not os.path.exists(local):
+            body = open(os.path.join(ROOT, '404.html'), 'rb').read()
+            self.send_response(404)
+            self.send_header('Content-Type', 'text/html; charset=utf-8')
+            self.send_header('Content-Length', str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
+            return
         super().do_GET()
 
     def log_message(self, *a):
