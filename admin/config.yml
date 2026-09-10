@@ -116,7 +116,10 @@ collections:
                 name: images
                 widget: list
                 required: false
-                field: { label: 图片, name: image, widget: image }
+                summary: "{{fields.image}}"
+                fields:
+                  - { label: 图片, name: image, widget: image }
+                  - { label: 图片说明(alt，可选), name: imageAlt, widget: string, required: false, hint: 图片说明（alt，建议英文，含产品关键词；留空则自动用品名/标题） }
               - { label: 图片模式, name: mode, widget: select, options: [carousel, single], default: carousel, hint: carousel=多图轮播；single=只显示第一张（固定） }
               - { label: 轮播间隔（秒）, name: interval, widget: number, default: 5, value_type: "int", min: 1, hint: 自动换图间隔秒数，如填 5 }
               - label: 特性标签
@@ -132,7 +135,10 @@ collections:
               - label: 照片
                 name: images
                 widget: list
-                field: { label: 图片, name: image, widget: image }
+                summary: "{{fields.image}}"
+                fields:
+                  - { label: 图片, name: image, widget: image }
+                  - { label: 图片说明(alt，可选), name: imageAlt, widget: string, required: false, hint: 图片说明（alt，建议英文，含产品关键词；留空则自动用品名/标题） }
           - label: 主要产品
             name: categories
             widget: object
@@ -147,6 +153,7 @@ collections:
                   - { label: 卡片标题, name: title, widget: string }
                   - { label: 卡片文案, name: text, widget: text }
                   - { label: 图片, name: image, widget: image }
+                  - { label: 图片说明(alt), name: imageAlt, widget: string, required: false, hint: 图片说明（alt，建议英文，含产品关键词；留空则自动用品名） }
                   - { label: 跳转链接, name: link, widget: string }
           - label: 补充模块（可添加多个；每个：图 + 标题 + 文字）
             name: supplement
@@ -158,6 +165,7 @@ collections:
               - { label: 标题（可选）, name: title, widget: string, required: false }
               - { label: 文字（可用 **词** 加粗）, name: text, widget: text, required: false }
               - { label: 图片（可选）, name: image, widget: image, required: false }
+              - { label: 图片说明(alt), name: imageAlt, widget: string, required: false, hint: 图片说明（alt，建议英文，含产品关键词；留空则自动用品名） }
           - label: "页面公告条（首页页面里的滚动公告条；显示/隐藏、颜色、内容、图标都在这里）"
             name: announce
             widget: object
@@ -219,6 +227,7 @@ collections:
               - { label: 标题, name: title, widget: string }
               - { label: 副标题, name: subtitle, widget: string }
               - { label: 页头图片, name: image, widget: image }
+              - { label: 图片说明(alt), name: imageAlt, widget: string, required: false, hint: 图片说明（alt，建议英文，含产品关键词；留空则自动用品名） }
           - label: "页面公告条（关于我们页顶部的那条滚动公告；显示/隐藏、颜色、内容、图标都在这里）"
             name: announce
             widget: object
@@ -274,6 +283,7 @@ collections:
                 fields:
                   - { label: 背景色, name: bg, widget: color, default: "#f8f8f8", hint: "点开选颜色（下方显示色块）。常用极简色：\n白 #ffffff\n米白 #fafaf9\n淡灰 #f8f8f8\n浅沙 #f5f0e8\n米黄 #faf7f5\n灰绿 #dfe3e2\n鼠尾草 #e8ece2\n雾蓝 #eef1f4\n藕粉 #f6f0ee\n浅炭 #f1f1ef" }
                   - { label: 图片, name: image, widget: image }
+                  - { label: 图片说明(alt), name: imageAlt, widget: string, required: false, hint: 图片说明（alt，建议英文，含产品关键词；留空则自动用品名） }
               - label: 图文组合
                 name: textImg
                 summary: "图文组合"
@@ -290,6 +300,7 @@ collections:
                     summary: "{{fields.image}}"
                     fields:
                       - { label: 图片, name: image, widget: image }
+                      - { label: 图片说明(alt), name: imageAlt, widget: string, required: false, hint: 图片说明（alt，建议英文，含产品关键词；留空则自动用品名） }
                       - { label: 上下位置（像素，正数下移/负数上移，可选）, name: offset, widget: number, required: false, default: 0, hint: 例：填 60=这张图往下移 60px；填 -40=往上移 40px }
               - label: 客户区块
                 name: clients
@@ -354,6 +365,7 @@ collections:
       - { label: 页面主标题, name: heading, widget: string }
       - { label: 标语（可选）, name: tagline, widget: string, required: false }
       - { label: 顶部横幅图片, name: bannerImage, widget: image, required: false, hint: 页面顶部的大横幅（可选，不填则无横幅） }
+      - { label: 图片说明(alt), name: imageAlt, widget: string, required: false, hint: 图片说明（alt，建议英文，含产品关键词；留空则自动用品名） }
       - label: 产品列表（通用/国旗/横幅/羽毛旗/旗杆等模板用）
         name: products
         widget: list
@@ -366,6 +378,7 @@ collections:
           - { label: 材质（可选）, name: material, widget: string, required: false }
           - { label: 描述, name: desc, widget: text, required: false }
           - { label: 图片, name: image, widget: image }
+          - { label: 图片说明(alt), name: imageAlt, widget: string, required: false, hint: 图片说明（alt，建议英文，含产品关键词；留空则自动用品名） }
       - label: 图文区块（flex 通用图文模板用，可按顺序多组）
         name: sections
         widget: list
@@ -408,6 +421,7 @@ collections:
       - { label: 页面主标题, name: heading, widget: string }
       - { label: 标语（可选）, name: tagline, widget: string, required: false }
       - { label: 顶部横幅图片, name: bannerImage, widget: image, required: false, hint: 页面顶部的大横幅（可选，不填则无横幅） }
+      - { label: 图片说明(alt), name: imageAlt, widget: string, required: false, hint: 图片说明（alt，建议英文，含产品关键词；留空则自动用品名） }
       - label: 产品列表
         name: products
         widget: list
@@ -425,6 +439,7 @@ collections:
               - { label: 属性值（如 90*160cm、铝合金、红/蓝）, name: value, widget: string }
           - { label: 宣传语（品名下方那句话，可选；多行文本框可显示完整文字；可用 **词** 加粗）, name: subtitle, widget: text, required: false }
           - { label: 图片, name: image, widget: image }
+          - { label: 图片说明(alt), name: imageAlt, widget: string, required: false, hint: 图片说明（alt，建议英文，含产品关键词；留空则自动用品名） }
       - label: 补充模块（可添加多个；每个：图 + 标题 + 文字）
         name: supplement
         widget: list
@@ -435,6 +450,7 @@ collections:
           - { label: 标题（可选）, name: title, widget: string, required: false }
           - { label: 文字（可用 **词** 加粗）, name: text, widget: text, required: false }
           - { label: 图片（可选）, name: image, widget: image, required: false }
+          - { label: 图片说明(alt), name: imageAlt, widget: string, required: false, hint: 图片说明（alt，建议英文，含产品关键词；留空则自动用品名） }
 
   # ---------- 产品：羽毛旗 ----------
   - name: feather-flags
@@ -453,6 +469,7 @@ collections:
           - { label: 页面标题, name: heading, widget: string }
           - { label: 徽标文案, name: badge, widget: string }
           - { label: 顶部横幅图片, name: bannerImage, widget: image, required: false, hint: 页面顶部的大横幅（可选，不填则无横幅） }
+          - { label: 图片说明(alt), name: imageAlt, widget: string, required: false, hint: 图片说明（alt，建议英文，含产品关键词；留空则自动用品名） }
           - label: 产品
             name: products
             widget: list
@@ -469,6 +486,7 @@ collections:
                   - { label: 属性值（如 110g knitted polyester、红/蓝）, name: value, widget: string }
               - { label: 宣传语（品名下方那句话，可选；多行；可用 **词** 加粗）, name: subtitle, widget: text, required: false }
               - { label: 图片, name: image, widget: image }
+              - { label: 图片说明(alt), name: imageAlt, widget: string, required: false, hint: 图片说明（alt，建议英文，含产品关键词；留空则自动用品名） }
           - label: 补充模块（可添加多个；每个：图 + 标题 + 文字）
             name: supplement
             widget: list
@@ -497,6 +515,7 @@ collections:
           - { label: 页面标题, name: heading, widget: string }
           - { label: 标语, name: tagline, widget: string }
           - { label: 顶部横幅图片, name: bannerImage, widget: image, required: false, hint: 页面顶部的大横幅（可选，不填则无横幅） }
+          - { label: 图片说明(alt), name: imageAlt, widget: string, required: false, hint: 图片说明（alt，建议英文，含产品关键词；留空则自动用品名） }
           - label: 产品
             name: products
             widget: list
@@ -513,6 +532,7 @@ collections:
                   - { label: 属性值（如 comstom size、100% knitted polyester）, name: value, widget: string }
               - { label: 宣传语（品名下方那句话，可选；多行；可用 **词** 加粗）, name: subtitle, widget: text, required: false }
               - { label: 图片, name: image, widget: image }
+              - { label: 图片说明(alt), name: imageAlt, widget: string, required: false, hint: 图片说明（alt，建议英文，含产品关键词；留空则自动用品名） }
           - label: 补充模块（可添加多个；每个：图 + 标题 + 文字）
             name: supplement
             widget: list
@@ -541,6 +561,7 @@ collections:
           - { label: 页面标题, name: heading, widget: string }
           - { label: 标语, name: tagline, widget: string }
           - { label: 顶部横幅图片, name: bannerImage, widget: image, required: false, hint: 页面顶部的大横幅（可选，不填则无横幅） }
+          - { label: 图片说明(alt), name: imageAlt, widget: string, required: false, hint: 图片说明（alt，建议英文，含产品关键词；留空则自动用品名） }
           - label: 产品
             name: products
             widget: list
@@ -557,6 +578,7 @@ collections:
                   - { label: 属性值（如 3*5ft、110g knitted polyester）, name: value, widget: string }
               - { label: 宣传语（品名下方那句话，可选；可用 **词** 加粗）, name: subtitle, widget: text, required: false }
               - { label: 图片, name: image, widget: image }
+              - { label: 图片说明(alt), name: imageAlt, widget: string, required: false, hint: 图片说明（alt，建议英文，含产品关键词；留空则自动用品名） }
           - label: 补充模块（可添加多个；每个：图 + 标题 + 文字）
             name: supplement
             widget: list
@@ -604,7 +626,10 @@ collections:
             name: images
             widget: list
             required: false
-            field: { label: 图片, name: image, widget: image }
+            summary: "{{fields.image}}"
+            fields:
+              - { label: 图片, name: image, widget: image }
+          - { label: 图片说明(alt), name: imageAlt, widget: string, required: false, hint: 图片说明（alt，建议英文，含产品关键词；留空则自动用品名/标题） }
           - label: 产品属性（可自由新增/编辑/删除，如 Fabric、颜色、缝纫方式、特殊工艺、MOQ、交期 等）
             name: specs
             widget: list
@@ -641,7 +666,10 @@ collections:
             name: images
             widget: list
             required: false
-            field: { label: 图片, name: image, widget: image }
+            summary: "{{fields.image}}"
+            fields:
+              - { label: 图片, name: image, widget: image }
+          - { label: 图片说明(alt), name: imageAlt, widget: string, required: false, hint: 图片说明（alt，建议英文，含产品关键词；留空则自动用品名/标题） }
 
   # ---------- 产品：旗杆展架 ----------
   - name: pole-display
@@ -670,6 +698,7 @@ collections:
               - { label: 补充说明, name: detail, widget: string }
               - { label: 强调标签, name: tag, widget: string }
               - { label: 图片, name: image, widget: image }
+              - { label: 图片说明(alt), name: imageAlt, widget: string, required: false, hint: 图片说明（alt，建议英文，含产品关键词；留空则自动用品名） }
           - label: 配件专栏
             name: ingredients
             widget: object
@@ -684,6 +713,7 @@ collections:
                   - { label: 名称, name: name, widget: string }
                   - { label: 描述, name: desc, widget: text }
                   - { label: 图片, name: image, widget: image }
+                  - { label: 图片说明(alt), name: imageAlt, widget: string, required: false, hint: 图片说明（alt，建议英文，含产品关键词；留空则自动用品名） }
 
   # ---------- 博客文章（新闻/产品/公告/公司大事） ----------
   - name: blog
@@ -706,6 +736,7 @@ collections:
       - { label: 置顶（勾选后排在最前）, name: pinned, widget: boolean, default: false, required: false, hint: 勾选置顶后排在列表最前；多个置顶按时间排；取消勾选回到时间顺序 }
       - { label: 草稿（勾选则不上线）, name: draft, widget: boolean, default: false, required: false }
       - { label: 封面图片, name: coverImage, widget: image, required: false }
+      - { label: 封面图说明(alt，可选), name: imageAlt, widget: string, required: false, hint: 图片说明（alt，建议英文，含产品关键词；留空则自动用品名/标题） }
       - { label: 摘要（列表页显示）, name: summary, widget: text, required: false }
       - label: 正文内容
         name: blocks
@@ -715,3 +746,4 @@ collections:
           - { label: 类型, name: type, widget: select, options: [p, h2, image], default: p, hint: p=普通段落，h2=小标题，image=插图（任意位置、数量不限） }
           - { label: 文本（段落/小标题内容；图片类型时为描述文字）, name: text, widget: text, required: false }
           - { label: 图片（类型选 image 时上传）, name: image, widget: image, required: false }
+          - { label: 图片说明(alt，可选), name: blockImageAlt, widget: string, required: false, hint: 填了就用它当图片 alt；留空则用上面的「文本」字段 }

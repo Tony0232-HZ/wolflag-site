@@ -71,6 +71,14 @@ for (const [key, data] of Object.entries(pageFiles)) {
 /* ---------------- helpers ---------------- */
 const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
+/** 图片 alt：优先用内容里的 imageAlt/blockImageAlt 字段，没填则回退到兜底值。
+ *  2026-09-10 新增——配合 config.yml 的「图片说明(alt)」字段（22 处）。
+ *  用法：altOf(对象, '兜底文字')  或  altOf(对象, '兜底', 'blockImageAlt') */
+const altOf = (obj, fallback = '', key = 'imageAlt') => {
+  const v = obj && typeof obj === 'object' ? obj[key] : '';
+  return esc(v && String(v).trim() ? v : fallback);
+};
+
 /** 正文加粗标记：**文字** -> <strong>文字</strong>；其余内容仍做 HTML 转义以保安全（无标记时等价 esc()）。
  *  规则：一对 ** 视为加粗段（中间不含星号、可含空格），可多处加粗混排。 */
 const bold = (s) => String(s ?? '').split(/(\*\*[^*]+\*\*)/g).map((part) => {
@@ -229,7 +237,7 @@ function homeBody() {
       <img src="${imgs[2]}" alt="Banner production machine" loading="lazy" decoding="async" width="960" height="540">`;
   const cards = home.categories.items.map((c, i) =>
     `<a class="cat-card ${i % 2 === 1 ? 'flip' : ''}" href="${esc(c.link)}">
-       <span class="cat-img"><img src="${c.image}" alt="${esc(c.title)}" loading="lazy" decoding="async" width="700" height="700"></span>
+       <span class="cat-img"><img src="${c.image}" alt="${altOf(c, c.title)}" loading="lazy" decoding="async" width="700" height="700"></span>
        <span class="cat-info">
          <span class="cat-title">${esc(c.title)}</span>
          <span class="cat-desc">${esc(c.text)}</span>
@@ -246,7 +254,7 @@ function homeBody() {
     </div>
     <div class="container hero-image">
       <div class="hero-slider" data-interval="${esc(String(home.hero.interval || 5))}" data-mode="${esc(home.hero.mode || 'carousel')}">
-        ${heroImgs.map((src, i) => `<img class="hero-slide${i === 0 ? ' is-active' : ''}" src="${esc(src)}" alt="WOLFLAG factory and products" ${i === 0 ? 'width="1259" height="562"' : 'loading="lazy"'} decoding="async">`).join('\n        ')}
+        ${heroImgs.map((src, i) => `<img class="hero-slide${i === 0 ? ' is-active' : ''}" src="${esc(src)}" alt="${altOf(src, 'WOLFLAG factory and products')}" ${i === 0 ? 'width="1259" height="562"' : 'loading="lazy"'} decoding="async">`).join('\n        ')}
       </div>
     </div>
   </section>
@@ -279,7 +287,7 @@ function nfBody(data) {
       : '';
     return `
     <article class="product-card nf-card">
-      <span class="p-img"><img src="${p.image}" alt="${esc(p.name)}" loading="lazy" decoding="async" width="332" height="332"></span>
+      <span class="p-img"><img src="${p.image}" alt="${altOf(p, p.name)}" loading="lazy" decoding="async" width="332" height="332"></span>
       <div class="p-body">
         <h2 class="p-name">${esc(p.name)}</h2>
         ${specHtml}
@@ -289,7 +297,7 @@ function nfBody(data) {
   }).join('');
   const banner = data.bannerImage ? `
   <section class="page-banner">
-    <div class="container"><img src="${esc(data.bannerImage)}" alt="National flags"></div>
+    <div class="container"><img src="${esc(data.bannerImage)}" alt="${altOf(data, 'National flags')}"></div>
   </section>` : '';
   const supplement = supplementSection(data);
   return `
@@ -313,7 +321,7 @@ function supplementSection(data) {
     <section class="section">
       <div class="container">
         <div class="f-supp${s.image ? '' : ' f-supp-txt'}">
-          ${s.image ? `<div class="f-supp-img"><img src="${esc(s.image)}" alt="" decoding="async"></div>` : ''}
+          ${s.image ? `<div class="f-supp-img"><img src="${esc(s.image)}" alt="${altOf(s, s.title || '', 'imageAlt')}" decoding="async"></div>` : ''}
           <div class="f-supp-body">
             ${s.title ? `<h2 class="f-supp-title">${esc(s.title)}</h2>` : ''}
             <div class="f-supp-text">${bold(s.text || '')}</div>
@@ -331,7 +339,7 @@ function featherBody(data) {
       : '';
     return `
     <article class="f-card">
-      <span class="f-img"><img src="${p.image}" alt="${esc(p.name)}" loading="lazy" decoding="async" width="280" height="320"></span>
+      <span class="f-img"><img src="${p.image}" alt="${altOf(p, p.name)}" loading="lazy" decoding="async" width="280" height="320"></span>
       <div class="f-body">
         <h2 class="f-title">${esc(p.name)}</h2>
         ${specHtml}
@@ -341,7 +349,7 @@ function featherBody(data) {
   }).join('');
   const banner = data.bannerImage ? `
   <section class="page-banner">
-    <div class="container"><img src="${esc(data.bannerImage)}" alt="Feather flags"></div>
+    <div class="container"><img src="${esc(data.bannerImage)}" alt="${altOf(data, 'Feather flags')}"></div>
   </section>` : '';
   const supplement = supplementSection(data);
   return `
@@ -364,7 +372,7 @@ function bannerBody(data) {
       : '';
     return `
     <article class="product-card">
-      <span class="p-img"><img src="${p.image}" alt="${esc(p.name)}" loading="lazy" decoding="async" width="332" height="332"></span>
+      <span class="p-img"><img src="${p.image}" alt="${altOf(p, p.name)}" loading="lazy" decoding="async" width="332" height="332"></span>
       <div class="p-body">
         <h2 class="p-name">${esc(p.name)}</h2>
         ${specHtml}
@@ -374,7 +382,7 @@ function bannerBody(data) {
   }).join('');
   const banner = data.bannerImage ? `
   <section class="page-banner">
-    <div class="container"><img src="${esc(data.bannerImage)}" alt="Banners"></div>
+    <div class="container"><img src="${esc(data.bannerImage)}" alt="${altOf(data, 'Banners')}"></div>
   </section>` : '';
   const supplement = supplementSection(data);
   return `
@@ -398,11 +406,11 @@ function poleBody(data) {
         ${p.detail ? `<p class="feat-desc">${esc(p.detail)}</p>` : ''}
         <p class="feat-tag">${esc(p.tag)}</p>
       </div>
-      <img src="${p.image}" alt="${esc(p.name)}" loading="lazy" decoding="async" width="553" height="368">
+      <img src="${p.image}" alt="${altOf(p, p.name)}" loading="lazy" decoding="async" width="553" height="368">
     </article>`).join('');
   const ing = data.ingredients.items.map((p) => `
     <article class="ing-card">
-      <img src="${p.image}" alt="${esc(p.name)}" loading="lazy" decoding="async" width="318" height="318">
+      <img src="${p.image}" alt="${altOf(p, p.name)}" loading="lazy" decoding="async" width="318" height="318">
       <h4>${esc(p.name)}</h4>
       <p>${esc(p.desc)}</p>
     </article>`).join('');
@@ -459,7 +467,7 @@ function aboutBg(b) {
 function renderAboutBlock(b) {
   if (!b) return '';
   if (b.type === 'text') return `<section class="about-grey about-mod" style="background:${aboutBg(b)}"><div class="container"><div class="about-text">\n      ${aboutParas(b.text)}\n    </div></div></section>`;
-  if (b.type === 'image') return `<section class="about-grey about-mod" style="background:${aboutBg(b)}"><div class="container"><img class="about-img-solo" src="${esc(b.image)}" alt="" loading="lazy" decoding="async"></div></section>`;
+  if (b.type === 'image') return `<section class="about-grey about-mod" style="background:${aboutBg(b)}"><div class="container"><img class="about-img-solo" src="${esc(b.image)}" alt="${altOf(b, 'WOLFLAG factory and products')}" loading="lazy" decoding="async"></div></section>`;
   if (b.type === 'textImg') {
     const dir = b.direction || 'textLeft';
     const rt = String(b.ratio || '50:50').split(':');
@@ -468,7 +476,8 @@ function renderAboutBlock(b) {
     const imgs = (b.images || []).map((im) => {
       const src = (typeof im === 'string') ? im : (im.image || '');
       const off = (im && typeof im === 'object') ? (parseInt(im.offset, 10) || 0) : 0;
-      return `<img src="${esc(src)}" alt="" loading="lazy" decoding="async" style="margin-top:${off}px">`;
+      // alt 取该图自己的 imageAlt，没填则回退到所在图文块的标题，再回退到兜底文案
+      return `<img src="${esc(src)}" alt="${altOf(im, b.title || 'WOLFLAG custom flags and displays')}" loading="lazy" decoding="async" style="margin-top:${off}px">`;
     }).join('');
     return `
     <section class="about-grey about-mod" style="background:${aboutBg(b)}"><div class="container">
@@ -545,7 +554,7 @@ function aboutBody(data) {
   const blocks = (data.blocks || []).map(renderAboutBlock).join('\n');
   return `
   <div class="about-hero">
-    <img src="${data.hero.image}" alt="WOLFLAG factory workshop" width="1500" height="575">
+    <img src="${data.hero.image}" alt="${altOf(data.hero, 'WOLFLAG factory workshop')}" width="1500" height="575">
   </div>
   ${announceBar(data.announce)}
   ${blocks}`;
@@ -557,14 +566,14 @@ function aboutBody(data) {
 function simpleBody(data) {
   const banner = data.bannerImage ? `
   <section class="page-banner">
-    <div class="container"><img src="${esc(data.bannerImage)}" alt="${esc(data.heading || '')}"></div>
+    <div class="container"><img src="${esc(data.bannerImage)}" alt="${altOf(data, data.heading || '')}"></div>
   </section>` : '';
   const products = (data.products || []).map((p) => {
     const nameStyle = data.titleFontSerif ? '' : 'style="font-family:Arial;font-weight:700;font-size:14px;letter-spacing:0;text-transform:none"';
     const link = p.link ? `class="p-link" href="${esc(p.link)}"` : '';
     const img = p.link
-      ? `<a ${link}><img src="${esc(p.image)}" alt="${esc(p.name)}" loading="lazy" decoding="async" width="600" height="600"></a>`
-      : `<img src="${esc(p.image)}" alt="${esc(p.name)}" loading="lazy" decoding="async" width="600" height="600">`;
+      ? `<a ${link}><img src="${esc(p.image)}" alt="${altOf(p, p.name)}" loading="lazy" decoding="async" width="600" height="600"></a>`
+      : `<img src="${esc(p.image)}" alt="${altOf(p, p.name)}" loading="lazy" decoding="async" width="600" height="600">`;
     const name = p.link
       ? `<a ${link}><h2 class="p-name" ${nameStyle}>${esc(p.name)}</h2></a>`
       : `<h2 class="p-name" ${nameStyle}>${esc(p.name)}</h2>`;
@@ -600,7 +609,7 @@ function simpleBody(data) {
 function specGridBody(data) {
   const banner = data.bannerImage ? `
   <section class="page-banner">
-    <div class="container"><img src="${esc(data.bannerImage)}" alt="${esc(data.heading || '')}"></div>
+    <div class="container"><img src="${esc(data.bannerImage)}" alt="${altOf(data, data.heading || '')}"></div>
   </section>` : '';
   const products = (data.products || []).map((p) => {
     const specRows = (p.specs || []).filter((sp) => sp.label || sp.value);
@@ -613,7 +622,7 @@ function specGridBody(data) {
         ${specHtml}
         ${p.subtitle ? `<p class="sg-sub">${bold(p.subtitle)}</p>` : ''}
       </div>`;
-    const img = p.image ? `<img src="${esc(p.image)}" alt="${esc(p.name)}" loading="lazy" decoding="async">` : '';
+    const img = p.image ? `<img src="${esc(p.image)}" alt="${altOf(p, p.name)}" loading="lazy" decoding="async">` : '';
     return `
     <article class="sg-card">
       <div class="sg-img">${img}</div>
@@ -660,7 +669,7 @@ function detailBody(data) {
     const imgs = (p.images && p.images.length ? p.images : (p.image ? [p.image] : [])) || [];
     const main = imgs[0] || home.hero.image;
     const thumbs = imgs.map((im, j) => `
-          <button class="pd-thumb${j === 0 ? ' on' : ''}" data-src="${esc(im)}" aria-label="Image ${j + 1}"><img src="${esc(im)}" alt="" loading="lazy" decoding="async"></button>`).join('\n');
+          <button class="pd-thumb${j === 0 ? ' on' : ''}" data-src="${esc(im)}" aria-label="Image ${j + 1}"><img src="${esc(im)}" alt="${altOf(im, p.name)}" loading="lazy" decoding="async"></button>`).join('\n');
     const specRows = productSpecRows(p);
     let specs = '';
     if (specRows.length) {
@@ -671,8 +680,8 @@ function detailBody(data) {
   <section class="pd-block">
     <div class="container pd-cols">
       <div class="pd-gallery">
-        ${imgs.length > 1 ? `<div class="pd-main"><img src="${esc(main)}" alt="${esc(p.name)}"></div>
-      <div class="pd-thumbs">${thumbs}</div>` : `<div class="pd-main"><img src="${esc(main)}" alt="${esc(p.name)}"></div>`}
+        ${imgs.length > 1 ? `<div class="pd-main"><img src="${esc(main)}" alt="${altOf(main, p.name)}"></div>
+      <div class="pd-thumbs">${thumbs}</div>` : `<div class="pd-main"><img src="${esc(main)}" alt="${altOf(main, p.name)}"></div>`}
       </div>
       <div class="pd-info">
         <h2 class="pd-name">${esc(p.name)}</h2>
@@ -693,7 +702,7 @@ function detailBody(data) {
       <p>${esc(c.text)}</p>
     </div>`).join('');
   const ti = data.textImg || {};
-  const tiImgs = (ti.images || []).map((im) => `<img src="${esc(im)}" alt="" loading="lazy" decoding="async">`).join('');
+  const tiImgs = (ti.images || []).map((im) => `<img src="${esc(im)}" alt="${altOf(im, ti.title || p.name, 'imageAlt')}" loading="lazy" decoding="async">`).join('');
   const textImg = (ti.title || ti.text || tiImgs) ? `
   <section class="pd-textimg">
     <div class="container">
@@ -718,7 +727,7 @@ function sectionsBlock(data) {
   const list = (data && data.sections) || [];
   return list.filter((s) => s && s.show !== false && (s.title || s.text || (s.images && s.images.length)))
     .map((s) => {
-      const imgs = (s.images || []).map((im) => `<img src="${esc(im)}" alt="" loading="lazy" decoding="async">`).join('');
+      const imgs = (s.images || []).map((im) => `<img src="${esc(im)}" alt="${altOf(im, s.title || '', 'imageAlt')}" loading="lazy" decoding="async">`).join('');
       return `
   <section class="flex-section">
     <div class="container">
@@ -768,7 +777,7 @@ function pinnedTag() { return '<span class="blog-flag">PINNED</span> '; }
 function blogCard(b) {
   return `
     <article class="blog-card">
-      <a class="blog-thumb" href="/blog/${esc(b.slug)}"><img src="${esc(b.coverImage || home.hero.image)}" alt="${esc(b.title)}" loading="lazy" decoding="async"></a>
+      <a class="blog-thumb" href="/blog/${esc(b.slug)}"><img src="${esc(b.coverImage || home.hero.image)}" alt="${altOf(b, b.title)}" loading="lazy" decoding="async"></a>
       <div class="blog-body">
         <p class="blog-meta">${b.pinned ? pinnedTag() : ''}${esc(b.date)}</p>
         <h2 class="blog-title"><a href="/blog/${esc(b.slug)}">${esc(b.title)}</a></h2>
@@ -806,7 +815,7 @@ function blogListBody(blogs, page, totalPages) {
 
 function recentItem(b) {
   return `<div class="recent-item">
-    <img src="${esc(b.coverImage || home.hero.image)}" alt="" loading="lazy" decoding="async">
+    <img src="${esc(b.coverImage || home.hero.image)}" alt="${altOf(b, b.title)}" loading="lazy" decoding="async">
     <div class="rt">
       <a href="/blog/${esc(b.slug)}">${esc(b.title)}</a>
       ${b.pinned ? pinnedTag() : ''}
@@ -817,7 +826,7 @@ function recentItem(b) {
 
 function blogPostBody(b, blogs) {
   const blocks = (b.blocks || []).map((bl) => {
-    if (bl.type === 'image') return `<img class="blog-img" src="${esc(bl.image)}" alt="${esc(bl.text || '')}">`;
+    if (bl.type === 'image') return `<img class="blog-img" src="${esc(bl.image)}" alt="${altOf(bl, bl.text || '', 'blockImageAlt')}">`;
     if (bl.type === 'h2') return `<h2>${bold(bl.text)}</h2>`;
     return `<p>${bold(bl.text)}</p>`;
   }).join('\n');
@@ -831,7 +840,7 @@ function blogPostBody(b, blogs) {
     <div class="container blog-post-cols">
       <div class="blog-main">
         <p class="blog-meta">${b.pinned ? pinnedTag() : ''}${esc(b.date)}</p>
-        ${b.coverImage ? `<img class="blog-cover" src="${esc(b.coverImage)}" alt="${esc(b.title)}">` : ''}
+        ${b.coverImage ? `<img class="blog-cover" src="${esc(b.coverImage)}" alt="${altOf(b, b.title)}">` : ''}
         <div class="blog-content">${blocks}</div>
         <p class="blog-back"><a href="/blog">&larr; Back to Blog</a></p>
       </div>
