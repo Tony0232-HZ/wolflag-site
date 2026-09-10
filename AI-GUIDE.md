@@ -394,23 +394,208 @@ feather/national/banner 页横幅: `.page-banner`（米黄 #faf7f5 底、pad 40p
 2. **外链 = 0**：新域名 + 零外链，Google 本就有 3~6 个月观察期。
 3. **无结构化数据**：全站 0 个 JSON-LD。
 
-### 10.4 站内 SEO 待办清单（**尚未动手，动手前须用户批准**）
+### 10.4 📋 SEO 待办清单（**给未来接手的 AI：照此执行**）
 
-> 以下均为 2026-09-10 只读体检的发现。**AI 不得自行改动，须先出方案经用户批准。**
+> **文件定位**：这是本仓库的**唯一一份 SEO 待办清单**。2026-09-10 建立。
+>
+> **给未来 AI 的三条使用说明：**
+> 1. **每一条都写清了「为什么做」**——先读懂原因再动手，不要机械执行、更不要凭自己的理解"优化"成别的样子。
+> 2. **两条铁律**（见 §0.7 / §0.8）：**① 严禁自行 `git push`**，改完必须请用户批准；**② 任何改动都要同时考虑电脑端 + 手机端**，并用 Playwright 双端截图验证。
+> 3. **本清单全部完成后，请删除整节 §10.4**（连标题一起删），并在变更日志里写一条简短总结（做了什么、结果如何）。**清单是"待办"，不是"历史"——做完了就不该再占地方；历史留给变更日志。**
+>
+> **开工前必做**：按 §0.5 先问用户"网站最近有没有更新？要不要同步到本地？"——后台（Decap）改的是 GitHub 仓库，本地通常落后。
 
-| 优先级 | 问题 | 具体位置 / 量 |
+---
+
+#### 🔴 P0-A：产品页内容太薄（**头号问题，收益最大**）
+
+**为什么必须做**（这段最重要，请读懂）：
+
+2026-09-10 查明：**用户搜不到自己产品（如 `feather flags`）的头号原因就是这个。** 实测全站正文字数：
+
+| 页面 | 正文词数 | 判断 |
 |---|---|---|
-| 🔴 P0 | 产品页内容太薄（目标 500~800 词/页） | feather-flag / banner / national-flag / index / products |
-| ✅ 已完成 | ~~无结构化数据~~ | **2026-09-10 已修复**：每页输出 Organization+WebSite，子页 BreadcrumbList、产品页 ItemList、About 页 FAQPage、博客 BlogPosting。详见 §10.12 |
-| 🔴 P0 | 无外链 | 站外工作：Kompass / Europages / ThomasNet 等 B2B 目录 |
-| ✅ 已完成 | ~~图片 alt 缺失~~ | **2026-09-10 已修复**：新增 22 个 `imageAlt`/`blockImageAlt` 后台字段 + `build.mjs` 的 `altOf()` 助手；真实内容图空 alt **62 → 0 处**；装饰性图标保持空 alt（规范做法）。详见 §10.10 |
-| ✅ 已完成 | ~~全站无 canonical~~ | **2026-09-10 已修复**（见 §10.7）：`shell()` 新增 `path` 参数，按页输出 canonical |
-| ✅ 已完成 | ~~og:url 全站写死首页~~ | **2026-09-10 已修复**：改为按页输出。另 og:image 相对路径、Twitter Card 缺失亦已修（见 §10.12） |
-| ✅ 已完成 | ~~图片文件名含中文~~ | **2026-09-10 已修复**：12 个中文名 + `1.webp` 全部改为英文语义名（逐张看图命名，非字面直译）；同步更新 7 个 JSON 引用；删除无引用的重复文件 `水滴型旗子.jpg`(892KB)。详见 §10.11 |
-| 🟢 P2 | `about-us.html` 无 H1 | 0 个 h1 / 3 个 h2 |
-| 🟢 P2 | 首页 H1 无关键词 | `home.hero.title` = "BESPOKE FLAGS MADE WITH YOUR DESIGNS AND SPECIFICATIONS!"（建议含 bespoke/custom flags manufacturer 等词） |
-| 🟢 P2 | 各页 `<title>` 缺采购意图词 | 现为 `Feather flag - WOLFLAG` 式；建议 `Custom Feather Flags Wholesale Manufacturer \| WOLFLAG`，并考虑复数 |
-| 🟢 P2 | 博客仅 1 篇 | `content/blog/welcome-to-wolflag-blog.json`，无搜索价值 |
+| `about-us` | 798 | 尚可 |
+| `stands-displays` | 384 | 偏薄 |
+| **`feather-flag`** | **334** | ❌ 严重不足（**产品描述常常只有一句话**） |
+| **`index`（首页）** | **281** | ❌ 严重不足 |
+| **`banner`** | **244** | ❌ 严重不足 |
+| **`national-flag`** | **199** | ❌ 严重不足 |
+| `products` | 105 | ❌ 几乎空白 |
+
+**为什么"内容薄"就排不上去**：
+
+- `flags` / `banners` / `feather flags` 是**行业竞争最惨烈的大词**，全球数万家厂商在抢；
+- Google 判断"这页值不值得排"，很大程度看**这页讲得够不够全面**；
+- 竞争对手的同名词页面普遍 **500~800 词**，讲透材质、工艺、尺寸、应用场景、MOQ、交期；
+- 用户这页只有 334 词、产品描述仅一句 → **Google 认为信息量不足，不给排名**。
+
+> ⚠️ **技术 SEO 已全部修完**（网址后缀、404、alt、Schema、og 卡片、图片压缩，见 §10.7~§10.12）。
+> **现在的瓶颈 100% 是内容**——再修技术也没用。
+
+**怎么做**：
+
+1. **目标**：每个核心产品页正文达到 **500~800 英文词**（不含页脚/导航）。
+2. **改哪里**：
+   - `content/products/feather-flags.json` → `products[].subtitle` 扩展，或加 `supplement[]` 图文模块；
+   - 同理 `banners.json` / `national-flags.json` / `pole-display.json`；
+   - 首页 `content/home.json` → `intro.text`、`categories.intro`、`supplement[]`；
+   - **优先用后台已有的 `supplement`（补充模块）字段**——它本就是为此设计的图文区，不必改代码。
+3. **每个产品页建议覆盖的内容**（B2B 买家真正关心的）：
+   - **材质**：110g knitted polyester / 100D woven polyester 等，各自适用场景；
+   - **印刷工艺**：dye sublimation（热升华）/ silkscreen（丝印）的区别与选择；
+   - **尺寸与选型**：常见规格、如何按场景选（如 3m 杆 vs 5m 杆）；
+   - **底座/配件**：ground spike / cross base / square base 的适配；
+   - **应用场景**：展会、门店开业、房产中介、餐厅促销、路演等；
+   - **B2B 采购要点**：MOQ、打样周期、交期、出货方式、设计文件格式要求（Vector PDF/AI）；
+   - **抗风/耐用性**：能扛几级风、寿命多久。
+4. **写作要求**：
+   - **英文**，面向海外 B2B 买家（网站全站英文）；
+   - **自然写作，不要堆砌关键词**（堆砌会被判作弊，反而有害）；
+   - 内容要**真实准确**——写之前**请与用户确认产品事实**（材质、尺寸、MOQ 等），**不要编造参数**；
+   - ⚠️ **产品现有文案的原始拼写/大小写要保留**（如 `comstom size`、`silksreen`）——用户明确要求复刻原站，见坑 #3。**新增的段落不必迁就旧拼写，但不要"顺手修正"已有字段。**
+5. **验收标准**：
+   - 相关页面正文 ≥ 500 词；
+   - `node scripts/build.mjs` 无报错；
+   - **桌面端 + 手机端截图**（§0.8 铁律）；
+   - 页面可见文字**只增不减**，原有内容一字不改。
+
+**⚠️ 须先做**：出方案给用户过目（要写哪些内容、改哪些字段），**批准后再动手**。
+
+---
+
+#### 🔴 P0-B：外链建设（= 0，**站外工作，需用户亲自参与**）
+
+**为什么必须做**：
+
+- Google 判断网站可信度的核心信号之一是**有多少其他网站链接到你**（叫"外链"/backlink）；
+- 本站是**新域名 + 零外链**。新域名本就有 **3~6 个月观察期**，零外链更是雪上加霜；
+- **这是"搜不到"的第二大原因**（第一大是内容，见 P0-A）；
+- **纯站内优化做不出外链**——必须在别的网站上留下你的链接。
+
+**怎么做**（AI 能做的是"给清单 + 写文案"，**注册与提交须用户本人操作**）：
+
+1. **国际 B2B 目录**（免费为主，逐个注册公司档案）：
+   - **Kompass**（kompass.com）——全球工业目录，B2B 采购常用；
+   - **Europages**（europages.com）——欧洲 B2B 目录；
+   - **ThomasNet**（thomasnet.com）——北美工业采购；
+   - 其他可考虑：Alibaba、Made-in-China、Global Sources（用户可能已在用，检查档案是否完整并链回官网）。
+2. **社交矩阵**（既是外链也是品牌信号）：
+   - LinkedIn Company Page（B2B 最重要）、YouTube（工厂实拍/工艺视频）、Facebook、X；
+   - ⚠️ **注册后要把链接填回网站**：`content/settings.json` 的 `footer.icons[].url`——**目前这几个社交图标是空的**（点击仍是 mailto 兜底），见 §2.1。
+3. **AI 可帮的部分**：
+   - 列**逐平台注册清单**（网址、需要填哪些字段、审核要多久）；
+   - 起草**中英文公司简介**（不同平台字数不同，可出 50/100/300 词多版本）；
+   - 起草**关键词描述**（各平台的 "products / services" 字段）；
+   - 整理**统一的事实表**（成立年份、地址、电话、员工数、产能、认证），保证各平台信息一致——**信息不一致会削弱可信度**。
+4. **验收标准**：能在 Google 搜到 `site:kompass.com wolflag` 之类，且**档案里的官网链接可点**。
+
+> ⚠️ **务必提醒用户**：目录网站注册通常需**邮箱验证 + 可能人工审核**，有的会推销付费版。**免费档足够，不必付费。**
+
+---
+
+#### 🟢 P2-A：`about-us.html` 没有 H1
+
+**为什么做**：H1 是页面**权重最高的标题标签**，Google 靠它判断"这页主题是什么"。About 页现在是 **0 个 h1、3 个 h2**——等于把最重要的位置空着。
+
+**怎么做**：
+- `build.mjs` 的 `aboutBody()` 里，给页头横幅（`.about-hero`）下方或正文起始处加一个 `<h1>`；
+- 文字建议含关键词，如 `About WOLFLAG — Custom Flag & Banner Manufacturer Since 2003`；
+- ⚠️ **H1 是可见元素，会改变页面外观**——须与用户确认文案，并双端截图确认排版不破。
+
+**验收**：该页恰好 1 个 `<h1>`，双端显示正常。
+
+---
+
+#### 🟢 P2-B：首页 H1 没关键词
+
+**为什么做**：首页 H1 现在是：
+
+```
+BESPOKE FLAGS MADE WITH YOUR DESIGNS AND SPECIFICATIONS!
+```
+
+- **是纯大写喊话**，读起来像广告标语而非主题陈述；
+- **一个搜索关键词都没有**（没有 flags manufacturer / custom flags 这类买家会搜的词）；
+- 首页 H1 是全站**最重要的一个标题位**，现在等于浪费。
+
+**怎么做**：
+- 改 `content/home.json` 的 `hero.title`；
+- 建议方向（**须用户拍板**）：保留"定制"语气但植入关键词，如
+  `Custom Flags, Banners & Pole Kits Manufacturer | WOLFLAG`；
+- ⚠️ 该字段**驱动首页首屏视觉排版**（36px Catamaran、左侧列 397px，见 §4），**改文案会改变换行与版式**——**必须双端截图确认**，必要时与用户商量版式调整。
+
+**验收**：H1 含目标关键词，双端不破版。
+
+---
+
+#### 🟢 P2-C：各页 `<title>` 太短、缺采购意图词
+
+**为什么做**：Google 允许 **50~60 字符**的标题，本站普遍只用了一半，**等于白送一半展位**。且**没有采购意图词**（买家真正会搜的词）。
+
+现状实测：
+
+| 页面 | 现在的 title | 字符数 |
+|---|---|---|
+| `banner` | `Banner - WOLFLAG` | 16 |
+| `blog` | `Blog - WOLFLAG` | 14 |
+| `car-flags` | `Car Flags - WOLFLAG` | 19 |
+| `feather-flag` | `Feather flag - WOLFLAG` | 22 |
+| 首页 | `Professional manufacturer of flags, banners, and poles \| WOLFLAG` | 64（略超） |
+
+**B2B 买家的采购意图词**：`custom`、`wholesale`、`manufacturer`、`supplier`、`factory`、`OEM`、`bulk`。
+
+**怎么做**：
+- 改各自的 `content/**/*.json` → `seo.title` 字段（后台「SEO 标题」）；
+- 参考公式：`Custom [产品名(复数)] Wholesale Manufacturer | WOLFLAG`；
+- 例：`Feather flag` → `Custom Feather Flags & Teardrop Banners Wholesale | WOLFLAG`；
+- **每页标题必须唯一**（现状已唯一，改时保持）；
+- ⚠️ **`<title>` 不显示在页面上**（只在浏览器标签栏和搜索结果里），**不影响页面版式**，改动风险低。
+
+**验收**：各页 title 在 50~60 字符、含采购意图词、互不重复。
+
+---
+
+#### 🟢 P2-D：博客只有 1 篇
+
+**为什么做**：
+- 现有唯一一篇是 `welcome-to-wolflag-blog.json`（"欢迎来到我们的博客"）——**没有任何搜索价值**，没人会搜这个；
+- 博客是**覆盖长尾关键词**的主要手段：大词（`feather flags`）抢不过大厂，但**长尾词**（`how to choose feather flag size`、`feather flag vs teardrop flag`）竞争小、意图明确、转化好；
+- 博客文章还能**给产品页做内链**，把权重导过去。
+
+**怎么做**：
+1. **选题方向**（都是海外买家的真实疑问）：
+   - *Feather Flag vs. Teardrop Flag: Which One Fits Your Business?*
+   - *How to Choose the Right Fabric for Long-Lasting Outdoor Flags*
+   - *Standard Flagpole Sizes and Wind Resistance Guide*
+   - *Single-Sided vs. Double-Sided Custom Flags: A Complete Buyer Guide*
+   - *What Artwork File Format Should You Send for Custom Flags?*
+2. **怎么发**：后台 `/admin/` → 博客文章 → 新建（`content/blog/*.json` 自动发现，见 §2.5）；
+3. **每篇要点**：
+   - `slug` 英文小写无空格，**发布后勿改**（改 = 旧链接失效）；
+   - `title` 含长尾关键词；`summary` 写清价值；`coverImage` 配图（注意 alt 字段）；
+   - 正文用 `blocks[]`（p / h2 / image），**支持 `**词**` 加粗**；
+   - **正文里用内链指向对应产品页**（如谈羽毛旗尺寸就链到 `/feather-flag`）；
+4. **节奏建议**：每月 2~4 篇，稳定输出比一次猛发更有效。
+
+**验收**：新文章能访问、进 sitemap、正文有到产品页的内链。
+
+---
+
+#### ⚠️ 附：两个"遗留小账"（非 SEO，但别忘）
+
+1. **成立年份三处不一致**（2026-09-10 用户知情）：
+   - Schema 写 `foundingDate: 2003`（用户选定）；
+   - 网站文案 `"23-year manufacturer"` → 对应 2003 ✅；
+   - 页脚版权 `© 2011 WOLFLAG` → 对应 2011 ❌（2011 至今仅 15 年）。
+   **建议**：日后与用户确认口径，统一三处。**改动前必须问用户。**
+
+2. **两张第三方素材图**（属"换图"非"改名"，2026-09-10 用户选择暂不处理）：
+   - `harvard-banner-building.webp` —— 横幅页顶部横幅，**画面含哈佛校徽**（第三方标识）；
+   - `teardrop-feather-flag.webp` —— 羽毛旗「水滴型」产品图，**画面是 World Food Expo 展会**（非自家工厂）。
+   **建议**：日后换成自有素材（**需用户提供照片**）。**不影响功能，不影响 SEO。**
+
+3. **裸域名 `wolflag.com`（不带 www）https 打不开** —— 详见 §10.5，**独立小项目，须单独安排**。
 
 ### 10.5 ⚠️ 待修：裸域名 `wolflag.com`（不带 www）https 打不开
 
@@ -560,7 +745,7 @@ Cloudflare Pages 在 `static/` 下**找不到 `404.html`** 时，会把**任意�
 
 `scripts/_preview_server.py` **已同步模拟 404 行为**（找不到的文件返回 `404.html` 内容 + HTTP 404），本地自检才与线上一致。
 
-### 10.10 🖼️ 图片 alt 后台可填（2026-09-10 新增）
+### 10.9 🖼️ 图片 alt 后台可填（2026-09-10 新增）
 
 > 背景：全站 149 张图曾有大面积 `alt=""`。审计后分为三类——**①装饰性图标**（页脚社交图标、公告条小图标、服务卡图标）空 alt 是 **a11y 规范正确做法**，保持不变；**②JS 动态填充的占位图**（`.site-lightbox` 的 `<img src="" alt="">`）本就该空；**③真实内容图**（产品图、横幅图、About 图片、详情页多图、博客封面）——**这类已清零**。
 
@@ -625,11 +810,72 @@ const altOf = (obj, fallback = '', key = 'imageAlt') => {
 
 #### ✅ 图片文件名已去中文（2026-09-10 完成）
 
-详见 §10.11。
+详见 §10.10。
 
 ---
 
-### 10.12 📊 结构化数据 Schema + og/Twitter Card + 图片压缩（2026-09-10）
+### 10.10 🏷️ 图片文件名去中文（2026-09-10 完成）
+
+Google 会读**图片文件名**判断内容，中文名对英文搜索无帮助。本次把媒体库所有中文名改为**英文语义名**。
+
+> ⚠️ **命名原则：先看图、再命名，不做字面直译。** 中文名常与实际画面不符（例：`1.webp` 实际是页脚大号 logo；`car-flag-米黄背景.webp` 实际是 4 面带杆汽车旗，并无米黄背景）。**改名前必须逐张查看实际内容。**
+
+#### 改名对照表
+
+| 原名 | 新名 | 实际内容 |
+|---|---|---|
+| `1.webp` | `wolflag-logo.webp` | 页脚大号 WOLFLAG logo（591×363） |
+| `a型展架-remax.jpg` | `a-frame-sign-remax.jpg` | A 型展架，画面为 RE/MAX 房地产牌 |
+| `banner-新横幅.webp` | `harvard-banner-building.jpg` | 哈佛楼前红色横幅 |
+| `car-flag-米黄背景.webp` | `custom-car-flags.jpg` | 4 面带杆定制汽车旗 |
+| `h-stake-网站图.webp` | `h-stake-yard-signs.jpg` | H 型地钉 + 庭院牌 |
+| `product横幅-.jpg` | `factory-direct-banner.jpg` | WOLFLAG 工厂直供宣传横幅 |
+| `x展架08.jpg` | `x-banner-stand.jpg` | X 型展架 |
+| `太阳能-灯箱-网站图.webp` | `solar-light-box.jpg` | 太阳能灯箱 |
+| `易拉宝02.webp` | `roll-up-banner-stand.jpg` | 易拉宝/拉网展架 |
+| `横幅-关于我们.webp` | `world-flags-banner.jpg` | 各国国旗特写（About 页头横幅） |
+| `横幅-示意图.webp` | `street-pole-banner.jpg` | 路灯杆挂旗 |
+| `水滴型沙滩旗02.webp` | `teardrop-feather-flag.jpg` | 水滴型沙滩旗 |
+
+**同步更新了 7 个内容 JSON 的引用**：`content/settings.json`（页脚 logo）、`about.json`、`pages/products.json`、`product-details/car-flags.json`、`products/banners.json`、`products/feather-flags.json`、`specgrid/stands-displays.json`。
+
+> 注意 `car-flag-米黄背景.webp` 被 **2 处**引用（products.json 与 car-flags.json），改名时两处都须更新。
+
+#### 删除的废弃文件
+
+`media/水滴型旗子.jpg`（892KB）—— 与 `teardrop-feather-flag.jpg` 是**同一张图**（md5 不同但画面/构图相同，仅尺寸与格式不同），**无任何内容引用**，已删除。
+
+#### 验证结果
+
+| 项目 | 结果 |
+|---|---|
+| 全站图片引用（75 个） | ✅ **全部 200，0 缺失（无图裂）** |
+| 12 页可见文字与线上比对 | ✅ **100% 一致** |
+| 新文件名出现在页面上 | ✅ 已抽查确认 |
+| 双端显示 | ✅ 桌面 + 手机截图正常 |
+| 媒体库残留中文名 | ✅ **已清零**（92 个文件） |
+| 线上复验 | ✅ 75 个图片引用全部 200；中文名引用 0 个 |
+
+> ⚠️ **旧链接会失效**：这些图若曾被外部引用（几乎不可能，均为站内资产），旧文件名将 404。站内引用已全部同步，无影响。
+
+#### 📌 记入待办（本次**未**处理，因属"换图"而非"改名"）
+
+- **③ `harvard-banner-building.jpg`** 用于 banner 产品页顶部横幅，画面含**哈佛校徽**（第三方标识）。
+- **⑫ `teardrop-feather-flag.jpg`** 用于羽毛旗「水滴型」产品图，画面是 **World Food Expo 展会**（第三方活动，非自家工厂）。
+
+→ 两处**不影响功能**，但**若要做品牌合规 / 展示自家实力**，建议日后换成自有素材。**换图需用户提供或另行挑选。**
+
+#### ⚠️ 后续注意事项
+
+新增图片时，**上传前就改成英文小写连字符名**（如 `custom-teardrop-feather-flag-wholesale.webp`）。
+
+> 重命名**已入库的文件**代价较高——必须同步改所有 JSON 引用 + 重建 + 验证，且**每次都要逐张看图**确认中文名是否与实际画面相符。**上传时命名正确，是最省事的做法。**
+>
+> 另注：`scripts/extract.py` 的「48 张原站图 md5→语义名映射表」**不包含**本次这 12 个文件（它们是后来手动上传/转换的），故本次改名**无需同步该脚本**。
+
+---
+
+### 10.11 📊 结构化数据 Schema + og/Twitter Card + 图片压缩（2026-09-10）
 
 #### 10.12.1 结构化数据（Schema.org）
 
@@ -710,72 +956,11 @@ const pageProducts = (d.products && d.products.length)
 
 ---
 
-### 10.11 🏷️ 图片文件名去中文（2026-09-10 完成）
-
-Google 会读**图片文件名**判断内容，中文名对英文搜索无帮助。本次把媒体库所有中文名改为**英文语义名**。
-
-> ⚠️ **命名原则：先看图、再命名，不做字面直译。** 中文名常与实际画面不符（例：`1.webp` 实际是页脚大号 logo；`car-flag-米黄背景.webp` 实际是 4 面带杆汽车旗，并无米黄背景）。**改名前必须逐张查看实际内容。**
-
-#### 改名对照表
-
-| 原名 | 新名 | 实际内容 |
-|---|---|---|
-| `1.webp` | `wolflag-logo.webp` | 页脚大号 WOLFLAG logo（591×363） |
-| `a型展架-remax.jpg` | `a-frame-sign-remax.jpg` | A 型展架，画面为 RE/MAX 房地产牌 |
-| `banner-新横幅.webp` | `harvard-banner-building.jpg` | 哈佛楼前红色横幅 |
-| `car-flag-米黄背景.webp` | `custom-car-flags.jpg` | 4 面带杆定制汽车旗 |
-| `h-stake-网站图.webp` | `h-stake-yard-signs.jpg` | H 型地钉 + 庭院牌 |
-| `product横幅-.jpg` | `factory-direct-banner.jpg` | WOLFLAG 工厂直供宣传横幅 |
-| `x展架08.jpg` | `x-banner-stand.jpg` | X 型展架 |
-| `太阳能-灯箱-网站图.webp` | `solar-light-box.jpg` | 太阳能灯箱 |
-| `易拉宝02.webp` | `roll-up-banner-stand.jpg` | 易拉宝/拉网展架 |
-| `横幅-关于我们.webp` | `world-flags-banner.jpg` | 各国国旗特写（About 页头横幅） |
-| `横幅-示意图.webp` | `street-pole-banner.jpg` | 路灯杆挂旗 |
-| `水滴型沙滩旗02.webp` | `teardrop-feather-flag.jpg` | 水滴型沙滩旗 |
-
-**同步更新了 7 个内容 JSON 的引用**：`content/settings.json`（页脚 logo）、`about.json`、`pages/products.json`、`product-details/car-flags.json`、`products/banners.json`、`products/feather-flags.json`、`specgrid/stands-displays.json`。
-
-> 注意 `car-flag-米黄背景.webp` 被 **2 处**引用（products.json 与 car-flags.json），改名时两处都须更新。
-
-#### 删除的废弃文件
-
-`media/水滴型旗子.jpg`（892KB）—— 与 `teardrop-feather-flag.jpg` 是**同一张图**（md5 不同但画面/构图相同，仅尺寸与格式不同），**无任何内容引用**，已删除。
-
-#### 验证结果
-
-| 项目 | 结果 |
-|---|---|
-| 全站图片引用（75 个） | ✅ **全部 200，0 缺失（无图裂）** |
-| 12 页可见文字与线上比对 | ✅ **100% 一致** |
-| 新文件名出现在页面上 | ✅ 已抽查确认 |
-| 双端显示 | ✅ 桌面 + 手机截图正常 |
-| 媒体库残留中文名 | ✅ **已清零**（92 个文件） |
-| 线上复验 | ✅ 75 个图片引用全部 200；中文名引用 0 个 |
-
-> ⚠️ **旧链接会失效**：这些图若曾被外部引用（几乎不可能，均为站内资产），旧文件名将 404。站内引用已全部同步，无影响。
-
-#### 📌 记入待办（本次**未**处理，因属"换图"而非"改名"）
-
-- **③ `harvard-banner-building.jpg`** 用于 banner 产品页顶部横幅，画面含**哈佛校徽**（第三方标识）。
-- **⑫ `teardrop-feather-flag.jpg`** 用于羽毛旗「水滴型」产品图，画面是 **World Food Expo 展会**（第三方活动，非自家工厂）。
-
-→ 两处**不影响功能**，但**若要做品牌合规 / 展示自家实力**，建议日后换成自有素材。**换图需用户提供或另行挑选。**
-
-#### ⚠️ 后续注意事项
-
-新增图片时，**上传前就改成英文小写连字符名**（如 `custom-teardrop-feather-flag-wholesale.webp`）。
-
-> 重命名**已入库的文件**代价较高——必须同步改所有 JSON 引用 + 重建 + 验证，且**每次都要逐张看图**确认中文名是否与实际画面相符。**上传时命名正确，是最省事的做法。**
->
-> 另注：`scripts/extract.py` 的「48 张原站图 md5→语义名映射表」**不包含**本次这 12 个文件（它们是后来手动上传/转换的），故本次改名**无需同步该脚本**。
-
----
-
-### 10.9 用户交付文档
+### 10.12 用户交付文档
 
 - **`E:\2026 公司网站\SEO操作指南.html`**（仓库外，用户本机）——面向用户的中文图文操作指南，含本次全部截图（图片存 `E:\2026 公司网站\SEO操作指南图片\`）。日后 GSC 相关操作变更，应同步更新此文件。
 - **`E:\2026 公司网站\后台管理操作说明书.html`**（仓库外，用户本机）——日常操作手册，第 18 章为本次 SEO 变更。**改动站点的网址 / 收录 / 搜索相关行为后，应同步更新它**（改前先备份，已有 `_20260910备份`）。
 
 ---
 
-*最后更新：2026-09-10。今日（两个阶段）：**① 建立 Google Search Console SEO 基础设施**（GSC 以 `Domain` 方式绑定 `wolflag.com`，DNS TXT 验证通过（验证码见 §10.1，**永久保留**）；35互联 DNS 后台**新增** TXT 而非覆盖 → 企业邮箱未受影响，双节点 `nslookup` 复核两条 TXT 并存；重新提交 sitemap（**须填完整网址**，只填 `sitemap.xml` 会报 `Invalid sitemap address`）→ Google 时隔 8 个月重新读取，`Discovered pages` **6 → 12**；产出用户侧图文指南 `E:\2026 公司网站\SEO操作指南.html`）。**② 修复头号收录障碍：全站网址去 `.html` 后缀（§10.7）**——GSC `URL Inspection` 实测发现 Google 对**全站所有 `.html` 网址**拿到 **308 重定向**（Cloudflare Pretty URLs），页面因而被判 `Page with redirect`、**不被收录**；`national-flag`/`pole-display` 命中该状态，`banner`/`feather-flag` 则 `URL is unknown to Google`。修复：`build.mjs` 新增 `cleanUrl()`、菜单/内链/博客/sitemap 全部改输出无后缀，`content/*.json` 的 `nav`/`link` 同步去后缀（**`page.file` 保留 `.html`**）；顺带补上全站缺失的 **`<link rel="canonical">`** 并修复 **`og:url`**（原 11 页全写死首页）。验证：**12 页可见文字与改动前逐页比对 100% 一致**、内部链接与 sitemap 全部 200 零 404、导航高亮逐页正常；新增本地自检工具 `scripts/_preview_server.py`（模拟 Cloudflare clean URL）与 `scripts/_check_links.py`。**纠正 §10.6**：此前误判"URL 混用"为非问题，实测后确认该 AI 这条**说对了**；教训已记入。⚠️ 无后缀依赖 Cloudflare Pretty URLs，**勿关闭该设置**。**⑤ 图片 alt 后台可填（§10.10）**——新增 **22 个 `imageAlt`/`blockImageAlt` 可选字段**（home/about/pages/specgrid/4 个产品页/product-details/pole-display/blog 全覆盖，含轮播图、简介照片、详情页多图等**列表型图片从 `field:` 简写改成 `fields:` 完整写法**，旧纯字符串数据仍兼容）；新增 `build.mjs` 的 **`altOf(对象, 兜底)` 助手**（优先读字段、没填回退品名/标题、兼容旧数据）；**真实内容图空 alt 62 处 → 0 处**（剩 44 处装饰图标 + 12 处 JS 占位图，属**规范上应保持为空**）；PyYAML + 字段层级 + 后台 `/admin/` 打开三项校验通过（无坑 #10b/#16）；**12 页可见文字与线上 100% 一致**；双端截图确认。**⑥ 图片文件名去中文（§10.11）**——12 个中文名 + `1.webp` 全部改为英文语义名（**逐张查看实际内容后命名，非字面直译**，如 `1.webp` 实为页脚 logo）；同步更新 7 个 JSON 引用（`car-flag-米黄背景` 被 2 处引用）；删除无引用的重复文件 `水滴型旗子.jpg`(892KB)；**验证：全站 75 个图片引用全部 200 零缺失、12 页可见文字 100% 一致、媒体库中文名清零**，线上复验通过。**⑦ Schema 结构化数据 + og/Twitter Card + 图片压缩（§10.12）**——此前全站 **0 个 JSON-LD**，现每页输出 Organization+WebSite，子页加 BreadcrumbList、产品页加 ItemList(内嵌 Product，**不写价格**)、About 加 FAQPage(6 条)、博客文章加 BlogPosting（用户确认：**成立 2003**、**工厂+贸易公司两个地址都写**、**不写价格**；⚠️ 2003 与版权行 2011 不一致，用户已知悉）；**og:image 由相对路径改为绝对网址并按页输出**（此前全站同一张相对路径图 → 社交分享卡片空白）、**补 Twitter Card**、**sitemap 加 lastmod**；**压缩 14 张大图**（首页图片 1211KB→991KB，`factory-direct-banner` -93%）；**修掉 9 个「扩展名 .jpg 实为 WebP」的文件**（服务端按扩展名回 image/jpeg 与内容不符）。验证：14 页 JSON-LD 全部合法、75 个图片引用 0 缺失、双端截图正常。另记入待办：`harvard-banner-building.webp`(含哈佛校徽) 与 `teardrop-feather-flag.jpg`(World Food Expo 展会图) 两处**属"换图"而非"改名"，本次未动**。**③ 新增 404.html 修复「软 404」（§10.8）**——实测发现 Cloudflare Pages 在无 `404.html` 时，把任意不存在的路径一律返回**首页内容 + HTTP 200**（`/zzz-nonexistent`、`/about-usweekly`、`pages.dev` 直连均复现），浪费抓取配额、掩盖真实死链；新增由 `notFoundBody()` 生成的 `static/404.html` 后，假路径正确返回 **HTTP 404**，12 个真实页面复检 100% 一致；`_preview_server.py` 同步模拟该行为。**④ 证伪某 AI 对 sitemap 的误判**——该 AI 称「sitemap.xml 格式严重畸变、URL 与 changefreq 拼接（如 `about-usweekly`）」，经 **XML 解析器实测证伪**（12 条 loc/changefreq 完全分离、标签闭合正常、`Content-Type: application/xml`）；其"畸形"实为**阅读工具剥离 XML 标签后的显示假象**（已本地复现），讽刺的是它警告的"大面积 404"恰恰反了——真实毛病是**该 404 时不 404**。另：裸域名 `wolflag.com` https 打不开待修（§10.5）；站内 SEO 待办清单（§10.4，丰富内容/补 alt/加 Schema/建外链）**未动手，须用户批准**。前次：2026-09-09。今日：**公告条手机端显示修复**（根因：`announce-item` 用 `white-space:nowrap + width:max-content` 只按电脑宽屏设计，手机窄屏长句被裁一半、滚动距离按视口宽算导致下一条和上一条重叠；已改 `width:100% + white-space:normal` 允许换行、容器高度由 site.js `sizeVp()` 依 `scrollHeight` 自适应；电脑端单行不受影响，双端 Playwright 截图验证通过）+ **新增 §0.8「任何改动必须同时考虑电脑端与手机端显示」最高优先级铁律**（用户 2026-09-09 强调：今后任何修改/改进/新增区块都需兼顾手机，两端难兼顾时先与用户商量）+ **坑 #17**（公告条手机显示教训）。前次：2026-09-09。今日：**公告条重构**（从全站顶部挪进页面内，只在首页/关于我们各一条且**独立配置**；字段 `{enabled,mode,bg,color,pause,scroll,items[{icon,text}]}`，`mode`=inout(首页:滚进停滚出) / slide(关于:当前滚出时下一条同步滚进)；build `announceBar()` 复用渲染、site.js 按 `data-mode` 分支、`.announce*` 样式、`.home-hero` 底带 71→24px 让首页公告条与栏目图间距 95→32px；About 顶部原 `.about-marquee` 删除；后台 home/about collection 各加 announce 字段（含 mode 下拉，防编辑时丢失）；图标 media/icon-megaphone/factory/globe/email.svg；首屏顶部公告已移除；见 §2.9）+ **首页 hero 轮播首张 cover、后张 fill**（`.hero-slide` 默认 cover，`.hero-slide:not(:first-child){object-fit:fill}`→后张完整显示、压缩/拉伸填满同一框、不裁剪，首张保持原样；2026-09-09 用户要求，见 §4）。前次：2026-09-09。今日：**About 页新增时间轴（年份大事记）**（新增第 6 种 About 模块 `timeline`：`{bg,title,autoPlay,interval,items[{year,text}]}`；年份横条+圆点、点年份切对应大字+文字；`items` **build 时自动按 `year` 升序**（最左最早、最右最晚，后台填错顺序也自动纠正）；自动播放**默认开**，每 `interval` 秒（默认5，建议5~8）跳到下一年、**到末位 `%years.length` 循环回第一个**；**悬停在某年份上 `mouseenter` 暂停、`mouseleave` 恢复**；手动点击 `go(i)+restart`；后台 About→页面模块→时间轴：背景色/标题/**自动播放开关**/**间隔秒数**/里程碑增删拖序；悬停/选中=鲑红 #f15d49（同顶部 marquee），线+圆点 #dfe3e2（同 FAQ 底），背景白 + 区块底部浅米黄分隔线 #f8f8f8，FAQ 背景改 #f8f8f8；build.mjs `renderAboutBlock` 加 timeline 分支 + site.js `go/start/stop/restart`（`data-autoplay`/`data-interval` 驱动）+ CSS `.tl-*` + config.yml about blocks `types` 加 timeline（字段校验通过）；见 §2.2/§4）。前次：2026-09-08。今日：**国旗产品页改版**（national-flags 卡片改为 品名加粗居中(.nf-card .p-name)→属性表(specs 自由增删，Size/Fabric/Printing 三行)→可选宣传语；size/material/printing 字段→specs，尺寸值去 "popular size:" 前缀；黑框印刷 chip(p-chip) 移除；后台表单同步更换并校验通过，见 §2.3/§4）+ **属性表改版**（f-spec/p-spec/sg-spec 去掉内层灰线框，改为左栏雾蓝 #eef1f4 + 右栏米白 #fafaf9 双色块、单元格 3px 白色缝隙（border-spacing，每格独立色块）；**pd-spec/pd-price 按用户要求保持原线框样式**，详情模板新页面也保持原样，见 §2.6/§4）+ **页脚间距与右对齐**（`.footer-grid` 改 `0.8fr 1fr 1fr auto` + 48px 列距，三块内容（工厂/杭州/电话邮箱）均匀排开，末列 auto 贴容器右缘=与上方内容框右对齐；原 4×1fr+6px padding 视觉仅 12px 太挤；杭州地址后台误合并成一行 `...St.hangzhou China`，已拆回两行 `St.` / `Hangzhou China`；页脚 logo `1.png`(153KB)→`1.webp`(36KB, quality 80)；见 §2.1/§4）+ **导航栏折行修复**（改复数菜单名后多词被叠成两行；`.nav-menu a` 加 `white-space:nowrap`、菜单间距收紧 gap 31→24、汉堡断点 900→1200px，见 §4/坑#15）+ **导航菜单名改复数**（Feather flag→Feather flags、Products→Full Products、National Flag→National Flags，仅显示文字、URL 不变）+ **羽毛旗 Teardrop 产品图转 WebP**（水滴型沙滩旗02.png 2.2MB→.webp 162KB，并删除旧 PNG）+ **Pinpoint 旗帜图文件名修复**（去掉手误的单引号字符 `pinpoint-旗帜-定版’.jpg`→`pinpoint-flag.jpg`）+ **羽毛旗产品页说明模块改版**（说明模块改为 Stands & Displays 同款：品名→属性表(specs)→宣传语(subtitle)，删 CTA；后台 feather-flags 字段 size/material/desc 改 specs+subtitle，见 §2.3/§4）+ **横幅产品页说明模块改版**（品名→属性表(specs)→宣传语(subtitle)，对照 specGrid；后台 banners 字段 desc/material/detail 改 specs+subtitle，见 §2.3/§4）+ **界面动效**（两个主按钮 Contact Us / Download Catalog 悬停轻微上移 2px + 柔色阴影；导航菜单产品名称悬停/选中=浅沙 #f5f0e8 圆角胶囊 + 加粗（padding 6px 12px + margin 0 -10px 防撑宽导航，移动端整行高亮），见 §4）+ **页脚联系图标**（地址/电话/邮箱前加内嵌SVG线框图标（定位/听筒/信封），地址每区块一图标、续行缩进对齐，见 §2.1/§4）+ **补充模块**（每页底部可加多个图文区（show/title/text/image），铺到首页/羽毛旗/横幅/国旗/Stands & Displays 五页，build.mjs `supplementSection()` 通用函数、后台 5 栏目均为 `widget:list` 可 Add 多个；默认全隐藏，见 §2.8）+ **图文区块显示/隐藏 + simple 布局渲染 sections**（sections 每块加 `show` 开关，`sectionsBlock(data)` 通用函数，`simpleBody`/`flexBody` 都用；products.json 底部可显示图文区块，见 §2.6）+ **首页 hero 多图轮播**（hero 加 `images[]/interval/mode`；淡入淡出+自动5s+悬停暂停+底部圆点+悬停左右箭头；site.js `hero-slider` 逻辑 + CSS `.hero-slider*`，见 §2.2/§4）。前次：2026-09-07。今日：**About 页内容模块化**（blocks 列表：text/image/textImg/clients/faq 五类，每模块可选背景色（Decap `color` 部件、十六进制、极简 10 色板）；图文可调方向/比例/每图独立上下位置；见 §2.2）；**新增 §0.6「改动推送上线并同步本地后，主动询问是否写进 AI-GUIDE/README」准则**；**specGrid 属性网格独立栏目**（content/specgrid、后台「属性网格类目页」、字段仅 品名/宣传语/属性/图片，避免混入他模板字段；宣传语改多行文本并移到产品属性下方）+ **全站产品图片点击放大**（悬停放大镜、点击弹全屏大图、Esc/点击恢复；链接卡保留跳转）；**正文加粗标记**：正文 `**文字**` 自动转 `<strong>`（build.mjs `bold()`，About 段落 + 博客 p/h2 已支持，其余仍转义保安全；CSS `p strong` 同色加粗）；**产品详情页规格表改为「产品属性」自由增删列表**（`specs[{label,value}]` 替代原 fabric/printing/size/moq/leadTime，`productSpecRows()` 兜底兼容；见 §2.6/坑附录）；新增 §0.5「**会话开场前必须先主动询问的两件事**」（① 网站更新要不要同步到本地；② 新上传图片要不要转 WebP；均以用户批准为前提，2026-09-07 用户要求）；**config.yml 全角逗号导致后台全线崩溃，已修（坑 10b）**；Products 合集页加 bannerImage 横幅 + 卡片 p.link 可点击；删除 Custom Flags 示例页（用户不要 flex 页，模板保留）；「产品详情页 vs 新增类目页」定位确认（见 §2.6）。前次：2026-09-06 **Products 合集页 + 导航子菜单 + 两个新模板（detail 产品详情：多图画廊/规格表/价格表/MOQ/交期/3 张可编辑服务卡/图文区；flex 通用图文）**，Banner 改为 Products 子菜单项（详见 §2.6）；**Blog 博客模块增强**：正文插图块（type:image，数量不限）；文章页右侧 All Posts 侧栏（所有文章、20 条/页、JS 翻页）；列表分页 20 篇/页（/blog-2.html…）；置顶 `pinned`（多置顶按时间倒序、取消即回时间序）+ PINNED 徽章；**Blog 博客模块**（列表页 /blog.html + 文章页 /blog/<slug>.html，content/blog/*.json 自动发现、draft 草稿开关、后台「博客文章」栏目、自动进 sitemap，详见 §2.5）；最新导航：…About Us / Blog / Contact Us 按钮；Feather flag 页顶部横幅（`bannerImage` 字段，后台「羽毛旗产品页→顶部横幅图片」可换，素材 media/feather-banner.webp 2000×825）；National Flag 页同款横幅（media/national-banner.webp 2000×837）；Banner 页同款横幅（media/banners-banner.webp 1952×806）；CSS 类统一为 `.page-banner`（原 `.feather-banner` 改名）；三页横幅加 12px 圆角；About 页工厂图下新增拼图（段距调 36px 使左右两列高度≈对齐）、工厂图 12px 圆角；页脚原地址已由后台改为 No 7 Weisan Road Zhapu Town（Zhapu/平湖）；**全站页脚统一完整页脚**（页脚策略变更，见 §3/坑 #6）；随线上后台更新同步拉取并重建 static。前次：2026-09-04 导航改名「Flagpoles & Accessories」；修复并新增「Stands & Displays」类目页（.md→.json + `format: json` 治本）；首页新增「Download Catalog (PDF)」金色按钮 + 后台上传入口；**后台登录 OAuth 修复实战**（Worker 密钥被错指为不存在的 Client ID → 404；登记回调与线上 Worker 版本不一致 → Invalid Redirect URI；两处对齐 + 重置 Client Secret 后恢复，实测登录通过），并新增 §9 排障手册。版本号按 git log 追踪。*
+*最后更新：2026-09-10。今日（两个阶段）：**① 建立 Google Search Console SEO 基础设施**（GSC 以 `Domain` 方式绑定 `wolflag.com`，DNS TXT 验证通过（验证码见 §10.1，**永久保留**）；35互联 DNS 后台**新增** TXT 而非覆盖 → 企业邮箱未受影响，双节点 `nslookup` 复核两条 TXT 并存；重新提交 sitemap（**须填完整网址**，只填 `sitemap.xml` 会报 `Invalid sitemap address`）→ Google 时隔 8 个月重新读取，`Discovered pages` **6 → 12**；产出用户侧图文指南 `E:\2026 公司网站\SEO操作指南.html`）。**② 修复头号收录障碍：全站网址去 `.html` 后缀（§10.7）**——GSC `URL Inspection` 实测发现 Google 对**全站所有 `.html` 网址**拿到 **308 重定向**（Cloudflare Pretty URLs），页面因而被判 `Page with redirect`、**不被收录**；`national-flag`/`pole-display` 命中该状态，`banner`/`feather-flag` 则 `URL is unknown to Google`。修复：`build.mjs` 新增 `cleanUrl()`、菜单/内链/博客/sitemap 全部改输出无后缀，`content/*.json` 的 `nav`/`link` 同步去后缀（**`page.file` 保留 `.html`**）；顺带补上全站缺失的 **`<link rel="canonical">`** 并修复 **`og:url`**（原 11 页全写死首页）。验证：**12 页可见文字与改动前逐页比对 100% 一致**、内部链接与 sitemap 全部 200 零 404、导航高亮逐页正常；新增本地自检工具 `scripts/_preview_server.py`（模拟 Cloudflare clean URL）与 `scripts/_check_links.py`。**纠正 §10.6**：此前误判"URL 混用"为非问题，实测后确认该 AI 这条**说对了**；教训已记入。⚠️ 无后缀依赖 Cloudflare Pretty URLs，**勿关闭该设置**。**⑤ 图片 alt 后台可填（§10.9）**——新增 **22 个 `imageAlt`/`blockImageAlt` 可选字段**（home/about/pages/specgrid/4 个产品页/product-details/pole-display/blog 全覆盖，含轮播图、简介照片、详情页多图等**列表型图片从 `field:` 简写改成 `fields:` 完整写法**，旧纯字符串数据仍兼容）；新增 `build.mjs` 的 **`altOf(对象, 兜底)` 助手**（优先读字段、没填回退品名/标题、兼容旧数据）；**真实内容图空 alt 62 处 → 0 处**（剩 44 处装饰图标 + 12 处 JS 占位图，属**规范上应保持为空**）；PyYAML + 字段层级 + 后台 `/admin/` 打开三项校验通过（无坑 #10b/#16）；**12 页可见文字与线上 100% 一致**；双端截图确认。**⑥ 图片文件名去中文（§10.10）**——12 个中文名 + `1.webp` 全部改为英文语义名（**逐张查看实际内容后命名，非字面直译**，如 `1.webp` 实为页脚 logo）；同步更新 7 个 JSON 引用（`car-flag-米黄背景` 被 2 处引用）；删除无引用的重复文件 `水滴型旗子.jpg`(892KB)；**验证：全站 75 个图片引用全部 200 零缺失、12 页可见文字 100% 一致、媒体库中文名清零**，线上复验通过。**⑦ Schema 结构化数据 + og/Twitter Card + 图片压缩（§10.11）**——此前全站 **0 个 JSON-LD**，现每页输出 Organization+WebSite，子页加 BreadcrumbList、产品页加 ItemList(内嵌 Product，**不写价格**)、About 加 FAQPage(6 条)、博客文章加 BlogPosting（用户确认：**成立 2003**、**工厂+贸易公司两个地址都写**、**不写价格**；⚠️ 2003 与版权行 2011 不一致，用户已知悉）；**og:image 由相对路径改为绝对网址并按页输出**（此前全站同一张相对路径图 → 社交分享卡片空白）、**补 Twitter Card**、**sitemap 加 lastmod**；**压缩 14 张大图**（首页图片 1211KB→991KB，`factory-direct-banner` -93%）；**修掉 9 个「扩展名 .jpg 实为 WebP」的文件**（服务端按扩展名回 image/jpeg 与内容不符）。验证：14 页 JSON-LD 全部合法、75 个图片引用 0 缺失、双端截图正常。另记入待办：`harvard-banner-building.webp`(含哈佛校徽) 与 `teardrop-feather-flag.jpg`(World Food Expo 展会图) 两处**属"换图"而非"改名"，本次未动**。**③ 新增 404.html 修复「软 404」（§10.8）**——实测发现 Cloudflare Pages 在无 `404.html` 时，把任意不存在的路径一律返回**首页内容 + HTTP 200**（`/zzz-nonexistent`、`/about-usweekly`、`pages.dev` 直连均复现），浪费抓取配额、掩盖真实死链；新增由 `notFoundBody()` 生成的 `static/404.html` 后，假路径正确返回 **HTTP 404**，12 个真实页面复检 100% 一致；`_preview_server.py` 同步模拟该行为。**④ 证伪某 AI 对 sitemap 的误判**——该 AI 称「sitemap.xml 格式严重畸变、URL 与 changefreq 拼接（如 `about-usweekly`）」，经 **XML 解析器实测证伪**（12 条 loc/changefreq 完全分离、标签闭合正常、`Content-Type: application/xml`）；其"畸形"实为**阅读工具剥离 XML 标签后的显示假象**（已本地复现），讽刺的是它警告的"大面积 404"恰恰反了——真实毛病是**该 404 时不 404**。另：裸域名 `wolflag.com` https 打不开待修（§10.5）；站内 SEO 待办清单见 **§10.4**（alt、Schema、canonical、og 等**已于同日完成**，详见其后各条；剩余为内容/外链/H1/Title/博客）。前次：2026-09-09。今日：**公告条手机端显示修复**（根因：`announce-item` 用 `white-space:nowrap + width:max-content` 只按电脑宽屏设计，手机窄屏长句被裁一半、滚动距离按视口宽算导致下一条和上一条重叠；已改 `width:100% + white-space:normal` 允许换行、容器高度由 site.js `sizeVp()` 依 `scrollHeight` 自适应；电脑端单行不受影响，双端 Playwright 截图验证通过）+ **新增 §0.8「任何改动必须同时考虑电脑端与手机端显示」最高优先级铁律**（用户 2026-09-09 强调：今后任何修改/改进/新增区块都需兼顾手机，两端难兼顾时先与用户商量）+ **坑 #17**（公告条手机显示教训）。前次：2026-09-09。今日：**公告条重构**（从全站顶部挪进页面内，只在首页/关于我们各一条且**独立配置**；字段 `{enabled,mode,bg,color,pause,scroll,items[{icon,text}]}`，`mode`=inout(首页:滚进停滚出) / slide(关于:当前滚出时下一条同步滚进)；build `announceBar()` 复用渲染、site.js 按 `data-mode` 分支、`.announce*` 样式、`.home-hero` 底带 71→24px 让首页公告条与栏目图间距 95→32px；About 顶部原 `.about-marquee` 删除；后台 home/about collection 各加 announce 字段（含 mode 下拉，防编辑时丢失）；图标 media/icon-megaphone/factory/globe/email.svg；首屏顶部公告已移除；见 §2.9）+ **首页 hero 轮播首张 cover、后张 fill**（`.hero-slide` 默认 cover，`.hero-slide:not(:first-child){object-fit:fill}`→后张完整显示、压缩/拉伸填满同一框、不裁剪，首张保持原样；2026-09-09 用户要求，见 §4）。前次：2026-09-09。今日：**About 页新增时间轴（年份大事记）**（新增第 6 种 About 模块 `timeline`：`{bg,title,autoPlay,interval,items[{year,text}]}`；年份横条+圆点、点年份切对应大字+文字；`items` **build 时自动按 `year` 升序**（最左最早、最右最晚，后台填错顺序也自动纠正）；自动播放**默认开**，每 `interval` 秒（默认5，建议5~8）跳到下一年、**到末位 `%years.length` 循环回第一个**；**悬停在某年份上 `mouseenter` 暂停、`mouseleave` 恢复**；手动点击 `go(i)+restart`；后台 About→页面模块→时间轴：背景色/标题/**自动播放开关**/**间隔秒数**/里程碑增删拖序；悬停/选中=鲑红 #f15d49（同顶部 marquee），线+圆点 #dfe3e2（同 FAQ 底），背景白 + 区块底部浅米黄分隔线 #f8f8f8，FAQ 背景改 #f8f8f8；build.mjs `renderAboutBlock` 加 timeline 分支 + site.js `go/start/stop/restart`（`data-autoplay`/`data-interval` 驱动）+ CSS `.tl-*` + config.yml about blocks `types` 加 timeline（字段校验通过）；见 §2.2/§4）。前次：2026-09-08。今日：**国旗产品页改版**（national-flags 卡片改为 品名加粗居中(.nf-card .p-name)→属性表(specs 自由增删，Size/Fabric/Printing 三行)→可选宣传语；size/material/printing 字段→specs，尺寸值去 "popular size:" 前缀；黑框印刷 chip(p-chip) 移除；后台表单同步更换并校验通过，见 §2.3/§4）+ **属性表改版**（f-spec/p-spec/sg-spec 去掉内层灰线框，改为左栏雾蓝 #eef1f4 + 右栏米白 #fafaf9 双色块、单元格 3px 白色缝隙（border-spacing，每格独立色块）；**pd-spec/pd-price 按用户要求保持原线框样式**，详情模板新页面也保持原样，见 §2.6/§4）+ **页脚间距与右对齐**（`.footer-grid` 改 `0.8fr 1fr 1fr auto` + 48px 列距，三块内容（工厂/杭州/电话邮箱）均匀排开，末列 auto 贴容器右缘=与上方内容框右对齐；原 4×1fr+6px padding 视觉仅 12px 太挤；杭州地址后台误合并成一行 `...St.hangzhou China`，已拆回两行 `St.` / `Hangzhou China`；页脚 logo `1.png`(153KB)→`1.webp`(36KB, quality 80)；见 §2.1/§4）+ **导航栏折行修复**（改复数菜单名后多词被叠成两行；`.nav-menu a` 加 `white-space:nowrap`、菜单间距收紧 gap 31→24、汉堡断点 900→1200px，见 §4/坑#15）+ **导航菜单名改复数**（Feather flag→Feather flags、Products→Full Products、National Flag→National Flags，仅显示文字、URL 不变）+ **羽毛旗 Teardrop 产品图转 WebP**（水滴型沙滩旗02.png 2.2MB→.webp 162KB，并删除旧 PNG）+ **Pinpoint 旗帜图文件名修复**（去掉手误的单引号字符 `pinpoint-旗帜-定版’.jpg`→`pinpoint-flag.jpg`）+ **羽毛旗产品页说明模块改版**（说明模块改为 Stands & Displays 同款：品名→属性表(specs)→宣传语(subtitle)，删 CTA；后台 feather-flags 字段 size/material/desc 改 specs+subtitle，见 §2.3/§4）+ **横幅产品页说明模块改版**（品名→属性表(specs)→宣传语(subtitle)，对照 specGrid；后台 banners 字段 desc/material/detail 改 specs+subtitle，见 §2.3/§4）+ **界面动效**（两个主按钮 Contact Us / Download Catalog 悬停轻微上移 2px + 柔色阴影；导航菜单产品名称悬停/选中=浅沙 #f5f0e8 圆角胶囊 + 加粗（padding 6px 12px + margin 0 -10px 防撑宽导航，移动端整行高亮），见 §4）+ **页脚联系图标**（地址/电话/邮箱前加内嵌SVG线框图标（定位/听筒/信封），地址每区块一图标、续行缩进对齐，见 §2.1/§4）+ **补充模块**（每页底部可加多个图文区（show/title/text/image），铺到首页/羽毛旗/横幅/国旗/Stands & Displays 五页，build.mjs `supplementSection()` 通用函数、后台 5 栏目均为 `widget:list` 可 Add 多个；默认全隐藏，见 §2.8）+ **图文区块显示/隐藏 + simple 布局渲染 sections**（sections 每块加 `show` 开关，`sectionsBlock(data)` 通用函数，`simpleBody`/`flexBody` 都用；products.json 底部可显示图文区块，见 §2.6）+ **首页 hero 多图轮播**（hero 加 `images[]/interval/mode`；淡入淡出+自动5s+悬停暂停+底部圆点+悬停左右箭头；site.js `hero-slider` 逻辑 + CSS `.hero-slider*`，见 §2.2/§4）。前次：2026-09-07。今日：**About 页内容模块化**（blocks 列表：text/image/textImg/clients/faq 五类，每模块可选背景色（Decap `color` 部件、十六进制、极简 10 色板）；图文可调方向/比例/每图独立上下位置；见 §2.2）；**新增 §0.6「改动推送上线并同步本地后，主动询问是否写进 AI-GUIDE/README」准则**；**specGrid 属性网格独立栏目**（content/specgrid、后台「属性网格类目页」、字段仅 品名/宣传语/属性/图片，避免混入他模板字段；宣传语改多行文本并移到产品属性下方）+ **全站产品图片点击放大**（悬停放大镜、点击弹全屏大图、Esc/点击恢复；链接卡保留跳转）；**正文加粗标记**：正文 `**文字**` 自动转 `<strong>`（build.mjs `bold()`，About 段落 + 博客 p/h2 已支持，其余仍转义保安全；CSS `p strong` 同色加粗）；**产品详情页规格表改为「产品属性」自由增删列表**（`specs[{label,value}]` 替代原 fabric/printing/size/moq/leadTime，`productSpecRows()` 兜底兼容；见 §2.6/坑附录）；新增 §0.5「**会话开场前必须先主动询问的两件事**」（① 网站更新要不要同步到本地；② 新上传图片要不要转 WebP；均以用户批准为前提，2026-09-07 用户要求）；**config.yml 全角逗号导致后台全线崩溃，已修（坑 10b）**；Products 合集页加 bannerImage 横幅 + 卡片 p.link 可点击；删除 Custom Flags 示例页（用户不要 flex 页，模板保留）；「产品详情页 vs 新增类目页」定位确认（见 §2.6）。前次：2026-09-06 **Products 合集页 + 导航子菜单 + 两个新模板（detail 产品详情：多图画廊/规格表/价格表/MOQ/交期/3 张可编辑服务卡/图文区；flex 通用图文）**，Banner 改为 Products 子菜单项（详见 §2.6）；**Blog 博客模块增强**：正文插图块（type:image，数量不限）；文章页右侧 All Posts 侧栏（所有文章、20 条/页、JS 翻页）；列表分页 20 篇/页（/blog-2.html…）；置顶 `pinned`（多置顶按时间倒序、取消即回时间序）+ PINNED 徽章；**Blog 博客模块**（列表页 /blog.html + 文章页 /blog/<slug>.html，content/blog/*.json 自动发现、draft 草稿开关、后台「博客文章」栏目、自动进 sitemap，详见 §2.5）；最新导航：…About Us / Blog / Contact Us 按钮；Feather flag 页顶部横幅（`bannerImage` 字段，后台「羽毛旗产品页→顶部横幅图片」可换，素材 media/feather-banner.webp 2000×825）；National Flag 页同款横幅（media/national-banner.webp 2000×837）；Banner 页同款横幅（media/banners-banner.webp 1952×806）；CSS 类统一为 `.page-banner`（原 `.feather-banner` 改名）；三页横幅加 12px 圆角；About 页工厂图下新增拼图（段距调 36px 使左右两列高度≈对齐）、工厂图 12px 圆角；页脚原地址已由后台改为 No 7 Weisan Road Zhapu Town（Zhapu/平湖）；**全站页脚统一完整页脚**（页脚策略变更，见 §3/坑 #6）；随线上后台更新同步拉取并重建 static。前次：2026-09-04 导航改名「Flagpoles & Accessories」；修复并新增「Stands & Displays」类目页（.md→.json + `format: json` 治本）；首页新增「Download Catalog (PDF)」金色按钮 + 后台上传入口；**后台登录 OAuth 修复实战**（Worker 密钥被错指为不存在的 Client ID → 404；登记回调与线上 Worker 版本不一致 → Invalid Redirect URI；两处对齐 + 重置 Client Secret 后恢复，实测登录通过），并新增 §9 排障手册。版本号按 git log 追踪。*
