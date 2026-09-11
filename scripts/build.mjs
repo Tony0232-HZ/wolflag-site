@@ -254,30 +254,41 @@ function breadcrumbSchema(name, path) {
   };
 }
 
-/** 产品列表 → ItemList（B2B 不写价格，只列品名/图/描述） */
+/** 产品列表 → ItemList（B2B 不写价格，只列品名/图/描述）
+ *
+ *  ⚠️ 2026-09-11：条目类型由 `Product` 改为中性的 `ListItem`（方案 A）。
+ *  【为什么改】Google 对 Product 富媒体的硬性要求是「`offers` / `review` / `aggregateRating`
+ *   三者至少有一项」，否则报 **Critical**：
+ *   "Either 'offers', 'review', or 'aggregateRating' should be specified"（2026-09-11 用户收到 GSC 邮件）。
+ *   而本站是 **B2B 询盘站、按用户决定「故意不公开价格」**，也没有评价与评分
+ *   → **那个富媒体位本来就不可能拿到**（见 §10.11「产品价格：不写」）。
+ *   既然拿不到，就没有理由继续声称「这是可购买的产品」——降级为「这是一份产品清单」，
+ *   报错即消失，且**依旧不写价格**，页面可见内容**零变化**。
+ *
+ *  ⚠️ **绝对不要**为了通过校验去填假价格或假评分——那违反 Google 政策，**会被真处罚**。
+ *  📌 以后若用户愿意在页面上公开价格/起订价，可再把 `Product` + `offers` 加回来。 */
 function productListSchema(products, pageName, path) {
   const items = (products || []).filter((p) => p && p.name);
   if (!items.length) return null;
+  const pageUrl = `${SITE}${path}`;
   return {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
     name: pageName,
-    url: `${SITE}${path}`,
+    url: pageUrl,
     numberOfItems: items.length,
     itemListElement: items.map((p, i) => {
       const img = p.image || (Array.isArray(p.images) && p.images[0]) ||
         (Array.isArray(p.images) && p.images[0] && p.images[0].image);
+      const desc = p.subtitle || p.desc;
       return {
         '@type': 'ListItem',
         position: i + 1,
-        item: {
-          '@type': 'Product',
-          name: p.name,
-          ...(p.subtitle || p.desc ? { description: String(p.subtitle || p.desc).slice(0, 300) } : {}),
-          ...(img ? { image: absUrl(typeof img === 'string' ? img : img.image) } : {}),
-          brand: { '@type': 'Brand', name: 'WOLFLAG' },
-          manufacturer: { '@id': ORG_ID },
-        },
+        name: p.name,
+        // 有独立产品链接就用它；没有则指向本页（Google 要求 ListItem 至少有 url 或 item）
+        url: p.link ? absUrl(p.link) : pageUrl,
+        ...(desc ? { description: String(desc).slice(0, 300) } : {}),
+        ...(img ? { image: absUrl(typeof img === 'string' ? img : img.image) } : {}),
       };
     }),
   };
