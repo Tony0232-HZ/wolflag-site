@@ -4,6 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>WOLFLAG 管理后台</title>
+  <!-- 2026-09-11：后台登录页没有对外内容，明确告诉搜索引擎不要收录它。
+       用 noindex 而不用 robots.txt 的 Disallow —— 若 Disallow 了，爬虫就读不到这条 noindex，反而可能仍被收录。 -->
+  <meta name="robots" content="noindex, nofollow">
 </head>
 <body>
   <script src="https://cdn.jsdelivr.net/npm/decap-cms@3.9.0/dist/decap-cms.js"></script>

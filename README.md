@@ -116,13 +116,15 @@ git push -u origin main
 
 网站构建时会**自动扫描** `content/products/` 与 `content/pages/` 两个目录，每个 JSON 自动生成一个页面并进入 sitemap。
 
-新增一个类目页（例如 LED Display）只需三步：
+新增一个类目页（例如 Custom Tents）只需三步：
 
-1. **后台创建内容文件**：打开 `/admin/` → **新增类目页** → 新建（示例页 `led-display.html` 已存在，可直接复制修改）
-   - `页面声明` 填三项：文件标识 `led-display` / 页面文件名 `led-display.html` / 排版模板 `simple`（通用）/ 导航地址 `/led-display.html`
+1. **后台创建内容文件**：打开 `/admin/` → **新增类目页** → 新建
+   - `页面声明` 填三项：文件标识 `custom-tents` / 页面文件名 `custom-tents.html` / 排版模板 `simple`（通用）/ 导航地址 `/custom-tents`
    - 填 SEO 标题、页面主标题、标语、上传产品图片并填写产品列表 → 保存
-2. **加导航菜单**：`/admin/` → 站点设置 → 导航菜单 → 添加一项（名称「LED Display」、链接 `/led-display.html`）→ 保存
+2. **加导航菜单**：`/admin/` → 站点设置 → 导航菜单 → 添加一项（名称「Custom Tents」、链接 `/custom-tents`）→ 保存
 3. 1-3 分钟后线上出现新页面，自动进入 sitemap
+
+> 📌 **2026-09-11 变更**：原有的 LED 示例页 `content/pages/led-display.json` **已删除**（它只是模板示例，内容几乎是空的，且不在导航里，被 Google 收录反而拖低整站质量）。**现存可参考的同类页面是 `content/pages/products.json`**（Full Products，同样是 `simple` 模板）。
 
 > ⚠️ **新页面不出现？先检查这三点**：
 > ① `content/pages/` 里对应文件是 **`.json`** 不是 `.md`（后台已配 `format: json`，正常为 `.json`；若是 `.md` 会被忽略）；
@@ -130,7 +132,7 @@ git push -u origin main
 > ③ 页面没重新生成——后台保存会自动触发 Cloudflare 重新构建，约 1-3 分钟。
 
 > 排版模板选择（7 种）：`simple` 通用网格 | `flags` 国旗式 | `feather` 横卡式 | `bannerCards` 横幅式 | `pole` 旗杆展架式 | `detail` 产品详情 | `flex` 通用图文。
-> 参考：`content/pages/led-display.json`（仓库里已内置 LED 示例页，可直接替换内容）。
+> 参考：`content/pages/products.json`（Full Products 页，`simple` 模板的现成范例；原 LED 示例页已于 2026-09-11 删除）。
 
 > **图文区块（可加多组，每组可显隐，2026-09-08）**：新增类目页底部可加多组"图文区块"（小标题 + 文字 + 多张图）。每组顶部有「**显示此图文区块**」勾选框：勾上=显示、取消=隐藏（内容保留）。`simple` 与 `flex` 两种布局都会在产品列表下方渲染这些图文区块（例：Full Products 页）。
 
@@ -369,14 +371,32 @@ About 页新增「**时间轴**」模块：一条横线+年份圆点，点某个
 
 > `static/404.html` 由 `build.mjs` 的 `notFoundBody()` 自动生成，**不要手工改**（会被下次构建覆盖）。要改文案请改 `build.mjs`。
 
+### 🏷️ 全站标题/摘要优化 + 分享卡片尺寸修复（2026-09-11）
+
+**① 分享卡片（og:image）尺寸修复**
+每个页面都有一句「告诉微信/LinkedIn/Facebook/X 这张分享图多大」的声明，**此前全站写死 1200×630**，而实际图各页不同（首页 1259×562、产品页 1600×660、汽车旗 944×944）→ 平台按**错误比例**预留卡片位置，会裁切错位、个别抓取器干脆不显示图。现改为**构建时自动读取图片真实尺寸**（读不到就不输出这两行，宁缺勿错）。404 页也补上了分享图。
+
+**② 全站标题（`<title>`）与摘要（description）优化**
+`<title>` 是搜索结果里的蓝色大标题、`description` 是下面那两行灰字。此前标题普遍只有 14~33 字符（Google 可用 50~60），等于白送展位；摘要则长短不一（3 个超长会被截、4 个偏短浪费）。现已全部改写：**标题 55~59 字符、摘要 135~152 字符，并植入海外买家真正会搜的采购词**（`custom` / `wholesale` / `manufacturer`）。
+
+> ✅ **这两项都不显示在网页上**，改了**页面一个字都不会变**（已逐页比对确认 12/12 页可见文字 100% 一致）。以后要改，在后台各页的「**SEO → 页面标题 / 页面描述**」里改，或改 `scripts/build.mjs` 里博客列表页的部分。
+
+**③ 后台登录页 `/admin/` 加了「不要收录」标记**
+后台登录页没有对外内容，没必要被 Google 收录。已加 `noindex`。
+
+> ⚠️ 用的是 `noindex` 而**不是** robots.txt 的 `Disallow`——若 Disallow 了，爬虫就读不到这条 noindex 指令，反而可能仍被收录。
+
+**④ 删除 `/led-display` 占位页**
+该页只有 26 个词、不在任何导航里，内容写「LED 显示屏」却配了张旗帜图，只是当初做模板留的示例。它却进了 sitemap、会被 Google 收录，**又薄又不对，会拖低整站质量评分**。已删除（`content/pages/led-display.json`），sitemap 从 12 条降为 11 条。
+
 ### 后台新建页面时的填法
 
 建页面时「**导航地址**」一栏填**无后缀**：
 
 ```
-文件标识：    led-display
-页面文件名：  led-display.html     ← 保留 .html（这是实际文件名）
-导航地址：    /led-display         ← 去掉 .html
+文件标识：    custom-tents
+页面文件名：  custom-tents.html     ← 保留 .html（这是实际文件名）
+导航地址：    /custom-tents         ← 去掉 .html
 ```
 
 **为什么搜不到产品词（2026-09-10 体检结论）：**

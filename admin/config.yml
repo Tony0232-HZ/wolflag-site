@@ -358,19 +358,19 @@ collections:
     summary: "{{fields.heading}}"
     identifier_field: slug
     fields:
-      - { label: 文件标识（英文小写，如 led-display）, name: slug, widget: string, hint: 用于内容文件与网址命名 }
+      - { label: 文件标识（英文小写，如 stands-displays）, name: slug, widget: string, hint: 用于内容文件与网址命名 }
       - label: 页面声明
         name: page
         widget: object
         fields:
-          - { label: 页面文件名（含 .html）, name: file, widget: string, hint: 如 led-display.html }
+          - { label: 页面文件名（含 .html）, name: file, widget: string, hint: 如 stands-displays.html }
           - label: 排版模板
             name: layout
             widget: select
             options: [simple, flags, feather, bannerCards, pole, detail, flex]
             default: simple
             hint: simple=通用网格；flags=国旗式；feather=横卡式；bannerCards=横幅式；pole=旗杆展架式；detail=产品详情（多图+规格+价格表）；flex=通用图文（标题+文字+图片组合）。注：属性网格(specGrid)类页面请在「属性网格类目页」栏目里建
-          - { label: 导航地址，如 /led-display.html, name: nav, widget: string }
+          - { label: 导航地址（无 .html 后缀），如 /stands-displays, name: nav, widget: string }
       - label: SEO
         name: seo
         widget: object

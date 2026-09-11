@@ -405,6 +405,15 @@ function shell({ title, desc, body, active, ogImage, footerMode, path, type, sch
   // path = 本页对外网址路径（无后缀）。canonical 与 og:url 均按页输出（2026-09-10）
   const url = `${SITE}${!path || path === '/' ? '/' : path}`;
   const ogImg = absUrl(ogImage);
+  // og:image:width/height 必须与该图真实尺寸一致（2026-09-11 修复）
+  //   此前写死 1200x630，而实际图各页不同（首页 1259x562、产品页 1600x66x、汽车旗 944x944…）
+  //   → 社交平台按「错误比例」预留卡片位置 → 裁切错位 / 个别抓取器不显示图。
+  //   这与 §10.12「图片尺寸必须自动读取，不能写死」是同一类问题，且同样是换图后会过期。
+  //   读不到尺寸就「不输出这两行」（宁缺勿错，退回平台自动判断）。
+  const ogSize = ogImage ? readImageSize(ogImage) : null;
+  const ogDim = ogSize && ogSize.w && ogSize.h
+    ? `\n  <meta property="og:image:width" content="${ogSize.w}">\n  <meta property="og:image:height" content="${ogSize.h}">`
+    : '';
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -419,9 +428,7 @@ function shell({ title, desc, body, active, ogImage, footerMode, path, type, sch
   <meta property="og:type" content="${type || 'website'}">
   <meta property="og:url" content="${url}">
   <meta property="og:locale" content="en_US">
-  ${ogImg ? `<meta property="og:image" content="${esc(ogImg)}">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">` : ''}
+  ${ogImg ? `<meta property="og:image" content="${esc(ogImg)}">${ogDim}` : ''}
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="${esc(title)}">
   <meta name="twitter:description" content="${esc(desc)}">
@@ -1190,6 +1197,7 @@ writeFileSync(join(STATIC, '404.html'), shell({
   body: notFoundBody(),
   active: '',
   path: '/404',           // canonical 指向自身，避免 404 页被当成首页副本
+  ogImage: home.hero.image, // 2026-09-11: 此前 404 页无 og:image，补上（全站统一）
   schema: schemaGraph(orgSchema()),
   footerMode: 'full',
 }));
@@ -1204,8 +1212,11 @@ listingPages.forEach((chunk, idx) => {
   const page = idx + 1;
   const file = page === 1 ? 'blog.html' : `blog-${page}.html`;
   writeFileSync(join(STATIC, file), shell({
-    title: page === 1 ? 'Blog - WOLFLAG' : `Blog - Page ${page} - WOLFLAG`,
-    desc: 'WOLFLAG news, product releases, announcements and company updates.',
+    // 2026-09-11 标题/摘要优化：原为 'Blog - WOLFLAG'(14 字符)、摘要 66 字符，均远低于 Google 可用长度
+    title: page === 1
+      ? 'Custom Flags & Banners Blog: Buying Guides & News | WOLFLAG'
+      : `Custom Flags & Banners Blog: Guides & News (Page ${page}) | WOLFLAG`,
+    desc: 'Practical buying guides and factory news from WOLFLAG: how to choose custom flags and banners, compare materials, prepare artwork and order wholesale.',
     body: blogListBody(chunk, page, listingPages.length),
     active: '/blog',
     path: page === 1 ? '/blog' : `/blog-${page}`,
