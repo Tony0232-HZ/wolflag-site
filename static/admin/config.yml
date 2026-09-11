@@ -291,6 +291,16 @@ collections:
                   - { label: 背景色, name: bg, widget: color, default: "#f8f8f8", hint: "点开选颜色（下方显示色块）。常用极简色：\n白 #ffffff\n米白 #fafaf9\n淡灰 #f8f8f8\n浅沙 #f5f0e8\n米黄 #faf7f5\n灰绿 #dfe3e2\n鼠尾草 #e8ece2\n雾蓝 #eef1f4\n藕粉 #f6f0ee\n浅炭 #f1f1ef" }
                   - { label: 排版方向, name: direction, widget: select, options: [textLeft, textRight, textTop], default: textLeft, hint: textLeft=文左图右；textRight=文右图左；textTop=文上图下 }
                   - { label: 文字/图片比例, name: ratio, widget: select, options: ["50:50", "40:60", "60:40", "30:70"], default: "50:50", hint: 前面数字=文字占比，后面=图片占比 }
+                  - label: 图片垂直位置（图片比文字矮时才有区别）
+                    name: imgAlign
+                    widget: select
+                    required: false
+                    default: top
+                    options:
+                      - { label: 顶部对齐（与文字首行齐平）, value: top }
+                      - { label: 垂直居中（与文字中间对齐）, value: mid }
+                      - { label: 底部对齐（与文字末行齐平）, value: bottom }
+                    hint: "图片比左边文字矮的时候，决定图片靠上、居中还是靠下。「垂直居中」= 上下留白均分，视觉最平衡。只对「文左图右 / 文右图左」两栏排版有效，手机上不受影响。"
                   - { label: 标题（可选）, name: title, widget: string, required: false }
                   - { label: 文字（可用 **词** 加粗，多段用空行分隔）, name: text, widget: text, required: false }
                   - label: 固定图片（不轮播；每张可单独调上下位置，多张纵向堆叠）
@@ -347,6 +357,14 @@ collections:
                     fields:
                       - { label: 年份, name: year, widget: string }
                       - { label: 当年的大事（英文，面向海外买家，可用 **词** 加粗）, name: text, widget: text }
+              - label: 无缝滚动横幅（工厂车间实拍）
+                name: marquee
+                summary: "无缝滚动横幅"
+                fields:
+                  - { label: 背景色, name: bg, widget: color, default: "#ffffff", hint: "点开选颜色（下方显示色块）。常用极简色：\n白 #ffffff\n米白 #fafaf9\n淡灰 #f8f8f8\n浅沙 #f5f0e8\n米黄 #faf7f5\n灰绿 #dfe3e2\n鼠尾草 #e8ece2\n雾蓝 #eef1f4\n藕粉 #f6f0ee\n浅炭 #f1f1ef" }
+                  - { label: 横幅图片（要超宽横图；会自动首尾相连循环滚动）, name: image, widget: image, hint: "建议用一张超宽的横长图（如 2700×260），里面横向拼好多个车间场景。网站会把这张图首尾相连、不停地往左滚动，看不出接缝。上传前请用英文小写连字符命名。" }
+                  - { label: 图片说明(alt), name: imageAlt, widget: string, required: false, hint: 图片说明（alt，建议英文，含产品关键词；留空则自动用兜底文案） }
+                  - { label: 滚动一圈的秒数（数字越大滚得越慢）, name: duration, widget: number, default: 45, required: false, value_type: "int", min: 5, hint: "填 45 = 整条横幅滚动一整圈需要 45 秒。想更快填小一点（如 25）；想更慢填大一点（如 80）" }
 
   # ---------- 新增类目页（通用模板） ----------
   - name: pages

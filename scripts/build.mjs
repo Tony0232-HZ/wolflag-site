@@ -714,6 +714,9 @@ function renderAboutBlock(b) {
     const rt = String(b.ratio || '50:50').split(':');
     const t = parseInt(rt[0], 10) || 50;
     const i = parseInt(rt[1], 10) || 50;
+    // 图片垂直位置（2026-09-11 新增）：mid=与左侧文字中间对齐 / bottom=底部对齐；
+    // top（默认值）沿用 align-items:flex-start，不输出类名
+    const alignCls = b.imgAlign === 'mid' ? ' about-it-mid' : (b.imgAlign === 'bottom' ? ' about-it-end' : '');
     const fallbackAlt = b.title || 'WOLFLAG custom flags and displays';
 
     // ① 固定图片（不轮播）：沿用原逻辑，多张纵向堆叠、可各自调 offset
@@ -743,7 +746,7 @@ function renderAboutBlock(b) {
 
     return `
     <section class="about-grey about-mod" style="background:${aboutBg(b)}"><div class="container">
-      <div class="about-it about-it-${dir}" style="--it-t:${t};--it-i:${i};">
+      <div class="about-it about-it-${dir}${alignCls}" style="--it-t:${t};--it-i:${i};">
         <div class="about-it-text">${b.title ? `<h4>${esc(b.title)}</h4>` : ''}${b.text ? `\n        ${aboutParas(b.text)}` : ''}</div>
         <div class="about-it-imgs">${imgs}${carousel}</div>
       </div>
@@ -808,6 +811,27 @@ function renderAboutBlock(b) {
         </div>
       </div>
     </div></section>`;
+  }
+  if (b.type === 'marquee') {
+    // 无缝滚动横幅（2026-09-11 新增）：同一张超宽横图输出两次、整体左移 50%（= 正好一张图宽），
+    // 终点画面与起点像素级一致 → 无限循环看不出接缝。纯 CSS 动画，不需要 JS。
+    // 宽度：套 .container，与上下区块同宽、左右对齐（用户看过效果后的要求；初版做的通栏已收窄）。
+    const src = b.image;
+    if (!src) return '';                                  // 后台没填图 → 不渲染空区块
+    const dur = parseFloat(b.duration) > 0 ? parseFloat(b.duration) : 45;
+    // 第二张是纯装饰副本：alt 置空 + aria-hidden，避免读屏软件把同一张图念两遍
+    // 有意不加 dimAttrs()：高度由 CSS 固定（桌面 260px / 手机 160px），尺寸属性会被 CSS 覆盖、无防抖收益
+    return `
+    <section class="about-strip" style="background:${aboutBg(b)}">
+      <div class="container">
+        <div class="about-strip-clip">
+          <div class="about-strip-track" style="--strip-duration:${dur}s">
+            <img src="${esc(src)}" alt="${altOf(b, 'WOLFLAG factory production line')}" loading="lazy" decoding="async">
+            <img src="${esc(src)}" alt="" aria-hidden="true" loading="lazy" decoding="async">
+          </div>
+        </div>
+      </div>
+    </section>`;
   }
   return '';
 }

@@ -44,16 +44,14 @@
           "offset": 0
         }
       ],
-      "carousel": {
-        "enabled": true,
-        "interval": 8,
-        "images": [
-          {
-            "image": "/assets/media/about-us-picture-5.webp",
-            "offset": 0
-          }
-        ]
-      }
+      "imgAlign": "mid"
+    },
+    {
+      "type": "marquee",
+      "bg": "#ffffff",
+      "image": "/assets/media/about-factory-production-line.webp",
+      "imageAlt": "WOLFLAG custom flag factory production line",
+      "duration": 45
     },
     {
       "type": "timeline",

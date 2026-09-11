@@ -1250,6 +1250,14 @@ ul { list-style: none; }
 .about-it-imgs { display: grid; grid-template-columns: 1fr; gap: 20px; }
 .about-it-imgs img { width: 100%; height: auto; border-radius: 12px; display: block; }
 .about-it-textTop .about-it-imgs { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+/* 图片垂直位置（2026-09-11 新增）：mid=与左侧文字中间对齐 / bottom=底部对齐
+   ⚠️ 只限「两栏排版 + 桌面宽度」：
+   ① 排除 .about-it-textTop（文上图下是纵排列排版，居中会变成"水平居中"→ 内容被压成窄条）；
+   ② 包在 min-width:761px 里，手机端（≤760px 切列排版）不适用，仍是默认 flex-start 全宽。 */
+@media (min-width: 761px) {
+  .about-it-mid:not(.about-it-textTop) { align-items: center; }
+  .about-it-end:not(.about-it-textTop) { align-items: flex-end; }
+}
 @media (max-width: 760px) {
   .about-it { flex-direction: column; gap: 24px; }
   .about-it-text, .about-it-imgs { flex: 0 0 100% !important; order: 0 !important; }
@@ -1315,6 +1323,41 @@ ul { list-style: none; }
   .it-carousel .it-arrow { opacity: .85; width: 34px; height: 34px; font-size: 15px; }
   .it-carousel .it-prev { left: 8px; }
   .it-carousel .it-next { right: 8px; }
+}
+
+/* ===== About 无缝滚动车间横幅（2026-09-11 新增）=====
+   原理：同一张超宽横图首尾相接排 2 份，整体左移 50%（= 正好一张图宽），
+   终点画面与起点像素级一致 → 无限循环、看不出接缝。HTML 里那张图因此是重复输出两次的。
+   宽度：套 .container，与上下区块（正文/图片/Our Journey）左右对齐、同宽
+        —— 用户 2026-09-11 看过效果后的要求（初版做的是通栏，已按要求收窄）。
+   ⚠️ 裁切必须落在 .about-strip-clip 上（它是 .container 的内容框，宽 1202px）。
+      不能把 overflow:hidden 直接加在 .container 上——那会连 24px 的 padding 区一起露出来，
+      横幅就会比正文宽出 48px、对不齐。 */
+.about-strip { padding: 28px 0; }
+/* 圆角 12px：与站内其他图片（`.it-carousel`、`.page-banner` 等）统一 —— 用户 2026-09-11 要求 */
+.about-strip-clip { overflow: hidden; border-radius: 12px; }
+.about-strip-track {
+  display: flex;
+  width: max-content;
+  animation: strip-scroll var(--strip-duration, 45s) linear infinite;
+}
+.about-strip-track img { display: block; height: 260px; width: auto; flex: none; }
+/* 注：不做「悬停暂停」——用户 2026-09-11 明确要求鼠标移上去也继续滚动 */
+
+@keyframes strip-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* 手机：图片缩到 160px 高（保持 260px 的话一次只能看到 1 个车间、且占屏过高） */
+@media (max-width: 640px) {
+  .about-strip { padding: 18px 0; }
+  .about-strip-track img { height: 160px; }
+}
+
+/* 无障碍：用户在系统里开启「减少动画」时改为静止显示（全站首次补上此处理） */
+@media (prefers-reduced-motion: reduce) {
+  .about-strip-track { animation: none; }
 }
 
 /* ===== About 时间轴（年份大事记，2026-09-09） ===== */
