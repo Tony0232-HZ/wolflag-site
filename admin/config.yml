@@ -768,7 +768,7 @@ collections:
         hint: 列表按日期排列（新的在前）
       - { label: 置顶（勾选后排在最前）, name: pinned, widget: boolean, default: false, required: false, hint: 勾选置顶后排在列表最前；多个置顶按时间排；取消勾选回到时间顺序 }
       - { label: 草稿（勾选则不上线）, name: draft, widget: boolean, default: false, required: false }
-      - { label: 封面图片, name: coverImage, widget: image, required: false }
+      - { label: 封面图片, name: coverImage, widget: image, required: false, hint: "★ 建议尺寸 1600×900（就是 16:9 的横图），文件 200KB 以内。\n\n为什么要 16:9：文章页会把原图按比例完整显示、不裁切；但列表页的小卡片高度固定，会居中裁成约 1.9:1 的横条。用 16:9 的图，电脑上只裁掉上下约 6%、手机上只裁掉左右约 4%，肉眼看不出来。\n\n⚠️ 别用太扁的图：比例超过 2:1（例如 1600×660）时，手机列表页会被裁掉约 30%，画面主体容易切没。\n⚠️ 上传前请确认图片四周没有白边或透明边。\n⚠️ 文件名请用英文小写连字符，如 custom-feather-flag-buying-guide.webp" }
       - { label: 封面图说明(alt，可选), name: imageAlt, widget: string, required: false, hint: 图片说明（alt，建议英文，含产品关键词；留空则自动用品名/标题） }
       - { label: 摘要（列表页显示）, name: summary, widget: text, required: false }
       - label: 正文内容
