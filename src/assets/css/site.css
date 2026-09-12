@@ -226,6 +226,11 @@ ul { list-style: none; }
     padding: 8px 24px 16px;
     border-bottom: 1px solid #eee;
     box-shadow: 0 12px 20px rgba(0,0,0,.06);
+    /* 2026-09-12：菜单行加高后，矮屏（如 iPhone SE 667px）上整块会超出屏幕且绝对定位无法滚动
+       → 限高 + 内部滚动，保证最后几项一定点得到。改动行高/新增菜单项后请重测此项。 */
+    max-height: calc(100vh - 52px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
   .nav-menu.open { display: flex; }
   .nav-drop {
@@ -236,12 +241,18 @@ ul { list-style: none; }
     padding: 0 0 4px 14px;
     min-width: 0;
   }
-  .nav-drop li a { padding: 6px 0; font-size: 15px; }
-  .nav-menu a { width: 100%; padding: 10px 0; border-bottom: none; }
-  .nav-menu a.active { border-bottom: none; }
-  /* 移动端菜单：悬停/当前项整行高亮，禁用负边距胶囊（2026-09-08） */
+  /* 手机端菜单行高（2026-09-12 用户要求加大）：
+     实测原为「点击框 37px、实际行距仅 26px」——因为主项 <a> 是 display:inline，
+     垂直内边距不撑开行高 → 相邻两项的点击框互相重叠（点下半截会命中下一项），
+     这正是"手指很难点"的根因。故：① 改 display:block 让内边距真正撑开行高；
+     ② 行高定到 ~52px（同行 Wisonflag 实测 54px）；③ 加 1px 分隔线便于区分。字号不变。 */
+  .nav-menu a { display: block; width: 100%; padding: 13px 0; border-bottom: 1px solid #ececec; }
+  .nav-drop li a { padding: 11px 0; font-size: 15px; border-bottom: 1px solid #f4f4f4; }
+  .nav-menu > li:last-child > a { border-bottom: none; }
+  .nav-drop li:last-child a { border-bottom: none; }
+  /* 移动端菜单：悬停/当前项整行高亮，禁用负边距胶囊（2026-09-08）；内边距须与上面一致，否则悬停时行高跳动 */
   .nav-menu a:hover,
-  .nav-menu a.active { padding: 10px 0; margin: 0; width: 100%; }
+  .nav-menu a.active { padding: 13px 0; margin: 0; width: 100%; border-bottom-color: #ececec; }
   .nav-cta { margin-left: 0; }
 }
 
