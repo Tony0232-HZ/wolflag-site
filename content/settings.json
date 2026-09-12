@@ -89,15 +89,15 @@
     "logo": "/assets/media/wolflag-logo.webp",
     "icons": [
       {
-        "icon": "/assets/media/footer-icon-1.webp",
+        "icon": "/assets/media/social-linkedin.svg",
         "url": ""
       },
       {
-        "icon": "/assets/media/footer-icon-2.webp",
+        "icon": "/assets/media/social-facebook.png",
         "url": ""
       },
       {
-        "icon": "/assets/media/footer-icon-3.webp",
+        "icon": "/assets/media/social-x.svg",
         "url": ""
       }
     ],
