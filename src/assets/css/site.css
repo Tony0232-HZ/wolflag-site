@@ -212,7 +212,27 @@ ul { list-style: none; }
 }
 
 @media (max-width: 1200px) {
-  .nav-toggle { display: block; }
+  /* 手机端汉堡菜单按钮（2026-09-12，用户批准的方案 A+B）：
+     【方案 A·静态加强】点击区 44×44（Apple 建议值）、深藏青描边、图标改由 CSS 背景画三条粗线。
+     原因：原来是 20px 的「☰」字符，笔画细、看着小（同行实测仅 30×32，但线条粗且深，所以"看着大"）。
+     图标用背景渐变绘制，故 font-size:0 隐藏原字符——无障碍名称由 button 的 aria-label 提供，不受影响。
+     【方案 B·一次性轻脉冲】.wl-nudge 由 site.js 仅在用户首次访问时添加（下方 @keyframes navNudge）。 */
+  .nav-toggle {
+    display: block;
+    width: 44px;
+    height: 44px;
+    border: 1.5px solid var(--navy);
+    border-radius: 8px;
+    background-color: #fff;
+    background-image: linear-gradient(var(--navy), var(--navy)),
+                      linear-gradient(var(--navy), var(--navy)),
+                      linear-gradient(var(--navy), var(--navy));
+    background-size: 20px 2.5px;
+    background-position: center 15px, center 20.5px, center 26px;
+    background-repeat: no-repeat;
+    font-size: 0; /* 隐藏「☰」字符本体 */
+  }
+  .nav-toggle.wl-nudge { animation: navNudge .62s ease-in-out .7s 3; }
   .nav-menu {
     display: none;
     position: absolute;
@@ -257,6 +277,20 @@ ul { list-style: none; }
   .nav-menu a:hover,
   .nav-menu a.active { padding: 13px 0; margin: 0; width: 100%; border-bottom-color: #ececec; }
   .nav-cta { margin-left: 0; }
+}
+
+/* 手机端菜单按钮「轻跳」提示动效（2026-09-12，方案 B）：
+   由 site.js 只在用户首次访问时加 .wl-nudge → 轻跳 3 下（约 2 秒）后自动停止，不循环。
+   为什么不做"一直闪烁"：会跟 Contact Us / 下载手册按钮抢注意力，且无障碍规范
+   要求"自动播放且超过 5 秒的动效必须可暂停"（详见 AI-GUIDE §10.21）。 */
+@keyframes navNudge {
+  0%   { transform: scale(1);    box-shadow: 0 0 0 0 rgba(76,106,255,0); }
+  45%  { transform: scale(1.12); box-shadow: 0 0 0 9px rgba(76,106,255,.18); }
+  100% { transform: scale(1);    box-shadow: 0 0 0 0 rgba(76,106,255,0); }
+}
+/* 访客系统开启「减少动态效果」时，一律不动（无障碍规范做法） */
+@media (prefers-reduced-motion: reduce) {
+  .nav-toggle.wl-nudge { animation: none; }
 }
 
 /* ==========================================================================

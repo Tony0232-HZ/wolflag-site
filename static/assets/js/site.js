@@ -7,6 +7,18 @@
       menu.classList.toggle('open');
       toggle.setAttribute('aria-expanded', menu.classList.contains('open') ? 'true' : 'false');
     });
+
+    /* 2026-09-12（方案 B）：首次访问时让手机端菜单按钮「轻跳」3 下（约 2 秒）作提示，
+       之后不再打扰（localStorage 只记一次）。要点：
+       ① 仅在按钮**真正可见**（手机端）时才算「已提示」，免得桌面端访问把机会用掉；
+       ② 隐私模式/禁用存储下静默跳过，不影响任何功能；
+       ③ 动效本身由 CSS 定义（@keyframes navNudge），并在系统「减少动态效果」时自动关闭。 */
+    try {
+      if (toggle.offsetWidth > 0 && !localStorage.getItem('wolflag_menu_hint')) {
+        toggle.classList.add('wl-nudge');
+        localStorage.setItem('wolflag_menu_hint', '1');
+      }
+    } catch (e) { /* 无存储权限：忽略 */ }
   }
 
   document.querySelectorAll('.faq-item').forEach(function (item) {
