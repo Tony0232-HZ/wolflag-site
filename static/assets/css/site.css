@@ -221,7 +221,10 @@ ul { list-style: none; }
     right: 0;
     background: #fff;
     flex-direction: column;
-    align-items: flex-start;
+    /* 2026-09-12：整行可点。原为 flex-start，会让每个 <li> 宽度收缩到"文字那么宽"
+       （实测 Blog 仅 32px），行右侧/中间的空白点不到、分隔线也参差不齐。
+       改 stretch 后每项 = 整行宽（314px），点行内任意处都命中本项。 */
+    align-items: stretch;
     gap: 0;
     padding: 8px 24px 16px;
     border-bottom: 1px solid #eee;
