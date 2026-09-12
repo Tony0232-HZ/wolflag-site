@@ -87,7 +87,10 @@ collections:
                 widget: list
                 summary: "{{fields.url}}"
                 fields:
-                  - { label: 图标图片, name: icon, widget: image }
+                  - label: 图标图片
+                    name: icon
+                    widget: image
+                    hint: "规格建议：正方形 PNG / SVG（或 WebP），48×48 最好——网站在页脚固定按 20×20 显示，48×48 相当于 2 倍高清屏效果。\n推荐“背景透明 + 浅色/白色图标”（页脚底色是深色 #352a2a），看起来最干净；整块方形的图标（如黑底白字）也能用。\n⚠️ 别用 JPG——没有透明背景，会显示成一块方块；别用长方形/竖图——会被压扁变形（网站按正方形显示，不做裁剪）；不必超过 100×100，白占体积。\n💡 没有现成图标？把社交账号告诉 Claude，可以帮你做一套风格统一的（含本站需要的白色/透明版本）。"
                   - { label: 链接地址, name: url, widget: string, required: false, hint: 粘贴社交平台链接，如 https://www.facebook.com/xxx；留空则点击发邮件 }
               - { label: 版权行, name: copyright, widget: string }
 
