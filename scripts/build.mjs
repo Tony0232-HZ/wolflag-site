@@ -79,6 +79,14 @@ const altOf = (obj, fallback = '', key = 'imageAlt') => {
   return esc(v && String(v).trim() ? v : fallback);
 };
 
+/** 列表型图片项取「图片路径」：同时兼容两种数据格式
+ *  ① 纯字符串（旧格式，如 "/assets/media/x.webp"）
+ *  ② 对象 { image, imageAlt }（后台「图片 + 图片说明」格式）
+ *  2026-09-12 新增：后台的轮播图/简介照片/详情页多图早已是②，而旧数据是①——
+ *  两者不一致会让 Decap 编辑该类列表时崩（TypeError: ...set is not a function），
+ *  故数据升级为②的同时，构建端改为两种都认（零依赖、不改变任何现有输出）。 */
+const imgSrc = (im) => (typeof im === 'string' ? im : (im && im.image) || '');
+
 /** 正文加粗标记：**文字** -> <strong>文字</strong>；其余内容仍做 HTML 转义以保安全（无标记时等价 esc()）。
  *  规则：一对 ** 视为加粗段（中间不含星号、可含空格），可多处加粗混排。 */
 const bold = (s) => String(s ?? '').split(/(\*\*[^*]+\*\*)/g).map((part) => {
@@ -470,12 +478,12 @@ function homeBody() {
     `<span class="tag-pill ${i === 0 ? 'fill' : 'line'}">${esc(f)}</span>`).join('');
   const imgs = home.intro.images;
   const photos = `
-      <img src="${imgs[0]}" alt="WOLFLAG printing workshop" loading="lazy" decoding="async"${dimAttrs(imgs[0], 0.5)}>
+      <img src="${esc(imgSrc(imgs[0]))}" alt="${altOf(imgs[0], 'WOLFLAG printing workshop')}" loading="lazy" decoding="async"${dimAttrs(imgSrc(imgs[0]), 0.5)}>
       <div class="mid">
         <div class="tag-pills">${pills}</div>
-        <img src="${imgs[1]}" alt="Flags printing line" loading="lazy" decoding="async"${dimAttrs(imgs[1], 0.5)}>
+        <img src="${esc(imgSrc(imgs[1]))}" alt="${altOf(imgs[1], 'Flags printing line')}" loading="lazy" decoding="async"${dimAttrs(imgSrc(imgs[1]), 0.5)}>
       </div>
-      <img src="${imgs[2]}" alt="Banner production machine" loading="lazy" decoding="async"${dimAttrs(imgs[2], 0.5)}>`;
+      <img src="${esc(imgSrc(imgs[2]))}" alt="${altOf(imgs[2], 'Banner production machine')}" loading="lazy" decoding="async"${dimAttrs(imgSrc(imgs[2]), 0.5)}>`;
   const cards = home.categories.items.map((c, i) =>
     `<a class="cat-card ${i % 2 === 1 ? 'flip' : ''}" href="${esc(c.link)}">
        <span class="cat-img"><img src="${c.image}" alt="${altOf(c, c.title)}" loading="lazy" decoding="async"${dimAttrs(c.image, 0.5)}></span>
@@ -495,7 +503,7 @@ function homeBody() {
     </div>
     <div class="container hero-image">
       <div class="hero-slider" data-interval="${esc(String(home.hero.interval || 5))}" data-mode="${esc(home.hero.mode || 'carousel')}">
-        ${heroImgs.map((src, i) => `<img class="hero-slide${i === 0 ? ' is-active' : ''}" src="${esc(src)}" alt="${altOf(src, 'WOLFLAG factory and products')}" ${i === 0 ? dimAttrs(src, 1).trim() : 'loading="lazy"'} decoding="async">`).join('\n        ')}
+        ${heroImgs.map((im, i) => `<img class="hero-slide${i === 0 ? ' is-active' : ''}" src="${esc(imgSrc(im))}" alt="${altOf(im, 'WOLFLAG factory and products')}" ${i === 0 ? dimAttrs(imgSrc(im), 1).trim() : 'loading="lazy"'} decoding="async">`).join('\n        ')}
       </div>
     </div>
   </section>
@@ -953,9 +961,10 @@ function productSpecRows(p) {
 function detailBody(data) {
   const products = (data.products || []).map((p) => {
     const imgs = (p.images && p.images.length ? p.images : (p.image ? [p.image] : [])) || [];
-    const main = imgs[0] || home.hero.image;
-    const thumbs = imgs.map((im, j) => `
-          <button class="pd-thumb${j === 0 ? ' on' : ''}" data-src="${esc(im)}" aria-label="Image ${j + 1}"><img src="${esc(im)}" alt="${altOf(im, p.name)}" loading="lazy" decoding="async"></button>`).join('\n');
+    const srcs = imgs.map(imgSrc);
+    const main = srcs[0] || home.hero.image;
+    const thumbs = srcs.map((im, j) => `
+          <button class="pd-thumb${j === 0 ? ' on' : ''}" data-src="${esc(im)}" aria-label="Image ${j + 1}"><img src="${esc(im)}" alt="${altOf(imgs[j], p.name)}" loading="lazy" decoding="async"></button>`).join('\n');
     const specRows = productSpecRows(p);
     let specs = '';
     if (specRows.length) {
@@ -988,7 +997,7 @@ function detailBody(data) {
       <p>${esc(c.text)}</p>
     </div>`).join('');
   const ti = data.textImg || {};
-  const tiImgs = (ti.images || []).map((im) => `<img src="${esc(im)}" alt="${altOf(im, ti.title || p.name, 'imageAlt')}" loading="lazy" decoding="async">`).join('');
+  const tiImgs = (ti.images || []).map((im) => `<img src="${esc(imgSrc(im))}" alt="${altOf(im, ti.title || p.name, 'imageAlt')}" loading="lazy" decoding="async">`).join('');
   const textImg = (ti.title || ti.text || tiImgs) ? `
   <section class="pd-textimg">
     <div class="container">
@@ -1013,7 +1022,7 @@ function sectionsBlock(data) {
   const list = (data && data.sections) || [];
   return list.filter((s) => s && s.show !== false && (s.title || s.text || (s.images && s.images.length)))
     .map((s) => {
-      const imgs = (s.images || []).map((im) => `<img src="${esc(im)}" alt="${altOf(im, s.title || '', 'imageAlt')}" loading="lazy" decoding="async">`).join('');
+      const imgs = (s.images || []).map((im) => `<img src="${esc(imgSrc(im))}" alt="${altOf(im, s.title || '', 'imageAlt')}" loading="lazy" decoding="async">`).join('');
       return `
   <section class="flex-section">
     <div class="container">

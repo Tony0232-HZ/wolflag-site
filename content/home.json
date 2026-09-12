@@ -8,9 +8,18 @@
     "text": "We are delighted to enhance the quality of products and services for our customers. Honesty and integrity are the qualities we adhere to.",
     "image": "/assets/media/home-hero.webp",
     "images": [
-      "/assets/media/home-hero.webp",
-      "/assets/media/banners-banner.webp",
-      "/assets/media/feather-banner.webp"
+      {
+        "image": "/assets/media/home-hero.webp",
+        "imageAlt": ""
+      },
+      {
+        "image": "/assets/media/custom-flag-factory-production-line.webp",
+        "imageAlt": ""
+      },
+      {
+        "image": "/assets/media/feather-banner.webp",
+        "imageAlt": ""
+      }
     ],
     "interval": 5,
     "mode": "carousel",
@@ -23,9 +32,18 @@
     "title": "Flags, Banners and Pole Kits",
     "text": "We are a professional manufacturer of flags, banners, and pole kits, located in Hangzhou, China. We have 23 years of experience in production and sales.",
     "images": [
-      "/assets/media/home-factory.webp",
-      "/assets/media/home-workshop.webp",
-      "/assets/media/home-printing.webp"
+      {
+        "image": "/assets/media/home-factory.webp",
+        "imageAlt": ""
+      },
+      {
+        "image": "/assets/media/home-workshop.webp",
+        "imageAlt": ""
+      },
+      {
+        "image": "/assets/media/home-printing.webp",
+        "imageAlt": ""
+      }
     ]
   },
   "categories": {
