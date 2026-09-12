@@ -1,11 +1,6 @@
 {
-  "slug": "welcome-to-wolflag-blog",
-  "title": "Welcome to the WOLFLAG Blog",
-  "date": "2026-09-06",
-  "coverImage": "/assets/media/factory-direct-banner.webp",
-  "summary": "WOLFLAG is launching its official blog. Stay tuned for new products, company news, trade announcements and milestones from our factory.",
   "draft": false,
-  "pinned": true,
+  "coverImage": "/assets/media/wolflag-custom-flags-collection.webp",
   "blocks": [
     {
       "type": "p",
@@ -32,5 +27,11 @@
       "type": "p",
       "text": "Follow our blog to keep updated, or contact us directly by email at tony@wolflag.com or tony@wolflagdisplay.com. We are always happy to discuss your custom flag and banner projects."
     }
-  ]
+  ],
+  "summary": "WOLFLAG is launching its official blog. Stay tuned for new products, company news, trade announcements and milestones from our factory.",
+  "slug": "welcome-to-wolflag-blog",
+  "imageAlt": "A collection of custom flags in different styles and sizes made by Wolflag",
+  "date": "2026-09-06",
+  "title": "Welcome to the WOLFLAG Blog",
+  "pinned": true
 }
