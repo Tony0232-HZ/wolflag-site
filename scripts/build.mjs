@@ -963,8 +963,11 @@ function detailBody(data) {
     const imgs = (p.images && p.images.length ? p.images : (p.image ? [p.image] : [])) || [];
     const srcs = imgs.map(imgSrc);
     const main = srcs[0] || home.hero.image;
+    // alt 回退顺序（2026-09-12 修正）：该图自己的 imageAlt（若将来配了）→ 产品级「图片说明(alt)」→ 品名。
+    // 此前只读每图层级，而后台「图片说明(alt)」字段配在**产品**层级 → 该字段填了也不生效（形同摆设）。
+    const altFallback = (p.imageAlt && String(p.imageAlt).trim()) ? p.imageAlt : p.name;
     const thumbs = srcs.map((im, j) => `
-          <button class="pd-thumb${j === 0 ? ' on' : ''}" data-src="${esc(im)}" aria-label="Image ${j + 1}"><img src="${esc(im)}" alt="${altOf(imgs[j], p.name)}" loading="lazy" decoding="async"></button>`).join('\n');
+          <button class="pd-thumb${j === 0 ? ' on' : ''}" data-src="${esc(im)}" aria-label="Image ${j + 1}"><img src="${esc(im)}" alt="${altOf(imgs[j], altFallback)}" loading="lazy" decoding="async"></button>`).join('\n');
     const specRows = productSpecRows(p);
     let specs = '';
     if (specRows.length) {
@@ -975,8 +978,8 @@ function detailBody(data) {
   <section class="pd-block">
     <div class="container pd-cols">
       <div class="pd-gallery">
-        ${imgs.length > 1 ? `<div class="pd-main"><img src="${esc(main)}" alt="${altOf(main, p.name)}"></div>
-      <div class="pd-thumbs">${thumbs}</div>` : `<div class="pd-main"><img src="${esc(main)}" alt="${altOf(main, p.name)}"></div>`}
+        ${imgs.length > 1 ? `<div class="pd-main"><img src="${esc(main)}" alt="${altOf(imgs[0], altFallback)}"></div>
+      <div class="pd-thumbs">${thumbs}</div>` : `<div class="pd-main"><img src="${esc(main)}" alt="${altOf(imgs[0], altFallback)}"></div>`}
       </div>
       <div class="pd-info">
         <h2 class="pd-name">${esc(p.name)}</h2>
@@ -997,7 +1000,11 @@ function detailBody(data) {
       <p>${esc(c.text)}</p>
     </div>`).join('');
   const ti = data.textImg || {};
-  const tiImgs = (ti.images || []).map((im) => `<img src="${esc(imgSrc(im))}" alt="${altOf(im, ti.title || p.name, 'imageAlt')}" loading="lazy" decoding="async">`).join('');
+  // alt 回退顺序（2026-09-12 修正）：该图自己的 imageAlt → 图文区级「图片说明(alt)」→ 图文区标题 → 页面主标题。
+  // 原写法有两处问题：① 兜底用了作用域外的 p.name（图文区一旦加图且未填标题会抛 ReferenceError）；
+  // ② 后台配在图文区层级的 imageAlt 字段被完全忽略（填了不生效）。
+  const tiAlt = (ti.imageAlt && String(ti.imageAlt).trim()) ? ti.imageAlt : (ti.title || data.heading || '');
+  const tiImgs = (ti.images || []).map((im) => `<img src="${esc(imgSrc(im))}" alt="${altOf(im, tiAlt, 'imageAlt')}" loading="lazy" decoding="async">`).join('');
   const textImg = (ti.title || ti.text || tiImgs) ? `
   <section class="pd-textimg">
     <div class="container">

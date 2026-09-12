@@ -380,7 +380,11 @@ ul { list-style: none; }
 .home-hero .hero-slider .hero-dot.is-active { background: #fff; transform: scale(1.2); }
 
 @media (max-width: 900px) {
-  .home-hero { padding-top: 40px; }
+  /* 2026-09-12 修复：此处原为 40px，但右上角「Download Catalog (PDF)」是绝对定位
+     （.hero-catalog-btn top:16px + 高约 43px，需约 59px 空间），窄屏下标题上移 36px
+     就会与按钮重叠（实测 390px 宽时 H1 首行被压住 19px）。改回与桌面一致的 76px，
+     按钮与标题间距同为 17px。改这个值前请先量 .hero-catalog-btn 的 top+高度。 */
+  .home-hero { padding-top: 76px; }
   .home-hero .hero-row { grid-template-columns: 1fr; gap: 18px; }
   .home-hero h1 { font-size: 28px; }
   .home-hero .hero-image { margin-top: 28px; }
