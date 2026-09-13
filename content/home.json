@@ -41,8 +41,8 @@
         "imageAlt": ""
       },
       {
-        "image": "/assets/media/home-printing.webp",
-        "imageAlt": ""
+        "image": "/assets/media/wolflag-flag-printing-machine.jpg",
+        "imageAlt": "Flag printing machine at Wolflag flag factory"
       }
     ]
   },
@@ -82,7 +82,7 @@
     "eyebrow": "Global Network",
     "title": "Clients & Partners",
     "subtitle": "Trusted by a global network of over **70+ clients** across **34+ countries**.",
-    "speed": 55,
+    "speed": 50,
     "row1": [
       {
         "image": "/assets/media/client-logo-toyota.webp",
