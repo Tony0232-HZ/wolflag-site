@@ -76,6 +76,142 @@
       }
     ]
   },
+  "clients": {
+    "enabled": true,
+    "bg": "#f1eeed",
+    "eyebrow": "Global Network",
+    "title": "Clients & Partners",
+    "subtitle": "Trusted by a global network of over **70+ clients** across **34+ countries**.",
+    "speed": 55,
+    "row1": [
+      {
+        "image": "/assets/media/client-logo-toyota.webp",
+        "imageAlt": "Toyota"
+      },
+      {
+        "image": "/assets/media/client-logo-vodafone.webp",
+        "imageAlt": "Vodafone"
+      },
+      {
+        "image": "/assets/media/client-logo-coca-cola.webp",
+        "imageAlt": "Coca-Cola"
+      },
+      {
+        "image": "/assets/media/client-logo-kfc.webp",
+        "imageAlt": "KFC"
+      },
+      {
+        "image": "/assets/media/client-logo-shell.webp",
+        "imageAlt": "Shell"
+      },
+      {
+        "image": "/assets/media/client-logo-amazon.webp",
+        "imageAlt": "Amazon"
+      },
+      {
+        "image": "/assets/media/client-logo-asus.webp",
+        "imageAlt": "ASUS"
+      },
+      {
+        "image": "/assets/media/client-logo-ford.webp",
+        "imageAlt": "Ford"
+      },
+      {
+        "image": "/assets/media/client-logo-lexus.webp",
+        "imageAlt": "Lexus"
+      },
+      {
+        "image": "/assets/media/client-logo-sixt.webp",
+        "imageAlt": "SIXT"
+      },
+      {
+        "image": "/assets/media/client-logo-starbucks.webp",
+        "imageAlt": "Starbucks"
+      },
+      {
+        "image": "/assets/media/client-logo-yamaha.webp",
+        "imageAlt": "Yamaha"
+      },
+      {
+        "image": "/assets/media/client-logo-aia.webp",
+        "imageAlt": "AIA"
+      },
+      {
+        "image": "/assets/media/client-logo-mcdonalds.webp",
+        "imageAlt": "McDonald's"
+      },
+      {
+        "image": "/assets/media/client-logo-six-flags.webp",
+        "imageAlt": "Six Flags"
+      },
+      {
+        "image": "/assets/media/client-logo-olympics.webp",
+        "imageAlt": "Olympic Games"
+      }
+    ],
+    "row2": [
+      {
+        "image": "/assets/media/client-logo-talabat.webp",
+        "imageAlt": "Talabat"
+      },
+      {
+        "image": "/assets/media/client-logo-microsoft.webp",
+        "imageAlt": "Microsoft"
+      },
+      {
+        "image": "/assets/media/client-logo-bonkers.webp",
+        "imageAlt": "Bonkers"
+      },
+      {
+        "image": "/assets/media/client-logo-emirates.webp",
+        "imageAlt": "Emirates"
+      },
+      {
+        "image": "/assets/media/client-logo-jahez.webp",
+        "imageAlt": "Jahez"
+      },
+      {
+        "image": "/assets/media/client-logo-saudi-aramco.webp",
+        "imageAlt": "Saudi Aramco"
+      },
+      {
+        "image": "/assets/media/client-logo-st-regis.webp",
+        "imageAlt": "St. Regis"
+      },
+      {
+        "image": "/assets/media/client-logo-telicom.webp",
+        "imageAlt": "Telicom"
+      },
+      {
+        "image": "/assets/media/client-logo-versa.webp",
+        "imageAlt": "Versa"
+      },
+      {
+        "image": "/assets/media/client-logo-vital-health.webp",
+        "imageAlt": "Vital Health"
+      },
+      {
+        "image": "/assets/media/client-logo-black-cocos.webp",
+        "imageAlt": "Black Cocos"
+      },
+      {
+        "image": "/assets/media/client-logo-mg-care.webp",
+        "imageAlt": "MG Care"
+      },
+      {
+        "image": "/assets/media/client-logo-mlb.webp",
+        "imageAlt": "Major League Baseball"
+      },
+      {
+        "image": "/assets/media/client-logo-deesign.webp",
+        "imageAlt": "DeeSign"
+      },
+      {
+        "image": "/assets/media/client-logo-papa-johns.webp",
+        "imageAlt": "Papa John's"
+      }
+    ]
+  },
   "factory": {
     "title": "Wolflag factory",
     "image": "/assets/media/about-factory.webp"

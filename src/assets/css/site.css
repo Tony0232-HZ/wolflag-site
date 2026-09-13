@@ -1380,6 +1380,90 @@ ul { list-style: none; }
   .it-carousel .it-next { right: 8px; }
 }
 
+/* ===== 首页「Clients & Partners」双排 logo 跑马灯（2026-09-13 新增）=====
+   参考 AI-MICH Group 同名区块；上排向左滚、下排向右滚；
+   未悬停时整体灰阶，鼠标悬停某个 logo → 恢复彩色 + 微微放大。
+   显示窗口套 .container + 内层 .hp-cl-clip 裁切 —— 左右与上下模块对齐（同 About 跑马灯）。
+   ⚠️ 每个 logo 的间距用 margin-right，**不是** flex gap：
+      轨道宽 = 2×(n 项 + n 间距)，translateX(-50%) 恰好是一份宽、接缝像素级对齐；
+      用 gap 则总宽 = 2n 项 + (2n-1) 个间距，-50% 差半个 gap → 循环处会跳一下。
+   ⚠️ 两排时长由 build.mjs 按各排“渲染宽度”算好后注入 --cl-dur / --cl-dur2，
+      目的是让两排线速度一致（两排 logo 数量/宽度不同，用同一个时长会一快一慢）。
+   ⚠️ 手机档的 height/max-width/margin 必须与桌面档**同比例**（48:34 ≈ 150:106 ≈ 56:40），
+      否则两排宽度之比会变，注入的时长就对不上了。 */
+.hp-clients { background: var(--cl-bg, #fff); padding: 96px 0 88px; }
+
+.hp-cl-header { text-align: center; margin-bottom: 44px; }
+.hp-cl-eyebrow {
+  display: inline-block;
+  font-size: 12px; font-weight: 700; letter-spacing: .22em; text-transform: uppercase;
+  color: var(--blue);
+  margin-bottom: 10px;
+}
+.hp-cl-title {
+  font-family: var(--display);
+  font-size: 40px; font-weight: 800; line-height: 1.15;
+  color: var(--navy);
+  margin: 0 0 16px;
+}
+.hp-cl-line { width: 48px; height: 3px; background: var(--blue); border-radius: 2px; margin: 0 auto 20px; }
+.hp-cl-sub { font-size: 15px; line-height: 1.6; color: #6b7280; max-width: 560px; margin: 0 auto; }
+.hp-cl-sub strong { color: var(--navy); font-weight: 700; }
+
+/* 裁切层：圆角与站内其他图片区块统一（同 .about-strip-clip / .page-banner）
+   ⚠️ 负边距 -15px（≤1000px 时 -12px）是**刻意**的：用户 2026-09-13 要求
+      「显示窗口要和上面那排产品卡左右齐平」。上面 `.cat-grid` 正是靠
+      `margin: 0 -15px`（≤1000px 为 -12px）比容器内容框各宽出 15px，
+      这里必须**用同样的值**才能与卡片边缘重合；改一个就要改另一个。 */
+.hp-cl-clip { overflow: hidden; border-radius: 12px; margin: 0 -15px; }
+@media (max-width: 1000px) {
+  .hp-cl-clip { margin: 0 -12px; }
+}
+
+.hp-cl-track {
+  display: flex;
+  width: max-content;
+  padding: 16px 0;
+  animation: clScrollLeft var(--cl-dur, 40s) linear infinite;
+}
+.hp-cl-row--rtl .hp-cl-track { animation-name: clScrollRight; animation-duration: var(--cl-dur2, 40s); }
+
+.hp-cl-item { flex: none; display: flex; align-items: center; justify-content: center; margin-right: 56px; }
+
+/* 悬停暂停（照 AI-MICH 原效果）：鼠标移到某一排上 → 那一排停住，方便看清并点某个 logo。
+   ⚠️ 只停**鼠标所在的那一排**（与 AI-MICH 一致），另一排继续滚。
+   ⚠️ 范围仅限 `.hp-cl-row`（本区块自己的类），**绝不要写成 `.about-strip-track` 那种全站通配**——
+      About 页那条车间横幅是用户 2026-09-11 明确要求"悬停也照常滚"的，不能跟着暂停。
+   选择器权重 0,3,0 > `.hp-cl-row--rtl .hp-cl-track`(0,2,0)，两排都能生效。 */
+.hp-cl-row:hover .hp-cl-track { animation-play-state: paused; }
+.hp-cl-logo {
+  display: block;
+  height: 48px; width: auto; max-width: 150px;
+  object-fit: contain;                     /* 被 max-width 截住的宽 logo（微软/可口可乐）等比内缩，不裁不拉 */
+  filter: grayscale(1) opacity(.55);
+  transition: filter .3s ease, transform .3s ease;
+}
+.hp-cl-item:hover .hp-cl-logo { filter: grayscale(0) opacity(1); transform: scale(1.06); }
+
+@keyframes clScrollLeft  { from { transform: translateX(0); }    to { transform: translateX(-50%); } }
+@keyframes clScrollRight { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+
+@media (max-width: 640px) {
+  .hp-clients { padding: 60px 0 56px; }
+  .hp-cl-header { margin-bottom: 30px; }
+  .hp-cl-title { font-size: 27px; }
+  .hp-cl-sub { font-size: 14px; }
+  .hp-cl-item { margin-right: 40px; }
+  .hp-cl-logo { height: 34px; max-width: 106px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* ⚠️ 必须连下面那排的选择器一起写：`.hp-cl-row--rtl .hp-cl-track`（0,2,0）
+     比 `.hp-cl-track`（0,1,0）更具体，只写后者时下排仍会继续滚（实测踩过）。 */
+  .hp-cl-track,
+  .hp-cl-row--rtl .hp-cl-track { animation: none; }
+}
+
 /* ===== About 无缝滚动车间横幅（2026-09-11 新增）=====
    原理：同一张超宽横图首尾相接排 2 份，整体左移 50%（= 正好一张图宽），
    终点画面与起点像素级一致 → 无限循环、看不出接缝。HTML 里那张图因此是重复输出两次的。

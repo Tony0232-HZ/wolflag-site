@@ -4,6 +4,12 @@
 /foo.html   → 308 → /foo
 /blog/x     → static/blog/x.html (200)
 仅供本地验证用，不参与部署。用法: python scripts/_preview_server.py 8080
+
+⚠️ 2026-09-13 改为**多线程**（原为单线程 TCPServer）：
+   首页现在有 68 张图，浏览器开 6 条并发连接，单线程一次只处理一个请求，
+   监听队列（默认 5）瞬间被打满 → 多余的连接直接 ERR_CONNECTION_REFUSED
+   → 页面上会看到一批"裂图"。**那是本地预览工具的毛病，不是网站的问题，
+   线上 Cloudflare 不受影响。** 换成 ThreadingTCPServer 后实测裂图 0。
 """
 import http.server, socketserver, os, sys, posixpath, urllib.parse
 
@@ -58,9 +64,18 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         pass
 
 
+class _Threaded(socketserver.ThreadingTCPServer):
+    """多线程版（见文件头说明）：并发处理图片请求，避免连接被拒。"""
+    allow_reuse_address = True
+    daemon_threads = True
+    # ⚠️ 必须调大：socketserver 默认 request_queue_size=5（listen backlog 只有 5）。
+    # 首页现在有 80 张图，浏览器一波并发就能打满队列 → 即便有多线程，来不及 accept 的连接
+    # 照样被拒（ERR_CONNECTION_REFUSED）。实测默认 5 时首页仍会偶发 20+ 张"裂图"。
+    request_queue_size = 256
+
+
 if __name__ == '__main__':
     port = int(sys.argv[1]) if len(sys.argv) > 1 else 8080
-    socketserver.TCPServer.allow_reuse_address = True
-    with socketserver.TCPServer(('127.0.0.1', port), Handler) as httpd:
-        print(f'preview server (clean-url) → http://127.0.0.1:{port}  root={ROOT}')
+    with _Threaded(('127.0.0.1', port), Handler) as httpd:
+        print(f'preview server (clean-url, threaded) → http://127.0.0.1:{port}  root={ROOT}')
         httpd.serve_forever()

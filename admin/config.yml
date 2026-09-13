@@ -158,6 +158,33 @@ collections:
                   - { label: 图片, name: image, widget: image }
                   - { label: 图片说明(alt), name: imageAlt, widget: string, required: false, hint: 图片说明（alt，建议英文，含产品关键词；留空则自动用品名） }
                   - { label: 跳转链接, name: link, widget: string }
+          - label: "Clients & Partners（首页底部的客户 logo 双排跑马灯）"
+            name: clients
+            widget: object
+            required: false
+            fields:
+              - { label: "显示此区块", name: enabled, widget: boolean, default: true, required: false, hint: "取消勾选 = 整个区块隐藏（内容保留，勾回来即恢复）" }
+              - { label: "背景色", name: bg, widget: color, default: "#ffffff", required: false }
+              - { label: "小标题（标题上方那行小字）", name: eyebrow, widget: string, required: false, hint: "英文。例如 Global Network" }
+              - { label: "区块标题", name: title, widget: string, required: false, hint: "英文。例如 Clients & Partners" }
+              - { label: "说明文字（可用 **词** 加粗）", name: subtitle, widget: text, required: false, hint: "例：Trusted by a global network of over **70+ clients** across **34+ countries**.（**…** 之间的字会加粗）" }
+              - { label: "滚动速度（数字越大滚得越快）", name: speed, widget: number, default: 55, value_type: "int", min: 10, required: false, hint: "55 = 每秒滚动约 55 像素（当前速度，推荐）。想慢一点填 35，想快一点填 80。下面一排会自动用同样速度反方向滚，不用单独设。" }
+              - label: "上排客户 logo（这一排向左滚）"
+                name: row1
+                widget: list
+                required: false
+                summary: "{fields.imageAlt}"
+                fields:
+                  - { label: "Logo 图片", name: image, widget: image, hint: "建议：正方形或横图、背景透明 PNG/SVG/WebP、高度 150px 左右即可（页面按 48px 高显示）。不要用 JPG——JPG 没有透明背景，会显示成一个方块。" }
+                  - { label: "品牌名 / 图片说明(alt)", name: imageAlt, widget: string, required: false, hint: "建议填英文品牌名（如 Toyota）。会写进图片的 alt，对 Google 图片搜索有帮助。" }
+              - label: "下排客户 logo（这一排向右滚）"
+                name: row2
+                widget: list
+                required: false
+                summary: "{fields.imageAlt}"
+                fields:
+                  - { label: "Logo 图片", name: image, widget: image, hint: "建议：正方形或横图、背景透明 PNG/SVG/WebP、高度 150px 左右即可（页面按 48px 高显示）。不要用 JPG——JPG 没有透明背景，会显示成一个方块。" }
+                  - { label: "品牌名 / 图片说明(alt)", name: imageAlt, widget: string, required: false, hint: "建议填英文品牌名（如 Toyota）。会写进图片的 alt，对 Google 图片搜索有帮助。" }
           - label: 补充模块（可添加多个；每个：图 + 标题 + 文字）
             name: supplement
             widget: list

@@ -493,6 +493,7 @@ function homeBody() {
        </span>
      </a>`).join('\n');
   const supplement = supplementSection(home);
+  const clients = homeClients();
   const heroImgs = (home.hero.images && home.hero.images.length ? home.hero.images : (home.hero.image ? [home.hero.image] : []));
   return `
   <section class="home-hero">
@@ -524,7 +525,84 @@ function homeBody() {
       <p class="intro">${esc(home.categories.intro)}</p>
       <div class="cat-grid">${cards}</div>
     </div>
-  </section>${supplement}`;
+  </section>${supplement}${clients}`;
+}
+
+/* ---------------- 首页「Clients & Partners」双排 logo 跑马灯（2026-09-13 新增）
+ *  参考 AI-MICH Group 站同名区块，按本站规格重做：
+ *   · 上排向左滚、下排向右滚；未悬停时整体灰阶，鼠标悬停某个 logo → 恢复彩色并微微放大。
+ *   · 显示窗口套 .container + 内层 .hp-cl-clip 裁切 → 左右与上下模块对齐（同 About 跑马灯 §10.17）。
+ *   · 无缝原理（与 .about-strip 同）：同一排 logo 输出 2 份、整体平移 -50%（= 正好一份宽）。
+ *     ⚠️ 每个 logo 的间距用 **margin-right**（不是 flex gap）——轨道宽 = 2×(n 项 + n 间距)，
+ *        半数恰好是一份；若用 gap，总宽是 2n 项 + (2n-1) 个间距，-50% 会差半个 gap，循环处跳一下。
+ *   · 两排线速度一致：构建时读每张 logo 的真实宽高 → 算出该排“渲染宽度”总和 →
+ *     按速度比分配两排各自的时长（--cl-dur / --cl-dur2）。否则 13 个与 12 个一排会一快一慢。
+ *   · 同时把渲染尺寸写成 width/height 属性：logo 加载前就占好位，否则轨道宽度会边加载边变、画面抖动。
+ *  数据：content/home.json 的 clients { enabled, bg, eyebrow, title, subtitle, speed, row1[], row2[] }
+ *  排布：**row1 = 上排（向左滚）、row2 = 下排（向右滚），两个列表各自独立**（用户 2026-09-13 要求，
+ *        原来是单个 logos 列表自动对半分，已废弃；下面的 logos 回退分支只为旧数据兜底）。 */
+function homeClients() {
+  const c = home.clients;
+  if (!c || c.enabled === false) return '';
+  const clean = (arr) => (Array.isArray(arr) ? arr : []).filter((l) => l && imgSrc(l));
+  let rows = [clean(c.row1), clean(c.row2)];
+  if (!rows[0].length && !rows[1].length && Array.isArray(c.logos)) {
+    // 旧数据兜底：单个 logos 列表 → 对半分
+    const half = Math.ceil(clean(c.logos).length / 2);
+    rows = [clean(c.logos).slice(0, half), clean(c.logos).slice(half)];
+  }
+  if (!rows[0].length && !rows[1].length) return '';
+
+  // 与 site.css 的 .hp-cl-* 桌面档一致（H=48 / MAXW=150 / GAP=56）；
+  // 手机档按同比例缩小（34 / 106 / 40），故两排宽度之比不变、时长可直接复用。
+  const H = 48, MAXW = 150, GAP = 56;
+  const renderW = (l) => {
+    const sz = readImageSize(imgSrc(l));
+    const ar = sz && sz.w && sz.h ? sz.w / sz.h : 3;   // 读不到（SVG 等）按 3:1 估
+    return Math.max(1, Math.round(Math.min(H * ar, MAXW)));
+  };
+
+  // 速度：`speed` = **每秒滚动多少像素**（数字越大越快）。两排各自按自己的宽度算时长
+  //   dur = 该排宽度 / speed → 两排**线速度恒等**，且与 logo 数量无关。
+  //   ⚠️ 这里刻意**不用**“一圈几秒”：那样一旦两排 logo 数量悬殊（比如上排 2 个、下排 15 个），
+  //     就会算出 300+ 秒这种荒唐时长（实测踩到过）。按像素速度定义就永远正常。
+  //   下排不单独设速度——两排不同速会明显看得出来（详见 site.css 注释）。
+  const widthOf = (r) => r.reduce((s, l) => s + renderW(l) + GAP, 0);
+  const speed = Number(c.speed) > 0 ? Number(c.speed) : 55;   // px/s
+  const w1 = rows[0].length ? widthOf(rows[0]) : 0;
+  const w2 = rows[1].length ? widthOf(rows[1]) : 0;
+  const dur1 = w1 ? w1 / speed : (w2 ? w2 / speed : 40);
+  const dur2 = w2 ? w2 / speed : dur1;
+
+  const style = `--cl-dur:${dur1.toFixed(1)}s;--cl-dur2:${dur2.toFixed(1)}s;--cl-bg:${esc(c.bg || '#ffffff')}`;
+  const item = (l, dup) => {
+    const w = renderW(l);
+    return `<li class="hp-cl-item"${dup ? ' aria-hidden="true"' : ''}>`
+      + `<img class="hp-cl-logo" src="${esc(imgSrc(l))}" alt="${dup ? '' : altOf(l, '')}"`
+      + ` width="${w}" height="${H}" decoding="async"></li>`;
+  };
+  // 不做 loading="lazy"：懒加载按“是否进入视口”判定，而滚动带里排在右侧的 logo
+  // 一开始在视口外 → 不预载，等滚进来才开始下载 → 会看到空白/闪一下（同 .about-strip 的处理）。
+  const track = (r) => `<ul class="hp-cl-track">${r.map((l) => item(l, false)).join('')}${r.map((l) => item(l, true)).join('')}</ul>`;
+
+  const head = (c.eyebrow || c.title || c.subtitle)
+    ? `<div class="hp-cl-header">
+        ${c.eyebrow ? `<span class="hp-cl-eyebrow">${esc(c.eyebrow)}</span>` : ''}
+        ${c.title ? `<h2 class="hp-cl-title">${esc(c.title)}</h2>` : ''}
+        <div class="hp-cl-line"></div>
+        ${c.subtitle ? `<p class="hp-cl-sub">${bold(c.subtitle)}</p>` : ''}
+      </div>` : '';
+
+  return `
+  <section class="hp-clients" id="clients" style="${style}">
+    <div class="container">
+      ${head}
+      <div class="hp-cl-clip">
+        ${rows[0].length ? `<div class="hp-cl-row hp-cl-row--ltr">${track(rows[0])}</div>` : ''}
+        ${rows[1].length ? `<div class="hp-cl-row hp-cl-row--rtl">${track(rows[1])}</div>` : ''}
+      </div>
+    </div>
+  </section>`;
 }
 
 function nfBody(data) {
