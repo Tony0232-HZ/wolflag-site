@@ -327,24 +327,74 @@ ul { list-style: none; }
 
 .home-hero {
   background: #faf7f5;
-  padding: 76px 0 24px;
+  /* 2026-09-14：上内边距 76 → 106（标题比原始位置下移 30px）。
+     来历：先加到 116（下移 40px），用户看后要求「标题再往金色按钮方向挪 10px」→ 106。
+     金色按钮是绝对定位（top:16px），不受本值影响，所以标题是向上靠近按钮 10px。
+     手机端仍为 76px（见下方 ≤900px 的媒体查询，那里有它与金色按钮间距的原因说明），
+     即此次位移只作用于电脑端。 */
+  padding: 106px 0 24px;
 }
 
 .home-hero .hero-row {
   display: grid;
-  grid-template-columns: 397px 1fr;
-  gap: 250px;
-  align-items: start;
+  /* 2026-09-14：左栏原为固定 397px——大标题拆成两行完整句后放不下（会折成 4~5 行）。
+     改为自适应宽度（右侧副文案仍限 505px），左栏因此拿到约 640px。
+     容器 1250px − 左右内边距各 24px = 1202px 可用。 */
+  grid-template-columns: minmax(0, 1fr) minmax(0, 480px);
+  gap: 50px;
+  /* 2026-09-14 底边对齐：原来的 align-items:start + .hero-text{align-self:end} 只让两块文字的
+     「盒子」底边齐平，但字迹其实差 5.5px（大标题末行无下伸字母、副文案末行有 y/g/q）。
+     改为「末行基线对齐」后，两行末行坐在同一条基线上，实测字迹只差 1.7px（肉眼齐平），
+     且不依赖固定像素值——后台改字号也不会跑偏。
+     第一行是给老浏览器的兜底（不支持 last baseline 时退回「盒子底边对齐」，即改动前的效果）。 */
+  align-items: end;
+  align-items: last baseline;
 }
 
 .home-hero h1 {
   font-family: var(--display);
-  font-size: 36px;
+  /* 字号可在后台调：首屏 → 第一行字号。--hero-l1 由构建脚本按后台数值注入，未填时用 36px */
+  font-size: var(--hero-l1, 36px);
   font-weight: 700;
   line-height: 1.3;
   color: #573d3d;
   letter-spacing: .01em;
-  max-width: 400px;
+  max-width: none;
+  text-align: center; /* 2026-09-14 用户要求：两行居中对齐（第二行比第一行宽，居中才对称） */
+}
+
+/* 2026-09-14 首页大标题拆两行（第一行主标题、第二行副标题），
+   两行各自独立成行、不再挤在一起；第二行比第一行小一号。 */
+.home-hero h1 .hero-line1 { display: block; }
+.home-hero h1 .hero-line2 {
+  display: block;
+  font-size: var(--hero-l2, 26px); /* 后台「第二行字号」，未填时用 26px */
+  font-weight: 600;
+  line-height: 1.3;
+  margin-top: .34em; /* 两行之间的间距：跟随第二行字号等比（改字号时间距自动协调） */
+  /* 第二行里的英文逗号会显示成这根细竖线（后台填句子时照常写逗号即可） */
+}
+.home-hero h1 .hero-part { white-space: nowrap; } /* 文字与它后面那根竖线锁成一组，换行时竖线留在行尾 */
+.home-hero h1 .hero-sep {
+  display: inline-block;
+  width: 1px;                /* 细线：1 像素宽 */
+  height: .9em;              /* 长度跟随第二行字号等比 */
+  margin: 0 .5em;
+  background: var(--hero-sep, #d8cfc0); /* 颜色可在后台「第二行竖线颜色」里改 */
+  vertical-align: -.1em;
+}
+
+/* 屏幕阅读器 / 搜索引擎可见、但视觉上隐藏（用于给竖线分隔符补回逗号的语义） */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .home-hero .hero-text {
@@ -352,11 +402,16 @@ ul { list-style: none; }
   font-size: 14px;
   line-height: 21px;
   max-width: 505px;
-  align-self: end;
+  /* 2026-09-14：原来的 align-self:end 已移除——它会覆盖父级的对齐方式，
+     改由 .hero-row 统一用「末行基线对齐」控制（见上方 .hero-row 的注释）。 */
 }
 
 .home-hero .hero-image {
-  margin-top: 64px;
+  /* 2026-09-14：64 → 54，净增 10px → 大横幅图片比原始位置下移 20px
+     （先按「图片不动」设为 24px，用户看后要求「大图再往下挪 20px」→ 54px）。
+     这是「真下移」：图片下面的公告条、简介区块等全部跟着往下推，页面整体变长，
+     不是压缩间距。手机端另有 28px（见 ≤900px 媒体查询），不受此改动影响。 */
+  margin-top: 54px;
 }
 
 /* 首页 hero 横幅：多图轮播（淡入淡出 + 悬停箭头 + 底部圆点；2026-09-08） */
@@ -427,6 +482,16 @@ ul { list-style: none; }
 }
 .home-hero .hero-slider .hero-dot.is-active { background: #fff; transform: scale(1.2); }
 
+/* 2026-09-14：视口 ≤1239px 时首屏改为上下堆叠（与手机端一致）。
+   原因：两行大标题需要左栏 ≥620px（实测第二行实宽 609px），
+   而两栏布局的左栏 = 视口 − 48(左右内边距) − 480(右栏) − 50(栏间距)，
+   视口低于约 1218px 就放不下 → 两行各自折成 2 行（就是"挤在一起"的老毛病）。
+   堆叠后标题占满整宽（1024px 视口时约 976px），两行仍各占一行；
+   字号在此区间不变，≤900px 才按 0.78 等比缩小（见下一条媒体查询）。 */
+@media (max-width: 1239px) {
+  .home-hero .hero-row { grid-template-columns: 1fr; gap: 18px; }
+}
+
 @media (max-width: 900px) {
   /* 2026-09-12 修复：此处原为 40px，但右上角「Download Catalog (PDF)」是绝对定位
      （.hero-catalog-btn top:16px + 高约 43px，需约 59px 空间），窄屏下标题上移 36px
@@ -434,7 +499,11 @@ ul { list-style: none; }
      按钮与标题间距同为 17px。改这个值前请先量 .hero-catalog-btn 的 top+高度。 */
   .home-hero { padding-top: 76px; }
   .home-hero .hero-row { grid-template-columns: 1fr; gap: 18px; }
-  .home-hero h1 { font-size: 28px; }
+  /* 2026-09-14：原写死 28px，现改为按后台字号等比缩放（×0.78 ≈ 原 36→28），
+     这样后台调大/调小字号时，手机端会同步变化，不会一大一小失衡。
+     窄屏(≤900px)时 hero-row 已是单栏，左栏占满整宽，两行都能完整显示。 */
+  .home-hero h1 { font-size: calc(var(--hero-l1, 36px) * .78); }
+  .home-hero h1 .hero-line2 { font-size: calc(var(--hero-l2, 26px) * .78); }
   .home-hero .hero-image { margin-top: 28px; }
   .home-hero .hero-slider { height: auto; aspect-ratio: 1259 / 562; }
   .home-hero .hero-slider .hero-arrow { width: 34px; height: 34px; font-size: 16px; }

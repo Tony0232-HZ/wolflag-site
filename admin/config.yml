@@ -112,7 +112,11 @@ collections:
             name: hero
             widget: object
             fields:
-              - { label: 大标题, name: title, widget: string }
+              - { label: "大标题（第一行，字大）", name: title, widget: string, hint: "英文。这句会单独占一行。例如 Custom Flag Manufacturer in China" }
+              - { label: "副标题（第二行，字稍小；留空则不显示第二行）", name: title2, widget: string, required: false, hint: "英文。例如 Low MOQ, OEM & Bulk Production, Fast Turnaround" }
+              - { label: "第一行字号（px）", name: titleSize, widget: number, required: false, value_type: "int", min: 16, max: 52, hint: "电脑端字号（像素）。默认 36。建议 32~42；超过约 43 就会折成两行（手机端会自动按比例缩小，不用另设）。" }
+              - { label: "第二行字号（px）", name: title2Size, widget: number, required: false, value_type: "int", min: 12, max: 40, hint: "建议比第一行小 8~12px，默认 26，安全范围 22~28；超过约 29 就会折成两行。" }
+              - { label: "第二行竖线颜色（第二行里的英文逗号会显示成细竖线）", name: sepColor, widget: color, required: false, default: "#d8cfc0", hint: "默认 #d8cfc0（沙色）。⚠️ 首屏底色是 #faf7f5，若填 #f5f0e8 这类同样很浅的颜色，竖线会几乎看不见。" }
               - { label: 副文案, name: text, widget: text }
               - { label: 横幅图片（用于兼容/默认）, name: image, widget: image }
               - label: 轮播图片（可多张；第一张为默认，拖动手柄调顺序；只有 1 张时静止显示单图）

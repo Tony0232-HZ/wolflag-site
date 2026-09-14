@@ -495,11 +495,36 @@ function homeBody() {
   const supplement = supplementSection(home);
   const clients = homeClients();
   const heroImgs = (home.hero.images && home.hero.images.length ? home.hero.images : (home.hero.image ? [home.hero.image] : []));
+  /* 2026-09-14 首页大标题拆两行：第一行 title（主标题，字大）+ 第二行 title2（副标题，字稍小）。
+     两行字号由后台 hero.titleSize / hero.title2Size 控制，以 CSS 变量 --hero-l1 / --hero-l2 注入；
+     未填则用 site.css 里的默认值。手机端字号在 CSS 里按同一比例自动缩小（见 .home-hero h1 的 900px 断点）。
+     兼容旧数据：title2 为空 = 只显示一行，与改动前完全一致。 */
+  const heroL1 = Math.round(Number(home.hero.titleSize)) || 0;
+  const heroL2 = Math.round(Number(home.hero.title2Size)) || 0;
+  /* 竖线分隔符颜色：后台「第二行竖线颜色」。只接受 #RRGGBB 这种合法值，防止拼进 style 属性出问题。 */
+  const heroSepColor = /^#[0-9a-fA-F]{3,8}$/.test(String(home.hero.sepColor || '').trim())
+    ? String(home.hero.sepColor).trim() : '';
+  const heroSizeStyle = (heroL1 > 0 || heroL2 > 0 || heroSepColor)
+    ? ` style="${heroL1 > 0 ? `--hero-l1:${heroL1}px;` : ''}${heroL2 > 0 ? `--hero-l2:${heroL2}px;` : ''}${heroSepColor ? `--hero-sep:${heroSepColor};` : ''}"`
+    : '';
+  const heroLine2 = String(home.hero.title2 || '').trim();
+  /* 第二行的英文逗号 → 细竖线分隔符（2026-09-14 用户要求）。
+     后台仍按普通句子填（用逗号分隔即可），这里自动拆成「片段 + 竖线」；
+     竖线本身是纯装饰（aria-hidden），紧跟一个对读屏软件/搜索引擎可见的逗号，语义不丢。 */
+  /* 竖线「跟着前一段走」（.hero-part 用 white-space:nowrap 把「文字+竖线」锁成一组），
+     窄屏换行时竖线留在上一行行尾，不会跑到下一行行首（那样看着像笔误）。 */
+  const heroParts = heroLine2.split(',').map((s) => s.trim()).filter(Boolean);
+  const heroLine2Html = heroParts.length
+    ? heroParts.map((s, i) =>
+      `<span class="hero-part">${esc(s)}${i < heroParts.length - 1 ? '<span class="hero-sep" aria-hidden="true"></span>' : ''}</span>`
+    ).join('<span class="sr-only">, </span>')
+    : '';
+  const heroTitleHtml = `<span class="hero-line1">${esc(home.hero.title)}</span>${heroLine2 ? `\n        <span class="hero-line2">${heroLine2Html}</span>` : ''}`;
   return `
   <section class="home-hero">
     ${settings.catalogButton ? `<a class="hero-catalog-btn" href="${esc(settings.catalogButton.file)}" download>${esc(settings.catalogButton.text)}</a>` : ''}
     <div class="container hero-row">
-      <h1>${esc(home.hero.title)}</h1>
+      <h1${heroSizeStyle}>${heroTitleHtml}</h1>
       <p class="hero-text">${esc(home.hero.text)}</p>
     </div>
     <div class="container hero-image">
@@ -767,6 +792,21 @@ function aboutParas(text) {
   return String(text || '').split(/\n+/).map((p) => p.trim()).filter(Boolean).map((p) => `<p>${bold(p)}</p>`).join('\n      ');
 }
 
+/** FAQ 答案：后台填的换行要保留（2026-09-14）。
+    原先整个答案被塞进一个 <p>，HTML 会把换行折成空格 —— 用户精心排的
+    「空行分段 + • 分点」在网页上糊成一整段。现改为：
+      · 空行 → 分成多个段落（<p>，沿用浏览器默认段间距，单段答案外观与改动前完全一致）
+      · 段内单个换行 → <br>（这样 • 分点各自成行、间距紧凑，像正常的列表）
+    先 esc() 转义再补 <br>，顺序不能反（否则 <br> 会被转义掉）。 */
+function faqAnswer(text) {
+  return String(text || '')
+    .split(/\n\s*\n/)
+    .map((para) => esc(para.trim()).replace(/\n/g, '<br>'))
+    .filter(Boolean)
+    .map((para) => `<p>${para}</p>`)
+    .join('');
+}
+
 /** 模块可选背景色映射（后台 bg 下拉，国际极简风色板，低饱和高级中性色） */
 const ABOUT_BG = {
   white: '#ffffff',     // 纯白
@@ -861,7 +901,7 @@ function renderAboutBlock(b) {
           <span>${esc(f.q)}</span>
           <span class="chev" aria-hidden="true">&#9660;</span>
         </button>
-        <div class="faq-a"><p>${esc(f.a)}</p></div>
+        <div class="faq-a">${faqAnswer(f.a)}</div>
       </div>`).join('');
     return `
     <section class="faq-section" style="background:${aboutBg(b)}">
