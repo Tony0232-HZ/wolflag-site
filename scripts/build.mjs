@@ -511,15 +511,19 @@ function homeBody() {
   /* 第二行的英文逗号 → 细竖线分隔符（2026-09-14 用户要求）。
      后台仍按普通句子填（用逗号分隔即可），这里自动拆成「片段 + 竖线」；
      竖线本身是纯装饰（aria-hidden），紧跟一个对读屏软件/搜索引擎可见的逗号，语义不丢。 */
-  /* 竖线「跟着前一段走」，但**不用 white-space:nowrap**（2026-09-14 晚修正，见 §10.26.10）：
-     竖线紧跟在前一段文字之后（中间**不留空格**），而空格只留在竖线的**后面**。
-     空格才是断行点 → 换行时浏览器只能断在竖线之后 → 竖线自然落在行尾。
-     这比 nowrap 安全：nowrap 会让「文字+竖线」变成一个不可断行的整体，
-     在 iOS「文字自动放大」等字号变大的场合会把网格列撑宽（实测复现，页面横向溢出）。 */
+  /* 分隔符「跟着前一段走」，但**不用 white-space:nowrap**（2026-09-14 晚修正，见 §10.26.10）：
+     分隔符紧跟在前一段文字之后（中间**不留空格**），而空格只留在它的**后面**。
+     空格才是断行点 → 换行时浏览器只能断在分隔符之后 → 分隔符自然落在行尾。
+     这比 nowrap 安全：nowrap 会让「文字+分隔符」变成不可断行的整体，
+     在 iOS「文字自动放大」等字号变大的场合会把网格列撑宽（实测复现，页面横向溢出）。
+     2026-09-14 用户选定：分隔符由「1px 竖线」改为**小圆点 •**（用户原话「如果不好控制，
+     就用小圆点代替竖线」）——点是**文字里真实存在的字符**，所以位置由字体自带、
+     **不会像"边框画的线"那样跟着字体度量跑位**（竖线那一版就因此跑到基线下面去了）。
+     圆点放在 span 里（不再是空 span），`aria-hidden` 保持装饰性，逗号语义仍由后面那个 sr-only 补。 */
   const heroParts = heroLine2.split(',').map((s) => s.trim()).filter(Boolean);
   const heroLine2Html = heroParts.length
     ? heroParts.map((s, i) =>
-      esc(s) + (i < heroParts.length - 1 ? '<span class="hero-sep" aria-hidden="true"></span><span class="sr-only">, </span>' : '')
+      esc(s) + (i < heroParts.length - 1 ? '<span class="hero-sep" aria-hidden="true">&#8226;</span><span class="sr-only">, </span>' : '')
     ).join(' ')
     : '';
   const heroTitleHtml = `<span class="hero-line1">${esc(home.hero.title)}</span>${heroLine2 ? `\n        <span class="hero-line2">${heroLine2Html}</span>` : ''}`;
