@@ -1220,7 +1220,6 @@ function blogPostBody(b, blogs) {
     <div class="container blog-post-cols">
       <div class="blog-main">
         <p class="blog-meta">${b.pinned ? pinnedTag() : ''}${esc(b.date)}</p>
-        ${b.coverImage ? `<img class="blog-cover" src="${esc(b.coverImage)}" alt="${altOf(b, b.title)}">` : ''}
         <div class="blog-content">${blocks}</div>
         <p class="blog-back"><a href="/blog">&larr; Back to Blog</a></p>
       </div>

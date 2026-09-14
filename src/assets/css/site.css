@@ -1102,6 +1102,11 @@ ul { list-style: none; }
 .blog-post .blog-meta { margin-top: 20px; }
 
 .blog-cover {
+  /* ⚠️ 2026-09-14 起**正文页不再渲染封面图**——用户要求「封面照片只做封面，不跟正文共享」：
+     封面 coverImage 现在只用于「列表页卡片 / 文章页侧栏小图 / 分享卡片 og:image」三处，
+     文章页顶部（.blog-main）由 build.mjs 的 blogPostBody() 直接输出，已不再输出 .blog-cover。
+     本规则**保留未删**（§0.1 精神：便于日后想加回「正文顶部大图」时复用）。
+     文章页想放开场大图，请用正文里的「插图块」（blocks[].image → .blog-img，显示效果与本规则几乎相同）。 */
   width: 100%;
   height: auto;
   border-radius: 12px;
