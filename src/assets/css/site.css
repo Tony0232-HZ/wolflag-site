@@ -1710,6 +1710,16 @@ ul { list-style: none; }
   object-fit: contain;
 }
 
+/* 🔴 2026-09-14 修「1024px 平板横屏横向溢出」（用户选定方案 B；**改动前就存在的老问题**）：
+   客户区左栏固定 373px + 间距 88px + logo 区固定 605px（4 列 × 128 + 3 间隔 × 31）+ 内边距 48 = 共需 1114px。
+   而原来的堆叠断点是 ≤1000px → **1001~1113px 这段"没人管"**：两栏放不下、又不肯堆叠，
+   而容器列是 `1fr`（最小值 = 内容最小宽度）→ 被撑宽 → 页面横向溢出（实测 1024px 溢 66px、1001px 溢 89px）。
+   ⚠️ 只有「关于我们」页有此问题，其余 10 页在 1001~1130px 全部正常。
+   修法：1120px 以下把 logo 区改成 3 列（446px，放得下），**保住左右两栏**（用户选的 B）；
+   A 方案是"提前堆叠"，用户未选。≥1121px 与 ≤1000px 的行为**完全不变**。 */
+@media (max-width: 1120px) {
+  .clients .cl-logos { grid-template-columns: repeat(3, 128px); }
+}
 @media (max-width: 1000px) {
   .clients .container { grid-template-columns: 1fr; gap: 40px; }
   .clients .cl-logos { grid-template-columns: repeat(3, 128px); justify-content: end; }
