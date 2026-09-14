@@ -4,13 +4,11 @@
     "description": "WOLFLAG is a 23-year manufacturer of custom flags, banners, feather flags, flagpoles and display kits in China. OEM/ODM welcome, factory-direct prices."
   },
   "hero": {
-    "title": "Custom Flag Manufacturer in China",
-    "title2": "Low MOQ, OEM & Bulk Production, Fast Turnaround",
-    "titleSize": 36,
-    "title2Size": 26,
+    "mode": "carousel",
+    "interval": 5,
     "sepColor": "#a89a99",
     "text": "We are delighted to enhance the quality of products and services for our customers. Honesty and integrity are the qualities we adhere to.",
-    "image": "/assets/media/home-hero.webp",
+    "title": "Custom Flag Manufacturer in China",
     "images": [
       {
         "image": "/assets/media/home-hero.webp",
@@ -25,8 +23,10 @@
         "imageAlt": ""
       }
     ],
-    "interval": 5,
-    "mode": "carousel",
+    "titleSize": 36,
+    "title2": "Low MOQ, OEM & Bulk Production, Fast Turnaround",
+    "image": "/assets/media/home-hero.webp",
+    "title2Size": 26,
     "features": [
       "Professional",
       "Reliable"
@@ -45,7 +45,7 @@
         "imageAlt": ""
       },
       {
-        "image": "/assets/media/wolflag-flag-printing-machine-01.webp",
+        "image": "/assets/media/wolflag-flag-printing-machine-06.webp",
         "imageAlt": "Flag printing machine at Wolflag flag factory"
       }
     ]
