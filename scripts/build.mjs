@@ -455,7 +455,7 @@ function shell({ title, desc, body, active, ogImage, footerMode, path, type, sch
   <link rel="icon" type="image/png" href="/assets/media/favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Catamaran:wght@400;700&family=Antic+Slab&family=Bona+Nova:wght@400;700&family=Rufina&family=Acme&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Catamaran:wght@400;700&family=Antic+Slab&family=Bona+Nova:wght@400;700&family=Rufina&family=Acme&family=Roboto+Condensed:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/assets/css/site.css">
 ${schema ? `  <script type="application/ld+json">${JSON.stringify(schema, null, 0).replace(/</g, '\\u003c')}</script>` : ''}
 </head>
@@ -804,7 +804,11 @@ function aboutParas(text) {
 function faqAnswer(text) {
   return String(text || '')
     .split(/\n\s*\n/)
-    .map((para) => esc(para.trim()).replace(/\n/g, '<br>'))
+    // 2026-09-14 修：这里原先用 esc() → 后台写 **加粗** 会**原样显示星号**。
+    // 但《后台管理操作说明书》一直写着「FAQ 答案里可以用 ** 加粗」→ **文档与实现不符**。
+    // 现改用 bold()（它内部对不含标记的部分仍做 esc()，安全性不变）。
+    // ⚠️ 顺序：必须在 bold() **之后**再把换行换成 <br>（bold 只转义、不动换行符）。
+    .map((para) => bold(para.trim()).replace(/\n/g, '<br>'))
     .filter(Boolean)
     .map((para) => `<p>${para}</p>`)
     .join('');
@@ -902,7 +906,9 @@ function renderAboutBlock(b) {
       <div class="faq-item ${idx === 0 ? 'open' : ''}">
         <button class="faq-q" aria-expanded="${idx === 0}">
           <span>${esc(f.q)}</span>
-          <span class="chev" aria-hidden="true">&#9660;</span>
+          ${/* 右侧「大于号」箭头：**空 span**，形状由 CSS 的 border 画出来（2026-09-14 改版，
+               与参考站同一做法，故形状/颜色一致）。不要再放 ▼ 字符——那会和 border 叠加。 */''}
+          <span class="chev" aria-hidden="true"></span>
         </button>
         <div class="faq-a">${faqAnswer(f.a)}</div>
       </div>`).join('');

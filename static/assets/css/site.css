@@ -1728,7 +1728,28 @@ ul { list-style: none; }
   margin-bottom: 36px;
 }
 
-.faq-item { border-bottom: 1px solid #c8cdcc; }
+/* —— FAQ 改版（2026-09-14，按用户提供的参考站「实测」规格 1:1 复刻）——
+   来源：用户要求「和这家一样」。所有颜色/字号/内边距都是把参考页渲染出来后
+   用 getComputedStyle 量出来的**实测值**，不是肉眼估的：
+     外框 1px #E5E5E5 / 圆角 4px / 条目间距 2px
+     问题 18px / 600 / word-spacing 4px / #1F2A30，内边距 15px 20px
+     悬停与展开 → 浅粉底 #FAF3F3 + 深红字 #A33335（整条外框变 #F7F7F7）
+     右侧「大于号」= 用 border 画的 V 形（与参考站同做法）：常态 #A33335、悬停/展开 #E2B0B1
+   ⚠️ 与参考站**唯一不同**：参考站的 FAQ 比上面区块窄（880px），
+      用户要求本站**与上面区块左右对齐、同宽** —— 故这里不设 max-width，随 .container 走。 */
+.faq-item {
+  border: 1px solid #e5e5e5;
+  border-radius: 4px;
+  margin: 2px 0;                 /* 参考站实测：条目之间只留 2px 缝 */
+  background: #fff;
+  transition: background-color .2s ease-in-out;
+}
+/* 🔴 用户的硬性要求（2026-09-14，务必照办）：**答案区的底色必须比 FAQ 区块外面的底色更浅**。
+   FAQ 区块外面的底色是 #F8F8F8（后台可改的 aboutBg）。所以条目底色=白 #FFF，
+   **不能反过来做成浅灰**——曾经试过 #F7F7F7 / #F0F0F0，用户反馈「比外面更深了，不对」。
+   （参考站是把展开区做成 #F7F7F7 的淡灰，这里**有意不同**，以用户要求为准。）
+   注意：所以这里**不要**写 `.faq-item:hover{background:…}` 之类的整条变色——
+   那会把展开着的答案区一起压暗、又违反上面这条。变色只作用在「问题条」上（见下条）。 */
 
 .faq-q {
   width: 100%;
@@ -1739,27 +1760,59 @@ ul { list-style: none; }
   background: none;
   border: none;
   text-align: left;
-  padding: 20px 0;
+  padding: 15px 20px;            /* 参考站实测 */
   font: inherit;
-  font-family: "Acme", Arial, sans-serif;
-  font-size: 20px;
-  font-weight: 700;
-  line-height: 30px;
-  color: #272e47;
+  /* 参考站用 Roboto Condensed；后方兜底 Acme（本站原字体）→ Arial */
+  font-family: "Roboto Condensed", "Acme", Arial, sans-serif;
+  font-size: 18px;               /* 参考站实测 */
+  font-weight: 600;              /* 参考站实测 */
+  word-spacing: 4px;             /* 参考站实测 */
+  line-height: 1.4;
+  color: #1f2a30;                /* 参考站实测 */
   cursor: pointer;
+  transition: color .2s ease-in-out, background-color .2s ease-in-out;
+}
+.faq-item:hover .faq-q,
+.faq-item.open .faq-q {
+  color: #a33335;                /* 参考站实测：深红 */
+  background: #faf3f3;           /* 参考站实测：浅粉 */
 }
 
-.faq-q .chev { transition: transform .25s; flex-shrink: 0; color: #555; }
-.faq-q .chev { display: inline-block; transform: rotate(180deg); }
-.faq-item.open .chev { transform: rotate(0deg); }
+/* 右侧「大于号」：空 span + 只画右边和下边的边框，再整体转 45° → 就是那个 V 形。
+   ⚠️ span 里**不能放 ▼ 字符**，否则会和 border 叠在一起。 */
+.faq-q .chev {
+  flex-shrink: 0;
+  box-sizing: border-box;
+  width: 12px;
+  height: 12px;
+  padding: 4px;
+  border: solid #a33335;         /* 参考站实测：常态深红 */
+  border-width: 0 4px 4px 0;
+  transform: translateY(-15%) rotate(45deg);
+  transition: transform .2s ease-out, border-color .2s ease-out;
+}
+.faq-item:hover .chev,
+.faq-item.open .chev { border-color: #e2b0b1; }   /* 参考站实测：悬停/展开变浅粉 */
+.faq-item.open .chev { transform: translateY(-15%) rotate(225deg); }  /* 展开时翻上去 */
 
 .faq-a {
   display: none;
-  padding: 0 0 20px;
-  color: #545a6e;
+  /* 2026-09-14 用户要求「答案下方一定要有留白」：实测参考站是
+     「最后一行字 → 框底边 = 41px」，本站原来只有 20.5px（显得拥挤）。
+     下方内边距 15 → 36px，正好补到 ≈41px（像素扫描复量确认）。**固定值，不做后台字段**。 */
+  padding: 15px 20px 36px;
+  /* 2026-09-14 用户选定「和参考站一样」：答案文字 = 纯黑（参考站实测 #000，对比度 19.6:1），
+     行高 = 29.75px（参考站实测，比原来的 27px 更松）。
+     起因：用户对比后觉得参考站「答案字更黑、更清晰」——像素实测证实：
+     本站原 #545A6E 只有 6.85:1，参考站纯黑 19.6:1，**差近 3 倍**，用户的感觉是对的。 */
+  color: #000;
   font-size: 16px;
-  line-height: 27px;
+  line-height: 29.75px;
 }
+/* 2026-09-14 补：本站有 `*{margin:0}` 全局重置，段落间距被清掉了 →
+   多段答案（后台用空行分段）会糊在一起、看不出分段。补一个段间距。
+   （同 about-text / about-it-text 的 `p + p` 做法） */
+.faq-a p + p { margin-top: 10px; }
 
 .faq-item.open .faq-a { display: block; }
 
