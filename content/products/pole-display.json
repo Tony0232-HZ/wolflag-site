@@ -35,9 +35,10 @@
         "imageAlt": "Polished chrome cross base with 360-degree rotating spindle for feather and teardrop flags"
       },
       {
-        "name": "Water tank base",
-        "desc": "Around 33.0lbs with water",
-        "image": "/assets/media/pole-04.webp"
+        "name": "Heavy-Duty Water Tank Cross Base",
+        "desc": "Engineered for maximum outdoor wind resistance, this hybrid base combines a heavy-duty steel cross stand with a fillable water tank, weighing approx. 33 lbs (15 kg) when filled. Equipped with a smooth 360° rotating spindle, it ensures your feather and teardrop banners rotate freely without tipping over.",
+        "image": "/assets/media/heavy-duty-water-tank-cross-base-for-feather-teardrop-flags.webp",
+        "imageAlt": "Heavy-duty black cross base with fillable water tank for outdoor feather flags"
       },
       {
         "name": "Water bag",
