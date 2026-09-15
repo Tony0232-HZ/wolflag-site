@@ -32,19 +32,22 @@
   },
   "blocks": [
     {
-      "type": "textImg",
+      "carousel": {
+        "enabled": false
+      },
+      "imgAlign": "mid",
       "bg": "#f8f8f8",
-      "direction": "textLeft",
       "ratio": "55:45",
-      "title": "",
       "text": "**WOLFLAG** is the China's leading manufacturer and supplier of flags, banners, bunting, flagpoles, exhibition stands, temporary signage and promotional displays. We are also Official Flag Suppliers to the China Government. Using our extensive experience, a wide range of materials including PVC, knitted polyester, canvas, vinyl and paper, and the latest in printing technology, we help businesses to get noticed with creative, eye catching and high impact promotional and advertising solutions.\n\nWhether you're organising a product launch or promotional campaign, running an event or attending an exhibition or ensuring your corporate image is displayed to maximum effect, WOLFLAG's complete, customer focused service and varied, yet concentrated, product range, will provide you with a professional display solution suited to your environment, brand image and budget.\n\nOur foreign trade sales headquarters is located in Hangzhou (**Hangzhou Loyal Import & Export Co., Ltd**) and boasts an excellent sales team, offering highly experienced services to global flag purchasers. With other two offices in Jiaxing and Yuyao we are always on hand to discuss your requirements and advise on the right solution for you. From design and print at our Jiaxing site, to deliver to your site, your flag, flag pole, banner, building wrap or promotional display order will be project managed from start to finish.\n\nWe, as a factory, ship our products directly to you with very low shipping cost. There are no distributors or \"middle-men\" involved, so you get the lowest price each and every time you buy. This will save you money compared to your local shop.\n\nA wide range of national flags, table flags, flag poles, bunting and hand wavers are available from our website. If for any reason you are unable to find exactly what you are looking for, call one of our knowledgeable customer service representatives who will be happy to assist.",
+      "title": "",
       "images": [
         {
           "image": "/assets/media/about-factory.webp",
           "offset": 0
         }
       ],
-      "imgAlign": "mid"
+      "type": "textImg",
+      "direction": "textLeft"
     },
     {
       "type": "marquee",
@@ -148,20 +151,20 @@
           "a": "Sample orders usually take 5–7 working days.\nBulk custom flag orders take about 15–25 working days.\nFor large-volume orders, the production schedule is confirmed based on your quantity and requirements."
         },
         {
-          "q": "Q. What type of files do you need for my artwork?",
-          "a": "A. We prefer CorelDRAW, Adobe Illustrator, Adobe Photoshop. Please Make sure you supply your files as .eps or high res .pdf format."
+          "q": "Q. What file formats do you accept for custom flag artwork?",
+          "a": "We accept CorelDRAW (.cdr), Adobe Illustrator (.ai), Adobe Photoshop (.psd), .eps, and high-resolution .pdf files.\nFor best print results, please send vector files or 300 DPI PDFs.\nContact us if you need an artwork template or a free proof."
         },
         {
-          "q": "Q. Will the colours be the same as my monitor?",
-          "a": "A. It is very difficult to get an exact match. Getting accurate colours requires matching with pantone or CMYK pantone reference guides."
+          "q": "Q. Will the custom flag colors match my monitor?",
+          "a": "Monitor colors can vary, so printed colors may not match your screen exactly.\nFor accurate color matching, please provide a Pantone (PMS) code or CMYK values.\nContact us if you need a color proof before production."
         },
         {
-          "q": "Q. What size should we prepare artwork?",
-          "a": "A. At least 25% of original size – or more ideally 50% of original size. Please contact us to discuss this if you are unsure."
+          "q": "Q. What size and resolution should custom flag artwork be?",
+          "a": "We recommend preparing your artwork at least 25% of the final print size, and 50% is preferred for the best print quality.\nIf you are unsure about the artwork size or resolution, contact us and we'll check it for free."
         },
         {
-          "q": "Q. Do you accept files in RGB format?",
-          "a": "A. We ideally need CMYK files that will accurately produce the colours you are expecting from your artwork. We can convert RGB for you but there is a small fee for this service."
+          "q": "Q. Do you accept RGB files for custom flag printing?",
+          "a": "We prefer CMYK files for accurate color reproduction.\nIf your artwork is in RGB format, we can convert it to CMYK for you. A small conversion fee may apply.\nContact us if you need help preparing print-ready files."
         },
         {
           "q": "Q. Do you offer private label services for custom flags?",
