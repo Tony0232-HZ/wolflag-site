@@ -93,6 +93,30 @@ collections:
                     hint: "规格建议：正方形 PNG / SVG（或 WebP），48×48 最好——网站在页脚固定按 20×20 显示，48×48 相当于 2 倍高清屏效果。\n推荐“背景透明 + 浅色/白色图标”（页脚底色是深色 #352a2a），看起来最干净；整块方形的图标（如黑底白字）也能用。\n⚠️ 别用 JPG——没有透明背景，会显示成一块方块；别用长方形/竖图——会被压扁变形（网站按正方形显示，不做裁剪）；不必超过 100×100，白占体积。\n💡 没有现成图标？把社交账号告诉 Claude，可以帮你做一套风格统一的（含本站需要的白色/透明版本）。"
                   - { label: 链接地址, name: url, widget: string, required: false, hint: 粘贴社交平台链接，如 https://www.facebook.com/xxx；留空则点击发邮件 }
               - { label: 版权行, name: copyright, widget: string }
+          - label: 优势条（Why Source from Wolflag?）
+            name: benefits
+            widget: object
+            hint: "页面最底部（页脚正上方）那条优势图标带，出现在 6 个页面：羽毛旗 / 国旗 / 展架 / 旗杆展架 / 横幅 / Full Products。在这里改一次，6 个页面一起生效。"
+            fields:
+              - label: 显示此区块
+                name: enabled
+                widget: boolean
+                default: true
+                required: false
+                hint: 取消勾选 = 整个区块隐藏（内容会保留，勾回来就恢复）
+              - { label: 区块标题, name: title, widget: string, default: 'Why Source from Wolflag?', hint: 图标带上方那行居中的大标题 }
+              - label: 卖点条目（每条 = 图标 + 文字；可拖动排序、可增删）
+                name: items
+                widget: list
+                required: false
+                summary: "{{fields.label}}"
+                fields:
+                  - label: 图标
+                    name: icon
+                    widget: image
+                    required: false
+                    hint: "⚠️ 请上传【单色线条 SVG】图标 —— 黑色或品牌蓝会被自动替换成主题色，这样鼠标悬停时才能变酒红。若传 PNG/JPG 或【多色图标】：图标能正常显示，但【悬停不会变色】。尺寸不限（页面按 75×75 显示），文件名请用英文小写连字符。"
+                  - { label: 文字, name: label, widget: string, hint: 图标下方那行字，建议英文 }
 
   # ---------- 首页 ----------
   - name: home

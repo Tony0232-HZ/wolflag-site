@@ -107,5 +107,31 @@
       "tony_flag123@hotmail.com",
       "tony@wolflagdisplay.com"
     ]
+  },
+  "benefits": {
+    "enabled": true,
+    "title": "Why Source from Wolflag?",
+    "items": [
+      {
+        "icon": "/assets/media/benefit-price.svg",
+        "label": "Factory-Direct Pricing"
+      },
+      {
+        "icon": "/assets/media/benefit-design.svg",
+        "label": "Custom Designs, Low MOQ"
+      },
+      {
+        "icon": "/assets/media/benefit-expertise.svg",
+        "label": "23 Years Factory Expertise"
+      },
+      {
+        "icon": "/assets/media/benefit-shipping.svg",
+        "label": "Fast Turnaround & Global Delivery"
+      },
+      {
+        "icon": "/assets/media/benefit-quality.svg",
+        "label": "100% Quality Guaranteed"
+      }
+    ]
   }
 }
