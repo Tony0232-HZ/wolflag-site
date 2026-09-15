@@ -12,14 +12,16 @@
       "desc": "Fiberglass and aluminum pole set, one galvanized steel ground stake, and an Oxford carrying bag. For use in wind gusts up to 31 miles per hour. Pole length: 9.51ft (without flag attached)",
       "detail": "Suitable for flag size: 6.75ft x 2.2ft",
       "tag": "Other pole sizes are available for selection.",
-      "image": "/assets/media/pole-01.webp"
+      "image": "/assets/media/pole-01.webp",
+      "imageAlt": "Wolflag factory-direct feather flag pole kit with 3m fiberglass pole, Oxford carry bag, and rotating ground spike for feather flags, teardrop flags, and banner flags."
     },
     {
       "name": "Indoor flag pole kit",
       "desc": "Telescoping aluminum silver pole, made of quality aluminum alloy. it is suitable for sending to your friends, colleagues, relatives, neighbors, family members and others you care and love, they will be happy to receive this gift.",
       "detail": "Flagpoles & Accessories",
       "tag": "American flag: approx. 3 x 5 ft",
-      "image": "/assets/media/pole-02.webp"
+      "image": "/assets/media/pole-02.webp",
+      "imageAlt": "Wolflag factory-direct indoor flag pole kit with 8ft beech wood pole, eagle ornament, and gold metal base for indoor, office, and ceremony flag displays."
     }
   ],
   "ingredients": {
