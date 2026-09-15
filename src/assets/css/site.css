@@ -1961,7 +1961,15 @@ ul { list-style: none; }
 }
 
 .pd-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.pd-thumb.on { border-color: var(--blue); }
+/* 2026-09-15 用户要求：缩略图「当前选中」的框由品牌蓝改成酒红（与 FAQ 深红/服务卡悬停同一色）。
+   即正在看的那张图的框色；未选中的几张仍是浅灰 #e5e7eb。
+   ⚠️ 用户随后反馈「颜色偏深，减淡一半」→ 改为 #d1999a。
+   算法与首屏第二行分隔圆点（§10.26.11）**完全相同**：与背景色各半混合
+     round(fg*a + bg*(1-a))，a=0.5
+     酒红 #a33335 (163,51,53) ＋ 底色纯白 #ffffff (255,255,255) ÷ 2
+     = (209,153,154) = #d1999a  ← 实测该缩略图背后就是 BODY 的纯白，没有中间层底色
+   要再调深浅：改这一个值即可（与背景各半 = 当前；想要更深就往 #a33335 靠）。 */
+.pd-thumb.on { border-color: #d1999a; }
 
 .pd-info .pd-name {
   font-family: "Rufina", Georgia, serif;
@@ -2047,12 +2055,20 @@ ul { list-style: none; }
   gap: 32px;
 }
 
+/* 产品详情页底部三张服务小卡（car-flags：24/7 Customer Service / Factory-Direct Prices /
+   Easy & Free Returns）。2026-09-15 用户要求改造：
+     ① 图标原来的品牌蓝 #4c6aff → 深灰 #3d3d3d（用户：「为了统一颜色」「黑色太黑，
+        要深灰」）。图标已由 build.mjs 的 inlineSvg() 内联成 currentColor，故 color 能直接管。
+     ② 悬停：图标 + 标题变酒红 #a33335、**卡片底色变浅粉 #faf3f3**（用户指定要与
+        FAQ 问题条悬停色完全一致，见下方 .faq-item:hover 的实测值）、图标上跳 6px。
+     ③ 图标上跳幅度与「Why Source from Wolflag?」那条优势条保持一致（都是 6px）。 */
 .svc-card {
   background: #fff;
   border: 1px solid #e5e7eb;
   border-radius: 12px;
   padding: 28px 26px;
   text-align: center;
+  transition: background-color .25s ease, border-color .25s ease;
 }
 
 .svc-card .svc-icon {
@@ -2060,13 +2076,17 @@ ul { list-style: none; }
   height: 52px;
   margin: 0 auto 14px;
   display: block;
+  color: #3d3d3d;                 /* 常态深灰（内联 SVG 用 currentColor 取这个值） */
+  transition: color .25s ease, transform .25s ease;
 }
+.svc-card .svc-icon svg { display: block; width: 100%; height: 100%; }
 
 .svc-card h4 {
   font-size: 17px;
   font-weight: 700;
   color: #272e47;
   margin: 0 0 8px;
+  transition: color .25s ease;
 }
 
 .svc-card p {
@@ -2074,6 +2094,16 @@ ul { list-style: none; }
   line-height: 21px;
   color: #6b7280;
   margin: 0;
+}
+
+/* 悬停：与 FAQ 问题条同一套语言（浅粉底 + 深红字），图标额外上跳 */
+.svc-card:hover { background: #faf3f3; border-color: #f2dede; }
+.svc-card:hover .svc-icon { color: #a33335; transform: translateY(-6px); }
+.svc-card:hover h4 { color: #a33335; }
+
+@media (prefers-reduced-motion: reduce) {
+  .svc-card .svc-icon { transition: color .25s ease; }
+  .svc-card:hover .svc-icon { transform: none; }
 }
 
 /* 图文区（标题+文字+图片，后台可编辑） */
@@ -2256,4 +2286,102 @@ p strong, .blog-content strong, .pd-desc strong, .ti-text strong {
   .pd-cols { grid-template-columns: 1fr; gap: 28px; }
   .svc-grid { grid-template-columns: 1fr; }
   .ti-imgs { grid-template-columns: 1fr; }
+}
+
+/* ============================================================================
+   「Why Source from Wolflag?」优势条（2026-09-15 新增）
+   位置：feather-flag / national-flag / stands-displays / pole-display 四页的正文末尾
+         —— 正好落在页脚正上方。
+   版式：1:1 复刻用户给的同行参考站（BuildASign 的 benefit-badges 模块）。值是
+         Playwright 渲染后 getComputedStyle 实测（1600px 视口），不是肉眼估：
+         底条 #f9f9f9 ／ 标题 24px·600·居中·行高32 ／ 标题→栏间距 24px
+         ／ 每栏 padding 32px ／ 图标 75×75 ／ 文字 16px·500·与图标间距 16px
+         ／ 竖线 = 每栏 border-right 1px #d3d3d3（末栏不画）。
+   本站改造（用户要求，与参考站有意不同，勿当 bug 改回）：
+     ① 参考站纯静态、无任何交互；这里悬停 → 图标与文字一起变酒红 #a33335
+        （同 FAQ 深红），图标同时上跳 6px（同首页药丸 / Reliable / Contact Us
+        按钮的「上浮」语言，只是幅度放大——图标小，2px 看不出来）。
+     ② 悬停热区 = 整栏（不只图标），手机上手指也点得准。
+     ③ 内容套 .container，与上方区块左右同宽对齐（参考站是 1440px 满铺）。
+   响应式（§0.8 双端铁律，已逐宽度实测）：
+     >900px 五栏横排 ｜ ≤900px 缩图标与内边距 ｜ ≤640px 两栏、末项跨列居中。
+   注：.wl-ben-tile 写死 min-width:0 —— 防坑 #23（flex 子项最小宽度=内容宽，
+       长词会把整条轨道撑宽、连累兄弟元素一起溢出）。
+   ============================================================================ */
+.wl-benefits {
+  background: #f9f9f9;
+  padding: 56px 0;
+  /* 兜底：万一字号被系统放大到极端（坑 #24 的 3 倍压力测试），长单词（如标题里的
+     "Wolflag?"）宁可中间断开，也不要顶出屏幕。写在容器上让所有子元素继承。 */
+  overflow-wrap: break-word;
+}
+.wl-ben-title {
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 32px;
+  color: var(--navy);
+  text-align: center;
+  margin: 0 0 24px;
+}
+.wl-ben-row {
+  display: flex;
+  align-items: stretch;
+}
+.wl-ben-tile {
+  flex: 1 1 0%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 32px;
+  text-align: center;
+  border-right: 1px solid #d3d3d3;   /* 参考站实测：这就是那条「长浅色竖线」 */
+}
+.wl-ben-tile:last-child { border-right: 0; }
+.wl-ben-ico {
+  display: block;
+  width: 75px;
+  height: 75px;
+  color: var(--navy);
+  transition: color .25s ease, transform .25s ease;
+}
+.wl-ben-ico svg { display: block; width: 100%; height: 100%; }
+.wl-ben-label {
+  font-size: 16px;
+  /* 2026-09-15 用户反馈「有点细」：参考站是 500，这里提到 700（本站产品名/服务卡标题
+     本来就是 700，加重后反而更统一）。 */
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--navy);
+  margin: 16px 0 0;
+  /* max-width:100% 必须写：父级是 align-items:center 的 flex 列，子元素默认按
+     「max-content」定宽 —— 少了这条，字号被系统放大后长标签会顶出栏宽；
+     配上 max-width 才有机会触发下面那条 overflow-wrap 断词（坑 #24 压力测试实测）。 */
+  max-width: 100%;
+  overflow-wrap: break-word;   /* 兜底：万一某个词比整栏还宽，断开而不是溢出（坑 #24） */
+  transition: color .25s ease;
+}
+/* 悬停：热区是整栏；图标上跳 + 图标与文字同时变酒红 */
+.wl-ben-tile:hover .wl-ben-ico   { color: #a33335; transform: translateY(-6px); }
+.wl-ben-tile:hover .wl-ben-label { color: #a33335; }
+
+@media (max-width: 900px) {
+  .wl-benefits { padding: 44px 0; }
+  .wl-ben-tile { padding: 22px 10px; }
+  .wl-ben-ico { width: 60px; height: 60px; }
+  .wl-ben-label { font-size: 14px; }
+}
+@media (max-width: 640px) {
+  .wl-benefits { padding: 36px 0; }
+  .wl-ben-title { font-size: 19px; line-height: 1.3; margin-bottom: 14px; }
+  .wl-ben-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .wl-ben-tile { padding: 18px 10px; }
+  .wl-ben-tile:nth-child(2n)  { border-right: 0; }
+  .wl-ben-tile:last-child     { grid-column: 1 / -1; border-right: 0; }  /* 第5项居中跨两列 */
+  .wl-ben-ico { width: 54px; height: 54px; }
+}
+/* 用户系统开了「减少动态效果」→ 去掉位移，只保留变色 */
+@media (prefers-reduced-motion: reduce) {
+  .wl-ben-ico { transition: color .25s ease; }
+  .wl-ben-tile:hover .wl-ben-ico { transform: none; }
 }
