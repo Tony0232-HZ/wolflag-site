@@ -30,8 +30,9 @@
     "items": [
       {
         "name": "Chrome cross base",
-        "desc": "made of pure durable metal alloy and robust steel with a polished finish",
-        "image": "/assets/media/pole-03.webp"
+        "desc": "Engineered from robust solid steel with a sleek polished chrome finish, this premium indoor cross base features a 360° smooth-swivelling spindle. \n\nDesigned for flat surfaces, it provides reliable stability for standard feather and teardrop flags (compatible with water weight bags for added stability).",
+        "image": "/assets/media/chrome-cross-base-with-360°-rotator-for-feather-teardrop-flags.webp",
+        "imageAlt": "Polished chrome cross base with 360-degree rotating spindle for feather and teardrop flags"
       },
       {
         "name": "Water tank base",
@@ -46,7 +47,7 @@
       {
         "name": "Beach Flag Sand Auger Spike",
         "desc": "Heavy-Duty Beach Auger Flag Spike – Ideal for Beaches, Surf Life Saving Events & Outdoor Sponsorship Displays. Fits All Standard Feather & Teardrop Flag Poles.",
-        "image": "/assets/media/wolflag-ground-peg.webp",
+        "image": "/assets/media/wolflag-plastic-screw-ground-spike-with-rotator-for-beach-and-feather-flags.webp",
         "imageAlt": "Wolflag heavy-duty sand auger flag pole base with handles for feather banner"
       },
       {
