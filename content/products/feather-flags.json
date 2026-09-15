@@ -20,7 +20,8 @@
         }
       ],
       "subtitle": "Flags are portable and easy to install. The flag is made of high-quality durable fabric with an optional carbon composite fiber stand.",
-      "image": "/assets/media/digital-printing-feather-flag.webp"
+      "image": "/assets/media/digital-printing-feather-flag.webp",
+      "imageAlt": "Wolflag factory-direct custom feather flag for Insanity Slush, a printed outdoor advertising banner with cross base for business promotions."
     },
     {
       "name": "Open house feather flag",
@@ -35,7 +36,8 @@
         }
       ],
       "subtitle": "High Visibility: Tall, moving flags catch eyes instantly from afar.\nCost-Effective: Inexpensive, durable, and reusable for every listing.\nPortable & Easy Setup: Lightweight, fast to assemble, and simple to transport.",
-      "image": "/assets/media/feather-open-house.webp"
+      "image": "/assets/media/feather-open-house.webp",
+      "imageAlt": "Wolflag factory-direct real estate feather flag for open house events, a custom outdoor advertising banner printed with OPEN HOUSE and Please Come In."
     },
     {
       "name": "Leaf shape",
@@ -50,7 +52,8 @@
         }
       ],
       "subtitle": "Leaf-shaped flag, very unique, eye-catching, supported by two fiberglass rods. Easy to install and carry.",
-      "image": "/assets/media/leaf-shape-feather-flag.webp"
+      "image": "/assets/media/leaf-shape-feather-flag.webp",
+      "imageAlt": "Wolflag factory-direct custom feather flag （leaf-shaped） for Maplewood land sales, a printed outdoor advertising flag for real estate promotions."
     },
     {
       "name": "Rectangle shape",
@@ -65,7 +68,8 @@
         }
       ],
       "subtitle": "The easiest to install, with the smoothest flag surface, your advertising slogan is displayed in full view. It is more like a standing banner.",
-      "image": "/assets/media/rectangular-flag.webp"
+      "image": "/assets/media/rectangular-flag.webp",
+      "imageAlt": "Wolflag factory-direct custom rectangular flag for land sales, a printed outdoor advertising banner for real estate and property promotions by Maplewood."
     },
     {
       "name": "Teardrop Shape",
@@ -80,7 +84,8 @@
         }
       ],
       "subtitle": "The coolest and most beautiful shape, often seen in major shopping malls and sports venues, people can't help but take a few more glances.",
-      "image": "/assets/media/teardrop-feather-flag.webp"
+      "image": "/assets/media/teardrop-feather-flag.webp",
+      "imageAlt": "Wolflag factory-direct custom teardrop flags for World Food Expo 2007, printed indoor exhibition flags for trade shows, expos, and event promotions"
     },
     {
       "name": "Pinpoint Flags",
@@ -95,7 +100,8 @@
         }
       ],
       "subtitle": "Turn heads from every angle with a rotating, two-sided display that never misses a customer. Swap your prints in seconds to keep your message fresh and ready for any event. Easy to carry, quick to set up, and stands strong anywhere—indoors or out.",
-      "image": "/assets/media/pinpoint-flag.webp"
+      "image": "/assets/media/pinpoint-flag.webp",
+      "imageAlt": "Wolflag factory-direct custom pinpoint flags for real estate open houses, printed teardrop flags with FOR SALE and OPEN HOUSE for RE/MAX property promotions."
     }
   ],
   "supplement": [
@@ -110,5 +116,6 @@
     "file": "feather-flag.html",
     "layout": "feather",
     "nav": "/feather-flag"
-  }
+  },
+  "imageAlt": "Custom advertising feather flags for outdoor promotions, including OPEN, FARM FRESH EGGS, EASY FINANCE, CAR WASH, OPEN HOUSE, and Just Listed banner designs."
 }
