@@ -206,7 +206,27 @@ git push -u origin main
 > **验证方式（可复用）**：把 `table-flags.json` 复制一份、删掉 `layout` 行、构建 →
 > 输出应打印 `layout: detail`，产物里应含 `pd-gallery` / `pd-spec`；测完删掉临时文件重建。
 
-### ④ 用户决策
+### ④ 顺手修掉 3 处过期的后台提示文字（2026-09-16 晚）
+
+用户截图问：**「跳转链接到底要不要加 `html`？为什么注释说要加 HTML？」**
+
+**不用加，是那句提示文字过期了**：2026-09-10 全站网址去 `.html` 后缀时（`b314370`），
+**数据、菜单、sitemap、内链都改了，但后台 `config.yml` 里给用户看的 hint/label 忘了改**——
+`link` 字段的提示还写着 `如 /banner.html`，用户照着填就会一直填错。
+
+已修正 3 处（其余 4 处提到 `.html` 的都是对的，因为它们在讲「页面文件名」）：
+
+| 字段 | 改前 | 改后 |
+|---|---|---|
+| `pages` → 产品列表的**跳转链接** hint | `如 /banner.html` | `如 /banner —— 不要加 .html 后缀` |
+| `specgrid` → 导航地址 label | `导航地址，如 /stands-displays.html` | `导航地址（无 .html 后缀），如 /stands-displays` |
+| `product-details` → 导航地址 label | `导航地址，如 /car-flags.html` | `导航地址（无 .html 后缀），如 /car-flags` |
+
+> 📌 **事实边界**：**加了 `.html` 也能打开**——Cloudflare 对 `/x.html` 返回 **308 跳转**到 `/x`
+> （实测 `/table-flags.html`、`/banner.html`、`/car-flags.html` 都是 308）。只是多绕一跳，
+> 且 Google 会把带 `.html` 的那个当"跳转页"、不算正式内容。**所以：能用，但不该用。**
+
+### ⑤ 用户决策
 
 - **详情页不加「优势条」**：优势条仍只在原来那 6 页（feather / national / stands-displays /
   pole-display / banner / products）——**以后新增 detail 页不要顺手加上去**。
