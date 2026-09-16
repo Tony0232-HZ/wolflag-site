@@ -25,11 +25,16 @@ const about = j(join(CONTENT, 'about.json'));
 /* 自动发现：content/products/* 与 content/pages/* 与 content/product-details/* 均注册为页面 */
 const PAGE_DIRS = ['products', 'pages', 'product-details', 'specgrid'];
 const pageFiles = {};   // key: json 文件名(不带扩展) -> 内容
+const pageFileDirs = {}; // key -> 所在目录（决定兜底排版模板，见下）
 for (const dir of PAGE_DIRS) {
   const abs = join(CONTENT, dir);
   if (!existsSync(abs)) continue;
   for (const f of readdirSync(abs)) {
-    if (f.endsWith('.json')) pageFiles[f.replace(/\.json$/, '')] = j(join(abs, f));
+    if (f.endsWith('.json')) {
+      const key = f.replace(/\.json$/, '');
+      pageFiles[key] = j(join(abs, f));
+      pageFileDirs[key] = dir;
+    }
   }
 }
 
@@ -61,7 +66,9 @@ for (const [key, data] of Object.entries(pageFiles)) {
     slug: url,
     title: (data.seo && data.seo.title) || `${data.heading || key} - WOLFLAG`,
     desc: (data.seo && data.seo.description) || 'WOLFLAG products.',
-    layout: p.layout || 'grid3',
+    // 兜底模板：content/product-details/ 下的文件本来就是「产品详情」，缺 layout 字段时按 detail 渲染
+    //（2026-09-16：后台「产品详情页」表单里原本没有 layout 字段，新建的条目会漏掉它 → 页面被当通用网格渲染）
+    layout: p.layout || (pageFileDirs[key] === 'product-details' ? 'detail' : 'grid3'),
     // nav 用于菜单高亮比对；内容 JSON 的 p.nav 可能仍带 .html（后台旧数据），去掉后缀再比对
     nav: p.nav ? cleanUrl(p.nav) : url,
     data,
