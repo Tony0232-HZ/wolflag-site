@@ -29,6 +29,15 @@
       "material": "",
       "desc": "Custom car flags with full-color printing, multiple sizes and factory-direct pricing.",
       "image": "/assets/media/custom-car-flags.webp"
+    },
+    {
+      "name": "Table & Desk Flags",
+      "link": "/table-flags",
+      "size": "4x6\"  (10x15cm) / 6x9\" (14x21cm) / Custom sizes",
+      "material": "68D 100% polyester / 100D 100% polyester / 110 g/m² knitted polyester / Satin (polyester)",
+      "desc": "Wolflag supplies custom table & desk flags with versatile pole configurations (single, double, and multi-pole) paired with metal, solid wood, crystal, or durable plastic bases. Designed to elevate corporate branding, diplomatic conferences, executive offices, and official ceremonies.",
+      "image": "/assets/media/wolflag-conference-office-desk-flag-display-2.webp",
+      "imageAlt": "Wolflag 6-pole table flag stand with polished gold round base displaying miniature international flags for conference tables"
     }
   ]
 }
