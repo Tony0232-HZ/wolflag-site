@@ -10,7 +10,11 @@ wolflag-site/
 │   ├── settings.json        # 导航/页脚/联系方式/版权
 │   ├── home.json            # 首页内容
 │   ├── about.json           # 关于我们（模块列表：文本/图片/图文/客户/FAQ，每模块可独立换背景色）
-│   └── products/            # 4 个产品页（羽毛旗/横幅/国旗/旗杆展架）
+│   ├── products/            # 4 个产品页（羽毛旗/横幅/国旗/旗杆展架）
+│   ├── pages/               # 新增类目页（自动发现机制）—— Full Products
+│   ├── product-details/     # 产品详情页（多图+规格表+服务卡）—— car-flags、table-flags
+│   ├── specgrid/            # 属性网格类目页 —— stands-displays
+│   └── blog/                # 博客文章
 ├── media/                   # 图片库（原站 48 张图提取 + 后台可上传新图）
 ├── src/assets/              # 样式与脚本源文件
 ├── admin/                   # Decap CMS 管理后台
@@ -159,6 +163,60 @@ git push -u origin main
 
 改坏也不会丢：每次发布都是一个 GitHub commit，可在 GitHub 网页上查看历史、随时回滚。
 
+## 🆕 新增 `/table-flags` 产品页 + 修「后台新建详情页会漏掉排版模板」（2026-09-16）
+
+### ① 用户报的问题：后台加完卡片，点开是 404
+
+在后台上完新产品 **Table & Desk Flags**（Full Products 上加了卡片、导航子菜单也挂了 `/table-flags`），
+点开却是 **404**。
+
+**根因不是操作失误**——站点是「构建时按 `content/` 下的文件自动生成页面」，
+**而卡片上的「跳转链接」和菜单里的「链接」都只是纯文本指路牌，写什么都不可能凭空生成页面**：
+
+| | 是什么 | 在后台哪 | 这次 |
+|---|---|---|---|
+| ① **卡片** | Full Products 上那张图 + 名字（带 `link`） | 「新增类目页」→ `content/pages/products.json` 的 `products[]` | ✅ 加了 |
+| ② **页面本身** | 点开后真正的网页（**一个独立文件**） | 「产品详情页」→ `content/product-details/*.json` | ❌ **从没建过** ← 404 根因 |
+| ③ 菜单入口 | 顶部导航 / 子菜单一条 | `content/settings.json` 的 `nav[].children` | ✅ 加了 |
+
+> 📌 **以后加产品记住一句**：**卡片 ≠ 页面**。两件事，两个栏目，都要各自建一次。
+
+### ② 已建好并上线
+
+- 新增 `content/product-details/table-flags.json`，**结构完全照抄 `car-flags.json`**（`detail` 模板）：
+  3 图画廊（点缩略图切换）+ 7 行规格表（Fabric / Printing / Flag Size / Poles / Base / MOQ / Lead Time）
+  + 3 张服务小卡 + 图文区；`prices` 留空（= 不公开报价，前台不显示价格表，与 car-flags 一致）。
+- 新增 2 张图进 `media/`：`wolflag-conference-office-desk-flag-display-1.webp`、
+  `wolflag-stainless-steel-desk-flag-stand.webp`（源文件名 `…display 1.webp` 带空格 → 改成小写连字符）。
+- 写法照 README 的网址规范：`slug=table-flags`、`file=table-flags.html`、`nav=/table-flags`
+  （**只有「页面文件名」带 `.html`，其余都不带**）。
+- 线上 `https://www.wolflag.com/table-flags` 已可访问；`/products` 的卡片、首页子菜单都指向它。
+
+### ③ 顺带修掉一个真 bug：「产品详情页」后台表单缺 `layout` 字段
+
+构建按 `page.layout` 选模板（缺省落到通用网格）。而**「产品详情页」的表单里原本没有这个字段**，
+只有 `car-flags.json` 因为 `layout: "detail"` 是当初手工写进 JSON 才没事。
+**后果：照正常流程在后台新建一款产品并保存，页面会被当成"通用网格"渲染 → 没图库、没规格表。**
+
+修法两道保险：
+1. `admin/config.yml`：给 `product-details` 的「页面声明」补一个 **`widget: hidden, default: detail`** 的 `layout` 字段
+   （新建条目自动写入，界面上不显示、不用用户操心）；
+2. `scripts/build.mjs`：**`content/product-details/` 下的文件即使缺 `layout`，也按 `detail` 渲染**。
+
+> **验证方式（可复用）**：把 `table-flags.json` 复制一份、删掉 `layout` 行、构建 →
+> 输出应打印 `layout: detail`，产物里应含 `pd-gallery` / `pd-spec`；测完删掉临时文件重建。
+
+### ④ 用户决策
+
+- **详情页不加「优势条」**：优势条仍只在原来那 6 页（feather / national / stands-displays /
+  pole-display / banner / products）——**以后新增 detail 页不要顺手加上去**。
+- 页面上那 7 行规格值（MOQ 100 / Lead Time 7-12 days 等）是照 car-flags 惯例先填的，**待用户核对**。
+
+> 📌 完整技术复盘见 `AI-GUIDE.md` **§10.31** 与 **坑 #31 / #32**；
+> 面向用户的分步教程见《后台管理操作说明书.html》**第 19 章**（含 11 张标注截图）。
+
+---
+
 ## 🎯 首页大标题：两行显示 + 字号可调（2026-09-14 新增）
 
 首页首屏（Hero）的大标题现在**分成两行**，不再是挤成一坨的长句：
@@ -291,8 +349,14 @@ This is **very important** for your order.
 
 **两种页面入口的区别（用哪个）**：
 - **新增类目页**（`content/pages/`）→ 类目/列表型页面：一个页面放一类产品，每个产品配 1 张图（名称/尺寸/材质/描述），模板可选（simple/flags/feather/bannerCards/pole/flex）。如 Products 合集页。注：Stands & Displays 现在用的是「**属性网格类目页**」栏目（见下）。
-- **产品详情页**（`content/product-details/` 目录，后台「产品详情页」栏目）→ 单款产品详情：**多张实拍图**（点击缩略图切换）+ 品名 + **自由增删的『产品属性』**（面料 / 印刷 / 尺寸 / MOQ / 交期作为默认行，可加颜色、缝纫方式等）+ **数量↔价格表**（阶梯价）+ 页面底部 3 张可编辑服务小卡 + 图文区。例：`/car-flags.html`。
+- **产品详情页**（`content/product-details/` 目录，后台「产品详情页」栏目）→ 单款产品详情：**多张实拍图**（点击缩略图切换）+ 品名 + **自由增删的『产品属性』**（面料 / 印刷 / 尺寸 / MOQ / 交期作为默认行，可加颜色、缝纫方式等）+ **数量↔价格表**（阶梯价）+ 页面底部 3 张可编辑服务小卡 + 图文区。例：`/car-flags`、`/table-flags`（2026-09-16 新增）。
 - ⚠️ 注意：「新增类目页」的模板下拉里也有 detail，但该表单字段是通用版（无多图/价格表输入框）——要详情功能请去「产品详情页」栏目建。
+- ⚠️ **「产品详情页」没有「排版模板」下拉**（它固定就是 detail）：该字段是**隐藏的**，由后台自动写入 `page.layout`；
+  若手工删掉它页面会被当通用网格渲染（2026-09-16 已修，见上方条目 / `AI-GUIDE.md` 坑 #32）。
+
+**⚠️ 加一款新产品的完整顺序（最容易踩的一步）**：后台建**页面**（「产品详情页」）→
+再回「新增类目页 → Full Products」加**卡片**（「跳转链接」填那个网址）→ 需要的话去「站点设置 → 导航菜单」加**子菜单**。
+**卡片和菜单都只是指路牌，页面本身必须单独建**——只建卡片不建页面，点开就是 404。
 
 **导航子菜单**：顶部菜单现在支持下拉子菜单（如 Products ▾ → Banners / Car Flags）。配置：`/admin/` → 站点设置 → 导航菜单 → 菜单项展开可「+ 添加 子菜单」（子菜单文字 + 链接）。新增子页面后，用此入口挂到 Products 下。
 
