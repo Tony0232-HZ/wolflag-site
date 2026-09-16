@@ -26,6 +26,11 @@
           "label": "Car Flags",
           "url": "/car-flags",
           "external": false
+        },
+        {
+          "external": false,
+          "label": "Table & Desk Flags",
+          "url": "/table-flags"
         }
       ]
     },
