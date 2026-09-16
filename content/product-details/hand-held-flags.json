@@ -1,0 +1,66 @@
+{
+  "page": {
+    "layout": "detail",
+    "file": "/hand-held-flags.html",
+    "nav": "/hand-held-flags"
+  },
+  "textImg": {
+    "align": "left",
+    "title": "Why Choose WOLFLAG Hand Held Flags",
+    "text": "**• 23 Years of Manufacturing Experience**   Our established factory combines professional expertise with strong capacity for bulk orders.\n\n**• Quality Flags, Made with Care**   Quality materials and careful workmanship help your brand stand out at every event.\n\n**• Hassle-Free Export Service**  Our experienced team coordinates production and shipping to make your sourcing simple."
+  },
+  "slug": "hand-held-flags",
+  "seo": {
+    "title": "Custom Hand Flags Manufacturer & Wholesale | Wolflag Factory",
+    "description": "Source factory-direct custom hand flags & stick flags at wholesale prices. Full-color printing, custom sizes, low MOQ & fast worldwide shipping. Inquire today!"
+  },
+  "heading": "Custom Hand Held Flags Wholesale",
+  "tagline": "Turn every crowd into a brand wave with lightweight, fade-resistant mini flags.",
+  "products": [
+    {
+      "name": "Hand Held Flags",
+      "images": [
+        {
+          "image": "/assets/media/wolflag-wholesale-custom-hand-held-flags.webp"
+        },
+        {
+          "image": "/assets/media/wolflag-custom-country-hand-waving-flags.webp"
+        },
+        {
+          "image": "/assets/media/wolflag-mini-stick-flags-with-poles.webp"
+        }
+      ],
+      "imageAlt": "Wolflag custom hand held stick flags with plastic poles and finials featuring printed country flags for parades, sports events, and national celebrations",
+      "specs": [
+        {
+          "label": "Fabric",
+          "value": "68D / 100D / 150D 100% polyester /110g knitted polyester"
+        },
+        {
+          "label": "Printing",
+          "value": "digital / silkscreen printing"
+        },
+        {
+          "label": "Size",
+          "value": "12''x18'' / 18''x22''/ custom sizes"
+        },
+        {
+          "label": "flag making",
+          "value": "Three sides double-stitched; hoist sleeve fitted on the left / hot cutting"
+        },
+        {
+          "label": "MOQ",
+          "value": "100 pieces"
+        },
+        {
+          "label": "Lead Time",
+          "value": "7-10 days"
+        },
+        {
+          "label": "Flagpole",
+          "value": "Primarily wood and plastic (custom materials available upon request)"
+        }
+      ]
+    }
+  ]
+}
