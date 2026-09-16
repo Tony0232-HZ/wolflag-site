@@ -697,6 +697,9 @@ collections:
         widget: object
         fields:
           - { label: 页面文件名（含 .html）, name: file, widget: string, hint: 如 car-flags.html }
+          # 2026-09-16 补：这个字段原是隐藏的「排版模板=detail」。缺了它，后台新建的产品详情页
+          # 会被当成通用网格渲染（页面会缺图、缺规格表）。用 hidden 让它自动写入、不用您操心。
+          - { label: 排版模板, name: layout, widget: hidden, default: detail }
           - { label: 导航地址，如 /car-flags.html, name: nav, widget: string }
       - label: SEO
         name: seo
