@@ -844,6 +844,43 @@ function aboutParas(text) {
   return String(text || '').split(/\n+/).map((p) => p.trim()).filter(Boolean).map((p) => `<p>${bold(p)}</p>`).join('\n      ');
 }
 
+/** 产品详情页「图文区」的文字（2026-09-16 晚，用户要求的样子）：
+
+    后台写法保持不变（空行分段 / 单个回车换行 / **词** 加粗）。
+    当某一段是「**加粗小标题** 独占一行 + 紧跟正文」的结构时，渲染成「悬挂缩进条目」：
+        每一条 = <p class="ti-item"><span class="ti-h">小标题</span><span class="ti-b">正文</span></p>
+    CSS 用 `display:grid; grid-template-columns:auto 1fr` 让**正文的每一行都从
+    小标题右边那一列开始** —— 也就是用户要的「换行后的文字与正文第一个词对齐」。
+    用 grid 而不用 `text-indent`：每个小标题宽度不同（Direct Source Manufacturer /
+    Diplomatic & Executive Grade Quality…），`auto` 列会各按自己的标题宽度算，
+    固定 text-indent 做不到。
+
+    ⚠️ 两种回退（都走原来的普通段落，行为与 2026-09-16 修好那版一致）：
+      ① 整段没有「独占一行的 **加粗标题**」→ 普通段落（换行 <br>、** 加粗）；
+      ② 有标题但缺正文 → 也走普通段落（避免产出空列）。
+    📌 手机窄屏另外由 CSS 断开 grid（标题独占一行、正文另起），见 site.css 的 640px 断点。 */
+function tiParas(text) {
+  return String(text || '')
+    .split(/\n\s*\n/)
+    .map((para) => para.split('\n').map((s) => s.trim()).filter(Boolean))
+    .filter((lines) => lines.length)
+    .map((lines) => {
+      const items = [];
+      for (const ln of lines) {
+        const m = ln.match(/^\*\*([^*]+)\*\*$/);      // 整行就是一个加粗标题
+        if (m) items.push({ h: m[1], b: [] });
+        else if (items.length) items[items.length - 1].b.push(ln);
+        else items.push({ h: '', b: [ln] });
+      }
+      const usable = items.length > 1 && items.every((it) => it.h && it.b.length);
+      if (!usable) {
+        return `<p>${bold(lines.join('\n')).replace(/\n/g, '<br>')}</p>`;
+      }
+      return items.map((it) => `<p class="ti-item"><span class="ti-h"><strong>${esc(it.h)}</strong></span><span class="ti-b">${bold(it.b.join(' '))}</span></p>`).join('');
+    })
+    .join('');
+}
+
 /** FAQ 答案：后台填的换行要保留（2026-09-14）。
     原先整个答案被塞进一个 <p>，HTML 会把换行折成空格 —— 用户精心排的
     「空行分段 + • 分点」在网页上糊成一整段。现改为：
@@ -1229,7 +1266,7 @@ function detailBody(data) {
   <section class="pd-textimg">
     <div class="container">
       ${ti.title ? `<h2>${esc(ti.title)}</h2>` : ''}
-      ${ti.text ? `<div class="ti-text">${faqAnswer(ti.text)}</div>` : ''}
+      ${ti.text ? `<div class="ti-text ${ti.align === 'center' ? 'is-center' : 'is-left'}">${tiParas(ti.text)}</div>` : ''}
       ${tiImgs ? `<div class="ti-imgs">${tiImgs}</div>` : ''}
     </div>
   </section>` : '';

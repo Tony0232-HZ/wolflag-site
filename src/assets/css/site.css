@@ -2122,18 +2122,46 @@ ul { list-style: none; }
   margin: 0 0 14px;
 }
 .pd-textimg .ti-text {
-  max-width: 760px;
+  /* 基础：宽度、字号行高、颜色（对齐方式由下面的 .is-left / .is-center 决定，可在后台切） */
   margin: 0 auto 24px;
-  text-align: center;
   color: #545a6e;
   font-size: 16px;
   line-height: 26px;
 }
+/* ── 后台「排版方式」两种取值（2026-09-16）─────────────────────────────
+   is-left   = 左对齐通栏：宽度用 .container 内容宽（与上方三张服务卡左右对齐）
+   is-center = 居中窄块：整段居中、宽度约 760px（2026-09-16 之前的旧样式）
+   ⚠️ 这两个 class 由 build.mjs 按 textImg.align 输出，**后台字段是 textImg.align**。 */
+.pd-textimg .ti-text.is-left { text-align: left; }
+.pd-textimg .ti-text.is-center { max-width: 760px; text-align: center; }
 /* 2026-09-16：后台文字现在支持「空行分段 / 单个回车换行 / **加粗**」（同 FAQ），
    所以 .ti-text 由单个 <p> 改成 div 包多个 <p>。全站有 * { margin:0 } reset，
    段落间距要在这里自己补（同 FAQ 的 .faq-a p + p 做法）。 */
 .pd-textimg .ti-text p { margin: 0; }
 .pd-textimg .ti-text p + p { margin-top: 12px; }
+/* 「悬挂缩进」条目（由 build.mjs 的 tiParas() 产出）：
+   小标题在第 1 列、正文在第 2 列 —— 正文折行后每一行都从第 2 列开始，
+   也就是与小标题后面正文的第一个词对齐（用户 2026-09-16 要求）。
+   ⚠️ 用 grid 的 auto 列，每个条目的标题各按自己的宽度算；不要改成 text-indent（固定值做不到）。
+   ⚠️ 只有 is-left 用两列；is-center（窄栏）两列排不下，见下面的 is-center 覆盖。 */
+.pd-textimg .ti-text.is-left .ti-item {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 10px;          /* 小标题与正文之间的「固定一小段距离」 */
+  align-items: baseline;     /* 两边第一行文字基线对齐 */
+}
+.pd-textimg .ti-text.is-left .ti-item .ti-h { white-space: nowrap; }
+.pd-textimg .ti-text.is-left .ti-item .ti-b { min-width: 0; }   /* 允许正文列被压缩（否则长单词会顶宽整列） */
+/* 居中窄块：小标题独占一行、正文另起（窄栏里做不了"同一行+悬挂缩进"） */
+.pd-textimg .ti-text.is-center .ti-item { display: block; }
+.pd-textimg .ti-text.is-center .ti-item .ti-h { display: block; white-space: normal; }
+.pd-textimg .ti-text .ti-item + .ti-item { margin-top: 6px; }
+/* 手机窄屏：is-left 也改成一列（标题窄屏会折行、且会把正文挤成一条） */
+@media (max-width: 640px) {
+  .pd-textimg .ti-text.is-left .ti-item { display: block; }
+  .pd-textimg .ti-text.is-left .ti-item .ti-h { display: block; white-space: normal; }
+  .pd-textimg .ti-text .ti-item + .ti-item { margin-top: 10px; }
+}
 .ti-imgs {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
