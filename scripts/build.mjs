@@ -1151,6 +1151,14 @@ function inlineSvg(urlPath) {
 }
 
 /** 汇总某产品的规格表行：优先用自由属性的 specs 数组；旧字段(fabric/printing/size/moq/leadTime)作兜底，保证兼容 */
+/* 📌 2026-09-16（detailBody 相关，写在这里免得漏进产物 HTML）：
+   本次修了 detail 模板两处「文档承诺了、代码没实现」：
+   ① `textImg.text`（图文区文字）原先 `esc()` → **加粗与换行都不生效**（用户实测报的 bug）。
+      改用 `faqAnswer()`：空行→分段、单个回车→换行、`**词**`→加粗（与 FAQ 同一套约定）。
+   ② `products[].desc`（产品描述）原先 `esc()` → 加粗不生效。CSS 里本来就写着 `.pd-desc strong`，
+      说明当初就打算支持；改用 `bold()`。对不含 `**` 的旧文案，bold() 与 esc() 输出**逐字节一致**。
+   同类还有 `sectionsBlock` 的 `s.text`（flex 图文区块）→ 也已改用 `bold()`。
+   教训：**手册/README 里写「可以用 ** 加粗」之前，先确认那条渲染路径真的产出了 <strong>**（同坑 #25、§10.31）。 */
 function productSpecRows(p) {
   if (p.specs && p.specs.length) return p.specs.filter((s) => s.label || s.value);
   const rows = [];
@@ -1187,7 +1195,7 @@ function detailBody(data) {
       </div>
       <div class="pd-info">
         <h2 class="pd-name">${esc(p.name)}</h2>
-        ${p.desc ? `<p class="pd-desc">${esc(p.desc)}</p>` : ''}
+        ${p.desc ? `<p class="pd-desc">${bold(p.desc)}</p>` : ''}
         ${specs ? `<table class="pd-spec">${specs}</table>` : ''}
         ${priceRows ? `<h3 class="pd-sub">Price List</h3>
       <table class="pd-price"><thead><tr><th>Quantity</th><th>Price</th></tr></thead><tbody>
@@ -1221,7 +1229,7 @@ function detailBody(data) {
   <section class="pd-textimg">
     <div class="container">
       ${ti.title ? `<h2>${esc(ti.title)}</h2>` : ''}
-      ${ti.text ? `<p class="ti-text">${esc(ti.text)}</p>` : ''}
+      ${ti.text ? `<div class="ti-text">${faqAnswer(ti.text)}</div>` : ''}
       ${tiImgs ? `<div class="ti-imgs">${tiImgs}</div>` : ''}
     </div>
   </section>` : '';
@@ -1246,7 +1254,7 @@ function sectionsBlock(data) {
   <section class="flex-section">
     <div class="container">
       ${s.title ? `<h2>${esc(s.title)}</h2>` : ''}
-      ${s.text ? `<p class="flex-text">${esc(s.text)}</p>` : ''}
+      ${s.text ? `<p class="flex-text">${bold(s.text)}</p>` : ''}
       ${imgs ? `<div class="flex-imgs">${imgs}</div>` : ''}
     </div>
   </section>`;

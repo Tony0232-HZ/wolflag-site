@@ -2129,6 +2129,11 @@ ul { list-style: none; }
   font-size: 16px;
   line-height: 26px;
 }
+/* 2026-09-16：后台文字现在支持「空行分段 / 单个回车换行 / **加粗**」（同 FAQ），
+   所以 .ti-text 由单个 <p> 改成 div 包多个 <p>。全站有 * { margin:0 } reset，
+   段落间距要在这里自己补（同 FAQ 的 .faq-a p + p 做法）。 */
+.pd-textimg .ti-text p { margin: 0; }
+.pd-textimg .ti-text p + p { margin-top: 12px; }
 .ti-imgs {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
