@@ -1,0 +1,85 @@
+{
+  "slug": "table-flags",
+  "page": {
+    "file": "table-flags.html",
+    "layout": "detail",
+    "nav": "/table-flags"
+  },
+  "seo": {
+    "title": "Custom Table Flags & Desk Flags Wholesale | WOLFLAG",
+    "description": "Custom printed table flags and desk flags with gold, chrome or black bases, 1 to 12 poles. Factory-direct wholesale from China with low MOQ and fast lead time."
+  },
+  "heading": "Table & Desk Flags",
+  "tagline": "Small flags, big impression",
+  "products": [
+    {
+      "name": "Custom Table & Desk Flags",
+      "desc": "Printed table flags on gold, chrome or black bases — for conference tables, executive offices, receptions and official ceremonies. Choose the number of poles, the base finish and the flag size that fit your occasion.",
+      "images": [
+        {
+          "image": "/assets/media/wolflag-conference-office-desk-flag-display-2.webp"
+        },
+        {
+          "image": "/assets/media/wolflag-stainless-steel-desk-flag-stand.webp"
+        },
+        {
+          "image": "/assets/media/wolflag-conference-office-desk-flag-display-1.webp"
+        }
+      ],
+      "imageAlt": "Custom printed table flags and desk flags with gold and stainless steel bases for conference tables and offices",
+      "specs": [
+        {
+          "label": "Fabric",
+          "value": "polyester / satin"
+        },
+        {
+          "label": "Printing",
+          "value": "digital printing / silkscreen printing"
+        },
+        {
+          "label": "Flag Size",
+          "value": "4\"x6\" / 6\"x9\" / custom sizes"
+        },
+        {
+          "label": "Poles",
+          "value": "1 pole / 2 poles / 6 poles / 12 poles"
+        },
+        {
+          "label": "Base",
+          "value": "gold metal / stainless steel / black plastic"
+        },
+        {
+          "label": "MOQ",
+          "value": "100 pieces"
+        },
+        {
+          "label": "Lead Time",
+          "value": "7-12 days"
+        }
+      ],
+      "prices": []
+    }
+  ],
+  "serviceCards": [
+    {
+      "icon": "/assets/media/svc-support.svg",
+      "title": "24/7 Customer Service",
+      "text": "If you have any questions about ordering or customization, email us any time — our team replies around the clock."
+    },
+    {
+      "icon": "/assets/media/svc-shipping.svg",
+      "title": "Factory-Direct Prices",
+      "text": "We ship directly from our factory with no middlemen, so you get the best factory-direct price."
+    },
+    {
+      "icon": "/assets/media/svc-returns.svg",
+      "title": "Easy & Free Returns",
+      "text": "Changed your mind? Just let us know — our return policy is easy and designed to keep things simple."
+    }
+  ],
+  "textImg": {
+    "title": "Why Choose WOLFLAG Table Flags",
+    "text": "We are a professional flag factory, and table flags are one of our regular products. We have plenty of experience making desk flag sets for embassies, trade shows, corporate receptions and government meetings.\nFull-color printing on quality fabric, waterproof and fade-resistant, with a tidy stitched edge. From artwork proof to production and shipping, our team manages your entire order — every set packed so it stands up straight on the table as soon as it is unpacked.",
+    "images": []
+  }
+}
