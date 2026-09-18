@@ -1,0 +1,64 @@
+{
+  "page": {
+    "layout": "detail",
+    "file": "/custom-pennant-flags.html",
+    "nav": "/custom-pennant-flags"
+  },
+  "textImg": {
+    "align": "left",
+    "title": "Why Choose WOLFLAG Custom Pennant Flags",
+    "text": "**• Factory-Direct Wholesale Value**      Source custom pennant flags directly from our factory for competitive pricing without middleman markups.\n\n**• Custom Designs That Showcase Your Brand**     Choose your sizes, colors, and printed logos for schools, clubs, and promotional events.\n\n**• Flexible MOQ for Every Order**     Order the quantity you need, from small custom runs to bulk wholesale orders.\n"
+  },
+  "slug": "custom-pennant-flags",
+  "seo": {
+    "title": "Custom Pennant Flags Wholesale | Factory Direct | Wolflag",
+    "description": " High-definition full-color printing delivers crisp logos and fade-resistant graphics for sports teams, clubs, and corporate branding."
+  },
+  "heading": "Custom Sports & Club Pennant Flags",
+  "tagline": "Made from tear-resistant polyester with reinforced stitching and customizable hanging options, including snap clips and top cords.",
+  "products": [
+    {
+      "name": "Custom Pennant Flags",
+      "desc": "Wolflag Custom Pennant Flags feature vibrant custom printing, durable fabric, and reinforced stitching for clubs, schools, and promotions. With 23 years of manufacturing experience, we offer custom sizes, factory-direct wholesale pricing, and low minimum orders.\n\n",
+      "images": [
+        {
+          "image": "/assets/media/wolflag-custom-printed-triangle-pennant-flag-with-clips.webp"
+        },
+        {
+          "image": "/assets/media/wolflag-custom-club-triangle-pennant-flag-with-rope.webp"
+        },
+        {
+          "image": "/assets/media/wolflag-custom-promotional-hanging-pennant-banner.webp"
+        }
+      ],
+      "imageAlt": "Custom full-color printed triangle pennant flag with reinforced header and hanging clips, wholesale direct from Wolflag factory.",
+      "specs": [
+        {
+          "label": "Fabric ",
+          "value": "68D / 100D / 150D / 300D 100% polyester   / 110g /120g knitted polyester "
+        },
+        {
+          "label": "Printing",
+          "value": "Digital / Silkscreen printing"
+        },
+        {
+          "label": "Size",
+          "value": "14''x24'' / 24''x35.5''  / custom sizes"
+        },
+        {
+          "value": "Double-stitched along both edges, finished with a heavy-duty webbing header on the left, or an optional 5 cm pole sleeve (closed at the top, open at the bottom).",
+          "label": "Flag Making"
+        },
+        {
+          "label": "MOQ",
+          "value": "100 pieces"
+        },
+        {
+          "label": "Lead Time",
+          "value": "7-10 days"
+        }
+      ],
+      "prices": []
+    }
+  ]
+}
