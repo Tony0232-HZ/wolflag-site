@@ -36,6 +36,11 @@
           "external": false,
           "label": "Hand Held Flags",
           "url": "/hand-held-flags"
+        },
+        {
+          "external": false,
+          "label": "International Maritime Signal Flags",
+          "url": "/international-maritime-signal-flags"
         }
       ]
     },
