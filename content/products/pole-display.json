@@ -35,16 +35,22 @@
         "imageAlt": "Polished chrome cross base with 360-degree rotating spindle for feather and teardrop flags"
       },
       {
-        "name": "Heavy-Duty Water Tank Cross Base",
-        "desc": "Engineered for maximum outdoor wind resistance, this hybrid base combines a heavy-duty steel cross stand with a fillable water tank, weighing approx. 33 lbs (15 kg) when filled. Equipped with a smooth 360° rotating spindle, it ensures your feather and teardrop banners rotate freely without tipping over.",
-        "image": "/assets/media/feather-flag-water-tank-cross-base.webp",
-        "imageAlt": "Heavy-Duty Donut Water Weight Bag"
+        "name": "Steel Ground Spike",
+        "image": "/assets/media/wolflag-beach-flag-ground-spike-with-rotator.jpg",
+        "imageAlt": "Heavy-duty steel ground spike with 360-degree rotating spindle for feather and teardrop beach flags - WOLFLAG wholesale",
+        "desc": "Made from wear-resistant stainless steel, this ground spike securely anchors your beach flag pole for a stable, safe display on lawns, gardens, and outdoor events. Its built-in rotating spindle lets the flag turn freely with the wind, while the pointed design allows for quick installation, easy removal, and compact storage."
       },
       {
         "name": "Donut Water Weight Bag",
         "desc": "Designed to slip easily over cross bases and square plate stands, this durable ring fills with water (or sand) to provide critical ground ballast in moderate to high-wind outdoor conditions.",
         "image": "/assets/media/wolflag-round-water-weight-bag.webp",
         "imageAlt": "Wolflag round water weight bag placed over cross base for outdoor banner poles"
+      },
+      {
+        "name": "Heavy-Duty Water Tank Cross Base",
+        "desc": "Engineered for maximum outdoor wind resistance, this hybrid base combines a heavy-duty steel cross stand with a fillable water tank, weighing approx. 33 lbs (15 kg) when filled. Equipped with a smooth 360° rotating spindle, it ensures your feather and teardrop banners rotate freely without tipping over.",
+        "image": "/assets/media/feather-flag-water-tank-cross-base.webp",
+        "imageAlt": "Heavy-Duty Donut Water Weight Bag"
       },
       {
         "name": "Beach Flag Sand Auger Spike",
@@ -63,12 +69,6 @@
         "desc": "Constructed with lightweight aluminum interlocking tubes and a heavy-duty steel base. Offers quick tool-free setup and includes a durable padded carry bag.",
         "image": "/assets/media/wolflag-tension-fabric-banner-stand-frame-kit.webp",
         "imageAlt": "Portable aluminum tube tension fabric display stand kit with heavy base and carry bag - WOLFLAG factory wholesale"
-      },
-      {
-        "name": "Steel Ground Spike",
-        "image": "/assets/media/wolflag-beach-flag-ground-spike-with-rotator.jpg",
-        "imageAlt": "Heavy-duty steel ground spike with 360-degree rotating spindle for feather and teardrop beach flags - WOLFLAG wholesale",
-        "desc": "Made from wear-resistant stainless steel, this ground spike securely anchors your beach flag pole for a stable, safe display on lawns, gardens, and outdoor events. Its built-in rotating spindle lets the flag turn freely with the wind, while the pointed design allows for quick installation, easy removal, and compact storage."
       }
     ]
   },
