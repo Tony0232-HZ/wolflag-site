@@ -1,0 +1,56 @@
+{
+  "page": {
+    "layout": "detail",
+    "file": "/international-maritime-signal-flags.html",
+    "nav": "/international-maritime-signal-flags"
+  },
+  "textImg": {
+    "align": "left"
+  },
+  "slug": "international maritime signal flags",
+  "seo": {
+    "title": "International Maritime Signal Flags Wholesale | Wolflag",
+    "description": "Wolflag manufactures International Maritime Signal Flags in marine-grade, wind & moisture-resistant fabric. 40-piece ICS sets, all sizes, factory-direct. "
+  },
+  "heading": "International Maritime Signal Flags",
+  "tagline": "Source marine-grade international maritime signal flags direct from Wolflag factory at wholesale prices—weather-resistant, durable, and ready to ship. Inquire today!",
+  "products": [
+    {
+      "name": "Mautical Marine Code Flag",
+      "images": [
+        {
+          "image": "/assets/media/wolflag-nautical-marine-code-flag-foxtrot-rope-toggle.webp"
+        },
+        {
+          "image": "/assets/media/wolflag-complete-maritime-signal-flag-set-pocket-organizer.webp"
+        },
+        {
+          "image": "/assets/media/wolflag-international-maritime-signal-flags.webp"
+        }
+      ],
+      "imageAlt": "Wolflag custom international maritime signal flag made of durable marine-grade polyester with rope and toggle heading for nautical boat communication.",
+      "specs": [
+        {
+          "label": "Fabric",
+          "value": "120g / 300D / 600D 100% heavyweight polyester"
+        },
+        {
+          "label": "Printing",
+          "value": "Silkscreen pinting"
+        },
+        {
+          "label": "Size",
+          "value": "12\" x 18\" / 1'x1.25' / 2'x2' / 3'x3'  custom sizes"
+        },
+        {
+          "label": "Flag Making",
+          "value": "Double-stitched on all edges with four-row fly-end reinforcement, completed with a heavy-duty canvas header and marine rope and toggle."
+        },
+        {
+          "label": "MOQ",
+          "value": "50 sets (custom packaging and mixed orders supported)  "
+        }
+      ]
+    }
+  ]
+}
