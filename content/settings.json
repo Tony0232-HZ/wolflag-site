@@ -41,6 +41,11 @@
           "external": false,
           "label": "International Maritime Signal Flags",
           "url": "/international-maritime-signal-flags"
+        },
+        {
+          "external": false,
+          "label": "Custom Pennant Flags",
+          "url": "/custom-pennant-flags"
         }
       ]
     },
