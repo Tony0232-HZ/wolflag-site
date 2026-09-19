@@ -1260,6 +1260,9 @@ function detailBody(data) {
   // alt 回退顺序（2026-09-12 修正）：该图自己的 imageAlt → 图文区级「图片说明(alt)」→ 图文区标题 → 页面主标题。
   // 原写法有两处问题：① 兜底用了作用域外的 p.name（图文区一旦加图且未填标题会抛 ReferenceError）；
   // ② 后台配在图文区层级的 imageAlt 字段被完全忽略（填了不生效）。
+  // ⚠️ 2026-09-19 晚：图文区层级的 imageAlt **已按用户要求从后台表单删除**（图文区通常只放 1 张图，
+  //    多一层框只会让人困惑）。此处保留读取仅为兜底——若历史数据里仍有该值，仍会生效；
+  //    正常情况下链路是：该图自己的 alt → 图文区标题 → 页面主标题。
   const tiAlt = (ti.imageAlt && String(ti.imageAlt).trim()) ? ti.imageAlt : (ti.title || data.heading || '');
   const tiImgs = (ti.images || []).map((im) => `<img src="${esc(imgSrc(im))}" alt="${altOf(im, tiAlt, 'imageAlt')}" loading="lazy" decoding="async">`).join('');
   const textImg = (ti.title || ti.text || tiImgs) ? `

@@ -777,8 +777,9 @@ collections:
             fields:
               - { label: 图片, name: image, widget: image }
               # 2026-09-19 补：与上方「产品图片」同理——原先每张图没地方填 alt（同坑 #32/#33）。
-              - { label: 图片说明(alt，每张图可各写各的), name: imageAlt, widget: string, required: false, hint: 这一张图自己的说明（建议英文，含产品关键词）。留空则自动用下面那行「图片说明(alt)」；下面那行也留空就用品名/标题。多张图内容不同时，建议各写各的。 }
-          - { label: 图片说明(alt，整组图共用；每张图没单独填时用这个), name: imageAlt, widget: string, required: false, hint: 图片说明（alt，建议英文，含产品关键词；留空则自动用品名/标题） }
+              # 2026-09-19 晚（用户拍板）：本区的「整组共用」那层已**删掉**——图文区通常只放 1 张图，
+              # 多一个框只会让人困惑。只保留每张图自己的这一个。
+              - { label: 图片说明(alt，每张图各写各的), name: imageAlt, widget: string, required: false, hint: 这一张图自己的说明（建议英文，含产品关键词）。留空不会有问题：会自动用「图文区大标题」，再没有就用页面主标题。多张图内容不同时，建议各写各的。 }
 
   # ---------- 产品：旗杆展架 ----------
   - name: pole-display
