@@ -218,6 +218,54 @@ git push -u origin main
 > ⚠️ 这一处和上面不同：它的数据格式是「**单值**」型（`field:`），加字段必须**同时升级数据**，
 > 属于 `AI-GUIDE.md` **坑 #20** 的雷区，**不能顺手改**。
 
+## 🏷️ 图片改名：19 张图换成"看得懂、对搜索有用"的名字 + 8 个客户 logo 各写各的说明（2026-09-20）
+
+### 先回答您问的那件事：**后台「Media 图片中心」不能改图片名**
+
+Decap 的媒体中心**只有** 上传 / 复制路径 / 下载 / 删除，**没有重命名**。
+
+**而且这不是"少做一个按钮"** —— 图片名被**写死在网页内容里**（比如某张图的名字记在"羽毛旗产品页"的数据里）。
+**一改名，那处记录就指向一个不存在的文件 → 页面上那张图直接裂掉。**
+所以改名从来不是"改个名字"，而是：**改文件名 → 找出所有引用它的地方一处处改 → 重建 → 逐页检查有没有裂图**。
+**Decap 不给这个按钮，正是为了避免用户一点就把网站弄裂。**
+
+> ✅ **最省事的做法：上传前就命名正确** —— 英文、小写、连字符、说清是什么，例如
+> `custom-teardrop-feather-flag-wholesale.webp`。**省得事后大动。**
+
+### 这次改了什么（您批准后做的）
+
+**① 19 张图换了名字**（我**一张张打开看过**才命名的，不是照原名猜）：
+
+| 类别 | 改前 | 改后（举例） |
+|---|---|---|
+| 国旗 6 张 | `flag-01.webp` … `flag-06.webp` | `custom-china-national-flag.webp`、`custom-usa-national-flag.webp`、`custom-european-union-flag.webp`… |
+| 横幅 6 张 | `banner-1.webp` … `banner-6.webp` | `street-pole-banner-custom-printed.webp`、`swallowtail-banner-custom-printed.webp`… |
+| 车旗 2 张 | `car-flag-01/02.webp` | `spain-car-flag-on-vehicle.webp`、`retail-packed-custom-car-flags.webp` |
+| 旗杆 2 张 | `pole-01/02.webp` | `feather-flag-pole-kit-with-ground-spike.webp`、`indoor-flag-pole-kit-with-eagle-finial.webp` |
+| 展架 2 张 | `a-frame-08.webp`、`pole-08.webp` | `real-estate-open-house-a-frame-sign.webp`、`folding-banner-stand-frame-in-carry-bag.webp` |
+| 桌旗 1 张 | `wolflag-conference-office-desk-flag-display-2.webp` | `wolflag-6-pole-desk-flag-stand-gold-base.webp` |
+
+> 📌 **为什么文件名对 Google 有用**：Google 会读图片的文件名来判断"这张图画的是什么"。
+> `custom-china-national-flag` 一眼看得出是中国国旗，`flag-01` 什么也看不出来。
+>
+> 📌 **一个我如实说明的判断**：客户 logo 那 8 张（可口可乐、肯德基…）**我没改** ——
+> 它们是**别人家的品牌**，客户不会靠搜"可口可乐 logo"找到您，**改名对您的排名几乎没帮助**。
+
+**② 顺带修好一处真问题：「关于我们」页 8 个客户 logo，alt 全是同一句 `Client logo`**
+
+和您上次发现并让我修的那类问题一样（**8 张不同的图共用一个说明**）。现在每个 logo 各写各的品牌名，
+**而且后台能自己改**：`/admin/` → **关于我们** → 页面模块 → **客户区块** → 客户 Logo → 每条现在有两个框（**Logo 图片** + **品牌名(alt)**）。
+
+### ✅ 测过了
+
+| 检查项 | 结果 |
+|---|---|
+| 全站 142 处图片引用，有没有指向不存在的文件 | ✅ **零缺失** |
+| **14 个页面、238 张图**逐张检查有没有裂图 | ✅ **零裂图** |
+| 页面**可见文字**有没有被改名波及 | ✅ **一字未变** |
+| alt 的变化是否正确（**只该变那 8 个客户 logo**） | ✅ 正好只有那 8 个 |
+| 后台 `/admin/` 能否正常打开 | ✅ 无配置报错 |
+
 ## 📐 产品详情页「图文区」：现在能加**多套**，每套可自选**文字/图片的位置**（2026-09-20）
 
 **您要的**：以前图文区**只能加一套**、文字和图片的位置还是**写死的**（文字在上、图片在下）。

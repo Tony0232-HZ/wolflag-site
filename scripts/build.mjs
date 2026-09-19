@@ -982,7 +982,10 @@ function renderAboutBlock(b) {
           <p class="cl-sub">${esc(c.subtitle)}</p>
         </div>
         <div class="cl-logos">
-          ${(c.logos || []).map((l) => `<img src="${esc(l)}" alt="Client logo" loading="lazy" decoding="async" width="128" height="86">`).join('\n        ')}
+          ${/* 2026-09-20：每个 logo 现在能各写各的「品牌名(alt)」（此前 8 个共用写死的 "Client logo"）。
+               用 imgSrc()/altOf() 兼容新旧两种数据格式（纯字符串 / {image,imageAlt}）——同坑 #20 的安全做法。
+               ⚠️ width/height 是**允许写死的 2 处固定 UI 尺寸之一**（另一处是导航 logo），别改成 dimAttrs()。 */
+            ''}${(c.logos || []).map((l) => `<img src="${esc(imgSrc(l))}" alt="${altOf(l, 'Client logo')}" loading="lazy" decoding="async" width="128" height="86">`).join('\n        ')}
         </div>
       </div>
     </section>`;

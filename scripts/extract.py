@@ -47,28 +47,28 @@ IMAGE_MAP = {
     "5323dde5e1": "feather-3.png",   # 003
     "cfb9730e86": "feather-4.png",   # 005
     # National Flag (01=China 02=USA 03=EU 04=Malaysia 05=Kuwait 06=UN)
-    "e839543a54": "flag-01.png",
-    "49a4bbe001": "flag-02.png",
-    "2cc6fc0826": "flag-03.png",
-    "b876cd226f": "flag-04.png",
-    "75fe9bab70": "flag-05.png",
-    "c5c68f9f07": "flag-06.png",
+    "e839543a54": "custom-china-national-flag.png",
+    "49a4bbe001": "custom-usa-national-flag.png",
+    "2cc6fc0826": "custom-european-union-flag.png",
+    "b876cd226f": "custom-malaysia-national-flag.png",
+    "75fe9bab70": "custom-kuwait-national-flag.png",
+    "c5c68f9f07": "custom-united-nations-flag.png",
     # Banner
-    "97e255f945": "banner-1.png",
-    "3bca803b77": "banner-2.png",
-    "269de529d1": "banner-3.png",
-    "959530070c": "banner-4.png",
-    "53dfc3b283": "banner-5.png",
-    "5dc840bcf5": "banner-6.png",
+    "97e255f945": "street-pole-banner-custom-printed.png",
+    "3bca803b77": "swallowtail-banner-custom-printed.png",
+    "269de529d1": "hook-banner-custom-logo.png",
+    "959530070c": "grommet-banner-custom-logo.png",
+    "53dfc3b283": "tassel-banner-nigeria-flag-with-fringe.png",
+    "5dc840bcf5": "tension-fabric-banner-stand-espresso-graphics.png",
     # Pole & Display
-    "a6aedd8f7d": "pole-01.png",
-    "e2dda51519": "pole-02.png",
+    "a6aedd8f7d": "feather-flag-pole-kit-with-ground-spike.png",
+    "e2dda51519": "indoor-flag-pole-kit-with-eagle-finial.png",
     "988f65d0cc": "pole-03.png",
     "881ddd213b": "pole-04.png",
     "b9ac4ea49b": "pole-05.png",
     "f51b39246d": "pole-06.png",
     "bff79d001e": "pole-07.png",
-    "a88d558dae": "pole-08.png",
+    "a88d558dae": "folding-banner-stand-frame-in-carry-bag.png",
 }
 
 def hash_of(b64):

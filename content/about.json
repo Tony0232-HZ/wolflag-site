@@ -124,14 +124,38 @@
       "tagline": "Trusted by over 70+ clients",
       "subtitle": "We bring solutions to make business easier for our customers.",
       "logos": [
-        "/assets/media/client-01.webp",
-        "/assets/media/client-02.webp",
-        "/assets/media/client-03.webp",
-        "/assets/media/client-04.webp",
-        "/assets/media/client-05.webp",
-        "/assets/media/client-06.webp",
-        "/assets/media/client-07.webp",
-        "/assets/media/client-08.webp"
+        {
+          "image": "/assets/media/client-01.webp",
+          "imageAlt": "Coca-Cola"
+        },
+        {
+          "image": "/assets/media/client-02.webp",
+          "imageAlt": "KFC"
+        },
+        {
+          "image": "/assets/media/client-03.webp",
+          "imageAlt": "McDonald's"
+        },
+        {
+          "image": "/assets/media/client-04.webp",
+          "imageAlt": "Six Flags"
+        },
+        {
+          "image": "/assets/media/client-05.webp",
+          "imageAlt": "Olympics"
+        },
+        {
+          "image": "/assets/media/client-06.webp",
+          "imageAlt": "Major League Baseball"
+        },
+        {
+          "image": "/assets/media/client-07.webp",
+          "imageAlt": "DeeSign"
+        },
+        {
+          "image": "/assets/media/client-08.webp",
+          "imageAlt": "Papa John's"
+        }
       ]
     },
     {

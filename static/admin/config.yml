@@ -393,7 +393,17 @@ collections:
                   - { label: 区块标题, name: title, widget: string }
                   - { label: 大标题, name: tagline, widget: string }
                   - { label: 副文案, name: subtitle, widget: string }
-                  - { label: 客户 Logo, name: logos, widget: list, field: { label: Logo, name: logo, widget: image } }
+                  # 2026-09-20：由「单值」（field:，数据是纯字符串）改成「一条记录」（fields:，数据是对象），
+                  # 为的是让每个 logo 能各写各的「品牌名(alt)」——此前 8 个 logo 共用写死的 alt="Client logo"。
+                  # ⚠️ 改 field→fields 前**必须先迁移数据**（about.json 的 logos 已在本提交里升级为对象），
+                  #    否则 Decap 一编辑该列表就崩（坑 #20）。build.mjs 用 imgSrc()/altOf() 两种格式都认。
+                  - label: 客户 Logo
+                    name: logos
+                    widget: list
+                    summary: "{{fields.imageAlt || fields.image}}"
+                    fields:
+                      - { label: Logo 图片, name: image, widget: image }
+                      - { label: 品牌名(alt), name: imageAlt, widget: string, required: false, hint: 建议填英文品牌名（如 Coca-Cola）。会写进图片的 alt，对无障碍和 Google 图片搜索都有帮助；留空会自动兜底。 }
               - label: FAQ 区块
                 name: faq
                 summary: "FAQ 区块"

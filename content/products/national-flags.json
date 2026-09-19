@@ -14,7 +14,7 @@
         { "label": "Fabric", "value": "110g knitted polyester/ 100D polyester" },
         { "label": "Printing", "value": "silkscreen printing /digital printing" }
       ],
-      "image": "/assets/media/flag-01.webp"
+      "image": "/assets/media/custom-china-national-flag.webp"
     },
     {
       "name": "United States flag",
@@ -23,7 +23,7 @@
         { "label": "Fabric", "value": "110g knitted polyester/ 100D polyester" },
         { "label": "Printing", "value": "silkscreen printing /digital printing" }
       ],
-      "image": "/assets/media/flag-02.webp"
+      "image": "/assets/media/custom-usa-national-flag.webp"
     },
     {
       "name": "European Union flag",
@@ -32,7 +32,7 @@
         { "label": "Fabric", "value": "110g knitted polyester/ 100D polyester" },
         { "label": "Printing", "value": "silkscreen printing /digital printing" }
       ],
-      "image": "/assets/media/flag-03.webp"
+      "image": "/assets/media/custom-european-union-flag.webp"
     },
     {
       "name": "Malaysia national flag",
@@ -41,7 +41,7 @@
         { "label": "Fabric", "value": "110g knitted polyester/ 100D polyester" },
         { "label": "Printing", "value": "silkscreen printing /digital printing" }
       ],
-      "image": "/assets/media/flag-04.webp"
+      "image": "/assets/media/custom-malaysia-national-flag.webp"
     },
     {
       "name": "Kuwait national flag",
@@ -50,7 +50,7 @@
         { "label": "Fabric", "value": "110g knitted polyester/ 100D polyester" },
         { "label": "Printing", "value": "silkscreen printing /digital printing" }
       ],
-      "image": "/assets/media/flag-05.webp"
+      "image": "/assets/media/custom-kuwait-national-flag.webp"
     },
     {
       "name": "United Nations flag",
@@ -59,7 +59,7 @@
         { "label": "Fabric", "value": "110g knitted polyester/ 100D polyester" },
         { "label": "Printing", "value": "silkscreen printing /digital printing" }
       ],
-      "image": "/assets/media/flag-06.webp"
+      "image": "/assets/media/custom-united-nations-flag.webp"
     }
   ],
   "supplement": [],
