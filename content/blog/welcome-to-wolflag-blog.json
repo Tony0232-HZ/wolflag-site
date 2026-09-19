@@ -9,7 +9,8 @@
     {
       "type": "image",
       "image": "/assets/media/national-banner.webp",
-      "text": "National flags in our showroom"
+      "text": "National flags in our showroom",
+      "imageAlt": "Indoor flag display with USA and China national flags on gold-based flagpoles"
     },
     {
       "type": "h2",

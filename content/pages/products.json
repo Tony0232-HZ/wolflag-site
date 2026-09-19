@@ -28,7 +28,8 @@
       "size": "",
       "material": "",
       "desc": "Custom car flags with full-color printing, multiple sizes and factory-direct pricing.",
-      "image": "/assets/media/custom-car-flags.webp"
+      "image": "/assets/media/custom-car-flags.webp",
+      "imageAlt": "Custom car window flags in UK, Italy, Spain and sports team designs"
     },
     {
       "name": "Table & Desk Flags",
@@ -60,5 +61,6 @@
       "desc": "Custom Pennant Flags are full-color printed on durable polyester with double-stitched edges and a finished header with clips or hanging cord. Available in any size and shape for clubs, schools, events, and promotions. ",
       "imageAlt": "Custom full-color printed marine pennant flag with reinforced header and snap hook, manufactured by Wolflag for boats and yacht clubs."
     }
-  ]
+  ],
+  "imageAlt": "Wolflag factory-direct promotional banner reading Factory direct, Empowering you"
 }

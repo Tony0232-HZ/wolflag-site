@@ -25,7 +25,8 @@
           "value": "Aluminum alloy / U-PVC"
         }
       ],
-      "image": "/assets/media/roll-up-banner-stand.webp"
+      "image": "/assets/media/roll-up-banner-stand.webp",
+      "imageAlt": "Retractable roll up banner stand with custom printed graphic and carry bag"
     },
     {
       "name": "X Stand Banners",
@@ -40,7 +41,8 @@
           "value": "Aluminum, fiberglass pole + ABS connectors"
         }
       ],
-      "image": "/assets/media/x-banner-stand.jpg"
+      "image": "/assets/media/x-banner-stand.jpg",
+      "imageAlt": "X-banner stand with tripod base and custom printed sports banner"
     },
     {
       "name": "A-Frame Signs",
@@ -55,7 +57,8 @@
           "value": "Aluminum alloy"
         }
       ],
-      "image": "/assets/media/a-frame-sign-remax.jpg"
+      "image": "/assets/media/a-frame-sign-remax.jpg",
+      "imageAlt": "A-frame sidewalk sign with custom printed FOR SALE real estate panel"
     },
     {
       "name": "Real Estate A-Frame",
@@ -70,7 +73,8 @@
           "value": "Material: Steel"
         }
       ],
-      "image": "/assets/media/real-estate-open-house-a-frame-sign.webp"
+      "image": "/assets/media/real-estate-open-house-a-frame-sign.webp",
+      "imageAlt": "Real estate open house A-frame sign with pennant flag and custom panels"
     },
     {
       "name": "Solar Light Box",
@@ -85,7 +89,8 @@
           "value": "Aluminum Alloy & Tempered Glass"
         }
       ],
-      "image": "/assets/media/solar-light-box.webp"
+      "image": "/assets/media/solar-light-box.webp",
+      "imageAlt": "Solar powered light box display stand with caster wheels for outdoor advertising"
     },
     {
       "name": "H-Stakes & Yard Signs",
@@ -100,9 +105,11 @@
           "value": "PP Hollow Board  / steel"
         }
       ],
-      "image": "/assets/media/h-stake-yard-signs.webp"
+      "image": "/assets/media/h-stake-yard-signs.webp",
+      "imageAlt": "H-stake yard signs with double H wire frame and full color printed panel"
     }
   ],
   "bannerImage": "/assets/media/banners-banner.webp",
-  "supplement": []
+  "supplement": [],
+  "imageAlt": "Wolflag factory welcome banner reading we produce high quality banners"
 }

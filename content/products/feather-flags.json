@@ -109,7 +109,8 @@
       "show": false,
       "title": "Bring Your Design to Life",
       "text": "**Tell us your idea** — our team will help you customize your feather flags, with factory-direct pricing and fast turnaround. Email us anytime for a free quote.",
-      "image": "/assets/media/about-factory.webp"
+      "image": "/assets/media/about-factory.webp",
+      "imageAlt": "Wolflag flag factory building in Pinghu with three flags on flagpoles"
     }
   ],
   "page": {

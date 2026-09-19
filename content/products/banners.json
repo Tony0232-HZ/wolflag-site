@@ -20,7 +20,8 @@
         }
       ],
       "subtitle": "attract the attention of passersby\na sleeve at both the top and bottom.",
-      "image": "/assets/media/street-pole-banner-custom-printed.webp"
+      "image": "/assets/media/street-pole-banner-custom-printed.webp",
+      "imageAlt": "Custom printed street pole banner for street advertising"
     },
     {
       "name": "Swallowtail banner",
@@ -35,7 +36,8 @@
         }
       ],
       "subtitle": "A unique shape, like a beautiful landscape.\na sleeve at both the top and 2 grommets at bottom.",
-      "image": "/assets/media/swallowtail-banner-custom-printed.webp"
+      "image": "/assets/media/swallowtail-banner-custom-printed.webp",
+      "imageAlt": "Custom swallowtail banner with a club crest for outdoor events"
     },
     {
       "name": "Hook banner",
@@ -50,7 +52,8 @@
         }
       ],
       "subtitle": "Customizable sizes to fit various spaces\nThe left side is inlaid with sturdy hooks, easily securing it in your desired position",
-      "image": "/assets/media/hook-banner-custom-logo.webp"
+      "image": "/assets/media/hook-banner-custom-logo.webp",
+      "imageAlt": "Custom hook banner with printed brand logo on yellow fabric"
     },
     {
       "name": "grommet banner",
@@ -65,7 +68,8 @@
         }
       ],
       "subtitle": "provide reinforced holes through ropes, hooks, or ties\nmetal rings inserted along the let edges, can be easily tied in various locations",
-      "image": "/assets/media/grommet-banner-custom-logo.webp"
+      "image": "/assets/media/grommet-banner-custom-logo.webp",
+      "imageAlt": "Custom grommet banner with printed logo in magenta"
     },
     {
       "name": "tassel banner",
@@ -80,7 +84,8 @@
         }
       ],
       "subtitle": "adorned with tassels on its three edges\nTassels make the banner stand out, providing a more elegant look",
-      "image": "/assets/media/tassel-banner-nigeria-flag-with-fringe.webp"
+      "image": "/assets/media/tassel-banner-nigeria-flag-with-fringe.webp",
+      "imageAlt": "Custom tassel banner with gold fringe in Nigeria flag design"
     },
     {
       "name": "Banner stand",
@@ -95,7 +100,8 @@
         }
       ],
       "subtitle": "ideal for trade shows, exhibitions and promotion\neasy to set up and dismantle, Banner stands take up minimal floor space",
-      "image": "/assets/media/tension-fabric-banner-stand-espresso-graphics.webp"
+      "image": "/assets/media/tension-fabric-banner-stand-espresso-graphics.webp",
+      "imageAlt": "Custom tension fabric banner stand with printed drink promotion graphics"
     }
   ],
   "supplement": [],
@@ -103,5 +109,6 @@
     "file": "banner.html",
     "layout": "bannerCards",
     "nav": "/banner"
-  }
+  },
+  "imageAlt": "Large custom printed banners hanging on a university building facade"
 }

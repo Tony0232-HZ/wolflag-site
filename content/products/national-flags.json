@@ -10,56 +10,116 @@
     {
       "name": "China national flag",
       "specs": [
-        { "label": "Size", "value": "3.15*2.1ft / 4.72*3.15ft / 6.3*4.2ft" },
-        { "label": "Fabric", "value": "110g knitted polyester/ 100D polyester" },
-        { "label": "Printing", "value": "silkscreen printing /digital printing" }
+        {
+          "label": "Size",
+          "value": "3.15*2.1ft / 4.72*3.15ft / 6.3*4.2ft"
+        },
+        {
+          "label": "Fabric",
+          "value": "110g knitted polyester/ 100D polyester"
+        },
+        {
+          "label": "Printing",
+          "value": "silkscreen printing /digital printing"
+        }
       ],
-      "image": "/assets/media/custom-china-national-flag.webp"
+      "image": "/assets/media/custom-china-national-flag.webp",
+      "imageAlt": "Custom printed China national flag, wholesale from Wolflag flag factory"
     },
     {
       "name": "United States flag",
       "specs": [
-        { "label": "Size", "value": "1.9*1ft / 2.8*1.5ft / 3.78*2ft" },
-        { "label": "Fabric", "value": "110g knitted polyester/ 100D polyester" },
-        { "label": "Printing", "value": "silkscreen printing /digital printing" }
+        {
+          "label": "Size",
+          "value": "1.9*1ft / 2.8*1.5ft / 3.78*2ft"
+        },
+        {
+          "label": "Fabric",
+          "value": "110g knitted polyester/ 100D polyester"
+        },
+        {
+          "label": "Printing",
+          "value": "silkscreen printing /digital printing"
+        }
       ],
-      "image": "/assets/media/custom-usa-national-flag.webp"
+      "image": "/assets/media/custom-usa-national-flag.webp",
+      "imageAlt": "Custom printed United States national flag, wholesale from Wolflag flag factory"
     },
     {
       "name": "European Union flag",
       "specs": [
-        { "label": "Size", "value": "3*5ft / 3.3*6.6ft / 4*6ft" },
-        { "label": "Fabric", "value": "110g knitted polyester/ 100D polyester" },
-        { "label": "Printing", "value": "silkscreen printing /digital printing" }
+        {
+          "label": "Size",
+          "value": "3*5ft / 3.3*6.6ft / 4*6ft"
+        },
+        {
+          "label": "Fabric",
+          "value": "110g knitted polyester/ 100D polyester"
+        },
+        {
+          "label": "Printing",
+          "value": "silkscreen printing /digital printing"
+        }
       ],
-      "image": "/assets/media/custom-european-union-flag.webp"
+      "image": "/assets/media/custom-european-union-flag.webp",
+      "imageAlt": "Custom printed European Union flag, wholesale from Wolflag flag factory"
     },
     {
       "name": "Malaysia national flag",
       "specs": [
-        { "label": "Size", "value": "2*1ft / 4*2ft / 6*3ft / 8*4ft" },
-        { "label": "Fabric", "value": "110g knitted polyester/ 100D polyester" },
-        { "label": "Printing", "value": "silkscreen printing /digital printing" }
+        {
+          "label": "Size",
+          "value": "2*1ft / 4*2ft / 6*3ft / 8*4ft"
+        },
+        {
+          "label": "Fabric",
+          "value": "110g knitted polyester/ 100D polyester"
+        },
+        {
+          "label": "Printing",
+          "value": "silkscreen printing /digital printing"
+        }
       ],
-      "image": "/assets/media/custom-malaysia-national-flag.webp"
+      "image": "/assets/media/custom-malaysia-national-flag.webp",
+      "imageAlt": "Custom printed Malaysia national flag, wholesale from Wolflag flag factory"
     },
     {
       "name": "Kuwait national flag",
       "specs": [
-        { "label": "Size", "value": "2*1ft / 4*2ft / 6*3ft / 8*4ft" },
-        { "label": "Fabric", "value": "110g knitted polyester/ 100D polyester" },
-        { "label": "Printing", "value": "silkscreen printing /digital printing" }
+        {
+          "label": "Size",
+          "value": "2*1ft / 4*2ft / 6*3ft / 8*4ft"
+        },
+        {
+          "label": "Fabric",
+          "value": "110g knitted polyester/ 100D polyester"
+        },
+        {
+          "label": "Printing",
+          "value": "silkscreen printing /digital printing"
+        }
       ],
-      "image": "/assets/media/custom-kuwait-national-flag.webp"
+      "image": "/assets/media/custom-kuwait-national-flag.webp",
+      "imageAlt": "Custom printed Kuwait national flag, wholesale from Wolflag flag factory"
     },
     {
       "name": "United Nations flag",
       "specs": [
-        { "label": "Size", "value": "2*3ft / 3*5ft / 4*6ft" },
-        { "label": "Fabric", "value": "110g knitted polyester/ 100D polyester" },
-        { "label": "Printing", "value": "silkscreen printing /digital printing" }
+        {
+          "label": "Size",
+          "value": "2*3ft / 3*5ft / 4*6ft"
+        },
+        {
+          "label": "Fabric",
+          "value": "110g knitted polyester/ 100D polyester"
+        },
+        {
+          "label": "Printing",
+          "value": "silkscreen printing /digital printing"
+        }
       ],
-      "image": "/assets/media/custom-united-nations-flag.webp"
+      "image": "/assets/media/custom-united-nations-flag.webp",
+      "imageAlt": "Custom printed United Nations flag, wholesale from Wolflag flag factory"
     }
   ],
   "supplement": [],
@@ -67,5 +127,6 @@
     "file": "national-flag.html",
     "layout": "flags",
     "nav": "/national-flag"
-  }
+  },
+  "imageAlt": "Indoor flag display with USA and China national flags on gold-based flagpoles"
 }

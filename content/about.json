@@ -6,7 +6,8 @@
   "hero": {
     "title": "Quality Factory - 23 Years of Excellence",
     "subtitle": "23 Years of Excellence",
-    "image": "/assets/media/world-flags-banner.webp"
+    "image": "/assets/media/world-flags-banner.webp",
+    "imageAlt": "Close-up of international national flags including Argentina, Brazil, Canada, China and USA"
   },
   "announce": {
     "enabled": true,
@@ -43,7 +44,8 @@
       "images": [
         {
           "image": "/assets/media/about-factory.webp",
-          "offset": 0
+          "offset": 0,
+          "imageAlt": "Wolflag flag factory building in Pinghu with three flags on flagpoles"
         }
       ],
       "type": "textImg",
