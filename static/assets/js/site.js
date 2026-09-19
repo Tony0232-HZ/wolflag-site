@@ -50,6 +50,10 @@
     g.querySelectorAll('.pd-thumb').forEach(function (t) {
       t.addEventListener('click', function () {
         main.src = t.getAttribute('data-src');
+        /* 2026-09-19 修：原先只换 src、不换 alt → 点第 2 张后大图是第 2 张、
+           说明却还是第 1 张的（图与文字对不上）。现在 alt 跟着一起换。 */
+        var ti = t.querySelector('img');
+        if (ti) main.alt = ti.getAttribute('alt') || '';
         g.querySelectorAll('.pd-thumb.on').forEach(function (o) { o.classList.remove('on'); });
         t.classList.add('on');
       });

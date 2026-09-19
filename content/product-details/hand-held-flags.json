@@ -21,13 +21,16 @@
       "name": "Hand Held Flags",
       "images": [
         {
-          "image": "/assets/media/wolflag-wholesale-custom-hand-held-flags.webp"
+          "image": "/assets/media/wolflag-wholesale-custom-hand-held-flags.webp",
+          "imageAlt": "Wholesale hand held stick flags in France, Canada, USA and UK designs fanned out for parades and sporting events"
         },
         {
-          "image": "/assets/media/wolflag-custom-country-hand-waving-flags.webp"
+          "image": "/assets/media/wolflag-custom-country-hand-waving-flags.webp",
+          "imageAlt": "Hand waving custom country stick flags including USA and France, showing the lightweight plastic pole grip in use"
         },
         {
-          "image": "/assets/media/wolflag-mini-stick-flags-with-poles.webp"
+          "image": "/assets/media/wolflag-mini-stick-flags-with-poles.webp",
+          "imageAlt": "Custom printed mini stick flags on white wooden poles including German themed designs, a European country flag grid and German state flags"
         }
       ],
       "imageAlt": "Wolflag custom hand held stick flags with plastic poles and finials featuring printed country flags for parades, sports events, and national celebrations",

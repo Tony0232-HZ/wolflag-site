@@ -21,13 +21,16 @@
       "name": "Mautical Marine Code Flag",
       "images": [
         {
-          "image": "/assets/media/wolflag-nautical-marine-code-flag-foxtrot-rope-toggle.webp"
+          "image": "/assets/media/wolflag-nautical-marine-code-flag-foxtrot-rope-toggle.webp",
+          "imageAlt": "International maritime signal flag Foxtrot, a red diamond on white, with rope and toggle heading for boats and yachts"
         },
         {
-          "image": "/assets/media/wolflag-complete-maritime-signal-flag-set-pocket-organizer.webp"
+          "image": "/assets/media/wolflag-complete-maritime-signal-flag-set-pocket-organizer.webp",
+          "imageAlt": "Complete maritime signal flag set stored in a yellow roll-up pocket organizer with labelled slots for A to Z and numeral flags"
         },
         {
-          "image": "/assets/media/wolflag-international-maritime-signal-flags.webp"
+          "image": "/assets/media/wolflag-international-maritime-signal-flags.webp",
+          "imageAlt": "Chart of the international code of signals flags from Alfa to Zulu with numerals, repeaters and their meanings"
         }
       ],
       "imageAlt": "Wolflag custom international maritime signal flag made of durable marine-grade polyester with rope and toggle heading for nautical boat communication.",

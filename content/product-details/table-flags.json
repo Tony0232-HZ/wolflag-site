@@ -17,13 +17,16 @@
       "desc": "Wolflag offers custom desk flags that enhance corporate branding and bring a polished look to diplomatic conferences, executive offices, and official ceremonies.",
       "images": [
         {
-          "image": "/assets/media/wolflag-conference-office-desk-flag-display-2.webp"
+          "image": "/assets/media/wolflag-conference-office-desk-flag-display-2.webp",
+          "imageAlt": "Six-pole desk flag stand with polished gold round base displaying Malaysia, Philippines, Thailand and Netherlands table flags for conferences"
         },
         {
-          "image": "/assets/media/wolflag-stainless-steel-desk-flag-stand.webp"
+          "image": "/assets/media/wolflag-stainless-steel-desk-flag-stand.webp",
+          "imageAlt": "Stainless steel Y-shaped double desk flag stand with chrome base and two custom printed corporate logo desk flags"
         },
         {
-          "image": "/assets/media/wolflag-conference-office-desk-flag-display-1.webp"
+          "image": "/assets/media/wolflag-conference-office-desk-flag-display-1.webp",
+          "imageAlt": "Table desk flag set with two printed mini flags on black poles and a round black base for office and conference display"
         }
       ],
       "imageAlt": "Custom printed table flags and desk flags with gold and stainless steel bases for conference tables and offices",

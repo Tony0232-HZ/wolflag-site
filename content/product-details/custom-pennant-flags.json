@@ -22,13 +22,16 @@
       "desc": "Wolflag Custom Pennant Flags feature vibrant custom printing, durable fabric, and reinforced stitching for clubs, schools, and promotions. With 23 years of manufacturing experience, we offer custom sizes, factory-direct wholesale pricing, and low minimum orders.\n\n",
       "images": [
         {
-          "image": "/assets/media/wolflag-custom-printed-triangle-pennant-flag-with-clips.webp"
+          "image": "/assets/media/wolflag-custom-printed-triangle-pennant-flag-with-clips.webp",
+          "imageAlt": "Custom printed triangle pennant flag with full-colour geometric print, white header and metal clips for clubs and events"
         },
         {
-          "image": "/assets/media/wolflag-custom-club-triangle-pennant-flag-with-rope.webp"
+          "image": "/assets/media/wolflag-custom-club-triangle-pennant-flag-with-rope.webp",
+          "imageAlt": "Custom club pennant flag with gold rope trim celebrating Nigeria's 50th independence anniversary in green and white"
         },
         {
-          "image": "/assets/media/wolflag-custom-promotional-hanging-pennant-banner.webp"
+          "image": "/assets/media/wolflag-custom-promotional-hanging-pennant-banner.webp",
+          "imageAlt": "Custom hanging pennant banner in white and navy blue with a printed compass rose emblem and rope header for yacht clubs"
         }
       ],
       "imageAlt": "Custom full-color printed triangle pennant flag with reinforced header and hanging clips, wholesale direct from Wolflag factory.",

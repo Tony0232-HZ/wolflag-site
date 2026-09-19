@@ -40,13 +40,16 @@
       "desc": "Custom printed car flags for promotions, sports events, dealerships and corporate branding. Fits standard car windows with an easy clip mount.",
       "images": [
         {
-          "image": "/assets/media/custom-car-flags.webp"
+          "image": "/assets/media/custom-car-flags.webp",
+          "imageAlt": "Custom car window flags with white clip-on poles, showing UK, Italy, Spain and a printed sports team flag for vehicle promotions"
         },
         {
-          "image": "/assets/media/car-flag-01.webp"
+          "image": "/assets/media/car-flag-01.webp",
+          "imageAlt": "Spain car flag with white pole and window clip mount fitted to a vehicle, shown waving while driving"
         },
         {
-          "image": "/assets/media/car-flag-02.webp"
+          "image": "/assets/media/car-flag-02.webp",
+          "imageAlt": "Retail-packed custom car flags with branded hang tags for Germany, France and Italy football supporters"
         }
       ]
     }

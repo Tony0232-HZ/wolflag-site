@@ -723,7 +723,11 @@ collections:
             summary: "{{fields.image}}"
             fields:
               - { label: 图片, name: image, widget: image }
-          - { label: 图片说明(alt), name: imageAlt, widget: string, required: false, hint: 图片说明（alt，建议英文，含产品关键词；留空则自动用品名/标题） }
+              # 2026-09-19 补：图库此前「一个产品只有一个 alt」，3 张图被迫共用一句。
+              # 构建端（build.mjs 的 altOf(imgs[j], …)）本来就优先读每张图自己的 imageAlt，
+              # 只是后台表单没这个框 → 用户没地方填（同坑 #32/#33：代码支持、后台写不出来）。
+              - { label: 图片说明(alt，每张图可各写各的), name: imageAlt, widget: string, required: false, hint: 这一张图自己的说明（建议英文，含产品关键词）。留空则自动用下面那行「图片说明(alt)」；下面那行也留空就用品名。三张图内容不同时，建议各写各的——对 Google 图片搜索更有用。 }
+          - { label: 图片说明(alt，整组图共用；每张图没单独填时用这个), name: imageAlt, widget: string, required: false, hint: 图片说明（alt，建议英文，含产品关键词；留空则自动用品名/标题） }
           - label: 产品属性（可自由新增/编辑/删除，如 Fabric、颜色、缝纫方式、特殊工艺、MOQ、交期 等）
             name: specs
             widget: list
@@ -772,7 +776,9 @@ collections:
             summary: "{{fields.image}}"
             fields:
               - { label: 图片, name: image, widget: image }
-          - { label: 图片说明(alt), name: imageAlt, widget: string, required: false, hint: 图片说明（alt，建议英文，含产品关键词；留空则自动用品名/标题） }
+              # 2026-09-19 补：与上方「产品图片」同理——原先每张图没地方填 alt（同坑 #32/#33）。
+              - { label: 图片说明(alt，每张图可各写各的), name: imageAlt, widget: string, required: false, hint: 这一张图自己的说明（建议英文，含产品关键词）。留空则自动用下面那行「图片说明(alt)」；下面那行也留空就用品名/标题。多张图内容不同时，建议各写各的。 }
+          - { label: 图片说明(alt，整组图共用；每张图没单独填时用这个), name: imageAlt, widget: string, required: false, hint: 图片说明（alt，建议英文，含产品关键词；留空则自动用品名/标题） }
 
   # ---------- 产品：旗杆展架 ----------
   - name: pole-display
