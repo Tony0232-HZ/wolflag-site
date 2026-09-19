@@ -2170,6 +2170,60 @@ ul { list-style: none; }
 .ti-imgs img { width: 100%; height: auto; border-radius: 12px; display: block; }
 .ti-imgs img:first-child:nth-last-child(1) { grid-column: 1 / -1; }
 
+/* ── 图文区「文字/图片的位置」四种排布（2026-09-20 新增）──────────────────────
+   后台字段：textImg[].direction —— textTop(默认) / textBottom / textLeft / textRight。
+   做法与「关于我们」页的图文组合一致：HTML 里**永远"先文字、后图片"**，
+   四种位置全靠这里的 order / flex-direction 换位。
+   ⚠️ 这四个 class 由 build.mjs 白名单校验后输出，别改成直接拼内容里的值。
+
+   🔴 默认的 textTop **故意一条规则都不写**：它必须与改版前逐像素一致 ——
+      文字与图片的间距、以及「居中窄块」的居中，继续由 .ti-text 自带的
+      `margin: 0 auto 24px` 提供（那正是旧版的样子）。**给它套 flex + gap 会同时踩两个坑**：
+        ① `align-items:stretch` 遇上 `max-width:760px` 时，块会按 flex-start 落位 →
+           「居中窄块」（car-flags 用的就是这个）会被顶到**贴左边**；
+        ② flex 容器里没有外边距合并，24px 边距若换成 gap，**"只有文字、没有图片"的页面
+           底部会少 24px 留白**、整页变矮（5 个详情页**全是**这种）。
+      📌 教训：**"多一种新能力"不等于"默认那条也要走新代码路径"** —— 默认路径越少改动越安全。 */
+
+/* ① 左右两栏（等宽；栏距 60px，各占一半再各减半栏距） */
+.pd-ti-textLeft, .pd-ti-textRight { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 60px; }
+.pd-ti-textLeft > .ti-text, .pd-ti-textRight > .ti-text,
+.pd-ti-textLeft > .ti-imgs, .pd-ti-textRight > .ti-imgs { flex: 1 1 calc(50% - 30px); min-width: 0; }
+/* 两栏里"文字与图"的间距由 gap 给 → 只清上下外边距；
+   ⚠️ **保留左右 auto 不能写成 margin:0**，否则「居中窄块」会在栏内贴左。 */
+.pd-ti-textLeft > .ti-text, .pd-ti-textRight > .ti-text { margin-top: 0; margin-bottom: 0; }
+/* 半栏里再分两列会窄到看不清 → 图片改成纵向单列（上下两种仍保持多列网格） */
+.pd-ti-textLeft > .ti-imgs, .pd-ti-textRight > .ti-imgs { grid-template-columns: 1fr; }
+/* 半栏里放不下「小标题 + 正文」两列网格：小标题是 nowrap，会把 auto 列撑宽、
+   正文被挤成一条（坑 #23）→ 降级成"小标题独占一行"（同 .is-center 与 640px 断点的既有做法） */
+.pd-ti-textLeft .ti-text.is-left .ti-item, .pd-ti-textRight .ti-text.is-left .ti-item { display: block; }
+.pd-ti-textLeft .ti-text.is-left .ti-item .ti-h, .pd-ti-textRight .ti-text.is-left .ti-item .ti-h { display: block; white-space: normal; }
+/* 图片在左、文字在右：靠 order 换位（DOM 不动） */
+.pd-ti-textRight > .ti-imgs { order: 1; }
+.pd-ti-textRight > .ti-text { order: 2; }
+
+/* ② 图片在上、文字在下（竖排 + order；这是新增能力，没有旧版要对齐） */
+.pd-ti-textBottom { display: flex; flex-direction: column; gap: 24px; }
+/* ⚠️ 必须把 `.ti-text` 自带的 `margin: 0 auto 24px` **整个清掉**（不能只清上下）：
+   **在 flexbox 里，auto 外边距的优先级高于 align-items:stretch** ——
+   只要左右还是 auto，这一项就会被算成"按内容宽 + 居中"，
+   **长段落也不会通栏**（实测：整段文字被压成 369px 宽的一小条、居中飘在中间）。
+   这是"块级布局的 margin:auto 居中"在 flex 里含义变了导致的，**与 textTop 的普通块级流不同**。 */
+.pd-ti-textBottom > .ti-text { margin: 0; }
+/* 但「居中窄块」在竖排里仍需居中：显式给宽度 + auto 两边（有宽度时 auto 才生效） */
+.pd-ti-textBottom > .ti-text.is-center { width: 100%; max-width: 760px; margin-left: auto; margin-right: auto; }
+.pd-ti-textBottom > .ti-imgs { order: 1; }
+.pd-ti-textBottom > .ti-text { order: 2; }
+
+/* ③ 手机/窄屏（≤760px，与「关于我们」图文组合同一个断点）：一律单列上下堆叠 */
+@media (max-width: 760px) {
+  /* 容器改回普通块级流 → order 只对 flex/grid 项生效，于是自动失效、文字自然回到最前 */
+  .pd-ti-textLeft, .pd-ti-textRight { display: block; }
+  /* 还原旧版的「文字与图片间距 24px」（两栏模式里刚被清掉） */
+  .pd-ti-textLeft > .ti-text, .pd-ti-textRight > .ti-text { margin-bottom: 24px; }
+  /* textTop / textBottom 不参与本断点：竖排本来就是单列，且「图片在上」要保持用户选的方向 */
+}
+
 /* ==========================================================================
    Flex layout: heading + sections(title/text/images)
    ========================================================================== */

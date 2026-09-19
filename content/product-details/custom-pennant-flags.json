@@ -4,11 +4,15 @@
     "file": "/custom-pennant-flags.html",
     "nav": "/custom-pennant-flags"
   },
-  "textImg": {
-    "align": "left",
-    "title": "Why Choose WOLFLAG Custom Pennant Flags",
-    "text": "**• Factory-Direct Wholesale Value**      Source custom pennant flags directly from our factory for competitive pricing without middleman markups.\n\n**• Custom Designs That Showcase Your Brand**     Choose your sizes, colors, and printed logos for schools, clubs, and promotional events.\n\n**• Flexible MOQ for Every Order**     Order the quantity you need, from small custom runs to bulk wholesale orders.\n"
-  },
+  "textImg": [
+    {
+      "align": "left",
+      "title": "Why Choose WOLFLAG Custom Pennant Flags",
+      "text": "**• Factory-Direct Wholesale Value**      Source custom pennant flags directly from our factory for competitive pricing without middleman markups.\n\n**• Custom Designs That Showcase Your Brand**     Choose your sizes, colors, and printed logos for schools, clubs, and promotional events.\n\n**• Flexible MOQ for Every Order**     Order the quantity you need, from small custom runs to bulk wholesale orders.\n",
+      "show": true,
+      "direction": "textTop"
+    }
+  ],
   "slug": "custom-pennant-flags",
   "seo": {
     "title": "Custom Pennant Flags Wholesale | Factory Direct | Wolflag",

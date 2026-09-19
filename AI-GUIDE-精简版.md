@@ -170,7 +170,7 @@ wolflag-site/
 | `about.json` | `home` | `hero{}` + **`blocks[]`**（模块列表，可拖排序/增删）。当前顺序：`textImg` → `marquee` → `timeline` → `clients` → `faq`。**每个块都有 `bg`**（背景色） |
 | `products/*.json` | 见右 | 4 个专用类：`feather`(羽毛旗) / `bannerCards`(横幅) / `flags`(国旗) / `pole`(旗杆展架) |
 | `pages/*.json` | 可选 7 种 | 新增类目页（`simple` 通用网格 / `flex` 通用图文 等） |
-| `product-details/*.json` | `detail` | 产品详情页（多图 + specs + prices + serviceCards + textImg） |
+| `product-details/*.json` | `detail` | 产品详情页（多图 + specs + prices + serviceCards + **`textImg[]` 图文区（列表，可加多套）**） |
 | `specgrid/*.json` | `specGrid` | 属性网格类目页 |
 
 **⚠️ 产品卡的"说明模块"统一写法**（2026-09-08 起）：**品名（加粗居中）→ 属性表 `specs[{label,value}]`（可自由增删）→ 宣传语 `subtitle`**。
@@ -179,6 +179,18 @@ wolflag-site/
 > 新样式（雾蓝/米白双色块、3px 白缝）**只用于** `.f-spec` / `.p-spec` / `.sg-spec`。
 
 > 🔴 **详情页不加「优势条」** —— 用户明确说过「car-flags 和 table-flags 不需要」。**以后新增 detail 页不要顺手加。**
+
+**「图文区」`textImg` 是列表**（2026-09-20 起，可加多套）：每套 `{show, direction, title, align, text, images[]}`。
+- `direction`（文字/图片的位置）：`textTop`(默认，= 改版前的样子) / `textBottom` / `textLeft` / `textRight`，由后台下拉选择。
+- **HTML 永远"先文字、后图片"**，四种位置靠 CSS `order` 换位（同 About 图文组合）；**`h2` 在行外面**。
+- ⚠️ **`direction` 走白名单校验**，别把内容里的值直接拼进 class 名。
+- ⚠️ **「左右两栏」必须文字和图片都在**才成立；缺一边 build 会**自动退回 `textTop`**（否则出现"文字只占半栏、右边空一大块"）。
+- ⚠️ 手机上（≤760px）一律单列：左右两种退回"文在上"，**上下两种保持用户选的方向**。
+- ⚠️ CSS 铁律：**默认的 `textTop` 故意一条规则都不写**（保持普通块级流）。给它套 flex+gap 会踩两个坑：
+  ① `align-items:stretch` 遇 `max-width:760px` 时按 flex-start 落位 →「居中窄块」贴左；
+  ② "只有文字没图片"时 gap 不生效 → **整页矮 24px**。
+  另外 **flexbox 里 auto 外边距优先级高于 `stretch`** → 竖排模式下 `.ti-text` 必须整个 `margin:0`（只清上下不够，否则长段落被压成内容宽的一小条）。
+- 📌 **通用教训：「多一种新能力」≠「默认那条也要走新代码路径」——默认路径改动越少越安全。** [§10.35]
 
 **About 的 `blocks[]` 块类型**：`text` / `image` / `textImg`（图文组合，含 `direction`/`ratio`/`imgAlign`/`images[]`/`carousel{}`）/ `clients` / `faq` / `timeline`（年份大事记）/ `marquee`（无缝滚动横幅）。
 > 📌 `carousel` 轮播功能**保留可用**，但**About 页现在没在用**（`enabled:false`）——已被滚动横幅取代。

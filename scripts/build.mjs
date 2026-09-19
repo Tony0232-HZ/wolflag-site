@@ -1256,23 +1256,42 @@ function detailBody(data) {
       <p>${esc(c.text)}</p>
     </div>`;
   }).join('');
-  const ti = data.textImg || {};
-  // alt 回退顺序（2026-09-12 修正）：该图自己的 imageAlt → 图文区级「图片说明(alt)」→ 图文区标题 → 页面主标题。
-  // 原写法有两处问题：① 兜底用了作用域外的 p.name（图文区一旦加图且未填标题会抛 ReferenceError）；
-  // ② 后台配在图文区层级的 imageAlt 字段被完全忽略（填了不生效）。
-  // ⚠️ 2026-09-19 晚：图文区层级的 imageAlt **已按用户要求从后台表单删除**（图文区通常只放 1 张图，
-  //    多一层框只会让人困惑）。此处保留读取仅为兜底——若历史数据里仍有该值，仍会生效；
-  //    正常情况下链路是：该图自己的 alt → 图文区标题 → 页面主标题。
-  const tiAlt = (ti.imageAlt && String(ti.imageAlt).trim()) ? ti.imageAlt : (ti.title || data.heading || '');
-  const tiImgs = (ti.images || []).map((im) => `<img src="${esc(imgSrc(im))}" alt="${altOf(im, tiAlt, 'imageAlt')}" loading="lazy" decoding="async">`).join('');
-  const textImg = (ti.title || ti.text || tiImgs) ? `
+  // 图文区（2026-09-20）：由「单个对象」改为「可加多套的列表」，每套可自选文字/图片位置、可显隐。
+  // ⚠️ 兼容旧单对象（照抄 supplementSection 的做法）——历史数据/未迁移的 JSON 不会渲染崩。
+  const tiRaw = data.textImg;
+  const tiList = Array.isArray(tiRaw) ? tiRaw : (tiRaw ? [tiRaw] : []);
+  const TI_DIRS = ['textTop', 'textBottom', 'textLeft', 'textRight'];   // 四种位置（白名单）
+  const textImg = tiList
+    .filter((ti) => ti && ti.show !== false)
+    .map((ti) => {
+      // 先剔掉"点过 Add 图片但没选文件"的空行 —— 否则会输出 <img src="">（站内踩过这个坑）
+      const imgItems = (ti.images || []).filter((im) => imgSrc(im));
+      // 三样全空 → 这一套不输出（show:false 同理：内容保留、只是不显示）
+      if (!ti.title && !ti.text && !imgItems.length) return '';
+      // alt 回退顺序（2026-09-12 修正）：该图自己的 imageAlt → 本套「图片说明(alt)」→ 本套大标题 → 页面主标题。
+      // ⚠️ 2026-09-19 晚：图文区层级的 imageAlt 已按用户要求从后台表单删除，此处保留读取仅为历史数据兜底。
+      const tiAlt = (ti.imageAlt && String(ti.imageAlt).trim()) ? ti.imageAlt : (ti.title || data.heading || '');
+      const tiImgs = imgItems.map((im) => `<img src="${esc(imgSrc(im))}" alt="${altOf(im, tiAlt, 'imageAlt')}" loading="lazy" decoding="async">`).join('');
+      // ⚠️ 「左右两栏」必须**文字和图片都在**才成立：这一行里只有两个孩子（.ti-text / .ti-imgs），
+      //    大标题 h2 在行**外面** → 缺一边就会出现"文字只占半栏、右边空一大块"，看着像坏了。
+      //    缺就退回 textTop（上下通栏，与改版前一致）。textBottom 不需要这个门控（只有一边时 order 无所谓）。
+      const both = !!ti.text && !!imgItems.length;
+      // 白名单校验：绝不把内容里的值直接拼进 class 名
+      const dir = (both && TI_DIRS.indexOf(ti.direction) >= 0) ? ti.direction : 'textTop';
+      // HTML 里**永远"先文字、后图片"**，四种位置由 CSS 的 order / flex-direction 实现（同 About 图文组合）。
+      return `
   <section class="pd-textimg">
     <div class="container">
       ${ti.title ? `<h2>${esc(ti.title)}</h2>` : ''}
-      ${ti.text ? `<div class="ti-text ${ti.align === 'center' ? 'is-center' : 'is-left'}">${tiParas(ti.text)}</div>` : ''}
-      ${tiImgs ? `<div class="ti-imgs">${tiImgs}</div>` : ''}
+      <div class="pd-ti-row pd-ti-${dir}">
+        ${ti.text ? `<div class="ti-text ${ti.align === 'center' ? 'is-center' : 'is-left'}">${tiParas(ti.text)}</div>` : ''}
+        ${tiImgs ? `<div class="ti-imgs">${tiImgs}</div>` : ''}
+      </div>
     </div>
-  </section>` : '';
+  </section>`;
+    })
+    .filter(Boolean)
+    .join('');
   return `
   <section class="page-hero">
     <div class="container"><h1>${esc(data.heading || '')}</h1>${data.tagline ? `<p class="tagline" style="letter-spacing:0;text-transform:none">${esc(data.tagline)}</p>` : ''}</div>

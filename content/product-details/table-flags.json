@@ -80,9 +80,13 @@
       "text": "Changed your mind? Just let us know — our return policy is easy and designed to keep things simple."
     }
   ],
-  "textImg": {
-    "title": "Why Choose WOLFLAG Table Flags",
-    "text": "**• Direct Source Manufacturer**\nWe engineer custom desk flag systems in-house. From single metal bases to 12-pole diplomatic displays, you get true factory-direct pricing with strict batch-to-batch quality control.\n**• Diplomatic & Executive Grade Quality**\nrusted for embassies, international summits, and corporate boardrooms. We use premium non-fray fabrics with precision-stitched edges and vivid, fade-resistant sublimation printing.\n**• End-to-End Order Management**\nFrom free digital artwork proofs to final dispatch, our team handles the entire process. Enjoy fast turnaround and flexible low MOQs tailored for promotional distributors.\n**• Ready-to-Display Packaging**\nEvery set is packed with custom protective inserts to prevent bending and scratches—guaranteeing your flags stand perfectly upright the moment they are unpacked.",
-    "images": []
-  }
+  "textImg": [
+    {
+      "title": "Why Choose WOLFLAG Table Flags",
+      "text": "**• Direct Source Manufacturer**\nWe engineer custom desk flag systems in-house. From single metal bases to 12-pole diplomatic displays, you get true factory-direct pricing with strict batch-to-batch quality control.\n**• Diplomatic & Executive Grade Quality**\nrusted for embassies, international summits, and corporate boardrooms. We use premium non-fray fabrics with precision-stitched edges and vivid, fade-resistant sublimation printing.\n**• End-to-End Order Management**\nFrom free digital artwork proofs to final dispatch, our team handles the entire process. Enjoy fast turnaround and flexible low MOQs tailored for promotional distributors.\n**• Ready-to-Display Packaging**\nEvery set is packed with custom protective inserts to prevent bending and scratches—guaranteeing your flags stand perfectly upright the moment they are unpacked.",
+      "images": [],
+      "show": true,
+      "direction": "textTop"
+    }
+  ]
 }

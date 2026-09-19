@@ -71,10 +71,14 @@
       "text": "Changed your mind? Just let us know — our return policy is easy and designed to keep things simple."
     }
   ],
-  "textImg": {
-    "title": "Why Choose WOLFLAG Car Flags",
-    "text": "          We're a professional flag factory, and car flags are one of our regular products. We have plenty of experience making car flags to meet all kinds of customer needs.\n          Full-color printing on quality fabric, waterproof and fade-resistant. From artwork proof to production and shipping, our team manages your entire order — packed for every car, bumper or window display.",
-    "images": [],
-    "align": "center"
-  }
+  "textImg": [
+    {
+      "title": "Why Choose WOLFLAG Car Flags",
+      "text": "          We're a professional flag factory, and car flags are one of our regular products. We have plenty of experience making car flags to meet all kinds of customer needs.\n          Full-color printing on quality fabric, waterproof and fade-resistant. From artwork proof to production and shipping, our team manages your entire order — packed for every car, bumper or window display.",
+      "images": [],
+      "align": "center",
+      "show": true,
+      "direction": "textTop"
+    }
+  ]
 }

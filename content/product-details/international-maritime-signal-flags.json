@@ -4,11 +4,15 @@
     "file": "/international-maritime-signal-flags.html",
     "nav": "/international-maritime-signal-flags"
   },
-  "textImg": {
-    "align": "left",
-    "title": "Why Choose WOLFLAG International Maritime Signal Flags",
-    "text": "**• 23 Years of Manufacturing Experience**      Our established factory delivers ICS-compliant signal flags with strong capacity for bulk and wholesale orders.\n\n**• Built for Harsh Marine Conditions**      UV- and salt-resistant fabric with reinforced stitching and heavy-duty canvas headers ensures long service life at sea.\n\n**• Hassle-Free Export Service**       Our experienced team coordinates production and shipping, with a flexible MOQ of just 50 sets to make your sourcing simple."
-  },
+  "textImg": [
+    {
+      "align": "left",
+      "title": "Why Choose WOLFLAG International Maritime Signal Flags",
+      "text": "**• 23 Years of Manufacturing Experience**      Our established factory delivers ICS-compliant signal flags with strong capacity for bulk and wholesale orders.\n\n**• Built for Harsh Marine Conditions**      UV- and salt-resistant fabric with reinforced stitching and heavy-duty canvas headers ensures long service life at sea.\n\n**• Hassle-Free Export Service**       Our experienced team coordinates production and shipping, with a flexible MOQ of just 50 sets to make your sourcing simple.",
+      "show": true,
+      "direction": "textTop"
+    }
+  ],
   "slug": "international maritime signal flags",
   "seo": {
     "title": "International Maritime Signal Flags Wholesale | Wolflag",

@@ -4,11 +4,15 @@
     "file": "/hand-held-flags.html",
     "nav": "/hand-held-flags"
   },
-  "textImg": {
-    "align": "left",
-    "title": "Why Choose WOLFLAG Hand Held Flags",
-    "text": "**• 23 Years of Manufacturing Experience**   Our established factory combines professional expertise with strong capacity for bulk orders.\n\n**• Quality Flags, Made with Care**   Quality materials and careful workmanship help your brand stand out at every event.\n\n**• Hassle-Free Export Service**  Our experienced team coordinates production and shipping to make your sourcing simple."
-  },
+  "textImg": [
+    {
+      "align": "left",
+      "title": "Why Choose WOLFLAG Hand Held Flags",
+      "text": "**• 23 Years of Manufacturing Experience**   Our established factory combines professional expertise with strong capacity for bulk orders.\n\n**• Quality Flags, Made with Care**   Quality materials and careful workmanship help your brand stand out at every event.\n\n**• Hassle-Free Export Service**  Our experienced team coordinates production and shipping to make your sourcing simple.",
+      "show": true,
+      "direction": "textTop"
+    }
+  ],
   "slug": "hand-held-flags",
   "seo": {
     "title": "Custom Hand Flags Manufacturer & Wholesale | Wolflag Factory",
