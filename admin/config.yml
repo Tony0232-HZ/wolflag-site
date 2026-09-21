@@ -220,6 +220,17 @@ collections:
             summary: "{{fields.title || '补充模块'}}"
             fields:
               - { label: 显示此补充模块, name: show, widget: boolean, default: true, hint: 取消勾选即隐藏（内容会保留，重新勾选即可恢复） }
+              - label: 文字/图片的位置
+                name: direction
+                widget: select
+                required: false
+                default: textRight
+                options:
+                  - { label: 图片在左、文字在右（默认，和现在一样）, value: textRight }
+                  - { label: 文字在上、图片在下, value: textTop }
+                  - { label: 图片在上、文字在下, value: textBottom }
+                  - { label: 文字在左、图片在右, value: textLeft }
+                hint: "四种排布在下拉里选一个，然后点右上角 Publish 保存，1-3 分钟生效。\n图片在左、文字在右：默认，和现在一样（左边图片、右边文字）。\n文字在上、图片在下：标题和文字在上、图片在下面。\n图片在上、文字在下：反过来，先让客户看到图。\n文字在左、图片在右：左右两栏并排，方向反过来。\n⚠️ 手机上无论选哪种都会自动变成上下堆叠（屏幕太窄，两栏放不下）；左右两种在手机上会变成「文字在上」。\n每一套可以各选各的，互不影响。\n没有传图片时，一律只显示文字并居中（和现在一样）。"
               - { label: 标题（可选）, name: title, widget: string, required: false }
               - { label: 文字（可用 **词** 加粗）, name: text, widget: text, required: false }
               - { label: 图片（可选）, name: image, widget: image, required: false }
@@ -548,6 +559,17 @@ collections:
         summary: "{{fields.title || '补充模块'}}"
         fields:
           - { label: 显示此补充模块, name: show, widget: boolean, default: true, hint: 取消勾选即隐藏（内容会保留，重新勾选即可恢复） }
+          - label: 文字/图片的位置
+            name: direction
+            widget: select
+            required: false
+            default: textRight
+            options:
+              - { label: 图片在左、文字在右（默认，和现在一样）, value: textRight }
+              - { label: 文字在上、图片在下, value: textTop }
+              - { label: 图片在上、文字在下, value: textBottom }
+              - { label: 文字在左、图片在右, value: textLeft }
+            hint: "四种排布在下拉里选一个，然后点右上角 Publish 保存，1-3 分钟生效。\n图片在左、文字在右：默认，和现在一样（左边图片、右边文字）。\n文字在上、图片在下：标题和文字在上、图片在下面。\n图片在上、文字在下：反过来，先让客户看到图。\n文字在左、图片在右：左右两栏并排，方向反过来。\n⚠️ 手机上无论选哪种都会自动变成上下堆叠（屏幕太窄，两栏放不下）；左右两种在手机上会变成「文字在上」。\n每一套可以各选各的，互不影响。\n没有传图片时，一律只显示文字并居中（和现在一样）。"
           - { label: 标题（可选）, name: title, widget: string, required: false }
           - { label: 文字（可用 **词** 加粗）, name: text, widget: text, required: false }
           - { label: 图片（可选）, name: image, widget: image, required: false }
@@ -595,9 +617,21 @@ collections:
             summary: "{{fields.title || '补充模块'}}"
             fields:
               - { label: 显示此补充模块, name: show, widget: boolean, default: true, hint: 取消勾选即隐藏（内容会保留，重新勾选即可恢复） }
+              - label: 文字/图片的位置
+                name: direction
+                widget: select
+                required: false
+                default: textRight
+                options:
+                  - { label: 图片在左、文字在右（默认，和现在一样）, value: textRight }
+                  - { label: 文字在上、图片在下, value: textTop }
+                  - { label: 图片在上、文字在下, value: textBottom }
+                  - { label: 文字在左、图片在右, value: textLeft }
+                hint: "四种排布在下拉里选一个，然后点右上角 Publish 保存，1-3 分钟生效。\n图片在左、文字在右：默认，和现在一样（左边图片、右边文字）。\n文字在上、图片在下：标题和文字在上、图片在下面。\n图片在上、文字在下：反过来，先让客户看到图。\n文字在左、图片在右：左右两栏并排，方向反过来。\n⚠️ 手机上无论选哪种都会自动变成上下堆叠（屏幕太窄，两栏放不下）；左右两种在手机上会变成「文字在上」。\n每一套可以各选各的，互不影响。\n没有传图片时，一律只显示文字并居中（和现在一样）。"
               - { label: 标题（可选）, name: title, widget: string, required: false }
               - { label: 文字（可用 **词** 加粗）, name: text, widget: text, required: false }
               - { label: 图片（可选）, name: image, widget: image, required: false }
+              - { label: 图片说明(alt), name: imageAlt, widget: string, required: false, hint: 图片说明（alt，建议英文，含产品关键词；留空则自动用本套的标题） }
 
   # ---------- 产品：横幅 ----------
   - name: banners
@@ -641,9 +675,21 @@ collections:
             summary: "{{fields.title || '补充模块'}}"
             fields:
               - { label: 显示此补充模块, name: show, widget: boolean, default: true, hint: 取消勾选即隐藏（内容会保留，重新勾选即可恢复） }
+              - label: 文字/图片的位置
+                name: direction
+                widget: select
+                required: false
+                default: textRight
+                options:
+                  - { label: 图片在左、文字在右（默认，和现在一样）, value: textRight }
+                  - { label: 文字在上、图片在下, value: textTop }
+                  - { label: 图片在上、文字在下, value: textBottom }
+                  - { label: 文字在左、图片在右, value: textLeft }
+                hint: "四种排布在下拉里选一个，然后点右上角 Publish 保存，1-3 分钟生效。\n图片在左、文字在右：默认，和现在一样（左边图片、右边文字）。\n文字在上、图片在下：标题和文字在上、图片在下面。\n图片在上、文字在下：反过来，先让客户看到图。\n文字在左、图片在右：左右两栏并排，方向反过来。\n⚠️ 手机上无论选哪种都会自动变成上下堆叠（屏幕太窄，两栏放不下）；左右两种在手机上会变成「文字在上」。\n每一套可以各选各的，互不影响。\n没有传图片时，一律只显示文字并居中（和现在一样）。"
               - { label: 标题（可选）, name: title, widget: string, required: false }
               - { label: 文字（可用 **词** 加粗）, name: text, widget: text, required: false }
               - { label: 图片（可选）, name: image, widget: image, required: false }
+              - { label: 图片说明(alt), name: imageAlt, widget: string, required: false, hint: 图片说明（alt，建议英文，含产品关键词；留空则自动用本套的标题） }
 
   # ---------- 产品：国旗 ----------
   - name: national-flags
@@ -687,9 +733,21 @@ collections:
             summary: "{{fields.title || '补充模块'}}"
             fields:
               - { label: 显示此补充模块, name: show, widget: boolean, default: true, hint: 取消勾选即隐藏（内容会保留，重新勾选即可恢复） }
+              - label: 文字/图片的位置
+                name: direction
+                widget: select
+                required: false
+                default: textRight
+                options:
+                  - { label: 图片在左、文字在右（默认，和现在一样）, value: textRight }
+                  - { label: 文字在上、图片在下, value: textTop }
+                  - { label: 图片在上、文字在下, value: textBottom }
+                  - { label: 文字在左、图片在右, value: textLeft }
+                hint: "四种排布在下拉里选一个，然后点右上角 Publish 保存，1-3 分钟生效。\n图片在左、文字在右：默认，和现在一样（左边图片、右边文字）。\n文字在上、图片在下：标题和文字在上、图片在下面。\n图片在上、文字在下：反过来，先让客户看到图。\n文字在左、图片在右：左右两栏并排，方向反过来。\n⚠️ 手机上无论选哪种都会自动变成上下堆叠（屏幕太窄，两栏放不下）；左右两种在手机上会变成「文字在上」。\n每一套可以各选各的，互不影响。\n没有传图片时，一律只显示文字并居中（和现在一样）。"
               - { label: 标题（可选）, name: title, widget: string, required: false }
               - { label: 文字（可用 **词** 加粗）, name: text, widget: text, required: false }
               - { label: 图片（可选）, name: image, widget: image, required: false }
+              - { label: 图片说明(alt), name: imageAlt, widget: string, required: false, hint: 图片说明（alt，建议英文，含产品关键词；留空则自动用本套的标题） }
 
   # ---------- 产品详情页（多图 + 规格 + 价格表 + 服务卡 + 图文区） ----------
   - name: product-details

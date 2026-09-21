@@ -717,14 +717,22 @@ function benefitsSection() {
 }
 
 // 补充模块（可加多个：每个 图 + 标题 + 文字；show!==false 且至少一项有内容才渲染；兼容旧版单对象；2026-09-08 全站通用）
+// 「文字/图片的位置」direction（2026-09-21 新增，取值与图文区保持一致）：
+//   ⚠️ 走白名单校验，别把内容里的值直接拼进 class 名；
+//   ⚠️ textRight（图左文右）= 改动前的版式，是默认；缺省 / 非法值一律退回它 → 老数据零变化；
+//   ⚠️ 没图片时（.f-supp-txt）方向不生效，仍按原来的「只显示文字并居中」渲染。
+const SUPP_DIRS = ['textTop', 'textBottom', 'textLeft', 'textRight'];
 function supplementSection(data) {
   const raw = data && data.supplement;
   const items = Array.isArray(raw) ? raw : (raw ? [raw] : []);
   return items.filter((s) => s && s.show !== false && (s.text || s.title || s.image))
-    .map((s) => `
+    .map((s) => {
+      const dir = SUPP_DIRS.includes(s.direction) ? s.direction : 'textRight';
+      const cls = s.image ? ` f-supp-${dir}` : ' f-supp-txt';
+      return `
     <section class="section">
       <div class="container">
-        <div class="f-supp${s.image ? '' : ' f-supp-txt'}">
+        <div class="f-supp${cls}">
           ${s.image ? `<div class="f-supp-img"><img src="${esc(s.image)}" alt="${altOf(s, s.title || '', 'imageAlt')}" decoding="async"></div>` : ''}
           <div class="f-supp-body">
             ${s.title ? `<h2 class="f-supp-title">${esc(s.title)}</h2>` : ''}
@@ -732,7 +740,8 @@ function supplementSection(data) {
           </div>
         </div>
       </div>
-    </section>`).join('');
+    </section>`;
+    }).join('');
 }
 
 function featherBody(data) {

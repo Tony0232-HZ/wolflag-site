@@ -879,6 +879,17 @@ ul { list-style: none; }
 .f-supp-title { font-size: 26px; font-weight: 700; color: #191a19; margin-bottom: 14px; }
 .f-supp-text { color: #444c58; font-size: 16px; line-height: 1.7; }
 .f-supp.f-supp-txt { display: block; text-align: center; padding: 40px; }
+/* 补充模块「文字/图片的位置」（2026-09-21 新增）：
+   默认 textRight（图左文右）= 上面那套原样，一条规则都不写——默认路径零改动。
+   另外三种只靠 flex-direction / order 换位；HTML 顺序永远是「先图片、后文字」。
+   手机（≤700px）由下面那条 flex-direction:column 接管：左右两种自动退回「文字在上」，
+   上下两种保持用户选的方向——四种在手机上都是单列。 */
+.f-supp.f-supp-textTop,
+.f-supp.f-supp-textBottom { flex-direction: column; align-items: stretch; }
+.f-supp.f-supp-textTop .f-supp-img,
+.f-supp.f-supp-textBottom .f-supp-img { flex: none; width: 100%; }
+.f-supp.f-supp-textTop .f-supp-img { order: 2; }
+.f-supp.f-supp-textLeft .f-supp-body { order: -1; }
 @media (max-width: 700px) {
   .f-supp { flex-direction: column; gap: 24px; padding: 24px; }
   .f-supp-img { flex: none; width: 100%; }
