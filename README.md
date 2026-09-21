@@ -966,7 +966,7 @@ About 页新增一条**工厂车间实拍横幅**，会**一直往左缓慢滚�
 
 首页首屏右上角有一个金色「Download Catalog (PDF)」按钮（**只出现在首页**），点击可下载产品手册。相关配置：
 
-- **数据**：`content/settings.json` → `catalogButton`（`text` 按钮文字、`file` PDF 路径）。当前 PDF：`media/wolflag-catalog.pdf`（13.6MB），网站引用 `/assets/media/wolflag-catalog.pdf`。
+- **数据**：`content/settings.json` → `catalogButton`（`text` 按钮文字、`file` PDF 路径）。当前 PDF：`media/wolflag-product-catalogue.pdf`（13.4MB），网站引用 `/assets/media/wolflag-product-catalogue.pdf`。
 - **后台更新手册**：`/admin/` → 站点设置 →「产品手册下载按钮」→ 用文件组件上传/替换 PDF → 保存，线上自动生效。
 - **配色**：金黄橙 `#f59e0b`（hover `#d97706`）+ 深藏青字，CSS 变量在 `src/assets/css/site.css` 的 `:root`（`--catalog` / `--catalog-dark`）。改色只改这两个变量。
 - **为何在首页而非顶栏**：早期放共享顶栏导致菜单拥挤且间距难调，故移到首页首屏（`homeBody()` 里用绝对定位渲染，右边缘与首屏大图对齐）。
