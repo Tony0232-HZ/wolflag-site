@@ -8,6 +8,7 @@
     "interval": 5,
     "sepColor": "#a89a99",
     "text": "We are delighted to enhance the quality of products and services for our customers. Honesty and integrity are the qualities we adhere to.",
+    "imageAlt": "Row of custom national flags on flagpoles at an outdoor flag display",
     "title": "Custom Flag Manufacturer in China",
     "images": [
       {
@@ -30,8 +31,7 @@
     "features": [
       "Professional",
       "Reliable"
-    ],
-    "imageAlt": "Row of custom national flags on flagpoles at an outdoor flag display"
+    ]
   },
   "intro": {
     "title": "Flags, Banners and Pole Kits",
@@ -64,10 +64,10 @@
       },
       {
         "title": "banner",
-        "text": "banners are versatile outdoor promotional tools that can make your brand stand out in any setting.",
-        "image": "/assets/media/home-cat-banner.webp",
+        "text": "Custom freestanding banners deliver high-impact outdoor promotion to make your brand stand out anywhere.",
+        "image": "/assets/media/wolflag-custom-outdoor-vertical-standing-fabric-display.webp",
         "link": "/banner",
-        "imageAlt": "Custom printed advertising banner on a fence for a restaurant promotion"
+        "imageAlt": "Custom Outdoor Free Standing Tension Fabric Totem Banner for Storefront Advertising - Wolflag"
       },
       {
         "title": "Feather flag",
