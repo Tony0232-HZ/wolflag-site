@@ -441,9 +441,15 @@ collections:
                 summary: "无缝滚动横幅"
                 fields:
                   - { label: 背景色, name: bg, widget: color, default: "#ffffff", hint: "点开选颜色（下方显示色块）。常用极简色：\n白 #ffffff\n米白 #fafaf9\n淡灰 #f8f8f8\n浅沙 #f5f0e8\n米黄 #faf7f5\n灰绿 #dfe3e2\n鼠尾草 #e8ece2\n雾蓝 #eef1f4\n藕粉 #f6f0ee\n浅炭 #f1f1ef" }
-                  - { label: 横幅图片（要超宽横图；会自动首尾相连循环滚动）, name: image, widget: image, hint: "建议用一张超宽的横长图（如 2700×260），里面横向拼好多个车间场景。网站会把这张图首尾相连、不停地往左滚动，看不出接缝。上传前请用英文小写连字符命名。" }
-                  - { label: 图片说明(alt), name: imageAlt, widget: string, required: false, hint: 图片说明（alt，建议英文，含产品关键词；留空则自动用兜底文案） }
-                  - { label: 滚动一圈的秒数（数字越大滚得越慢）, name: duration, widget: number, default: 45, required: false, value_type: "int", min: 5, hint: "填 45 = 整条横幅滚动一整圈需要 45 秒。想更快填小一点（如 25）；想更慢填大一点（如 80）" }
+                  - label: 横幅图片（可加多张；网站会把它们首尾相连、循环滚动）
+                    name: images
+                    widget: list
+                    summary: "{{fields.image}}"
+                    hint: "建议用超宽的横长图（如 2700×260），里面横向拼好多个车间场景。\n可以加多张（点 Add 再加一张；拖动手柄可调先后顺序）：网站会把它们首尾相连成一条长带子，不停地往左滚动，看不出接缝。\n单张也完全可以（就按一张循环滚）。\n⚠️ 图片四周如果有透明边或纯白边，请先裁掉——会在拼接处露出来。上传前请用英文小写连字符命名。"
+                    fields:
+                      - { label: 图片, name: image, widget: image }
+                      - { label: 图片说明(alt), name: imageAlt, widget: string, required: false, hint: 图片说明（alt，建议英文，含产品关键词；留空则自动用兜底文案） }
+                  - { label: 滚动一圈的秒数（数字越大滚得越慢）, name: duration, widget: number, default: 45, required: false, value_type: "int", min: 5, hint: "填 45 = 整条横幅滚动一整圈需要 45 秒。想更快填小一点（如 25）；想更慢填大一点（如 80）。\n⚠️ 这里的「一圈」= 全部图片首尾相连的总长度：图片张数越多、整圈越长，想保持同样的快慢就把秒数按张数调大（2 张 ≈ 90）。" }
 
   # ---------- 新增类目页（通用模板） ----------
   - name: pages

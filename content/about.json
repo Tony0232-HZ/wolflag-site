@@ -54,9 +54,17 @@
     {
       "type": "marquee",
       "bg": "#ffffff",
-      "image": "/assets/media/about-factory-production-line.webp",
-      "imageAlt": "WOLFLAG custom flag factory production line",
-      "duration": 45
+      "images": [
+        {
+          "image": "/assets/media/about-factory-production-line.webp",
+          "imageAlt": "WOLFLAG custom flag factory production line"
+        },
+        {
+          "image": "/assets/media/wolflag-custom-flag-factory-silkscreen-printing-line.webp",
+          "imageAlt": "WOLFLAG custom flag silkscreen printing, washing and sewing production line"
+        }
+      ],
+      "duration": 90
     },
     {
       "type": "timeline",

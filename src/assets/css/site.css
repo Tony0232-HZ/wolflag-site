@@ -1598,6 +1598,11 @@ ul { list-style: none; }
   animation: strip-scroll var(--strip-duration, 45s) linear infinite;
 }
 .about-strip-track img { display: block; height: 260px; width: auto; flex: none; }
+/* 图与图之间的空隙：与图片自带的白色缝隙等宽（源图 240px 高时约 12px，随图片一起缩放）。
+   ⚠️ 每张图后面都跟一个空占位条（含最后一张）——「两张图相接处 / 循环点」那道缝就是它；
+      同时保证整条带子复制两份后 -50% 平移精确对齐（用 flex 的 gap 会少一道缝、循环处对不齐）。
+   宽度 13px = 12px × (260/240)，手机档 8px = 12px × (160/240)——与图片缩放同步，缝隙宽度才处处一致。 */
+.about-strip-gap { flex: none; width: 13px; }
 /* 注：不做「悬停暂停」——用户 2026-09-11 明确要求鼠标移上去也继续滚动 */
 
 @keyframes strip-scroll {
@@ -1609,6 +1614,7 @@ ul { list-style: none; }
 @media (max-width: 640px) {
   .about-strip { padding: 18px 0; }
   .about-strip-track img { height: 160px; }
+  .about-strip-gap { width: 8px; }   /* 与 160px 档的图片缩放同步（12px × 160/240） */
 }
 
 /* 无障碍：用户在系统里开启「减少动画」时改为静止显示（全站首次补上此处理） */

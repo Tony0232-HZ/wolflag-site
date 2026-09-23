@@ -1046,21 +1046,34 @@ function renderAboutBlock(b) {
     </div></section>`;
   }
   if (b.type === 'marquee') {
-    // 无缝滚动横幅（2026-09-11 新增）：同一张超宽横图输出两次、整体左移 50%（= 正好一张图宽），
+    // 无缝滚动横幅（2026-09-11 新增；2026-09-23 起支持多张图）：
+    // 把【全部图片】按顺序首尾相接成一条长带子，再整条复制一份、整体左移 50%（= 正好一份带子宽），
     // 终点画面与起点像素级一致 → 无限循环看不出接缝。纯 CSS 动画，不需要 JS。
+    // ⚠️ 必须「整份带子复制一份」，不要逐张复制——两份必须逐像素相同，拼接处才对得上。
     // 宽度：套 .container，与上下区块同宽、左右对齐（用户看过效果后的要求；初版做的通栏已收窄）。
-    const src = b.image;
-    if (!src) return '';                                  // 后台没填图 → 不渲染空区块
+    const list = (Array.isArray(b.images) ? b.images : [])
+      .map((im) => ({ src: imgSrc(im), alt: altOf(im, 'WOLFLAG factory production line') }))
+      .filter((it) => it.src);
+    // 兼容旧数据：单张 `image` 字段的形状（2026-09-23 前的 about.json）
+    if (!list.length && b.image) list.push({ src: b.image, alt: altOf(b, 'WOLFLAG factory production line') });
+    if (!list.length) return '';                          // 后台没填图 → 不渲染空区块
     const dur = parseFloat(b.duration) > 0 ? parseFloat(b.duration) : 45;
-    // 第二张是纯装饰副本：alt 置空 + aria-hidden，避免读屏软件把同一张图念两遍
+    // 每张图后面跟一个空的「空隙」占位条（与图片自带的白色缝隙等宽，随图片等比缩放）。
+    // ⚠️ 末尾那张后面也要跟一个 —— 它就是「两张图相接处 / 循环点」那道缝的来源；
+    //    而且整条带子复制两份后，只有每个序列都"带尾缝"，-50% 平移才能精确对齐（用 flex 的 gap 会少一道缝）。
+    const GAP = '<span class="about-strip-gap" aria-hidden="true"></span>';
+    // dup=true 的那份是纯装饰副本：alt 置空 + aria-hidden，避免读屏软件把同一批图念两遍
     // 有意不加 dimAttrs()：高度由 CSS 固定（桌面 260px / 手机 160px），尺寸属性会被 CSS 覆盖、无防抖收益
+    const stripImgs = (dup) => list.map((it) =>
+      `<img src="${esc(it.src)}" alt="${dup ? '' : it.alt}"${dup ? ' aria-hidden="true"' : ''} loading="lazy" decoding="async">${GAP}`
+    ).join('\n            ');
     return `
     <section class="about-strip" style="background:${aboutBg(b)}">
       <div class="container">
         <div class="about-strip-clip">
           <div class="about-strip-track" style="--strip-duration:${dur}s">
-            <img src="${esc(src)}" alt="${altOf(b, 'WOLFLAG factory production line')}" loading="lazy" decoding="async">
-            <img src="${esc(src)}" alt="" aria-hidden="true" loading="lazy" decoding="async">
+            ${stripImgs(false)}
+            ${stripImgs(true)}
           </div>
         </div>
       </div>
