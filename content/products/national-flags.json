@@ -132,6 +132,40 @@
       "imageAlt": "Custom national flags featuring durable canvas headers and brass grommets, folded uniformly for bulk multi-country orders"
     }
   ],
+  "optionBlocks": [
+    {
+      "show": true,
+      "bg": "#ffffff",
+      "title": "Production Options for National Flags",
+      "text": "Wolflag can prepare national flags in printed, sewn, embroidered, single-reverse, and double-sided formats according to the display setting, order quantity, and project standard. Size, fabric, header style, grommets, pole sleeve, reinforced edges, and packing method can also be adjusted by order requirement.\n\nFor projects that include several country designs, our team can help align the production details across the full batch, so each flag follows the same size, material, finishing, and packaging standard.",
+      "items": [
+        {
+          "title": "Printed National Flags",
+          "text": "For efficient bulk production across multiple country designs and repeat-order programs."
+        },
+        {
+          "title": "Sewn / Embroidered Flags",
+          "text": "For details on sewn panels, appliqué, embroidery, materials, and finishing, review the Fully Sewn Flag Guide."
+        },
+        {
+          "title": "Single-Reverse Flags",
+          "text": "For lightweight outdoor display, easier movement, and cost-efficient bulk requirements."
+        },
+        {
+          "title": "Double-Sided Flags",
+          "text": "For projects that require clear design reading and stronger visibility on both sides."
+        },
+        {
+          "title": "Size / Material Options",
+          "text": "For standard or custom sizes, fabric selection, and display-specific production needs."
+        },
+        {
+          "title": "Finishing and Packing",
+          "text": "For headers, grommets, sleeves, reinforced edges, and project-based packing plans."
+        }
+      ]
+    }
+  ],
   "page": {
     "file": "national-flag.html",
     "layout": "flags",

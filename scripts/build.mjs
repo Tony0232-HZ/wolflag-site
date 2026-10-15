@@ -675,7 +675,7 @@ function nfBody(data) {
     <div class="container">
       <div class="product-grid-3">${cards}</div>
     </div>
-  </section>${supplement}${benefitsSection()}`;
+  </section>${supplement}${optionBlocksSection(data)}${benefitsSection()}`;
 }
 
 /* ---------------- 「Why Source from Wolflag?」优势条（2026-09-15 新增） ----------------
@@ -717,6 +717,19 @@ function benefitsSection() {
 }
 
 // 补充模块（可加多个：每个 图 + 标题 + 文字；show!==false 且至少一项有内容才渲染；兼容旧版单对象；2026-09-08 全站通用）
+//
+// ⚠️ 2026-10-15 修：**「文字」从此支持分段/换行**（用户报「这个不能分段吗？只能是一整段吗？」）。
+//   改前用的是 `bold(s.text)`，而 `.f-supp-text` **没有** `white-space:pre-line`
+//   → 浏览器把换行折成空格，后台打的空行被吃掉，整块糊成一段。
+//   📌 而 AI-GUIDE §3.1 的表格里**一直写着**「补充模块的换行靠 white-space:pre-line」
+//      → 属**文档写了、代码没实现**（同 FAQ 加粗 / 图文区加粗那两次，坑 #33 家族）。
+//   现改为与 FAQ 答案 / detail 图文区**同一套** `faqAnswer()`：
+//     空行 → 分成多个 `<p>`（段间距靠 CSS `.f-supp-text p + p`，见 site.css）；
+//     段内单个回车 → `<br>`；`**词**` 加粗照旧。
+//   ⚠️ 全站只有国旗页那一处补充模块文字带换行（已扫过），羽毛旗页那套 show:false 且无换行
+//      → 其余页面的补充模块渲染结果**逐字节不变**（已 A/B 验证）。
+//   ⚠️ 不要改回 `bold()`。
+//
 // 「文字/图片的位置」direction（2026-09-21 新增，取值与图文区保持一致）：
 //   ⚠️ 走白名单校验，别把内容里的值直接拼进 class 名；
 //   ⚠️ textRight（图左文右）= 改动前的版式，是默认；缺省 / 非法值一律退回它 → 老数据零变化；
@@ -736,11 +749,58 @@ function supplementSection(data) {
           ${s.image ? `<div class="f-supp-img"><img src="${esc(s.image)}" alt="${altOf(s, s.title || '', 'imageAlt')}" decoding="async"></div>` : ''}
           <div class="f-supp-body">
             ${s.title ? `<h2 class="f-supp-title">${esc(s.title)}</h2>` : ''}
-            <div class="f-supp-text">${bold(s.text || '')}</div>
+            <div class="f-supp-text">${faqAnswer(s.text || '')}</div>
           </div>
         </div>
       </div>
     </section>`;
+    }).join('');
+}
+
+/* ---------------- 「生产选项」卡片网格模块（2026-10-15 新增，用户要求） ----------------
+   版式来源：用户指定的同行参考站 chinaflag.com/national-flags 的
+   「Production Options for National Flags」——把那一节**渲染出来、用 getComputedStyle 逐个量**后复刻
+   （不是读源码估的）。实测值：卡片 白底 + 1px #E6E8EC 边框 + 圆角 12px + 内边距 18×14；
+   卡片标题 20px/400/#a33335/居中；卡片间距 20px；
+   悬停 = 整卡上浮 6px + box-shadow 0 10px 24px rgba(0,0,0,.08) + 边框转淡酒红）。
+   💡 参考站那个酒红 #a33335 正好是本站一直在用的「悬停红」，配色天然统一，无需改色。
+
+   ✅ 2026-10-15 用户看预览后要求改 4 处（已改，见 site.css 同名注释，**别改回去**）：
+     ① 标题左边那条红色小竖条**去掉**；② 6 个框子**全部等高**；
+     ③ 字体与本站统一（说明/卡片文字 17px → **16px**；标题 600/灰 → **700**）；
+     ④ 模块标题颜色 → **纯黑 #191a19**。
+
+   ⚠️ 与参考站的两处**有意不同**（用户 2026-10-15 亲自拍板，别改回去）：
+     ① 卡片网格左右与本站 .container（1250）对齐，不用参考站的 1020 窄栏（要与页面其他区块齐边）；
+        但**说明文字那两段**仍在 .container 内再限宽 1020px，免得一行太长读着累。
+     ② 卡片 2 里「review the Fully Sewn Flag Guide」**去掉外链**——原链指向同行 chinaflag.com，
+        挂在自己站上会把自己的权重和流量送出去。
+
+   数据来源：content/products/national-flags.json 的 `optionBlocks`（**列表，可加多个**，
+   后台「国旗产品页 → 生产选项模块」）。每项：show / bg / title / text / items[{title,text}]。
+   位置：**只**接在 nfBody()（国旗页），插在补充模块之后、优势条之前。
+   ⚠️ items 是「新建字段」，没有历史数据 → 不涉及坑 #20 那类"数据形状升级"问题。 */
+function optionBlocksSection(data) {
+  const raw = data && data.optionBlocks;
+  const blocks = Array.isArray(raw) ? raw : (raw ? [raw] : []);
+  return blocks
+    .filter((b) => b && b.show !== false && (b.title || b.text || (b.items || []).length))
+    .map((b) => {
+      const items = (b.items || []).filter((it) => it && (it.title || it.text));
+      const cards = items.map((it) => `
+      <div class="wl-opt-card">
+        ${it.title ? `<h3 class="wl-opt-card-t">${esc(it.title)}</h3>` : ''}
+        ${it.text ? `<p class="wl-opt-card-x">${bold(it.text)}</p>` : ''}
+      </div>`).join('');
+      return `
+<section class="wl-opt" style="background-color:${esc(b.bg || '#ffffff')}">
+  <div class="container">
+    ${b.title ? `<h2 class="wl-opt-title">${esc(b.title)}</h2>` : ''}
+    ${b.text ? `<div class="wl-opt-lead">${faqAnswer(b.text)}</div>` : ''}
+    ${cards ? `<div class="wl-opt-grid">${cards}
+    </div>` : ''}
+  </div>
+</section>`;
     }).join('');
 }
 
