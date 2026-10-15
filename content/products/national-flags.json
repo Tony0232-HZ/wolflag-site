@@ -1,11 +1,5 @@
 {
-  "seo": {
-    "title": "Custom National Flags & Country Flags Wholesale | WOLFLAG",
-    "description": "National flags of any country in 110g knitted polyester or 100D polyester, silkscreen or digital printing. Custom sizes for government and event use."
-  },
   "heading": "National Flag",
-  "tagline": "Express pride and allegiance to your country",
-  "bannerImage": "/assets/media/national-banner.webp",
   "products": [
     {
       "name": "China national flag",
@@ -122,6 +116,14 @@
       "imageAlt": "Custom printed United Nations flag, wholesale from Wolflag flag factory"
     }
   ],
+  "imageAlt": "Indoor flag display with USA and China national flags on gold-based flagpoles",
+  "tagline": "Express pride and allegiance to your country",
+  "bannerImage": "/assets/media/national-banner.webp",
+  "page": {
+    "file": "national-flag.html",
+    "layout": "flags",
+    "nav": "/national-flag"
+  },
   "supplement": [
     {
       "show": true,
@@ -137,39 +139,37 @@
       "show": true,
       "bg": "#ffffff",
       "title": "Production Options for National Flags",
-      "text": "Wolflag can prepare national flags in printed, sewn, embroidered, single-reverse, and double-sided formats according to the display setting, order quantity, and project standard. Size, fabric, header style, grommets, pole sleeve, reinforced edges, and packing method can also be adjusted by order requirement.\n\nFor projects that include several country designs, our team can help align the production details across the full batch, so each flag follows the same size, material, finishing, and packaging standard.",
+      "text": "Wolflag manufactures custom national flags in printed, sewn, and embroidered styles—available in both single-reverse and double-sided formats to match your display environment, order volume, and project specs. You have full control over every production detail, from custom dimensions and weather-resistant fabrics to heavy-duty canvas headers, brass grommets, pole sleeves, reinforced stitching, and bulk or retail-ready packaging.\n\nSourcing multiple country designs in a single order? Our production team standardizes specifications across your entire batch, ensuring every flag matches in exact size, fabric weight, finishing, and packaging.",
       "items": [
         {
           "title": "Printed National Flags",
-          "text": "For efficient bulk production across multiple country designs and repeat-order programs."
+          "text": "Fast, cost-effective bulk production—perfect for multi-country assortments and consistent repeat orders."
         },
         {
           "title": "Sewn / Embroidered Flags",
-          "text": "For details on sewn panels, appliqué, embroidery, materials, and finishing, review the Fully Sewn Flag Guide."
+          "text": "Built for ceremonial, institutional, and heavy-duty outdoor displays—featuring pieced sewn panels, precision appliqué, dense embroidery, weather-resistant fabrics, and reinforced finishing."
         },
         {
-          "title": "Single-Reverse Flags",
-          "text": "For lightweight outdoor display, easier movement, and cost-efficient bulk requirements."
+          "title": "Single-Reverse National Flags",
+          "text": "Engineered for lightweight outdoor flying, effortless performance in light winds, and cost-effective bulk sourcing."
         },
         {
-          "title": "Double-Sided Flags",
-          "text": "For projects that require clear design reading and stronger visibility on both sides."
+          "title": "Double-Sided National Flags",
+          "text": "Built for high-profile displays where intricate emblems and text must read correctly on both sides with bold, zero-show-through visibility."
         },
         {
-          "title": "Size / Material Options",
-          "text": "For standard or custom sizes, fabric selection, and display-specific production needs."
+          "title": "Size & Fabric Options",
+          "text": "Available in standard flagpole dimensions, official country proportions, or custom project sizes—paired with commercial-grade fabrics tailored for indoor, outdoor, or high-wind displays."
         },
         {
-          "title": "Finishing and Packing",
-          "text": "For headers, grommets, sleeves, reinforced edges, and project-based packing plans."
+          "title": "Finishing & Packaging Options",
+          "text": "Configured with heavy-duty canvas headers, solid brass grommets, pole sleeves, and reinforced fly stitching—delivered in bulk cartons, pre-sorted country kits, or retail-ready packaging."
         }
       ]
     }
   ],
-  "page": {
-    "file": "national-flag.html",
-    "layout": "flags",
-    "nav": "/national-flag"
-  },
-  "imageAlt": "Indoor flag display with USA and China national flags on gold-based flagpoles"
+  "seo": {
+    "title": "Custom National Flags & Country Flags Wholesale | WOLFLAG",
+    "description": "National flags of any country in 110g knitted polyester or 100D polyester, silkscreen or digital printing. Custom sizes for government and event use."
+  }
 }
