@@ -107,10 +107,11 @@
   "supplement": [
     {
       "show": false,
-      "title": "Bring Your Design to Life",
-      "text": "**Tell us your idea** — our team will help you customize your feather flags, with factory-direct pricing and fast turnaround. Email us anytime for a free quote.",
-      "image": "/assets/media/about-factory.webp",
-      "imageAlt": "Wolflag flag factory building in Pinghu with three flags on flagpoles"
+      "title": "Quick, Tool-Free Assembly in 5 Easy Steps",
+      "text": "Engineered for fast event deployment, our hybrid fiberglass and aluminum flagpole system sets up in under two minutes—no tools or extra hands required. Follow the sequence below to assemble your pole from top to bottom for a smooth, taut, and wrinkle-free display every time.",
+      "image": "/assets/media/wolflag-beach-feather-flag-assembly-instructions-5-steps.webp",
+      "imageAlt": "5-step assembly instructions diagram showing how to connect the fiberglass and aluminum flagpole, slide on the Wolflag beach feather flag, and adjust tension.",
+      "direction": "textTop"
     }
   ],
   "page": {
