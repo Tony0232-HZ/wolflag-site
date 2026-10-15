@@ -122,7 +122,16 @@
       "imageAlt": "Custom printed United Nations flag, wholesale from Wolflag flag factory"
     }
   ],
-  "supplement": [],
+  "supplement": [
+    {
+      "show": true,
+      "direction": "textLeft",
+      "text": "Custom national flags, built for every occasion. Wolflag partners with distributors, importers, and event organizers to deliver flags for indoor, outdoor, desk, handheld, and ceremonial use. Customize by country, size, fabric, finishing, and packaging—with guaranteed consistency across every multi-country order.",
+      "title": "Custom National Flags, Built for Scale",
+      "image": "/assets/media/wolflag-wholesale-national-flags-sports-event-collection-02.webp",
+      "imageAlt": "Custom national flags featuring durable canvas headers and brass grommets, folded uniformly for bulk multi-country orders"
+    }
+  ],
   "page": {
     "file": "national-flag.html",
     "layout": "flags",
