@@ -1,11 +1,67 @@
 {
-  "seo": {
-    "title": "Custom Feather Flags & Teardrop Banners Wholesale | WOLFLAG",
-    "description": "Custom feather flags in feather, leaf, rectangle and teardrop shapes. 110g knitted polyester, digital or silkscreen printing. Factory-direct wholesale."
-  },
   "heading": "Feather flags",
+  "applications": {
+    "show": true,
+    "title": "Where Our Custom Feather Flags Make an Impact ？",
+    "subtitle": "From real estate open houses to major trade shows and community events — versatile vertical banners engineered to get your message noticed.",
+    "items": [
+      {
+        "icon": "🏠",
+        "title": "Real Estate & Property ",
+        "text": "Open house flags, agent branding, and roadside directional banners that turn passing traffic into property viewings.",
+        "bg": "#ebf3fc"
+      },
+      {
+        "icon": "👰",
+        "title": "Weddings & Ceremonies",
+        "text": "Custom welcome flags, outdoor ceremony markers, and reception wayfinding banners printed in the couple’s signature colors.",
+        "bg": "#fceef2"
+      },
+      {
+        "icon": "🎂",
+        "title": "Birthdays & Milestones",
+        "text": "Custom age flags, personalized name banners, and vibrant lawn displays that make every milestone celebration stand out.",
+        "bg": "#fef4dc"
+      },
+      {
+        "icon": "🥂",
+        "title": "Bridal & Baby Showers",
+        "text": "Event entrance flags, custom theme banners, and outdoor party markers that dress up any venue in minutes.",
+        "bg": "#f4eefc"
+      },
+      {
+        "icon": "🎓",
+        "title": "Graduations & School Events",
+        "text": "Campus wayfinding flags, school crest banners, and ceremony entrance displays for graduation and prom season.",
+        "bg": "#edf0fd"
+      },
+      {
+        "icon": "🎪",
+        "title": "Expos & Trade Shows",
+        "text": "High-visibility booth flags, aisle markers, and branded display banners that pull attendees straight to your stand.",
+        "bg": "#eaf7f0"
+      },
+      {
+        "icon": "💰",
+        "title": " Fundraisers & Community Events",
+        "text": "Charity runs, street fairs, and community drives — ideal for course markers, sponsor recognition flags, and start/finish lines.",
+        "bg": "#fdeee6"
+      },
+      {
+        "icon": "🎄",
+        "title": "Seasonal & Holiday Promos",
+        "text": "Christmas, Easter, Halloween, and seasonal sales — simply swap the flag graphic and reuse your existing flagpole.",
+        "bg": "#e8f6fa"
+      },
+      {
+        "icon": "🎗️",
+        "title": "Awareness & Charity Campaigns",
+        "text": "High-impact campaign flags and color-coded ribbon banners built for awareness weeks, civic rallies, and charity days.",
+        "bg": "#f9eff6"
+      }
+    ]
+  },
   "badge": "Custom Design / Portable / Premium Quality / Weatherproof",
-  "bannerImage": "/assets/media/feather-banner.webp",
   "products": [
     {
       "name": "Feather shape",
@@ -104,6 +160,13 @@
       "imageAlt": "Wolflag factory-direct custom pinpoint flags for real estate open houses, printed teardrop flags with FOR SALE and OPEN HOUSE for RE/MAX property promotions."
     }
   ],
+  "imageAlt": "Custom advertising feather flags for outdoor promotions, including OPEN, FARM FRESH EGGS, EASY FINANCE, CAR WASH, OPEN HOUSE, and Just Listed banner designs.",
+  "bannerImage": "/assets/media/feather-banner.webp",
+  "page": {
+    "file": "feather-flag.html",
+    "layout": "feather",
+    "nav": "/feather-flag"
+  },
   "supplement": [
     {
       "show": true,
@@ -121,71 +184,8 @@
       "direction": "textTop"
     }
   ],
-  "applications": {
-    "show": true,
-    "title": "Where Our Feather Flags Work",
-    "subtitle": "From real estate open houses to weddings and trade shows — the places our feather flags get you noticed.",
-    "items": [
-      {
-        "icon": "🏠",
-        "title": "Real Estate",
-        "text": "Open house flags, agent branding and directional signs that turn passing traffic into viewings.",
-        "bg": "#ebf3fc"
-      },
-      {
-        "icon": "👰",
-        "title": "Weddings",
-        "text": "Welcome signs, aisle markers and photo backdrops printed in the couple's own colors.",
-        "bg": "#fceef2"
-      },
-      {
-        "icon": "🎂",
-        "title": "Birthdays & milestones",
-        "text": "Number flags, name banners and photo backdrops for every age and every party.",
-        "bg": "#fef4dc"
-      },
-      {
-        "icon": "🥂",
-        "title": "Engagements, hens & baby showers",
-        "text": "Party backdrops, welcome signs and selfie frames that dress the venue in minutes.",
-        "bg": "#f4eefc"
-      },
-      {
-        "icon": "🎓",
-        "title": "Graduations & formals",
-        "text": "Photo backdrops, school branding and welcome flags for graduation and prom season.",
-        "bg": "#edf0fd"
-      },
-      {
-        "icon": "🎪",
-        "title": "Expos & trade shows",
-        "text": "Booth flags, aisle markers and media walls that pull visitors down the trade hall.",
-        "bg": "#eaf7f0"
-      },
-      {
-        "icon": "💰",
-        "title": "Fundraisers & community events",
-        "text": "Fun runs, fetes and charity drives — course markers, sponsor flags and start/finish lines.",
-        "bg": "#fdeee6"
-      },
-      {
-        "icon": "🎄",
-        "title": "Seasonal & holidays",
-        "text": "Christmas, Easter, Halloween and Mother's Day — swap the print, keep the pole.",
-        "bg": "#e8f6fa"
-      },
-      {
-        "icon": "🎗️",
-        "title": "Awareness days",
-        "text": "Campaign flags and color-coded banners for awareness weeks and charity days.",
-        "bg": "#f9eff6"
-      }
-    ]
-  },
-  "page": {
-    "file": "feather-flag.html",
-    "layout": "feather",
-    "nav": "/feather-flag"
-  },
-  "imageAlt": "Custom advertising feather flags for outdoor promotions, including OPEN, FARM FRESH EGGS, EASY FINANCE, CAR WASH, OPEN HOUSE, and Just Listed banner designs."
+  "seo": {
+    "title": "Custom Feather Flags & Teardrop Banners Wholesale | WOLFLAG",
+    "description": "Custom feather flags in feather, leaf, rectangle and teardrop shapes. 110g knitted polyester, digital or silkscreen printing. Factory-direct wholesale."
+  }
 }
