@@ -121,6 +121,67 @@
       "direction": "textTop"
     }
   ],
+  "applications": {
+    "show": true,
+    "title": "Where Our Feather Flags Work",
+    "subtitle": "From real estate open houses to weddings and trade shows — the places our feather flags get you noticed.",
+    "items": [
+      {
+        "icon": "🏠",
+        "title": "Real Estate",
+        "text": "Open house flags, agent branding and directional signs that turn passing traffic into viewings.",
+        "bg": "#ebf3fc"
+      },
+      {
+        "icon": "👰",
+        "title": "Weddings",
+        "text": "Welcome signs, aisle markers and photo backdrops printed in the couple's own colors.",
+        "bg": "#fceef2"
+      },
+      {
+        "icon": "🎂",
+        "title": "Birthdays & milestones",
+        "text": "Number flags, name banners and photo backdrops for every age and every party.",
+        "bg": "#fef4dc"
+      },
+      {
+        "icon": "🥂",
+        "title": "Engagements, hens & baby showers",
+        "text": "Party backdrops, welcome signs and selfie frames that dress the venue in minutes.",
+        "bg": "#f4eefc"
+      },
+      {
+        "icon": "🎓",
+        "title": "Graduations & formals",
+        "text": "Photo backdrops, school branding and welcome flags for graduation and prom season.",
+        "bg": "#edf0fd"
+      },
+      {
+        "icon": "🎪",
+        "title": "Expos & trade shows",
+        "text": "Booth flags, aisle markers and media walls that pull visitors down the trade hall.",
+        "bg": "#eaf7f0"
+      },
+      {
+        "icon": "💰",
+        "title": "Fundraisers & community events",
+        "text": "Fun runs, fetes and charity drives — course markers, sponsor flags and start/finish lines.",
+        "bg": "#fdeee6"
+      },
+      {
+        "icon": "🎄",
+        "title": "Seasonal & holidays",
+        "text": "Christmas, Easter, Halloween and Mother's Day — swap the print, keep the pole.",
+        "bg": "#e8f6fa"
+      },
+      {
+        "icon": "🎗️",
+        "title": "Awareness days",
+        "text": "Campaign flags and color-coded banners for awareness weeks and charity days.",
+        "bg": "#f9eff6"
+      }
+    ]
+  },
   "page": {
     "file": "feather-flag.html",
     "layout": "feather",

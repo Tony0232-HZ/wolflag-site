@@ -743,7 +743,7 @@ function supplementSection(data) {
       const dir = SUPP_DIRS.includes(s.direction) ? s.direction : 'textRight';
       const cls = s.image ? ` f-supp-${dir}` : ' f-supp-txt';
       return `
-    <section class="section">
+    <section class="section section-supp">
       <div class="container">
         <div class="f-supp${cls}">
           ${s.image ? `<div class="f-supp-img"><img src="${esc(s.image)}" alt="${altOf(s, s.title || '', 'imageAlt')}" decoding="async"></div>` : ''}
@@ -804,6 +804,54 @@ function optionBlocksSection(data) {
     }).join('');
 }
 
+/* ---------------- 「应用场景」卡片网格模块（2026-10-16 新增，用户要求） ----------------
+   版式来源：用户指定的同行参考站 vividads.com.au 的「Browse by event」一节
+   （用户把该页另存为 .htm 交给 AI）——照它**源码里的实测值**复刻：
+     卡片：圆角 14px、内边距 16×14、最小高 168px、卡片间距 14px；
+     图标块：40×40、圆角 10px、白底；卡片标题 17px/800；说明 13.5px；
+     悬停 = 整卡上浮 1px + box-shadow 0 6px 18px rgba(0,0,0,.10)。
+   文字颜色改用**本站**的（标题 #191a19、正文 #444c58），与上方各模块统一。
+
+   ⚠️ 与参考站的**三处有意不同**（用户 2026-10-16 明确要求，别改回去）：
+     ① **一排 3 个、共 3 排 = 9 个**（参考站是 4 个一排；第 9 个 Real Estate 是我们新增的）；
+     ② **卡片里的链接全部不要**——参考站每张卡有「标题链接 + 一排小标签链接 + 底部
+        Explore all events 按钮」三处链接，用户原话「那些链接都不要，我只需要在网站上
+        展示我们的旗帜可以用在那些地方」→ 全部去掉，卡片整张不可点；
+     ③ 多一张 **Real Estate**，用用户提供的 logo 图当图标（其余 8 张仍用 emoji）。
+
+   数据来源：content/products/feather-flags.json 的 `applications`（对象，本页只有一个）。
+     字段：show / title / subtitle / items[{image, icon, title, text, bg}]
+     —— 每张卡「有图用图、没图用 emoji」，两种都留了后台字段。
+   位置：**只**接在 featherBody()（羽毛旗页），插在**产品区之后、补充模块之前**。
+   ⚠️ items 是**新建字段**，没有历史数据 → 不涉及坑 #20 那类"数据形状升级"问题。 */
+function applicationsSection(data) {
+  const m = data && data.applications;
+  if (!m || m.show === false) return '';
+  const items = (m.items || []).filter((it) => it && (it.title || it.text || it.icon || it.image));
+  if (!items.length) return '';
+  const cards = items.map((it) => `
+        <li class="wl-app-card"${it.bg ? ` style="background:${esc(it.bg)}"` : ''}>
+          <div class="wl-app-top">
+            ${it.image
+              /* 图标是**纯装饰**（卡片标题已经说明是什么）→ 按无障碍规范 alt 固定留空，
+                 不给后台 alt 字段，免得用户填了反而是噪音（与公告条/服务卡/优势条同一规则）。 */
+              ? `<span class="wl-app-ic"><img src="${esc(it.image)}" alt="" loading="lazy" decoding="async"></span>`
+              : (it.icon ? `<span class="wl-app-ic" aria-hidden="true">${esc(it.icon)}</span>` : '')}
+            ${it.title ? `<h3 class="wl-app-t">${esc(it.title)}</h3>` : ''}
+          </div>
+          ${it.text ? `<p class="wl-app-x">${bold(it.text)}</p>` : ''}
+        </li>`).join('');
+  return `
+  <section class="section section-apps">
+    <div class="container">
+      ${m.title ? `<h2 class="wl-app-title">${esc(m.title)}</h2>` : ''}
+      ${m.subtitle ? `<p class="wl-app-sub">${bold(m.subtitle)}</p>` : ''}
+      <ul class="wl-app-grid">${cards}
+      </ul>
+    </div>
+  </section>`;
+}
+
 function featherBody(data) {
   const cards = data.products.map((p) => {
     const specRows = productSpecRows(p);
@@ -834,7 +882,7 @@ function featherBody(data) {
     <div class="container">
       <div class="product-grid-2">${cards}</div>
     </div>
-  </section>${supplement}${benefitsSection()}`;
+  </section>${applicationsSection(data)}${supplement}${benefitsSection()}`;
 }
 
 function bannerBody(data) {

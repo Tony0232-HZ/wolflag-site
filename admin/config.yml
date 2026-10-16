@@ -639,6 +639,27 @@ collections:
               - { label: 图片（可选）, name: image, widget: image, required: false }
               - { label: 图片说明(alt), name: imageAlt, widget: string, required: false, hint: 图片说明（alt，建议英文，含产品关键词；留空则自动用本套的标题） }
 
+          - label: 应用场景（「我们的旗帜用在哪里」卡片网格）
+            name: applications
+            widget: object
+            required: false
+            hint: "一排 3 个、共 3 排 = 9 个卡片。每张卡 = 图标 + 标题 + 一句说明。\n⚠️ 这个模块**故意没有链接**——卡片点了不会跳转（按您的要求，只用来展示旗帜能用在哪里）。"
+            fields:
+              - { label: 显示此模块, name: show, widget: boolean, default: true, hint: 取消勾选 = 整块隐藏（内容会保留，重新勾选即可恢复） }
+              - { label: 模块标题, name: title, widget: string, required: false }
+              - { label: 说明文字（可选；可用 **词** 加粗）, name: subtitle, widget: text, required: false, hint: "标题下面那句小字。\n用两个星号包住词可加粗，如 **feather flags**。" }
+              - label: 卡片（建议 9 个：一排 3 个 × 3 排；可拖动排序、可加可删）
+                name: items
+                widget: list
+                required: false
+                summary: "{{fields.title}}"
+                fields:
+                  - { label: 图标图片（可选）, name: image, widget: image, required: false, hint: "传了图就用图当图标（会显示在白色小方块里）；没传就往下一格填 emoji。\n★ 建议：正方形、白底或透明底、约 200×200、200KB 以内。\n⚠️ 别用深底图——图标底座是白的，深底会显成一个深色方块。\n⚠️ 文件名请用英文小写连字符，如 my-card-icon.png" }
+                  - { label: 图标 emoji（可选；上面没传图时才用它）, name: icon, widget: string, required: false, hint: "直接粘一个表情符号进来即可，例如 💍 🎂 🎓 🎄。\n💡 打不出来？在 Windows 上按 Win + 句号键（Win+.）会弹出表情面板，点一个就行。" }
+                  - { label: 卡片标题, name: title, widget: string }
+                  - { label: 卡片说明（可用 **词** 加粗；按一次回车=换行）, name: text, widget: text, required: false, hint: "一句话即可（参考站是一两句）。\n用两个星号包住词可加粗。" }
+                  - { label: 卡片底色, name: bg, widget: color, required: false, default: "#f4f4f6", hint: "点开选色。现在是 9 个不同的浅色（米白/浅粉/浅黄/浅紫/浅蓝/浅绿…），一眼能区分开。\n⚠️ 请只用**浅色**——卡片文字是深色的，填了深色底就看不清字了。" }
+
   # ---------- 产品：横幅 ----------
   - name: banners
     label: 横幅产品页

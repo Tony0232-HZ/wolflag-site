@@ -933,6 +933,56 @@ ul { list-style: none; }
 .f-supp.f-supp-textTop .f-supp-img img,
 .f-supp.f-supp-textBottom .f-supp-img img { border-radius: 12px; }
 
+/* --------------------------------------------------------------------------
+   2026-10-16（用户标注截图要求）——补充模块两处调整。
+   用户原话（截图红字）：①「上下两个模块距离太大，减小一半」（两处）
+                        ②「每一段落开头没有对齐」
+                        ③「距离边界要保持合适的距离，不要靠在边界上」
+
+   ① 上下的空白「减小一半」：112px → 56px
+      成因：每个补充模块都被单独包在一个 <section class="section"> 里，而 .section 是
+            **上下各 56px** 内边距；两个模块相邻 → 56 + 56 = **112px** 的空白带。
+      改法：给补充模块所在的 section 多挂一个 .section-supp 类（build.mjs 里加），
+            并把它的**上内边距归零**（下内边距照旧 56px）：
+              上方空档 = 上一节的 56 + 本节的 0        = 56px ✅（原 112）
+              两块之间 = 上一块的下内边距 56 + 本节的 0 = 56px ✅（原 112）
+              最下面一块与「优势条」的距离 **不变**（仍是 56px）✅
+      ⚠️ 不要把上内边距设成 28px「各减一半」——那样上方空档会变成 56+28 = 84px，
+         只减了 1/4，不是用户要的「减小一半」。
+      📌 影响范围：目前全站只有**羽毛旗页**（2 块）和**国旗页**（1 块）显示补充模块，
+         两页一起变（用户 2026-10-16 选定「所有有补充模块的页面一起改」）。
+
+   ② 上下排布时，标题和正文不再顶着盒子边缘（用户标注③）
+      成因：2026-10-15 为了让安装图更大，把上下排布的内边距**直接归零**
+            （见上面那条 .f-supp-textTop / .f-supp-textBottom）——图片是通栏了，
+            但**标题和正文也跟着贴到了盒子边上**（实测左边距 = 0px）。
+      改法：只把「文字块」.f-supp-body 的左右内边距恢复，**图片仍然通栏、一点没变**
+            （.f-supp-img 与 .f-supp-body 是兄弟节点，给文字块加内边距不会影响图片宽度）。
+      ⚠️ 只适用于「文字在上/图片在下」「图片在上/文字在下」两种**上下排布**；
+         左右两栏排布（图左文右 / 文左图右）本来就有 40px 内边距，**不要动**。
+   -------------------------------------------------------------------------- */
+.section-supp,
+.section-apps { padding-top: 0; padding-bottom: 56px; }
+/* ⬆️ .section-apps = 2026-10-16 新增的「应用场景」卡片模块（羽毛旗页）。
+      用同一套留白规则，让「产品区 → 应用场景 → 补充模块 → 优势条」之间的空档
+      **一律 56px**，与用户这次要求的节奏一致（原来纯 .section 会让上方空档变 112px）。 */
+.f-supp.f-supp-textTop .f-supp-body,
+.f-supp.f-supp-textBottom .f-supp-body { padding-left: 40px; padding-right: 40px; }
+@media (max-width: 700px) {
+  /* 手机档：.f-supp 本身在 ≤700px 时内边距是 24px（见上面那条媒体查询），
+     所以这里也同步用 24px，保证手机上文字同样不贴边。 */
+  .f-supp.f-supp-textTop .f-supp-body,
+  .f-supp.f-supp-textBottom .f-supp-body { padding-left: 24px; padding-right: 24px; }
+}
+
+/* 「每一段落开头没有对齐」（用户标注②）：
+   纯文字补充模块（.f-supp-txt）整块是居中的，而用户在这个模块里手打了 5 个「● 」条目，
+   居中会让**每一行的 ● 落在不同的横坐标**上（实测 5 行开头各不相同）。
+   改法：**标题保持居中不变**，只把正文块改成左对齐 → 5 行 ● 对齐到同一条竖线。
+   ⚠️ 只影响「纯文字」那种补充模块（.f-supp-txt）。带图的模块走 flex 布局，
+      本来就是左对齐，不受这条影响。 */
+.f-supp.f-supp-txt .f-supp-text { text-align: left; }
+
 /* ==========================================================================
    「生产选项」卡片网格模块（2026-10-15 新增，用户要求）
    版式来源：同行参考站 chinaflag.com/national-flags 的「Production Options for National Flags」一节
@@ -1031,6 +1081,116 @@ ul { list-style: none; }
   .wl-opt { padding: 40px 0; }
   .wl-opt-grid { grid-template-columns: minmax(0, 1fr); gap: 16px; }
   .wl-opt-title { font-size: 22px; }
+}
+
+/* ==========================================================================
+   「应用场景」卡片网格模块（2026-10-16 新增，用户要求）
+   版式来源：同行参考站 vividads.com.au 的「Browse by event」一节
+   （用户把该页另存为 .htm 交给 AI）——照它源码里的实测值复刻：
+     卡片：圆角 14px、内边距 16×14、最小高 168px、卡片间距 14px；
+     图标块：40×40、圆角 10px、白底；卡片标题 17px/800；说明 13.5px/行高 1.4；
+     悬停 = 整卡上浮 1px + box-shadow 0 6px 18px rgba(0,0,0,.10)。
+   文字颜色改用**本站**的（标题 #191a19、正文 #444c58），与上方各模块统一。
+
+   ⚠️ 与参考站的**三处有意不同**（用户 2026-10-16 明确要求，别改回去）：
+     ① 一排 3 个 × 3 排 = 9 个（参考站是 4 个一排）；
+     ② 卡片里的**链接全部去掉**——参考站每张卡有「标题链接 + 一排小标签链接 +
+        底部 Explore all events 按钮」，用户原话「那些链接都不要，我只需要在网站上
+        展示我们的旗帜可以用在那些地方」→ 全部去掉，**整张卡不可点、无 hover 指针**；
+     ③ 新增一张 Real Estate，用用户提供的 logo 图当图标（其余 8 张用 emoji）。
+
+   📌 每张卡的**底色来自数据里的 bg 字段**（vividads 那 8 个粉彩色照抄，Real Estate 是我们补的）；
+      代码里给的 #f4f4f6 只是"数据里没填颜色"时的兜底。
+   📌 只有羽毛旗页用得到（build.mjs 只接在 featherBody）。
+   ========================================================================== */
+
+.wl-app-title {
+  font-size: 26px;                                 /* = .f-supp-title / .wl-opt-title，全站模块标题统一 */
+  font-weight: 700;
+  color: #191a19;
+}
+.wl-app-sub {
+  margin-top: 8px;
+  font-size: 16px;                                 /* = .f-supp-text / .wl-opt-lead */
+  line-height: 1.75;
+  color: #444c58;
+  white-space: pre-line;                           /* 允许用户在后台按回车换行（与 .f-card .f-sub 同一套） */
+}
+
+.wl-app-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr)); /* 一排 3 个（用户要求）；一律写 minmax(0,1fr)，别写裸 1fr（坑 #23） */
+  grid-auto-rows: 1fr;                              /* 同一排的卡片等高 */
+  gap: 14px;                                        /* 参考站实测值 */
+  list-style: none;
+  margin: 20px 0 0;
+  padding: 0;
+}
+
+.wl-app-card {
+  display: flex;
+  flex-direction: column;
+  min-height: 168px;                                /* 参考站实测值 */
+  padding: 16px 16px 14px;                          /* 参考站实测值 */
+  border-radius: 14px;                              /* 参考站实测值 */
+  background: #f4f4f6;                              /* 兜底底色，正常被数据里的 bg 覆盖 */
+  transition: box-shadow .15s, transform .15s;
+  /* ⚠️ 刻意不写 cursor:pointer —— 用户要求卡片不可点、不放链接 */
+}
+.wl-app-card:hover {
+  box-shadow: 0 6px 18px rgba(0, 0, 0, .10);        /* 参考站实测值 */
+  transform: translateY(-1px);
+}
+
+.wl-app-top { display: flex; align-items: center; gap: 10px; }
+.wl-app-ic {
+  flex: 0 0 40px;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  line-height: 1;
+  overflow: hidden;
+}
+/* 用图片当图标时（Real Estate）：整块铺满那个白色小方块。
+   图片本身四周已按参考站规格处理成白底，所以和白方块融为一体、看不出边界。 */
+.wl-app-ic img { width: 100%; height: 100%; object-fit: contain; display: block; }
+
+.wl-app-t {
+  font-size: 17px;                                  /* 参考站实测值 */
+  font-weight: 800;
+  line-height: 1.2;
+  color: #191a19;
+  letter-spacing: -.01em;
+}
+.wl-app-x {
+  margin: 8px 0 0;
+  font-size: 13.5px;                                /* 参考站实测值 */
+  line-height: 1.45;
+  color: #444c58;
+  white-space: pre-line;
+}
+
+.wl-app-title,
+.wl-app-sub,
+.wl-app-t,
+.wl-app-x { overflow-wrap: break-word; }
+
+/* 平板：2 个一排（9 个 → 5 排，最后一排 1 个） */
+@media (max-width: 1024px) {
+  .wl-app-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+/* 手机：1 个一排；卡片改矮一点、图标和标题略缩（照参考站的手机档） */
+@media (max-width: 640px) {
+  .wl-app-title { font-size: 22px; }
+  .wl-app-grid { grid-template-columns: minmax(0, 1fr); gap: 10px; }
+  .wl-app-card { min-height: 0; }
+  .wl-app-ic { flex-basis: 34px; width: 34px; height: 34px; font-size: 19px; }
+  .wl-app-t { font-size: 16px; }
 }
 
 @media (max-width: 900px) {
