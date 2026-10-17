@@ -1007,11 +1007,22 @@ ul { list-style: none; }
   .wl-size { padding-bottom: 44px; }                /* 手机：12px 表格卡片内边距 + 44px = 56px */
 }
 
-/* 2026-10-17：国旗页的「Custom National Flags, Built for Scale」挪到**标语下面、产品卡上面**。
-   用户标注「这个间隙距离太大，减小一半」：原可见间隙 56px → **28px**。
-   `.page-hero` 底内边距 26px + 这里补 2px = 28px；
-   `.section-supp` 原底内边距 56px 归零，交给产品区自己的 padding-top 控制（见下一条）。 */
-.section-supp.nf-supp-top { padding-top: 2px; padding-bottom: 0; }
+/* 补充模块「显示位置 = 产品区上面（top）」：整组包在 `.supp-top-group` 里（2026-10-17 全站推广）。
+   组内每条仍按 `.section-supp` 的「上 0 / 下 56」；**最后一条下边距归零**，交给后面的产品区
+   自己的 padding-top 提供间距。外层组只负责「第一条上方」的间距（各页不同）：
+     · 首页 `.supp-top-home` 0（简介区底 56）
+     · 羽毛旗 `.supp-top-feather` 56（页面标题区底 0）
+     · 横幅 / 属性网格 `.supp-top-page` 30（page-hero 底 26 → 56）
+     · 国旗 `.supp-top-nf` 2（page-hero 底 26 → 28，用户特别要求「减半」）
+   ⚠️ 组内不要再给 `.section-supp` 加 top padding，否则两条之间会变成 112px。 */
+.supp-top-group > .section-supp { padding-top: 0; padding-bottom: 56px; }
+.supp-top-group > .section-supp:last-child { padding-bottom: 0; }
+.supp-top-group.supp-top-home { padding-top: 0; }
+.supp-top-group.supp-top-feather { padding-top: 56px; }
+.supp-top-group.supp-top-page { padding-top: 30px; }
+.supp-top-group.supp-top-nf { padding-top: 2px; }
+/* 首页有顶部补充模块时，主产品区上边距 130 → 56（否则顶部模块与产品区之间空档太大） */
+.main-products.has-supp-top { padding-top: 56px; }
 
 /* 国旗页产品区（2026-10-17 两处用户标注）：
    ① 上方灰块与产品卡之间 56px → **28px**（「间隙距离减小一半」）；

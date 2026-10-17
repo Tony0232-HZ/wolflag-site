@@ -499,7 +499,9 @@ function homeBody() {
          <span class="cat-desc">${esc(c.text)}</span>
        </span>
      </a>`).join('\n');
-  const supplement = supplementSection(home);
+  const supplementTop = supplementSection(home, '', 'top');
+  const supplementBottom = supplementSection(home, '', 'bottom');
+  const supplementTopGroup = supplementTop ? `<div class="supp-top-group supp-top-home">${supplementTop}</div>` : '';
   const clients = homeClients();
   const heroImgs = (home.hero.images && home.hero.images.length ? home.hero.images : (home.hero.image ? [home.hero.image] : []));
   /* 2026-09-14 首页大标题拆两行：第一行 title（主标题，字大）+ 第二行 title2（副标题，字稍小）。
@@ -556,15 +558,15 @@ function homeBody() {
       <p class="section-sub">${esc(home.intro.text)}</p>
       <div class="intro-photos">${photos}</div>
     </div>
-  </section>
+  </section>${supplementTopGroup}
 
-  <section class="main-products">
+  <section class="main-products${supplementTop ? ' has-supp-top' : ''}">
     <div class="container">
       <h2 class="eyebrow">${esc(home.categories.title)}</h2>
       <p class="intro">${esc(home.categories.intro)}</p>
       <div class="cat-grid">${cards}</div>
     </div>
-  </section>${supplement}${clients}`;
+  </section>${supplementBottom}${clients}`;
 }
 
 /* ---------------- 首页「Clients & Partners」双排 logo 跑马灯（2026-09-13 新增）
@@ -665,17 +667,19 @@ function nfBody(data) {
   <section class="page-banner">
     <div class="container"><img src="${esc(data.bannerImage)}" alt="${altOf(data, 'National flags')}"></div>
   </section>` : '';
-  const supplement = supplementSection(data, 'nf-supp-top');
+  const supplementTop = supplementSection(data, '', 'top');
+  const supplementBottom = supplementSection(data, '', 'bottom');
+  const supplementTopGroup = supplementTop ? `<div class="supp-top-group supp-top-nf">${supplementTop}</div>` : '';
   return `
   ${banner}
   <section class="page-hero">
     <div class="container"><h1>${esc(data.tagline)}</h1></div>
-  </section>${supplement}
+  </section>${supplementTopGroup}
   <section class="section nf-products">
     <div class="container">
       <div class="product-grid-3">${cards}</div>
     </div>
-  </section>${optionBlocksSection(data)}${sizeChartSection(data)}${benefitsSection()}`;
+  </section>${optionBlocksSection(data)}${sizeChartSection(data)}${supplementBottom}${benefitsSection()}`;
 }
 
 /* ---------------- 「Why Source from Wolflag?」优势条（2026-09-15 新增） ----------------
@@ -735,10 +739,20 @@ function benefitsSection() {
 //   ⚠️ textRight（图左文右）= 改动前的版式，是默认；缺省 / 非法值一律退回它 → 老数据零变化；
 //   ⚠️ 没图片时（.f-supp-txt）方向不生效，仍按原来的「只显示文字并居中」渲染。
 const SUPP_DIRS = ['textTop', 'textBottom', 'textLeft', 'textRight'];
-function supplementSection(data, extraClass = '') {
+function supplementSection(data, extraClass = '', position = null) {
   const raw = data && data.supplement;
   const items = Array.isArray(raw) ? raw : (raw ? [raw] : []);
-  return items.filter((s) => s && s.show !== false && (s.text || s.title || s.image))
+  // 2026-10-17：全站补充模块可按 `position` 放到两处（top=产品区上面 / bottom=页面底部）。
+  // - position=null：整组照旧，全部渲染（兼容旧调用）；
+  // - position='top'：只渲染**明确选了 top** 的条目；
+  // - position='bottom'：其余全部（**没有 position 字段的旧数据按 bottom 处理** → 现有内容位置不变）。
+  //   ⚠️ 国旗页那条「Custom National Flags」已显式写入 position:"top"，所以不会被当成 bottom。
+  return items.filter((s) => {
+    if (!s || s.show === false || !(s.text || s.title || s.image)) return false;
+    if (position === 'top') return s.position === 'top';
+    if (position === 'bottom') return s.position !== 'top';
+    return true;
+  })
     .map((s) => {
       const dir = SUPP_DIRS.includes(s.direction) ? s.direction : 'textRight';
       const cls = s.image ? ` f-supp-${dir}` : ' f-supp-txt';
@@ -921,17 +935,19 @@ function featherBody(data) {
   <section class="page-banner">
     <div class="container"><img src="${esc(data.bannerImage)}" alt="${altOf(data, 'Feather flags')}"></div>
   </section>` : '';
-  const supplement = supplementSection(data);
+  const supplementTop = supplementSection(data, '', 'top');
+  const supplementBottom = supplementSection(data, '', 'bottom');
+  const supplementTopGroup = supplementTop ? `<div class="supp-top-group supp-top-feather">${supplementTop}</div>` : '';
   return `
   ${banner}
   <section class="section" style="padding-bottom:0">
     <div class="container"><h1 class="page-badge">${esc(data.badge)}</h1></div>
-  </section>
+  </section>${supplementTopGroup}
   <section class="section">
     <div class="container">
       <div class="product-grid-2">${cards}</div>
     </div>
-  </section>${applicationsSection(data)}${supplement}${benefitsSection()}`;
+  </section>${applicationsSection(data)}${supplementBottom}${benefitsSection()}`;
 }
 
 function bannerBody(data) {
@@ -954,17 +970,19 @@ function bannerBody(data) {
   <section class="page-banner">
     <div class="container"><img src="${esc(data.bannerImage)}" alt="${altOf(data, 'Banners')}"></div>
   </section>` : '';
-  const supplement = supplementSection(data);
+  const supplementTop = supplementSection(data, '', 'top');
+  const supplementBottom = supplementSection(data, '', 'bottom');
+  const supplementTopGroup = supplementTop ? `<div class="supp-top-group supp-top-page">${supplementTop}</div>` : '';
   return `
   ${banner}
   <section class="page-hero">
     <div class="container"><h1>${esc(data.tagline)}</h1></div>
-  </section>
+  </section>${supplementTopGroup}
   <section class="section">
     <div class="container">
       <div class="product-grid-3">${cards}</div>
     </div>
-  </section>${supplement}${benefitsSection()}`;
+  </section>${supplementBottom}${benefitsSection()}`;
 }
 
 function poleBody(data) {
@@ -1318,7 +1336,9 @@ function specGridBody(data) {
       <div class="sg-info">${info}</div>
     </article>`;
   }).join('');
-  const supplement = supplementSection(data);
+  const supplementTop = supplementSection(data, '', 'top');
+  const supplementBottom = supplementSection(data, '', 'bottom');
+  const supplementTopGroup = supplementTop ? `<div class="supp-top-group supp-top-page">${supplementTop}</div>` : '';
   return `
   ${banner}
   <section class="page-hero">
@@ -1326,12 +1346,12 @@ function specGridBody(data) {
       <h1>${esc(data.heading || '')}</h1>
       ${data.tagline ? `<p class="tagline" style="letter-spacing:0;text-transform:none">${esc(data.tagline)}</p>` : ''}
     </div>
-  </section>
+  </section>${supplementTopGroup}
   <section class="section">
     <div class="container">
       <div class="sg-grid">${products}</div>
     </div>
-  </section>${supplement}${benefitsSection()}`;
+  </section>${supplementBottom}${benefitsSection()}`;
 }
 
 /* ---------------- 产品详情布局（detail）+ 通用图文布局（flex） ---------------- */
