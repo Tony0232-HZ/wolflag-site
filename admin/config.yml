@@ -236,6 +236,15 @@ collections:
               - { label: 标题（可选）, name: title, widget: string, required: false }
               - { label: 文字（空行分段；可用 **词** 加粗）, name: text, widget: text, required: false, hint: "空一行 = 分成两段（段与段之间会留出空隙）；按一次回车 = 换行；用两个星号包住词可加粗，如 **Wolflag**。" }
               - { label: 图片（可选）, name: image, widget: image, required: false }
+              - label: 图片显示方式（裁剪 / 完整显示）
+                name: imageFit
+                widget: select
+                required: false
+                default: cover
+                options:
+                  - { label: 填满区域（默认；图片可能被裁剪）, value: cover }
+                  - { label: 完整显示（不裁剪；两侧/上下可能留白）, value: contain }
+                hint: "尺寸表、长图建议选『完整显示』；照片想铺满区域选『填满区域』。没有图片时此项不起作用。"
               - { label: 图片说明(alt), name: imageAlt, widget: string, required: false, hint: 图片说明（alt，建议英文，含产品关键词；留空则自动用品名） }
           - label: "页面公告条（首页页面里的滚动公告条；显示/隐藏、颜色、内容、图标都在这里）"
             name: announce
@@ -583,6 +592,15 @@ collections:
           - { label: 标题（可选）, name: title, widget: string, required: false }
           - { label: 文字（空行分段；可用 **词** 加粗）, name: text, widget: text, required: false, hint: "空一行 = 分成两段（段与段之间会留出空隙）；按一次回车 = 换行；用两个星号包住词可加粗，如 **Wolflag**。" }
           - { label: 图片（可选）, name: image, widget: image, required: false }
+          - label: 图片显示方式（裁剪 / 完整显示）
+            name: imageFit
+            widget: select
+            required: false
+            default: cover
+            options:
+              - { label: 填满区域（默认；图片可能被裁剪）, value: cover }
+              - { label: 完整显示（不裁剪；两侧/上下可能留白）, value: contain }
+            hint: "尺寸表、长图建议选『完整显示』；照片想铺满区域选『填满区域』。没有图片时此项不起作用。"
           - { label: 图片说明(alt), name: imageAlt, widget: string, required: false, hint: 图片说明（alt，建议英文，含产品关键词；留空则自动用品名） }
 
   # ---------- 产品：羽毛旗 ----------
@@ -643,6 +661,15 @@ collections:
               - { label: 标题（可选）, name: title, widget: string, required: false }
               - { label: 文字（空行分段；可用 **词** 加粗）, name: text, widget: text, required: false, hint: "空一行 = 分成两段（段与段之间会留出空隙）；按一次回车 = 换行；用两个星号包住词可加粗，如 **Wolflag**。" }
               - { label: 图片（可选）, name: image, widget: image, required: false }
+              - label: 图片显示方式（裁剪 / 完整显示）
+                name: imageFit
+                widget: select
+                required: false
+                default: cover
+                options:
+                  - { label: 填满区域（默认；图片可能被裁剪）, value: cover }
+                  - { label: 完整显示（不裁剪；两侧/上下可能留白）, value: contain }
+                hint: "尺寸表、长图建议选『完整显示』；照片想铺满区域选『填满区域』。没有图片时此项不起作用。"
               - { label: 图片说明(alt), name: imageAlt, widget: string, required: false, hint: 图片说明（alt，建议英文，含产品关键词；留空则自动用本套的标题） }
 
           - label: 应用场景（「我们的旗帜用在哪里」卡片网格）
@@ -724,6 +751,15 @@ collections:
               - { label: 标题（可选）, name: title, widget: string, required: false }
               - { label: 文字（空行分段；可用 **词** 加粗）, name: text, widget: text, required: false, hint: "空一行 = 分成两段（段与段之间会留出空隙）；按一次回车 = 换行；用两个星号包住词可加粗，如 **Wolflag**。" }
               - { label: 图片（可选）, name: image, widget: image, required: false }
+              - label: 图片显示方式（裁剪 / 完整显示）
+                name: imageFit
+                widget: select
+                required: false
+                default: cover
+                options:
+                  - { label: 填满区域（默认；图片可能被裁剪）, value: cover }
+                  - { label: 完整显示（不裁剪；两侧/上下可能留白）, value: contain }
+                hint: "尺寸表、长图建议选『完整显示』；照片想铺满区域选『填满区域』。没有图片时此项不起作用。"
               - { label: 图片说明(alt), name: imageAlt, widget: string, required: false, hint: 图片说明（alt，建议英文，含产品关键词；留空则自动用本套的标题） }
 
   # ---------- 产品：国旗 ----------
@@ -767,6 +803,15 @@ collections:
               - { label: 标题（可选）, name: title, widget: string, required: false }
               - { label: 文字（空行分段；可用 **词** 加粗）, name: text, widget: text, required: false, hint: "空一行 = 分成两段（段与段之间会留出空隙）；按一次回车 = 换行；用两个星号包住词可加粗，如 **Wolflag**。" }
               - { label: 图片（可选）, name: image, widget: image, required: false }
+              - label: 图片显示方式（裁剪 / 完整显示）
+                name: imageFit
+                widget: select
+                required: false
+                default: cover
+                options:
+                  - { label: 填满区域（默认；图片可能被裁剪）, value: cover }
+                  - { label: 完整显示（不裁剪；两侧/上下可能留白）, value: contain }
+                hint: "尺寸表、长图建议选『完整显示』；照片想铺满区域选『填满区域』。没有图片时此项不起作用。"
               - { label: 图片说明(alt), name: imageAlt, widget: string, required: false, hint: 图片说明（alt，建议英文，含产品关键词；留空则自动用本套的标题） }
           - label: 产品
             name: products
