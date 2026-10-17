@@ -876,8 +876,11 @@ ul { list-style: none; }
 .f-supp-img { flex: 0 0 44%; align-self: stretch; min-height: 220px; }
 .f-supp-img img { width: 100%; height: 100%; object-fit: cover; border-radius: 10px; display: block; }
 /* 2026-10-17：补充模块「图片显示方式 = 完整显示（contain）」。
-   用于尺寸表/长图：图片在左右两栏布局里不再被 cover 裁掉，两侧或上下留白（白底与图片底色一致）。 */
-.f-supp-img.is-contain img { object-fit: contain; background: #fff; }
+   用于尺寸表/长图：图片在左右两栏布局里不再被 cover 裁掉，两侧或上下留白。
+   ⚠️ 图片元素本身不要写死白底，否则留白会和模块底色不一致；底色由容器负责
+   （后台「图片区域底色」字段，默认 #faf7f5 = 模块底色；可改 #ffffff 或其他颜色）。 */
+.f-supp-img.is-contain { background: #faf7f5; }
+.f-supp-img.is-contain img { object-fit: contain; background: transparent; }
 .f-supp-body { flex: 1; }
 .f-supp-title { font-size: 26px; font-weight: 700; color: #191a19; margin-bottom: 14px; }
 .f-supp-text { color: #444c58; font-size: 16px; line-height: 1.7; }

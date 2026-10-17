@@ -762,7 +762,7 @@ function supplementSection(data, slot = null, defaultSlot = null) {
     <section class="section section-supp">
       <div class="container">
         <div class="f-supp${cls}">
-          ${s.image ? `<div class="f-supp-img${s.imageFit === 'contain' ? ' is-contain' : ''}"><img src="${esc(s.image)}" alt="${altOf(s, s.title || '', 'imageAlt')}" decoding="async"></div>` : ''}
+          ${s.image ? `<div class="f-supp-img${s.imageFit === 'contain' ? ' is-contain' : ''}"${s.imageFit === 'contain' ? ` style="background:${esc(s.imageBg || '#faf7f5')}"` : ''}><img src="${esc(s.image)}" alt="${altOf(s, s.title || '', 'imageAlt')}" decoding="async"></div>` : ''}
           <div class="f-supp-body">
             ${s.title ? `<h2 class="f-supp-title">${esc(s.title)}</h2>` : ''}
             <div class="f-supp-text">${faqAnswer(s.text || '')}</div>

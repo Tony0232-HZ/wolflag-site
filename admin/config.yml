@@ -245,6 +245,12 @@ collections:
                   - { label: 填满区域（默认；图片可能被裁剪）, value: cover }
                   - { label: 完整显示（不裁剪；两侧/上下可能留白）, value: contain }
                 hint: "尺寸表、长图建议选『完整显示』；照片想铺满区域选『填满区域』。没有图片时此项不起作用。"
+              - label: 图片区域底色（仅「完整显示」时生效）
+                name: imageBg
+                widget: color
+                required: false
+                default: "#faf7f5"
+                hint: "默认 #faf7f5（和模块底色一致），留白会自动填充这个颜色；想用白色选 #ffffff，也可以选其他颜色。只对『图片显示方式=完整显示』生效。"
               - { label: 图片说明(alt), name: imageAlt, widget: string, required: false, hint: 图片说明（alt，建议英文，含产品关键词；留空则自动用品名） }
           - label: "页面公告条（首页页面里的滚动公告条；显示/隐藏、颜色、内容、图标都在这里）"
             name: announce
@@ -601,6 +607,12 @@ collections:
               - { label: 填满区域（默认；图片可能被裁剪）, value: cover }
               - { label: 完整显示（不裁剪；两侧/上下可能留白）, value: contain }
             hint: "尺寸表、长图建议选『完整显示』；照片想铺满区域选『填满区域』。没有图片时此项不起作用。"
+          - label: 图片区域底色（仅「完整显示」时生效）
+            name: imageBg
+            widget: color
+            required: false
+            default: "#faf7f5"
+            hint: "默认 #faf7f5（和模块底色一致），留白会自动填充这个颜色；想用白色选 #ffffff，也可以选其他颜色。只对『图片显示方式=完整显示』生效。"
           - { label: 图片说明(alt), name: imageAlt, widget: string, required: false, hint: 图片说明（alt，建议英文，含产品关键词；留空则自动用品名） }
 
   # ---------- 产品：羽毛旗 ----------
@@ -670,6 +682,12 @@ collections:
                   - { label: 填满区域（默认；图片可能被裁剪）, value: cover }
                   - { label: 完整显示（不裁剪；两侧/上下可能留白）, value: contain }
                 hint: "尺寸表、长图建议选『完整显示』；照片想铺满区域选『填满区域』。没有图片时此项不起作用。"
+              - label: 图片区域底色（仅「完整显示」时生效）
+                name: imageBg
+                widget: color
+                required: false
+                default: "#faf7f5"
+                hint: "默认 #faf7f5（和模块底色一致），留白会自动填充这个颜色；想用白色选 #ffffff，也可以选其他颜色。只对『图片显示方式=完整显示』生效。"
               - { label: 图片说明(alt), name: imageAlt, widget: string, required: false, hint: 图片说明（alt，建议英文，含产品关键词；留空则自动用本套的标题） }
 
           - label: 应用场景（「我们的旗帜用在哪里」卡片网格）
@@ -760,6 +778,12 @@ collections:
                   - { label: 填满区域（默认；图片可能被裁剪）, value: cover }
                   - { label: 完整显示（不裁剪；两侧/上下可能留白）, value: contain }
                 hint: "尺寸表、长图建议选『完整显示』；照片想铺满区域选『填满区域』。没有图片时此项不起作用。"
+              - label: 图片区域底色（仅「完整显示」时生效）
+                name: imageBg
+                widget: color
+                required: false
+                default: "#faf7f5"
+                hint: "默认 #faf7f5（和模块底色一致），留白会自动填充这个颜色；想用白色选 #ffffff，也可以选其他颜色。只对『图片显示方式=完整显示』生效。"
               - { label: 图片说明(alt), name: imageAlt, widget: string, required: false, hint: 图片说明（alt，建议英文，含产品关键词；留空则自动用本套的标题） }
 
   # ---------- 产品：国旗 ----------
@@ -812,6 +836,12 @@ collections:
                   - { label: 填满区域（默认；图片可能被裁剪）, value: cover }
                   - { label: 完整显示（不裁剪；两侧/上下可能留白）, value: contain }
                 hint: "尺寸表、长图建议选『完整显示』；照片想铺满区域选『填满区域』。没有图片时此项不起作用。"
+              - label: 图片区域底色（仅「完整显示」时生效）
+                name: imageBg
+                widget: color
+                required: false
+                default: "#faf7f5"
+                hint: "默认 #faf7f5（和模块底色一致），留白会自动填充这个颜色；想用白色选 #ffffff，也可以选其他颜色。只对『图片显示方式=完整显示』生效。"
               - { label: 图片说明(alt), name: imageAlt, widget: string, required: false, hint: 图片说明（alt，建议英文，含产品关键词；留空则自动用本套的标题） }
           - label: 产品
             name: products
