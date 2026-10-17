@@ -220,15 +220,8 @@ collections:
             summary: "{{fields.title || '补充模块'}}"
             fields:
               - { label: 显示此补充模块, name: show, widget: boolean, default: true, hint: 取消勾选即隐藏（内容会保留，重新勾选即可恢复） }
-              - label: 显示位置（全站补充模块通用）
-                name: position
-                widget: select
-                required: false
-                default: bottom
-                options:
-                  - { label: 产品区上面（简介下面）, value: top }
-                  - { label: 页面底部（Clients 上面，现在的位置）, value: bottom }
-                hint: "选『产品区上面（简介下面）』= 在主产品卡上面显示；选『页面底部（Clients 上面，现在的位置）』= 现在的位置。新加的补充模块默认在页面底部。"
+              # 构建时自动生成「显示位置」下拉（见 scripts/page-slots.mjs）
+              # @@SLOT_FIELD:home@@
               - label: 文字/图片的位置
                 name: direction
                 widget: select
@@ -574,15 +567,8 @@ collections:
         summary: "{{fields.title || '补充模块'}}"
         fields:
           - { label: 显示此补充模块, name: show, widget: boolean, default: true, hint: 取消勾选即隐藏（内容会保留，重新勾选即可恢复） }
-          - label: 显示位置（全站补充模块通用）
-            name: position
-            widget: select
-            required: false
-            default: bottom
-            options:
-              - { label: 产品区上面（页面标题下面）, value: top }
-              - { label: 页面底部（优势条上面，现在的位置）, value: bottom }
-            hint: "选『产品区上面（页面标题下面）』= 在主产品卡上面显示；选『页面底部（优势条上面，现在的位置）』= 现在的位置。新加的补充模块默认在页面底部。"
+          # 构建时自动生成「显示位置」下拉（见 scripts/page-slots.mjs）
+          # @@SLOT_FIELD:specgrid@@
           - label: 文字/图片的位置
             name: direction
             widget: select
@@ -641,15 +627,8 @@ collections:
             summary: "{{fields.title || '补充模块'}}"
             fields:
               - { label: 显示此补充模块, name: show, widget: boolean, default: true, hint: 取消勾选即隐藏（内容会保留，重新勾选即可恢复） }
-              - label: 显示位置（全站补充模块通用）
-                name: position
-                widget: select
-                required: false
-                default: bottom
-                options:
-                  - { label: 产品区上面（页面标题下面）, value: top }
-                  - { label: 页面底部（应用场景下面，现在的位置）, value: bottom }
-                hint: "选『产品区上面（页面标题下面）』= 在主产品卡上面显示；选『页面底部（应用场景下面，现在的位置）』= 现在的位置。新加的补充模块默认在页面底部。"
+              # 构建时自动生成「显示位置」下拉（见 scripts/page-slots.mjs）
+              # @@SLOT_FIELD:feather@@
               - label: 文字/图片的位置
                 name: direction
                 widget: select
@@ -729,15 +708,8 @@ collections:
             summary: "{{fields.title || '补充模块'}}"
             fields:
               - { label: 显示此补充模块, name: show, widget: boolean, default: true, hint: 取消勾选即隐藏（内容会保留，重新勾选即可恢复） }
-              - label: 显示位置（全站补充模块通用）
-                name: position
-                widget: select
-                required: false
-                default: bottom
-                options:
-                  - { label: 产品区上面（标语下面）, value: top }
-                  - { label: 页面底部（优势条上面，现在的位置）, value: bottom }
-                hint: "选『产品区上面（标语下面）』= 在主产品卡上面显示；选『页面底部（优势条上面，现在的位置）』= 现在的位置。新加的补充模块默认在页面底部。"
+              # 构建时自动生成「显示位置」下拉（见 scripts/page-slots.mjs）
+              # @@SLOT_FIELD:banner@@
               - label: 文字/图片的位置
                 name: direction
                 widget: select
@@ -779,15 +751,8 @@ collections:
             summary: "{{fields.title || '补充模块'}}"
             fields:
               - { label: 显示此补充模块, name: show, widget: boolean, default: true, hint: 取消勾选即隐藏（内容会保留，重新勾选即可恢复） }
-              - label: 显示位置（只有国旗页有这个选项）
-                name: position
-                widget: select
-                required: false
-                default: bottom
-                options:
-                  - { label: 页面顶部（标语下面、产品卡上面）, value: top }
-                  - { label: Choose Your Flag Size 模块下面（尺寸表下方、优势条上方）, value: bottom }
-                hint: "选『页面顶部』= 现在这条 Custom National Flags 的位置；选『Choose Your Flag Size 模块下面』= 尺寸表下方、Why Source 优势条上方。新加的内容默认选下面，现有这条已经在数据里固定为顶部。"
+              # 构建时自动生成「显示位置」下拉（见 scripts/page-slots.mjs）
+              # @@SLOT_FIELD:national@@
               - label: 文字/图片的位置
                 name: direction
                 widget: select

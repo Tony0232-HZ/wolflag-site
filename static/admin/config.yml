@@ -220,15 +220,18 @@ collections:
             summary: "{{fields.title || '补充模块'}}"
             fields:
               - { label: 显示此补充模块, name: show, widget: boolean, default: true, hint: 取消勾选即隐藏（内容会保留，重新勾选即可恢复） }
-              - label: 显示位置（全站补充模块通用）
-                name: position
+              # 构建时自动生成「显示位置」下拉（见 scripts/page-slots.mjs）
+              - label: 显示位置（插在页面哪个位置）
+                name: slot
                 widget: select
                 required: false
-                default: bottom
+                default: after-products
                 options:
-                  - { label: 产品区上面（简介下面）, value: top }
-                  - { label: 页面底部（Clients 上面，现在的位置）, value: bottom }
-                hint: "选『产品区上面（简介下面）』= 在主产品卡上面显示；选『页面底部（Clients 上面，现在的位置）』= 现在的位置。新加的补充模块默认在页面底部。"
+                  - { label: "首屏/公告条下面、简介上面", value: "after-announce" }
+                  - { label: "简介下面、主产品区上面", value: "after-intro" }
+                  - { label: "主产品区下面、Clients 上面（现在的位置）", value: "after-products" }
+                  - { label: "Clients 下面、页脚上面", value: "after-clients" }
+                hint: "这个下拉由构建时自动生成：网站新增一个可插入的段落后，这里会自动多一个位置。默认值是本页现在的补充模块位置。"
               - label: 文字/图片的位置
                 name: direction
                 widget: select
@@ -574,15 +577,17 @@ collections:
         summary: "{{fields.title || '补充模块'}}"
         fields:
           - { label: 显示此补充模块, name: show, widget: boolean, default: true, hint: 取消勾选即隐藏（内容会保留，重新勾选即可恢复） }
-          - label: 显示位置（全站补充模块通用）
-            name: position
+          # 构建时自动生成「显示位置」下拉（见 scripts/page-slots.mjs）
+          - label: 显示位置（插在页面哪个位置）
+            name: slot
             widget: select
             required: false
-            default: bottom
+            default: after-products
             options:
-              - { label: 产品区上面（页面标题下面）, value: top }
-              - { label: 页面底部（优势条上面，现在的位置）, value: bottom }
-            hint: "选『产品区上面（页面标题下面）』= 在主产品卡上面显示；选『页面底部（优势条上面，现在的位置）』= 现在的位置。新加的补充模块默认在页面底部。"
+              - { label: "页面标题下面、产品卡上面", value: "after-hero" }
+              - { label: "产品卡下面、优势条上面（现在的位置）", value: "after-products" }
+              - { label: "优势条下面、页脚上面", value: "after-benefits" }
+            hint: "这个下拉由构建时自动生成：网站新增一个可插入的段落后，这里会自动多一个位置。默认值是本页现在的补充模块位置。"
           - label: 文字/图片的位置
             name: direction
             widget: select
@@ -641,15 +646,18 @@ collections:
             summary: "{{fields.title || '补充模块'}}"
             fields:
               - { label: 显示此补充模块, name: show, widget: boolean, default: true, hint: 取消勾选即隐藏（内容会保留，重新勾选即可恢复） }
-              - label: 显示位置（全站补充模块通用）
-                name: position
+              # 构建时自动生成「显示位置」下拉（见 scripts/page-slots.mjs）
+              - label: 显示位置（插在页面哪个位置）
+                name: slot
                 widget: select
                 required: false
-                default: bottom
+                default: after-applications
                 options:
-                  - { label: 产品区上面（页面标题下面）, value: top }
-                  - { label: 页面底部（应用场景下面，现在的位置）, value: bottom }
-                hint: "选『产品区上面（页面标题下面）』= 在主产品卡上面显示；选『页面底部（应用场景下面，现在的位置）』= 现在的位置。新加的补充模块默认在页面底部。"
+                  - { label: "页面标题下面、产品卡上面", value: "after-badge" }
+                  - { label: "产品卡下面、应用场景上面", value: "after-products" }
+                  - { label: "应用场景下面、优势条上面（现在的位置）", value: "after-applications" }
+                  - { label: "优势条下面、页脚上面", value: "after-benefits" }
+                hint: "这个下拉由构建时自动生成：网站新增一个可插入的段落后，这里会自动多一个位置。默认值是本页现在的补充模块位置。"
               - label: 文字/图片的位置
                 name: direction
                 widget: select
@@ -729,15 +737,17 @@ collections:
             summary: "{{fields.title || '补充模块'}}"
             fields:
               - { label: 显示此补充模块, name: show, widget: boolean, default: true, hint: 取消勾选即隐藏（内容会保留，重新勾选即可恢复） }
-              - label: 显示位置（全站补充模块通用）
-                name: position
+              # 构建时自动生成「显示位置」下拉（见 scripts/page-slots.mjs）
+              - label: 显示位置（插在页面哪个位置）
+                name: slot
                 widget: select
                 required: false
-                default: bottom
+                default: after-products
                 options:
-                  - { label: 产品区上面（标语下面）, value: top }
-                  - { label: 页面底部（优势条上面，现在的位置）, value: bottom }
-                hint: "选『产品区上面（标语下面）』= 在主产品卡上面显示；选『页面底部（优势条上面，现在的位置）』= 现在的位置。新加的补充模块默认在页面底部。"
+                  - { label: "标语下面、产品卡上面", value: "after-hero" }
+                  - { label: "产品卡下面、优势条上面（现在的位置）", value: "after-products" }
+                  - { label: "优势条下面、页脚上面", value: "after-benefits" }
+                hint: "这个下拉由构建时自动生成：网站新增一个可插入的段落后，这里会自动多一个位置。默认值是本页现在的补充模块位置。"
               - label: 文字/图片的位置
                 name: direction
                 widget: select
@@ -779,15 +789,19 @@ collections:
             summary: "{{fields.title || '补充模块'}}"
             fields:
               - { label: 显示此补充模块, name: show, widget: boolean, default: true, hint: 取消勾选即隐藏（内容会保留，重新勾选即可恢复） }
-              - label: 显示位置（只有国旗页有这个选项）
-                name: position
+              # 构建时自动生成「显示位置」下拉（见 scripts/page-slots.mjs）
+              - label: 显示位置（插在页面哪个位置）
+                name: slot
                 widget: select
                 required: false
-                default: bottom
+                default: after-size
                 options:
-                  - { label: 页面顶部（标语下面、产品卡上面）, value: top }
-                  - { label: Choose Your Flag Size 模块下面（尺寸表下方、优势条上方）, value: bottom }
-                hint: "选『页面顶部』= 现在这条 Custom National Flags 的位置；选『Choose Your Flag Size 模块下面』= 尺寸表下方、Why Source 优势条上方。新加的内容默认选下面，现有这条已经在数据里固定为顶部。"
+                  - { label: "标语下面、产品卡上面（现在的位置）", value: "after-hero" }
+                  - { label: "6 张产品卡下面、Production Options 上面", value: "after-products" }
+                  - { label: "Production Options 下面、Choose Your Flag Size 上面", value: "after-options" }
+                  - { label: "Choose Your Flag Size 下面、Why Source 上面", value: "after-size" }
+                  - { label: "Why Source 下面、页脚上面", value: "after-benefits" }
+                hint: "这个下拉由构建时自动生成：网站新增一个可插入的段落后，这里会自动多一个位置。默认值是本页现在的补充模块位置。"
               - label: 文字/图片的位置
                 name: direction
                 widget: select

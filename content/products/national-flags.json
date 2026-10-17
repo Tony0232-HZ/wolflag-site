@@ -127,7 +127,7 @@
   "supplement": [
     {
       "show": true,
-      "position": "top",
+      "slot": "after-hero",
       "direction": "textLeft",
       "text": "**Wolflag** is your go-to partner for custom national flags, serving distributors, importers, institutions, and large-scale event projects. \n\nWe cover every display need—whether it’s hanging indoors or outdoors, sitting on a desk, waving in a crowd, or taking center stage at an international ceremony.\n\n Every order is built to your exact specs: choose your countries, sizes, materials, finishing styles, and packaging. And when it comes to multi-country orders, we make sure every single flag in your shipment matches in quality and build.",
       "title": "Custom National Flags, Built for Scale",

@@ -8,6 +8,7 @@
 import { readFileSync, writeFileSync, mkdirSync, cpSync, readdirSync, existsSync, rmSync, statSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { PAGE_SLOTS } from './page-slots.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const CONTENT = join(ROOT, 'content');
@@ -499,9 +500,10 @@ function homeBody() {
          <span class="cat-desc">${esc(c.text)}</span>
        </span>
      </a>`).join('\n');
-  const supplementTop = supplementSection(home, '', 'top');
-  const supplementBottom = supplementSection(home, '', 'bottom');
-  const supplementTopGroup = supplementTop ? `<div class="supp-top-group supp-top-home">${supplementTop}</div>` : '';
+  const afterAnnounce = slotGroup(home, 'home', 'after-announce');
+  const afterIntro = slotGroup(home, 'home', 'after-intro');
+  const afterProducts = slotGroup(home, 'home', 'after-products');
+  const afterClients = slotGroup(home, 'home', 'after-clients');
   const clients = homeClients();
   const heroImgs = (home.hero.images && home.hero.images.length ? home.hero.images : (home.hero.image ? [home.hero.image] : []));
   /* 2026-09-14 首页大标题拆两行：第一行 title（主标题，字大）+ 第二行 title2（副标题，字稍小）。
@@ -550,7 +552,7 @@ function homeBody() {
     </div>
   </section>
 
-  ${announceBar(home.announce)}
+  ${announceBar(home.announce)}${afterAnnounce}
 
   <section class="section section-center">
     <div class="container">
@@ -558,15 +560,15 @@ function homeBody() {
       <p class="section-sub">${esc(home.intro.text)}</p>
       <div class="intro-photos">${photos}</div>
     </div>
-  </section>${supplementTopGroup}
+  </section>${afterIntro}
 
-  <section class="main-products${supplementTop ? ' has-supp-top' : ''}">
+  <section class="main-products${afterIntro ? ' has-supp-top' : ''}">
     <div class="container">
       <h2 class="eyebrow">${esc(home.categories.title)}</h2>
       <p class="intro">${esc(home.categories.intro)}</p>
       <div class="cat-grid">${cards}</div>
     </div>
-  </section>${supplementBottom}${clients}`;
+  </section>${afterProducts}${clients}${afterClients}`;
 }
 
 /* ---------------- 首页「Clients & Partners」双排 logo 跑马灯（2026-09-13 新增）
@@ -667,19 +669,21 @@ function nfBody(data) {
   <section class="page-banner">
     <div class="container"><img src="${esc(data.bannerImage)}" alt="${altOf(data, 'National flags')}"></div>
   </section>` : '';
-  const supplementTop = supplementSection(data, '', 'top');
-  const supplementBottom = supplementSection(data, '', 'bottom');
-  const supplementTopGroup = supplementTop ? `<div class="supp-top-group supp-top-nf">${supplementTop}</div>` : '';
+  const afterHero = slotGroup(data, 'national', 'after-hero');
+  const afterProducts = slotGroup(data, 'national', 'after-products');
+  const afterOptions = slotGroup(data, 'national', 'after-options');
+  const afterSize = slotGroup(data, 'national', 'after-size');
+  const afterBenefits = slotGroup(data, 'national', 'after-benefits');
   return `
   ${banner}
   <section class="page-hero">
     <div class="container"><h1>${esc(data.tagline)}</h1></div>
-  </section>${supplementTopGroup}
+  </section>${afterHero}
   <section class="section nf-products">
     <div class="container">
       <div class="product-grid-3">${cards}</div>
     </div>
-  </section>${optionBlocksSection(data)}${sizeChartSection(data)}${supplementBottom}${benefitsSection()}`;
+  </section>${afterProducts}${optionBlocksSection(data)}${afterOptions}${sizeChartSection(data)}${afterSize}${benefitsSection()}${afterBenefits}`;
 }
 
 /* ---------------- 「Why Source from Wolflag?」优势条（2026-09-15 新增） ----------------
@@ -739,25 +743,23 @@ function benefitsSection() {
 //   ⚠️ textRight（图左文右）= 改动前的版式，是默认；缺省 / 非法值一律退回它 → 老数据零变化；
 //   ⚠️ 没图片时（.f-supp-txt）方向不生效，仍按原来的「只显示文字并居中」渲染。
 const SUPP_DIRS = ['textTop', 'textBottom', 'textLeft', 'textRight'];
-function supplementSection(data, extraClass = '', position = null) {
+function supplementSection(data, slot = null, defaultSlot = null) {
   const raw = data && data.supplement;
   const items = Array.isArray(raw) ? raw : (raw ? [raw] : []);
-  // 2026-10-17：全站补充模块可按 `position` 放到两处（top=产品区上面 / bottom=页面底部）。
-  // - position=null：整组照旧，全部渲染（兼容旧调用）；
-  // - position='top'：只渲染**明确选了 top** 的条目；
-  // - position='bottom'：其余全部（**没有 position 字段的旧数据按 bottom 处理** → 现有内容位置不变）。
-  //   ⚠️ 国旗页那条「Custom National Flags」已显式写入 position:"top"，所以不会被当成 bottom。
+  // 2026-10-17：补充模块改为「插槽」渲染（全站 5 页）。
+  // - slot=null：整组全部渲染（兼容旧调用）；
+  // - slot=某插槽 id：渲染 `s.slot === slot` 的条目；
+  // - 旧数据没有 `slot` 字段时，落到本页 `defaultSlot`（= 改动前所在位置）→ 老页面不变。
   return items.filter((s) => {
     if (!s || s.show === false || !(s.text || s.title || s.image)) return false;
-    if (position === 'top') return s.position === 'top';
-    if (position === 'bottom') return s.position !== 'top';
+    if (slot) return (s.slot || defaultSlot) === slot;
     return true;
   })
     .map((s) => {
       const dir = SUPP_DIRS.includes(s.direction) ? s.direction : 'textRight';
       const cls = s.image ? ` f-supp-${dir}` : ' f-supp-txt';
       return `
-    <section class="section section-supp${extraClass ? ` ${extraClass}` : ''}">
+    <section class="section section-supp">
       <div class="container">
         <div class="f-supp${cls}">
           ${s.image ? `<div class="f-supp-img"><img src="${esc(s.image)}" alt="${altOf(s, s.title || '', 'imageAlt')}" decoding="async"></div>` : ''}
@@ -769,6 +771,18 @@ function supplementSection(data, extraClass = '', position = null) {
       </div>
     </section>`;
     }).join('');
+}
+
+/** 补充模块插槽组：按注册表里的 top/bottom 控制上下留白（2026-10-17）。
+ *  没有条目时不输出任何东西 → 页面与改动前逐字节一致。 */
+function slotGroup(data, pageKey, slotId) {
+  const page = PAGE_SLOTS[pageKey];
+  if (!page) return '';
+  const slot = page.items.find((s) => s.id === slotId);
+  if (!slot) return '';
+  const html = supplementSection(data, slotId, page.defaultSlot);
+  if (!html) return '';
+  return `<div class="supp-slot-group" style="--supp-top:${slot.top}px;--supp-bottom:${slot.bottom}px">${html}</div>`;
 }
 
 /* ---------------- 「尺寸选择」模块（2026-10-17 新增，用户要求） ----------------
@@ -935,19 +949,20 @@ function featherBody(data) {
   <section class="page-banner">
     <div class="container"><img src="${esc(data.bannerImage)}" alt="${altOf(data, 'Feather flags')}"></div>
   </section>` : '';
-  const supplementTop = supplementSection(data, '', 'top');
-  const supplementBottom = supplementSection(data, '', 'bottom');
-  const supplementTopGroup = supplementTop ? `<div class="supp-top-group supp-top-feather">${supplementTop}</div>` : '';
+  const afterBadge = slotGroup(data, 'feather', 'after-badge');
+  const afterProducts = slotGroup(data, 'feather', 'after-products');
+  const afterApplications = slotGroup(data, 'feather', 'after-applications');
+  const afterBenefits = slotGroup(data, 'feather', 'after-benefits');
   return `
   ${banner}
   <section class="section" style="padding-bottom:0">
     <div class="container"><h1 class="page-badge">${esc(data.badge)}</h1></div>
-  </section>${supplementTopGroup}
+  </section>${afterBadge}
   <section class="section">
     <div class="container">
       <div class="product-grid-2">${cards}</div>
     </div>
-  </section>${applicationsSection(data)}${supplementBottom}${benefitsSection()}`;
+  </section>${afterProducts}${applicationsSection(data)}${afterApplications}${benefitsSection()}${afterBenefits}`;
 }
 
 function bannerBody(data) {
@@ -970,19 +985,19 @@ function bannerBody(data) {
   <section class="page-banner">
     <div class="container"><img src="${esc(data.bannerImage)}" alt="${altOf(data, 'Banners')}"></div>
   </section>` : '';
-  const supplementTop = supplementSection(data, '', 'top');
-  const supplementBottom = supplementSection(data, '', 'bottom');
-  const supplementTopGroup = supplementTop ? `<div class="supp-top-group supp-top-page">${supplementTop}</div>` : '';
+  const afterHero = slotGroup(data, 'banner', 'after-hero');
+  const afterProducts = slotGroup(data, 'banner', 'after-products');
+  const afterBenefits = slotGroup(data, 'banner', 'after-benefits');
   return `
   ${banner}
   <section class="page-hero">
     <div class="container"><h1>${esc(data.tagline)}</h1></div>
-  </section>${supplementTopGroup}
+  </section>${afterHero}
   <section class="section">
     <div class="container">
       <div class="product-grid-3">${cards}</div>
     </div>
-  </section>${supplementBottom}${benefitsSection()}`;
+  </section>${afterProducts}${benefitsSection()}${afterBenefits}`;
 }
 
 function poleBody(data) {
@@ -1336,9 +1351,9 @@ function specGridBody(data) {
       <div class="sg-info">${info}</div>
     </article>`;
   }).join('');
-  const supplementTop = supplementSection(data, '', 'top');
-  const supplementBottom = supplementSection(data, '', 'bottom');
-  const supplementTopGroup = supplementTop ? `<div class="supp-top-group supp-top-page">${supplementTop}</div>` : '';
+  const afterHero = slotGroup(data, 'specgrid', 'after-hero');
+  const afterProducts = slotGroup(data, 'specgrid', 'after-products');
+  const afterBenefits = slotGroup(data, 'specgrid', 'after-benefits');
   return `
   ${banner}
   <section class="page-hero">
@@ -1346,12 +1361,12 @@ function specGridBody(data) {
       <h1>${esc(data.heading || '')}</h1>
       ${data.tagline ? `<p class="tagline" style="letter-spacing:0;text-transform:none">${esc(data.tagline)}</p>` : ''}
     </div>
-  </section>${supplementTopGroup}
+  </section>${afterHero}
   <section class="section">
     <div class="container">
       <div class="sg-grid">${products}</div>
     </div>
-  </section>${supplementBottom}${benefitsSection()}`;
+  </section>${afterProducts}${benefitsSection()}${afterBenefits}`;
 }
 
 /* ---------------- 产品详情布局（detail）+ 通用图文布局（flex） ---------------- */
@@ -1793,7 +1808,32 @@ if (existsSync(SRC)) cpSync(SRC, STATIC, { recursive: true });
 if (existsSync(MEDIA)) cpSync(MEDIA, join(STATIC, 'assets', 'media'), { recursive: true });
 
 /* admin (Decap CMS) */
-if (existsSync(ADMIN)) cpSync(ADMIN, join(STATIC, 'admin'), { recursive: true });
+if (existsSync(ADMIN)) {
+  cpSync(ADMIN, join(STATIC, 'admin'), { recursive: true });
+  /* 2026-10-17：从 scripts/page-slots.mjs 自动生成后台「显示位置」下拉。
+     源文件 admin/config.yml 里只保留 `# @@SLOT_FIELD:<key>@@` 标记；
+     构建时把标记替换成完整 select 字段（选项来自同一份插槽注册表）。
+     → 以后新增插槽，只要注册表加一条 + layout 调用 slotGroup()，后台下拉自动多一个位置。 */
+  const adminSrc = readFileSync(join(ADMIN, 'config.yml'), 'utf8');
+  const adminOut = adminSrc.replace(/^([ \t]*)# @@SLOT_FIELD:([a-z]+)@@$/gm, (m, indent, key) => {
+    const page = PAGE_SLOTS[key];
+    if (!page) throw new Error(`未注册的插槽页面: ${key}`);
+    const optLines = page.items.map((s) =>
+      `${indent}    - { label: ${JSON.stringify(s.label)}, value: ${JSON.stringify(s.id)} }`);
+    return [
+      `${indent}- label: 显示位置（插在页面哪个位置）`,
+      `${indent}  name: slot`,
+      `${indent}  widget: select`,
+      `${indent}  required: false`,
+      `${indent}  default: ${page.defaultSlot}`,
+      `${indent}  options:`,
+      ...optLines,
+      `${indent}  hint: "这个下拉由构建时自动生成：网站新增一个可插入的段落后，这里会自动多一个位置。默认值是本页现在的补充模块位置。"`,
+    ].join('\n');
+  });
+  if (adminOut.includes('@@SLOT_FIELD:')) throw new Error('admin/config.yml 里有未替换的插槽标记');
+  writeFileSync(join(STATIC, 'admin', 'config.yml'), adminOut);
+}
 
 /* sitemap */
 const blogUrls = [
