@@ -179,7 +179,7 @@
     {
       "show": true,
       "slot": "after-applications",
-      "direction": "textRight",
+      "direction": "textLeft",
       "image": "/assets/media/wolflag-blade-feather-flag-size-chart-2.9m-to-4.55m-pole.webp",
       "imageAlt": "Wolflag blade feather flag size comparison chart showing 2.9m pole (206x67cm flag), 3.4m pole (250x60cm flag), 4m pole (285x65cm flag), and 4.55m pole (340x80cm flag)",
       "title": "Custom Feather Flag Sizes and Pole Set Options",
