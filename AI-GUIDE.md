@@ -4081,9 +4081,115 @@ Graduations `#EDF0FD` · Expos `#EAF7F0` · Fundraisers `#FDEEE6` · Seasonal `#
 《后台管理操作说明书.html》（**用户本次主动给了路径**：`E:\wolflag 网站信息\2026 公司网站\wolflag-site\后台管理操作说明书.html`
 —— ⚠️ **该文件仓库根目录下存在但 git 未跟踪**，**绝不可 `git add -A` 把它带进提交**）。
 
+### 10.42 🆕 国旗页新增「Choose Your Flag Size」尺寸选择模块 + 两处间距减半（2026-10-17，多轮迭代）
+
+**用户需求（最终口径）**：
+1. 照同行参考站 **bestflag.com/pages/custom-flags** 的「Choose Your Flag Size」一节移植一个模块到国旗页；
+   表格要用参考站的**颜色和样式**，但**不要 Oversized 那一列**。
+2. 左边图片**不用参考站的图**，用用户提供的两张尺寸图（Small / Standard）。
+3. 选中列（Standard）的高亮**不用参考站的蓝色**，改用本站 FAQ 模块的**浅红 `#faf3f3` + 深红 `#a33335`**。
+4. 表格最终**删掉 `20 x 27.75" (Guidon)`**，Standard 下面的值**整体上移一行**，**最下面一行删掉** → 6 行。
+5. 左边图片与右边表头**双向联动**：点 Small 出小图、点 Standard 出大图；不点时自动轮播，
+   表头高亮**实时跟着当前图片走**；点了表头后**停止自动轮播**。
+6. 模块最终位置：**「Production Options for National Flags」下面、优势条上面**。
+7. 另外两处间距按用户标注**减半**：标语 → 灰色图文块、灰色图文块 → 6 张产品卡（56 → 28px）。
+8. 灰色图文块「Custom National Flags, Built for Scale」本身要挪到**标语下面、产品卡上面**。
+9. 两张图片的 ALT 用用户给的英文原文；小尺寸图后来由用户重新制作（尺寸字更粗更大），**同名覆盖**。
+
+**最终页面顺序**：
+```
+横幅 → 标语 → Custom National Flags（supplement） → 6 张产品卡
+     → Production Options（optionBlocks） → Choose Your Flag Size（sizeChart） → 优势条
+```
+
+**数据模型**（`content/products/national-flags.json → sizeChart`，对象，只有一个）：
+`{show, bg, title, text, images[{image,imageAlt}], interval, table:{leftTitle,rightTitle,rows[{left,right}]}}`
+- `images` / `table.rows` 都是**新建字段**，没有历史数据 → **不涉及坑 #20**。
+- 后台字段顺序与页面一致：**补充模块 → 产品 → 生产选项模块 → 尺寸选择模块**。
+- 字段 `bg` 默认白色；目前没有给非白底色加内部留白，若以后用户填色带，需要补 padding（CSS 注释已写明）。
+
+**构建**：`scripts/build.mjs` 新增 `sizeChartSection(data)`，**只接在 `nfBody()`**，接在
+`${optionBlocksSection(data)}` 之后、`${benefitsSection()}` 之前。表头输出为真正的 `<button class="wl-size-tab">`
+（`th` 的 padding 归零，按钮填满整格，键盘可聚焦；`aria-pressed` 同步）。
+表格：`colgroup` 33.333% / 66.667%，`border-collapse:separate` + `overflow:hidden` + 16px 圆角 +
+`0 0 0 1px rgba(23,23,23,.06)`；表头 18px/600、正文 18px/400、行线 1px `#dee2e6`、表头灰 `#f8f9fa`；
+选中列表头 **`#faf3f3` 底 + `#a33335` 字 + 4px `#a33335` 下边线**（用户明确要求，别改回参考站蓝色）。
+
+**样式**：`src/assets/css/site.css` 新增 `.wl-size-*`、`.section-supp.nf-supp-top`、`.section.nf-products`。
+- 左侧轮播复用站内 `.it-carousel`，但**覆盖规则必须写成 `.wl-size .wl-size-carousel …`（3 个类）**：
+  基础 `.it-carousel …` 在本文件更靠后、同权重会把背景/比例/控件颜色盖回原值（**坑 #39**）。
+  实测覆盖后 `aspect-ratio: 1786/1279`、`object-fit: contain`、白底、箭头常显（opacity .55）、圆点蓝/灰。
+- 间距（**成对，改位置时必须一起改**）：
+  - 标语 → 灰块：`.page-hero` 底 26px + `.section-supp.nf-supp-top` 顶 **2px** = **28px**
+    （用户标注「间隙太大，减小一半」，56 → 28）；
+  - 灰块 → 产品卡：`.section.nf-products` 顶 **28px**（用户标注「间隙距离减小一半」，56 → 28）；
+  - 产品卡 → 生产选项：**112px**（原有间距，用户未标注，**未动**）；
+  - 生产选项 → 尺寸模块：`.wl-opt` 底 56px + 本模块顶 0 = **56px**；
+  - 尺寸表 → 优势条灰底：表格卡片自身 30px（手机 12px）+ 本模块底 26px（手机 44px）= **56px**。
+- 不要给 `.wl-size` 加 `padding-top`：上方邻居已给 56px，再加会变 112px。
+
+**交互**（`src/assets/js/site.js`）：
+- `.it-carousel` 的 `go()` 里新增 `box.dispatchEvent(new CustomEvent('it-slide-change', {detail:{index:idx}}))`，
+  并把 `go/stop/start` 暴露为 `box._itGo/_itStop/_itStart`；**原有轮播行为不变**（About 页当前无 `.it-carousel`，已核对 0 个）。
+- 新增 `.wl-size` 段：表头 `click` → `_itStop()` + `_itGo(i)` + 高亮；监听 `it-slide-change` → 高亮跟随；
+  初始 `setActive(0)`；`slides.length < 2` 时按钮 `disabled`、不绑定联动。
+- 联动按**图片顺序**：第 1 张 = 左表头（Small），第 2 张 = 右表头（Standard）。换图/排序时不能打乱。
+
+**表格数据**（最终 6 行，用户要求删 Guidon 后整体上移、删末行）：
+```
+8" x 12"   | 2' x 3'
+12" x 18"  | 2.5' x 4'
+16" x 24"  | 3' x 5'
+-          | 4' x 6'
+-          | 5' x 8'
+-          | 6' x 10'
+```
+
+**图片**：
+- `media/wolflag-mini-stick-flag-size-chart-8x12-12x18-16x24-inch.webp`（1786×1279，RGBA，透明边）
+- `media/wolflag-standard-flag-size-chart-2x3-3x5-4x6-5x8-6x10-ft.webp`（2163×1354，RGBA）
+- 小图 2026-10-17 由用户重新制作（尺寸字更粗更大），**同名覆盖**；构建端 `dimAttrs()` 自动读取尺寸。
+- ALT 用用户原文：
+  - mini: `Wolflag mini stick flag and handheld flag size comparison chart showing 8x12 inch, 12x18 inch, and 16x24 inch flags on a pole next to a person for real-life scale.`
+  - standard: `Wolflag standard and large outdoor flag size comparison chart showing 2x3 ft, 2.5x4 ft, 3x5 ft, 4x6 ft, 5x8 ft, and 6x10 ft flags with canvas header and grommets next to a person for scale.`
+
+**坑 / 教训**：
+1. **坑 #39（新增）——复用站内组件的 CSS，同权重覆盖会被"后面那条基础样式"盖掉**。
+   实况：只写 `.wl-size-carousel` 时，背景仍是 `#f1f1ef`、比例仍是 `1200/899`、圆点仍是白色（在白底上看不见）；
+   截图看起来像"覆盖没写"。改用 `.wl-size .wl-size-carousel …`（3 类）后全部生效。
+   **判据：改完先读 `getComputedStyle` 确认真的生效，别只看截图。**
+2. **协作教训（最重要）——箭头落在两个模块之间时，先确认"要挪的是哪一个模块"**。
+   用户圈的是灰色「Custom National Flags, Built for Scale」，我误读成「Choose Your Flag Size」，
+   **连挪错两次**（先挪到产品卡上、又挪到产品卡前），最后用户明确「我说的是 Custom National Flags, Built for Scale
+   挪到最上面」。**判据：看箭头起点/终点落在哪个模块上、标注文字紧挨哪个模块；拿不准就问一句。**
+3. **用户问"这个模块是新增套内的吗？无法挪上去吗？"→ 先回答"它是不是独立的"**：
+   `sizeChart` 和 `supplement` 的单项都是独立模块，**直接挪即可**，不需要复制一份再隐藏旧的那份——
+   复制会造成两份内容不同步。
+4. **"间隙减半"要量清这个空档由谁提供**：本次两处都是 56px（page-hero 底 26 + supplement 顶 30；
+   或 supplement 底 0 + 产品区顶 56），分别改成 28px 时只动**其中一侧**；
+   不要机械地"两边各减一半"（会变成 84px，只减 1/4，§10.41 已记）。
+5. **选中列颜色是用户明确要求**：FAQ 浅红/深红，**不是**参考站蓝色；别在后续"还原参考站"时改回去。
+6. **同名覆盖图片**：直接覆盖 `media/` 同名文件后重新构建；Cloudflare Pages 部署会更新静态资源，
+   浏览器若仍显示旧图，先强刷（Ctrl+F5）再排查。
+
+**验证**：
+- 表格实际渲染 6 行、内容与上表一致；`20 x 27.75" (Guidon)` 已不存在。
+- 表头联动：初始 Small、5 秒后自动切 Standard 且高亮跟随；点 Small/Standard 切图并停轮播；
+  点后等 6 秒不再自动切走。
+- 1920 / 1440 / 1024 / 768 / 390 / 320：模块 **0 横向溢出**；字号放大 1.5/2 倍模块内部 **0 溢出**。
+- 后台配置 PyYAML 通过、`/admin/` 无配置报错；字段顺序与页面一致。
+- `git diff` 只改国旗页可见内容 + 新增 CSS/JS/数据/配置；羽毛旗页的线上后台更新已先同步，未受影响。
+- 推送前 `git fetch` 发现本地落后 **5 个提交**（均为羽毛旗页后台更新），用
+  `git stash push（仅跟踪文件）→ git merge --ff-only origin/main → git stash pop` 同步，**零冲突、零丢失**。
+
+**文档同步**：本文件 §10.42 + 坑 #39 + 本变更日志；`README.md` 新增 2026-10-17 章节；
+`AI-GUIDE-精简版.md`（§2.3 数据模型 / §4 设计系统 / §6.3 坑 #39 / §10 协作）；
+《后台管理操作说明书.html》新增 18.21（**该文件 git 未跟踪，绝不可 `git add -A` 带进提交**）。
+
 ---
 
-*最后更新：2026-10-16。**羽毛旗页两轮迭代：① 补充模块「间距减半 + 条目左对齐 + 文字不贴边」；② 新增「应用场景」卡片网格模块（照同行参考站 vividads.com.au 的 htm 源码实测值复刻）+ 图标与配色定稿**（新增 §10.41）。用户先给一张**标注截图**（画了 4 处红框红箭头，文件名叫 `调整.jpg` 却放在 `Car flag\` 文件夹里 —— **判据：以截图里的内容为准，别被文件名带偏**，内容是羽毛旗页），后给一份**单文件另存的参考页**（`沙滩旗应用场景.htm`，2.3MB）要求「把这个新模块完全复制下来放到 feather flags 页面」「排版三个框一排，三排，总计9个框」「新增一个款是 real estate」「内容你帮我写一下」「**那些链接都不要，我只需要在网站上展示我们的旗帜可以用在那些地方**」。🔴 **动手前 `git fetch` 发现本地落后线上 5 个提交**，**线上那片 "One Hardware System" 补充模块本地压根没有**（用户自己在后台加的）→ 按 §0.1 开场必问、**经用户批准后**才同步；本地那张安装图有未提交改动，**实测 md5 与线上完全相同**后才丢弃本地改动合并，**零丢失**；第二轮做完时线上**又多了 2 个提交**（空 `image` 字段 + 重传安装图），用 `stash push → merge --ff-only → stash pop` 干净合并。**第一轮（三处修正）**：① 两个空档 **112px → 56px** —— 根因是每个补充模块各自包在 `.section`（上下各 56px 内边距）里、相邻即 56+56；修法是 `build.mjs` 给 section 加 `section-supp` 类 + CSS `.section-supp{padding-top:0;padding-bottom:56px}`（⚠️ **不要设成"上下各 28px"，那样上方空档=84px 只减 1/4**）；② 5 条 ● 开头不对齐 —— 根因是纯文字补充模块 `text-align:center` 而用户在正文里**手打了 5 个「● 」**，修法 `.f-supp-txt .f-supp-text{text-align:left}`（**标题保持居中不变**，实测 5 个横坐标全 = 159）；出过「整块左对齐 / 标题居中+条目左对齐 / 正文限宽居中」三版截图给用户挑，**用户选中间那版**；③ 标题正文贴盒子边 —— 根因是 **2026-10-15 为放大安装图把上下排布的内边距归零**（图通栏了、文字也跟着贴到 0px），修法**只给 `.f-supp-body` 补回 40px（手机 24px）**，`.f-supp-img` 与 `.f-supp-body` 是兄弟节点 → **图片宽度 1202/342 一点没变、用户"把图放大"的成果保住**（左右两栏排布不动）。**第二轮（新模块）**：`applications` = `{show,title,subtitle,items[{image,icon,title,text,bg}]}` 进 `feather-flags.json`，`build.mjs` 新增 `applicationsSection()` **只接 `featherBody()`**（插在产品区与补充模块之间），`config.yml` 顶层加字段（**files 型缩进 10**，坑 #16），CSS 新增 `.wl-app-*` 并让 `.section-apps` 与 `.section-supp` **共用同一套留白** → 全页「产品卡→应用场景→补充模块→补充模块」**一律 56px**；参考站规格照 htm 源码实测复刻（卡片圆角 14px / 内边距 16×14 / min-height 168px / 间距 14px、图标块 40×40 白底圆角 10px、标题 17px/800、说明 13.5px、悬停 `0 6px 18px rgba(0,0,0,.10)` + `translateY(-1px)`），**四处有意不同（用户拍板）**：一排 **3 个**（参考站 4 个）/ **卡片里的链接全部去掉**（参考站有标题链接+标签链接+Explore all events 三处，实测模块内 `<a>` 数 **0**）/ **9 张卡**（新增 Real Estate 放第一格）/ 文字色改用本站 `#191a19`+`#444c58`。**图标选型**：做**候选对比图**（用真实卡片底色+真实 40×40 图标位渲染）给用户挑，用户点名 4 格 → 我出推荐表+理由、**用户回「就按你推荐的」**：Weddings 💍→**👰**、Expos 🏛️→**🎪**、Fundraisers 🏃→**💰**、Awareness **🎗️ 保持**（⚠️ 用户原本想要 🏆 奖杯，我**如实指出奖杯在大众印象里是"比赛得奖"不是"公益宣传"**，用户采纳保留丝带）；Real Estate 起初用用户给的 `logo.png`（米白圆底+红灰楼房，把接近 `(250,247,245)` 的底改成纯白压平存 `media/real-estate-icon.png`），**随后用户改口「你这个 🏠 比我的好，还是用你的」** → 改 emoji 🏠、**该图已删**（未跟踪、零引用、删前 grep 确认）。**配色**：用户给 9 个新色号（`#EBF3FC`/`#FCEEF2`/`#FEF4DC`/`#F4EEFC`/`#EDF0FD`/`#EAF7F0`/`#FDEEE6`/`#E8F6FA`/`#F9EFF6`），⚠️ **Fundraisers 那格其实没变**（用户给的 `#FDEEE6` 与原来的 `#fdeee6` 是同一个颜色，只是大小写不同 → **实际变的是 8 个**，已如实告知）；存库统一小写。**验证**：**164 个产物文件逐字节比对只动 4 个、无多出少掉**；羽毛旗页 HTML 只多新模块、国旗页只改 **1 行**；全站 15 页 × 5~13 种宽度 **0 溢出 / 0 报错 / 0 真 404**（内部链接 15 条全 200）；**9 张卡的实际渲染色 vs 用户指定色号 9/9 完全一致**（读 `getComputedStyle` 转 hex，电脑+手机两端）；文字对比度 **7.6~7.9:1**（标准 4.5:1）；字号放大 1.5×/2× 模块内部 0 溢出；**用本地 decap-server 真后台实点展开一张卡**，5 个字段全部可编辑、0 报错（**不点 Publish**）。⚠️ **本次两处测试自身的假象**：屏蔽 Google Fonts + 快速连续 goto → 报告里出现 `fonts.googleapis.com` 与 `localhost/...webp` 的 `ERR_FAILED`，**逐个 curl 复核全是 200，不是真问题**；另有两次探针选择器写错（`.wl-app` 实为 `.section-apps`、Decap 列表标题取错元素）造成的假警报。**明确没做**：卡片几何值/一排几个没做成后台字段、模块只接羽毛旗页、`sitemap.xml` 的 lastmod「每次构建都写成当天」是**改动前就有的老做法**（已报备、未动）。
+*最后更新：2026-10-17。**国旗页新增「Choose Your Flag Size」尺寸选择模块 + 两处间距减半（新增 §10.42、坑 #39）**——用户照 bestflag.com/pages/custom-flags 的「Choose Your Flag Size」要求移植：表格颜色/样式照参考站、**不要 Oversized 列**、左边用用户两张尺寸图、选中列表头**改用 FAQ 浅红 `#faf3f3` + 深红 `#a33335`**（不用参考站蓝色）。实现：`national-flags.json → sizeChart`（`show/bg/title/text/images[{image,imageAlt}]/interval/table{leftTitle,rightTitle,rows[{left,right}]}`，新建字段不涉及坑 #20）；`build.mjs` 新增 `sizeChartSection()` **只接 `nfBody()`**，最终接在 **Production Options 之后、优势条之前**；表头输出为 `<button>`，点 Small/Standard 切第 1/2 张图并**停止自动轮播**，不点时 5 秒轮播、高亮跟随（`site.js` 给 `.it-carousel` 加 `it-slide-change` 事件与 `_itGo/_itStop/_itStart`，再写 `.wl-size` 联动段）；CSS 新增 `.wl-size-*`，**覆盖 `.it-carousel` 必须用 3 类选择器**（基础样式更靠后、同权重会盖回原值 → **坑 #39**），表格 33/67 列宽、18px/600 表头、18px/400 正文、`#dee2e6` 行线、16px 圆角 + 淡阴影、外层 30px 白卡；`bg` 默认白。用户后续把表格改为 **6 行**：删 `20 x 27.75" (Guidon)`、Standard 值整体上移、删末行；两处间距 **56→28px**（标语→灰块、灰块→产品卡），尺寸表→优势条保持 **56px**；灰色图文块「Custom National Flags, Built for Scale」挪到**标语下面、产品卡上面**。**最大协作教训**：用户箭头圈的是灰色图文块，我误读成尺寸模块、连挪错两次，最后用户明确「我说的是 Custom National Flags, Built for Scale 挪到最上面」——**箭头落在两个模块之间时，先确认要挪哪一个，拿不准就问**；另：用户问"是不是套内模块"→ 独立模块直接挪，**不要复制/隐藏两份**。图片：两张尺寸图（小图 2026-10-17 用户重做、尺寸字更粗更大，同名覆盖），ALT 用用户原文；验证 1920→320 六宽度 0 溢出、字号 1.5/2 倍模块 0 溢出、联动与后台加载全过。推送前 `git fetch` 发现落后 5 个提交（羽毛旗页后台更新），`stash（仅跟踪文件）→ merge --ff-only → stash pop` 零冲突同步。
+**前次（2026-10-16）**：**羽毛旗页两轮迭代**：① 补充模块「间距减半 + 条目左对齐 + 文字不贴边」；② 新增「应用场景」卡片网格模块（照同行参考站 vividads.com.au 的 htm 源码实测值复刻）+ 图标与配色定稿**（新增 §10.41）。用户先给一张**标注截图**（画了 4 处红框红箭头，文件名叫 `调整.jpg` 却放在 `Car flag\` 文件夹里 —— **判据：以截图里的内容为准，别被文件名带偏**，内容是羽毛旗页），后给一份**单文件另存的参考页**（`沙滩旗应用场景.htm`，2.3MB）要求「把这个新模块完全复制下来放到 feather flags 页面」「排版三个框一排，三排，总计9个框」「新增一个款是 real estate」「内容你帮我写一下」「**那些链接都不要，我只需要在网站上展示我们的旗帜可以用在那些地方**」。🔴 **动手前 `git fetch` 发现本地落后线上 5 个提交**，**线上那片 "One Hardware System" 补充模块本地压根没有**（用户自己在后台加的）→ 按 §0.1 开场必问、**经用户批准后**才同步；本地那张安装图有未提交改动，**实测 md5 与线上完全相同**后才丢弃本地改动合并，**零丢失**；第二轮做完时线上**又多了 2 个提交**（空 `image` 字段 + 重传安装图），用 `stash push → merge --ff-only → stash pop` 干净合并。**第一轮（三处修正）**：① 两个空档 **112px → 56px** —— 根因是每个补充模块各自包在 `.section`（上下各 56px 内边距）里、相邻即 56+56；修法是 `build.mjs` 给 section 加 `section-supp` 类 + CSS `.section-supp{padding-top:0;padding-bottom:56px}`（⚠️ **不要设成"上下各 28px"，那样上方空档=84px 只减 1/4**）；② 5 条 ● 开头不对齐 —— 根因是纯文字补充模块 `text-align:center` 而用户在正文里**手打了 5 个「● 」**，修法 `.f-supp-txt .f-supp-text{text-align:left}`（**标题保持居中不变**，实测 5 个横坐标全 = 159）；出过「整块左对齐 / 标题居中+条目左对齐 / 正文限宽居中」三版截图给用户挑，**用户选中间那版**；③ 标题正文贴盒子边 —— 根因是 **2026-10-15 为放大安装图把上下排布的内边距归零**（图通栏了、文字也跟着贴到 0px），修法**只给 `.f-supp-body` 补回 40px（手机 24px）**，`.f-supp-img` 与 `.f-supp-body` 是兄弟节点 → **图片宽度 1202/342 一点没变、用户"把图放大"的成果保住**（左右两栏排布不动）。**第二轮（新模块）**：`applications` = `{show,title,subtitle,items[{image,icon,title,text,bg}]}` 进 `feather-flags.json`，`build.mjs` 新增 `applicationsSection()` **只接 `featherBody()`**（插在产品区与补充模块之间），`config.yml` 顶层加字段（**files 型缩进 10**，坑 #16），CSS 新增 `.wl-app-*` 并让 `.section-apps` 与 `.section-supp` **共用同一套留白** → 全页「产品卡→应用场景→补充模块→补充模块」**一律 56px**；参考站规格照 htm 源码实测复刻（卡片圆角 14px / 内边距 16×14 / min-height 168px / 间距 14px、图标块 40×40 白底圆角 10px、标题 17px/800、说明 13.5px、悬停 `0 6px 18px rgba(0,0,0,.10)` + `translateY(-1px)`），**四处有意不同（用户拍板）**：一排 **3 个**（参考站 4 个）/ **卡片里的链接全部去掉**（参考站有标题链接+标签链接+Explore all events 三处，实测模块内 `<a>` 数 **0**）/ **9 张卡**（新增 Real Estate 放第一格）/ 文字色改用本站 `#191a19`+`#444c58`。**图标选型**：做**候选对比图**（用真实卡片底色+真实 40×40 图标位渲染）给用户挑，用户点名 4 格 → 我出推荐表+理由、**用户回「就按你推荐的」**：Weddings 💍→**👰**、Expos 🏛️→**🎪**、Fundraisers 🏃→**💰**、Awareness **🎗️ 保持**（⚠️ 用户原本想要 🏆 奖杯，我**如实指出奖杯在大众印象里是"比赛得奖"不是"公益宣传"**，用户采纳保留丝带）；Real Estate 起初用用户给的 `logo.png`（米白圆底+红灰楼房，把接近 `(250,247,245)` 的底改成纯白压平存 `media/real-estate-icon.png`），**随后用户改口「你这个 🏠 比我的好，还是用你的」** → 改 emoji 🏠、**该图已删**（未跟踪、零引用、删前 grep 确认）。**配色**：用户给 9 个新色号（`#EBF3FC`/`#FCEEF2`/`#FEF4DC`/`#F4EEFC`/`#EDF0FD`/`#EAF7F0`/`#FDEEE6`/`#E8F6FA`/`#F9EFF6`），⚠️ **Fundraisers 那格其实没变**（用户给的 `#FDEEE6` 与原来的 `#fdeee6` 是同一个颜色，只是大小写不同 → **实际变的是 8 个**，已如实告知）；存库统一小写。**验证**：**164 个产物文件逐字节比对只动 4 个、无多出少掉**；羽毛旗页 HTML 只多新模块、国旗页只改 **1 行**；全站 15 页 × 5~13 种宽度 **0 溢出 / 0 报错 / 0 真 404**（内部链接 15 条全 200）；**9 张卡的实际渲染色 vs 用户指定色号 9/9 完全一致**（读 `getComputedStyle` 转 hex，电脑+手机两端）；文字对比度 **7.6~7.9:1**（标准 4.5:1）；字号放大 1.5×/2× 模块内部 0 溢出；**用本地 decap-server 真后台实点展开一张卡**，5 个字段全部可编辑、0 报错（**不点 Publish**）。⚠️ **本次两处测试自身的假象**：屏蔽 Google Fonts + 快速连续 goto → 报告里出现 `fonts.googleapis.com` 与 `localhost/...webp` 的 `ERR_FAILED`，**逐个 curl 复核全是 200，不是真问题**；另有两次探针选择器写错（`.wl-app` 实为 `.section-apps`、Decap 列表标题取错元素）造成的假警报。**明确没做**：卡片几何值/一排几个没做成后台字段、模块只接羽毛旗页、`sitemap.xml` 的 lastmod「每次构建都写成当天」是**改动前就有的老做法**（已报备、未动）。
 
 **前次（2026-10-15）**：**国旗页新增「生产选项」卡片网格模块（照同行参考站 chinaflag.com 渲染后实测复刻）+ 修好「补充模块文字不能分段」（新增 §10.40、坑 #37/#38）**——用户要求「在 national flag 页面 Custom National Flags, Built for Scale 模块下方新增一个模块」，并给了两张红框标注图 + 单文件下载的参考页，原话「把这个整个模块全部拷贝过去，功能，字体颜色，内容先拷贝过去，后面我自己再来修改更换」。🔴 **动手前先 `git fetch` 发现本地落后线上 10 个提交**（线上国旗页**已经有**那个补充模块），按 §0.1 开场必问、**经用户批准后 `git pull --rebase` 同步**（否则会把用户在线加的东西覆盖）。**参考站照 §6.7 渲染后取计算样式实测**：栏宽 1020、标题 `26px/600/#666`+`4px #A33335` 左竖线、说明 17px/#333、卡片 `18×14` + `1px #E6E8EC` + `12px` 圆角、卡片标题 `20px/400/#a33335`、**所有间距一律 20px**、悬停 `translateY(-6px)`+`0 10px 24px rgba(0,0,0,.08)`+`#A3333547`（**那个酒红正好是本站的"悬停红"**，配色天然统一）。**实现 4 个文件**：`national-flags.json` 新增 `optionBlocks`（列表可加多个）、`config.yml` 加「生产选项模块」（**files 型缩进 10/14**）、`build.mjs` 新增 `optionBlocksSection()` **只接 `nfBody()`**（插在 `${supplement}` 与 `${benefitsSection()}` 之间）、CSS 新增 `.wl-opt*`。**与参考站 5 处有意不同（用户拍板）**：① 卡片网格跟本站 `.container`（1250）对齐、只有说明文字限宽 1020；② 卡片 2 指向同行站的外链**去掉**（挂自己站上=把权重流量送出去）；③ **去掉标题左边红色小竖条**（它把标题左缘往右挤 14px、跟卡片对不齐）；④ **6 个卡片全部等高** → `grid-auto-rows:1fr`（原上排高下排矮）；⑤ **字体与本站统一**（说明/卡片文字 17→**16px**、`#333`→**`#444c58`**；标题 600→**700**、`#666`→**`#191a19`**）——**字号色值全照"上方那个模块"抄**。**顺手修掉真 bug（用户问出来的）**：用户问「这个不能分段吗？只能是一整段吗？」→ `supplementSection()` 用 `bold()` 而 **`.f-supp-text` 没有 `white-space:pre-line`**，换行被折成空格、空行被吃掉；**而本文件 §3.1 一直写着补充模块靠 pre-line 换行 → 又是「文档写了、代码没实现」（第 3 次实例）**；改用与 FAQ/图文区同一套 `faqAnswer()` + CSS `.f-supp-text p + p{margin-top:10px}`（坑 #25：全站 reset 会清掉 p 段距），后台 5 处 hint 同步改「空行分段」。**验证**：9 种宽度零溢出、卡片与容器误差 0px、悬停三项与参考站逐值一致；**字号放大 1/1.5/2/3 倍新模块与补充模块内均 0 溢出且与改动前逐元素签名完全一致**；`git diff --stat static/*.html` **只有国旗页 +43 行**、其余 14 页逐字节未变；0 报错 0 裂图；`/admin/` 三步自检全过。**🔴 本次踩到两处测试自身的错**：① 我把「字号放大」脚本的"读 computed + 写回"放在**同一循环**（嵌套逐级叠加→等效 8 倍→**误报溢出**，§10.38 ③ 记过**我又踩一次**），已改成"先快照再一次性写回"并**主动更正了之前的错误汇报**；② 为回答「这个标题字体是不是你改回去了？」，用 **A/B 基线 worktree**（`git worktree add <仓库外临时目录> HEAD` + 另一个端口并行）+ **`git diff | grep '^-'`（零减号 = 纯新增）** 当场自证 —— **两条都提炼进了坑 #38**。**一处问出来但结论"不改"（留作事实）**：用户圈产品卡标题问字体是不是变了 → `.nf-card .p-name` = **Antic Slab**（复刻原站刻意保留、本次没碰）；全站产品名本来就不统一（**国旗/横幅/Full Products=Antic Slab；羽毛旗 `.f-title`/展架 `.sg-name`=Arial；详情页 `.pd-name`=Rufina**），**出图问过用户 → 明确「保持原样」、详情页 Rufina 也「先不动」**，⚠️ **以后别顺手统一这三处字体**。**明确没做**：新模块卡片 6 个标题仍是酒红（用户未答即保持原样）、卡片间距/圆角等固定值未做成后台字段（一事一批）。
 

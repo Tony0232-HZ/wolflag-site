@@ -665,17 +665,17 @@ function nfBody(data) {
   <section class="page-banner">
     <div class="container"><img src="${esc(data.bannerImage)}" alt="${altOf(data, 'National flags')}"></div>
   </section>` : '';
-  const supplement = supplementSection(data);
+  const supplement = supplementSection(data, 'nf-supp-top');
   return `
   ${banner}
   <section class="page-hero">
     <div class="container"><h1>${esc(data.tagline)}</h1></div>
-  </section>
-  <section class="section">
+  </section>${supplement}
+  <section class="section nf-products">
     <div class="container">
       <div class="product-grid-3">${cards}</div>
     </div>
-  </section>${supplement}${optionBlocksSection(data)}${benefitsSection()}`;
+  </section>${optionBlocksSection(data)}${sizeChartSection(data)}${benefitsSection()}`;
 }
 
 /* ---------------- 「Why Source from Wolflag?」优势条（2026-09-15 新增） ----------------
@@ -735,7 +735,7 @@ function benefitsSection() {
 //   ⚠️ textRight（图左文右）= 改动前的版式，是默认；缺省 / 非法值一律退回它 → 老数据零变化；
 //   ⚠️ 没图片时（.f-supp-txt）方向不生效，仍按原来的「只显示文字并居中」渲染。
 const SUPP_DIRS = ['textTop', 'textBottom', 'textLeft', 'textRight'];
-function supplementSection(data) {
+function supplementSection(data, extraClass = '') {
   const raw = data && data.supplement;
   const items = Array.isArray(raw) ? raw : (raw ? [raw] : []);
   return items.filter((s) => s && s.show !== false && (s.text || s.title || s.image))
@@ -743,7 +743,7 @@ function supplementSection(data) {
       const dir = SUPP_DIRS.includes(s.direction) ? s.direction : 'textRight';
       const cls = s.image ? ` f-supp-${dir}` : ' f-supp-txt';
       return `
-    <section class="section section-supp">
+    <section class="section section-supp${extraClass ? ` ${extraClass}` : ''}">
       <div class="container">
         <div class="f-supp${cls}">
           ${s.image ? `<div class="f-supp-img"><img src="${esc(s.image)}" alt="${altOf(s, s.title || '', 'imageAlt')}" decoding="async"></div>` : ''}
@@ -755,6 +755,55 @@ function supplementSection(data) {
       </div>
     </section>`;
     }).join('');
+}
+
+/* ---------------- 「尺寸选择」模块（2026-10-17 新增，用户要求） ----------------
+   版式来源：用户指定的同行参考站 bestflag.com/pages/custom-flags 的「Choose Your Flag Size」一节。
+   表格配色/尺寸**照参考站渲染后 getComputedStyle 实测值**复刻：
+     表头 18px/600/居中、内边距 15×10；正文 18px/400/居中、内边距 12×10；
+     行线 1px #dee2e6；表头浅灰 #f8f9fa；表格圆角约 16px + 外圈很淡阴影；列宽约 33% / 67%。
+   ⚠️ 用户 2026-10-17 明确要求（**别改回去**）：
+     ① **不要 Oversized 那一列**（参考站有三列，本站只保留 Small / Standard）；
+     ② 选中列（Standard）的高亮**不用参考站的蓝色**，改用本站 FAQ 模块的
+        浅红 `#faf3f3` + 深红 `#a33335`（用户原话：「这个选中后的背景色用 FAQ 模块的浅红和深红」）；
+     ③ 模块标题/说明用**本站现有模块的排版**（26px / 700 / #191a19 + 16px #444c58、左对齐），
+        不照参考站的大字号居中。
+   左侧图片：用户提供的两张尺寸图；≥2 张时复用站点已有的 `.it-carousel` 轮播 JS
+   （淡入淡出 + 自动切换 + 悬停暂停 + 圆点 + 箭头），单张时静止显示。
+   交互（2026-10-17 用户要求）：表头是真正的 <button>，点 Small / Standard 会切到对应图片并
+   **停止自动轮播**；不点击时表头高亮跟着轮播当前图片实时切换（逻辑在 site.js 的 `.wl-size` 段）。
+   数据来源：content/products/national-flags.json 的 `sizeChart`（对象），后台「国旗产品页 → 尺寸选择模块」。
+   位置：**只**接在 nfBody()（国旗页），插在**「生产选项」之后、优势条之前**
+        （2026-10-17 用户多次调整后的最终位置；之前依次试过补充模块之后、产品卡之后、产品卡之前，
+         以现在这行为准）。
+   ⚠️ images / table.rows 都是**新建字段**，没有历史数据 → 不涉及坑 #20 那类"数据形状升级"问题。 */
+function sizeChartSection(data) {
+  const m = data && data.sizeChart;
+  if (!m || m.show === false) return '';
+  const images = (m.images || []).filter((im) => imgSrc(im));
+  const table = m.table || {};
+  const rows = (table.rows || []).filter((r) => r && (r.left || r.right));
+  if (!m.title && !m.text && !images.length && !rows.length) return '';
+
+  const multi = images.length > 1;
+  const slides = images.map((im, n) => `<img class="it-slide${n === 0 ? ' is-active' : ''}" src="${esc(imgSrc(im))}" alt="${altOf(im, m.title || 'Flag size chart')}" loading="lazy" decoding="async"${dimAttrs(imgSrc(im), 0.5)}>`).join('');
+  const tableHtml = rows.length ? `<div class="wl-size-table-wrap"><table class="wl-size-table">
+          <colgroup><col class="wl-size-col-left"><col class="wl-size-col-right"></colgroup>
+          <thead><tr><th class="is-active"><button type="button" class="wl-size-tab" data-index="0" aria-pressed="true">${esc(table.leftTitle || 'Small')}</button></th><th><button type="button" class="wl-size-tab" data-index="1" aria-pressed="false">${esc(table.rightTitle || 'Standard')}</button></th></tr></thead>
+          <tbody>${rows.map((r) => `<tr><td>${esc(r.left || '')}</td><td>${esc(r.right || '')}</td></tr>`).join('')}</tbody>
+        </table></div>` : '';
+
+  return `
+  <section class="wl-size" style="background-color:${esc(m.bg || '#ffffff')}">
+    <div class="container">
+      ${m.title ? `<h2 class="wl-size-title">${esc(m.title)}</h2>` : ''}
+      ${m.text ? `<div class="wl-size-lead">${faqAnswer(m.text)}</div>` : ''}
+      <div class="wl-size-main${images.length ? '' : ' is-table-only'}${rows.length ? '' : ' is-media-only'}">
+        ${images.length ? `<div class="it-carousel wl-size-carousel${multi ? '' : ' is-single'}"${multi ? ` data-interval="${parseInt(m.interval, 10) || 5}"` : ''}>${slides}</div>` : ''}
+        ${tableHtml}
+      </div>
+    </div>
+  </section>`;
 }
 
 /* ---------------- 「生产选项」卡片网格模块（2026-10-15 新增，用户要求） ----------------

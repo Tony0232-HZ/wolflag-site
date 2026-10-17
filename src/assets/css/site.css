@@ -984,6 +984,187 @@ ul { list-style: none; }
 .f-supp.f-supp-txt .f-supp-text { text-align: left; }
 
 /* ==========================================================================
+   「尺寸选择」模块（2026-10-17 新增，用户要求）
+   版式来源：bestflag.com/pages/custom-flags 的「Choose Your Flag Size」；
+   表格配色/尺寸是**渲染后 getComputedStyle 实测值**复刻（见 build.mjs 的 sizeChartSection）。
+
+   ⚠️ 用户 2026-10-17 明确要求（**别改回去**）：
+     ① **不要 Oversized 那一列**（只保留 Small / Standard）；
+     ② 选中列（Standard）的高亮**不用参考站蓝色**，改用本站 FAQ 的
+        浅红 `#faf3f3` + 深红 `#a33335`（用户原话：「这个选中后的背景色用 FAQ 模块的浅红和深红」）；
+     ③ 模块标题/说明用**本站现有模块排版**（26px/700/#191a19 + 16px/#444c58、左对齐），
+        不照参考站的大字号居中。
+
+   间距（2026-10-17 最终位置：标语 → 灰块 → 产品卡 → 生产选项 → **本模块** → 优势条）：
+     上方：生产选项 `.wl-opt` 自带 padding-bottom:56px + 本模块 padding-top:0 = 56px；
+     下方：表格外层卡片自带 30px 白内边距；本模块再补 26px → 表格底边到优势条灰底 = 56px。
+     ⚠️ 不要再给本模块加 padding-top —— 上方邻居已经给了 56px，再加会变成 112px。
+     ⚠️ 若以后给这个模块填了非白色背景，色带会紧贴标题/表格；到时再加内边距并同步检查上下间距。
+   ========================================================================== */
+
+.wl-size { padding: 0 0 26px; }                     /* 桌面：30px 表格卡片内边距 + 26px = 56px */
+@media (max-width: 560px) {
+  .wl-size { padding-bottom: 44px; }                /* 手机：12px 表格卡片内边距 + 44px = 56px */
+}
+
+/* 2026-10-17：国旗页的「Custom National Flags, Built for Scale」挪到**标语下面、产品卡上面**。
+   用户标注「这个间隙距离太大，减小一半」：原可见间隙 56px → **28px**。
+   `.page-hero` 底内边距 26px + 这里补 2px = 28px；
+   `.section-supp` 原底内边距 56px 归零，交给产品区自己的 padding-top 控制（见下一条）。 */
+.section-supp.nf-supp-top { padding-top: 2px; padding-bottom: 0; }
+
+/* 国旗页产品区：用户标注「间隙距离减小一半」——上方灰块与产品卡之间 56px → **28px**。
+   只改上内边距；下内边距 56px 保持不变（产品卡 → 生产选项仍按原样）。 */
+.section.nf-products { padding-top: 28px; }
+
+.wl-size-title {
+  font-size: 26px;                                 /* = .f-supp-title / .wl-opt-title */
+  font-weight: 700;
+  color: #191a19;
+}
+.wl-size-lead {
+  max-width: 1020px;                               /* 与「生产选项」说明文字同一上限 */
+  margin-top: 14px;
+  font-size: 16px;                                 /* = .f-supp-text */
+  line-height: 1.75;
+  color: #444c58;
+}
+.wl-size-lead p + p { margin-top: 10px; }          /* 全站 reset 清掉 p 段距（坑 #25） */
+
+.wl-size-main {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr)); /* 两栏等宽，与参考站左右各 700px 一致 */
+  gap: 40px;
+  align-items: center;
+  margin-top: 28px;
+}
+.wl-size-main.is-table-only { grid-template-columns: minmax(0, 1fr); }
+.wl-size-main.is-table-only .wl-size-table-wrap { max-width: 700px; margin: 0 auto; }
+.wl-size-main.is-media-only { grid-template-columns: minmax(0, 1fr); }
+.wl-size-main.is-media-only .wl-size-carousel { max-width: 700px; margin: 0 auto; }
+
+/* 左侧轮播：复用站点已有的 `.it-carousel` JS（淡入淡出 + 自动切换 + 悬停暂停 + 圆点 + 箭头）。
+   这里只覆盖与尺寸图相关的三件事：比例、白底、控件颜色。
+   ⚠️ aspect-ratio 用第一张图 1786×1279 的比例；第二张更宽，会以 contain 方式留白（白底看不出）。 */
+/* ⚠️ 选择器刻意写成 `.wl-size .wl-size-carousel …`（3 个类）：
+   基础轮播样式 `.it-carousel …` 在本文件**更靠后**的位置，同权重会把它覆盖掉
+   （实测：只写 `.wl-size-carousel` 时背景/比例/控件颜色全被基础样式盖回原值）。 */
+.wl-size .wl-size-carousel {
+  width: 100%;
+  margin-top: 0;
+  aspect-ratio: 1786 / 1279;
+  background: #fff;
+  border-radius: 12px;
+}
+.wl-size .wl-size-carousel .it-slide { object-fit: contain; background: #fff; }
+.wl-size .wl-size-carousel .it-arrow {
+  background: rgba(0, 0, 0, .18);
+  opacity: .55;                                    /* 参考站箭头常显；桌面也让人看得出能翻 */
+}
+.wl-size .wl-size-carousel:hover .it-arrow { background: rgba(0, 0, 0, .42); opacity: 1; }
+.wl-size .wl-size-carousel .it-dot { background: rgba(0, 0, 0, .18); }
+.wl-size .wl-size-carousel .it-dot.is-active { background: #4c6aff; transform: scale(1.2); }
+
+/* 右侧尺寸表：参考站实测值（表头 18/600、正文 18/400、行线 #dee2e6、列宽 33/67）。
+   选中列的颜色按用户要求改成 FAQ 的浅红/深红（见上方注释）。 */
+.wl-size-table-wrap {
+  background: #fff;                                /* 参考站外层白底 + 30px 内边距 */
+  border-radius: 8px;
+  padding: 30px;
+}
+.wl-size-table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: separate;                        /* 配 overflow:hidden 才能裁出圆角 */
+  border-spacing: 0;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 0 0 1px rgba(23, 23, 23, .06);
+}
+.wl-size-table .wl-size-col-left { width: 33.333%; }
+.wl-size-table .wl-size-col-right { width: 66.667%; }
+
+.wl-size-table th {
+  background: #f8f9fa;                              /* 参考站未选中表头 */
+  color: #333;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.6;
+  text-align: center;
+  padding: 0;                                       /* 内边距移到按钮上，让整格可点 */
+  border-bottom: 2px solid #dee2e6;
+}
+.wl-size-table th.is-active {
+  background: #faf3f3;                              /* FAQ 浅红 */
+  color: #a33335;                                   /* FAQ 深红 */
+  border-bottom: 4px solid #a33335;                 /* 参考站 4px 选中线，颜色换深红 */
+}
+/* 表头按钮（2026-10-17 用户要求：点 Small / Standard 切换左侧图片）：
+   整格可点；透明底，背景色仍由 th 负责；font:inherit 保证和参考站字号/字重一致。 */
+.wl-size-tab {
+  display: block;
+  width: 100%;
+  padding: 15px 10px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  line-height: inherit;
+  text-align: center;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  overflow-wrap: break-word;
+}
+.wl-size-tab:focus-visible { outline: 2px solid #a33335; outline-offset: -2px; }
+/* 未选中的表头悬停 = FAQ 的浅粉底 + 深红字（提示它可以点） */
+.wl-size-table th:hover { background: #faf3f3; }
+.wl-size-table th:hover .wl-size-tab { color: #a33335; }
+.wl-size-table td {
+  background: #fff;
+  color: #333;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.6;
+  text-align: center;
+  padding: 12px 10px;
+  border-bottom: 1px solid #dee2e6;
+}
+.wl-size-table tbody tr:last-child td { border-bottom: 0; }
+
+/* 圆角：表头首尾 + 末行首尾（overflow:hidden 在不同浏览器对 table 的裁切不一致，双保险） */
+.wl-size-table thead th:first-child { border-top-left-radius: 16px; }
+.wl-size-table thead th:last-child { border-top-right-radius: 16px; }
+.wl-size-table tbody tr:last-child td:first-child { border-bottom-left-radius: 16px; }
+.wl-size-table tbody tr:last-child td:last-child { border-bottom-right-radius: 16px; }
+
+.wl-size-title,
+.wl-size-lead,
+.wl-size-table th,
+.wl-size-table td { overflow-wrap: break-word; }
+
+@media (max-width: 900px) {
+  .wl-size-main { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+  .wl-size-carousel { max-width: 640px; margin: 0 auto; }
+}
+
+@media (max-width: 560px) {
+  .wl-size-title { font-size: 22px; }               /* = .wl-opt-title 手机档 */
+  .wl-size-table-wrap { padding: 12px; }
+  .wl-size-table th { font-size: 16px; }
+  .wl-size-tab { padding: 12px 8px; }
+  .wl-size-table td { font-size: 15px; padding: 10px 6px; }
+}
+
+@media (max-width: 380px) {
+  .wl-size-table-wrap { padding: 8px; }
+  .wl-size-table th { font-size: 15px; }
+  .wl-size-tab { padding: 10px 5px; }
+  .wl-size-table td { font-size: 14px; padding: 9px 5px; }
+}
+
+/* ==========================================================================
    「生产选项」卡片网格模块（2026-10-15 新增，用户要求）
    版式来源：同行参考站 chinaflag.com/national-flags 的「Production Options for National Flags」一节
    —— 把那一节渲染后用 getComputedStyle 逐个量、照实测值复刻（见 build.mjs 的 optionBlocksSection）。

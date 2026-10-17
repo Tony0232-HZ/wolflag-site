@@ -1,5 +1,15 @@
 {
   "heading": "National Flag",
+  "supplement": [
+    {
+      "show": true,
+      "direction": "textLeft",
+      "text": "**Wolflag** is your go-to partner for custom national flags, serving distributors, importers, institutions, and large-scale event projects. \n\nWe cover every display need—whether it’s hanging indoors or outdoors, sitting on a desk, waving in a crowd, or taking center stage at an international ceremony.\n\n Every order is built to your exact specs: choose your countries, sizes, materials, finishing styles, and packaging. And when it comes to multi-country orders, we make sure every single flag in your shipment matches in quality and build.",
+      "title": "Custom National Flags, Built for Scale",
+      "image": "/assets/media/wolflag-wholesale-national-flags-sports-event-collection-02.webp",
+      "imageAlt": "Custom national flags featuring durable canvas headers and brass grommets, folded uniformly for bulk multi-country orders"
+    }
+  ],
   "products": [
     {
       "name": "China national flag",
@@ -116,24 +126,6 @@
       "imageAlt": "Custom printed United Nations flag, wholesale from Wolflag flag factory"
     }
   ],
-  "imageAlt": "Indoor flag display with USA and China national flags on gold-based flagpoles",
-  "tagline": "Express pride and allegiance to your country",
-  "bannerImage": "/assets/media/national-banner.webp",
-  "page": {
-    "file": "national-flag.html",
-    "layout": "flags",
-    "nav": "/national-flag"
-  },
-  "supplement": [
-    {
-      "show": true,
-      "direction": "textLeft",
-      "text": "**Wolflag** is your go-to partner for custom national flags, serving distributors, importers, institutions, and large-scale event projects. \n\nWe cover every display need—whether it’s hanging indoors or outdoors, sitting on a desk, waving in a crowd, or taking center stage at an international ceremony.\n\n Every order is built to your exact specs: choose your countries, sizes, materials, finishing styles, and packaging. And when it comes to multi-country orders, we make sure every single flag in your shipment matches in quality and build.",
-      "title": "Custom National Flags, Built for Scale",
-      "image": "/assets/media/wolflag-wholesale-national-flags-sports-event-collection-02.webp",
-      "imageAlt": "Custom national flags featuring durable canvas headers and brass grommets, folded uniformly for bulk multi-country orders"
-    }
-  ],
   "optionBlocks": [
     {
       "show": true,
@@ -168,6 +160,61 @@
       ]
     }
   ],
+  "sizeChart": {
+    "show": true,
+    "bg": "#ffffff",
+    "title": "Choose Your Flag Size",
+    "text": "Each custom flag comes in a variety of sizes, depending on the shape of the flag you select. Rectangular flags are available in our Small and Standard sizes (see chart below). If you are looking for a specific custom size, we are happy to create almost anything you need.",
+    "images": [
+      {
+        "image": "/assets/media/wolflag-mini-stick-flag-size-chart-8x12-12x18-16x24-inch.webp",
+        "imageAlt": "Wolflag mini stick flag and handheld flag size comparison chart showing 8x12 inch, 12x18 inch, and 16x24 inch flags on a pole next to a person for real-life scale."
+      },
+      {
+        "image": "/assets/media/wolflag-standard-flag-size-chart-2x3-3x5-4x6-5x8-6x10-ft.webp",
+        "imageAlt": "Wolflag standard and large outdoor flag size comparison chart showing 2x3 ft, 2.5x4 ft, 3x5 ft, 4x6 ft, 5x8 ft, and 6x10 ft flags with canvas header and grommets next to a person for scale."
+      }
+    ],
+    "interval": 5,
+    "table": {
+      "leftTitle": "Small",
+      "rightTitle": "Standard",
+      "rows": [
+        {
+          "left": "8\" x 12\"",
+          "right": "2' x 3'"
+        },
+        {
+          "left": "12\" x 18\"",
+          "right": "2.5' x 4'"
+        },
+        {
+          "left": "16\" x 24\"",
+          "right": "3' x 5'"
+        },
+        {
+          "left": "-",
+          "right": "4' x 6'"
+        },
+        {
+          "left": "-",
+          "right": "5' x 8'"
+        },
+        {
+          "left": "-",
+          "right": "6' x 10'"
+        }
+      ]
+    }
+  },
+  "imageAlt": "Indoor flag display with USA and China national flags on gold-based flagpoles",
+  "tagline": "Express pride and allegiance to your country",
+  "bannerImage": "/assets/media/national-banner.webp",
+  "page": {
+    "file": "national-flag.html",
+    "layout": "flags",
+    "nav": "/national-flag"
+  },
   "seo": {
     "title": "Custom National Flags & Country Flags Wholesale | WOLFLAG",
     "description": "National flags of any country in 110g knitted polyester or 100D polyester, silkscreen or digital printing. Custom sizes for government and event use."

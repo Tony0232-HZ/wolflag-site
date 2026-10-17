@@ -224,10 +224,17 @@
       idx = (n + slides.length) % slides.length;
       slides.forEach(function (sl, k) { sl.classList.toggle('is-active', k === idx); });
       dots.forEach(function (d, k) { d.classList.toggle('is-active', k === idx); });
+      // 2026-10-17：把当前页码广播给同页其他控件（国旗页「尺寸选择」用表头联动）。
+      box.dispatchEvent(new CustomEvent('it-slide-change', { detail: { index: idx } }));
     }
     function start() { if (!timer) timer = setInterval(function () { go(idx + 1); }, interval); }
     function stop() { if (timer) { clearInterval(timer); timer = null; } }
     function restart() { stop(); start(); }
+
+    // 暴露给同页的其他控件（如国旗页「尺寸选择」表头）；原有轮播不受影响。
+    box._itGo = go;
+    box._itStop = stop;
+    box._itStart = start;
 
     prev.addEventListener('click', function () { go(idx - 1); restart(); });
     next.addEventListener('click', function () { go(idx + 1); restart(); });
@@ -236,6 +243,49 @@
 
     go(0);
     start();
+  });
+
+  // 国旗页「尺寸选择」：表头（Small / Standard）与左侧图片联动（2026-10-17 用户要求）
+  // - 点表头 → 左侧切到对应图片，并**停止自动轮播**（否则 5 秒后会被切走）；
+  // - 不点击时 → 图片照常自动轮播，表头高亮跟着当前图片走（Tab 的 data-index = 图片序号）；
+  // - 只有 1 张图时，两个表头都不可点（没有可切换的目标）。
+  document.querySelectorAll('.wl-size').forEach(function (sec) {
+    var box = sec.querySelector('.wl-size-carousel');
+    if (!box) return;
+    var tabs = sec.querySelectorAll('.wl-size-tab');
+    if (!tabs.length) return;
+    var slides = box.querySelectorAll('.it-slide');
+
+    function setActive(i) {
+      tabs.forEach(function (tab, k) {
+        var on = k === i;
+        tab.classList.toggle('is-active', on);
+        tab.setAttribute('aria-pressed', on ? 'true' : 'false');
+        var th = tab.closest('th');
+        if (th) th.classList.toggle('is-active', on);
+      });
+    }
+
+    if (slides.length < 2) {
+      tabs.forEach(function (tab) { tab.disabled = true; tab.style.cursor = 'default'; });
+      setActive(0);
+      return;
+    }
+
+    tabs.forEach(function (tab, i) {
+      tab.addEventListener('click', function () {
+        if (box._itStop) box._itStop();                // 点了就停，别被自动轮播切走
+        if (box._itGo) box._itGo(i);
+        setActive(i);
+      });
+    });
+
+    // 自动轮播 / 圆点 / 箭头切换时，表头高亮同步跟随
+    box.addEventListener('it-slide-change', function (e) {
+      if (e.detail && typeof e.detail.index === 'number') setActive(e.detail.index);
+    });
+
+    setActive(0);                                      // 首张图 = 第一个表头
   });
 
   // About 时间轴：点击切换 + 自动播放（默认开启，可后台关/改间隔；到末尾循环回第一个）

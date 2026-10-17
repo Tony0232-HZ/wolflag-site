@@ -736,23 +736,6 @@ collections:
           - { label: 标语, name: tagline, widget: string }
           - { label: 顶部横幅图片, name: bannerImage, widget: image, required: false, hint: 页面顶部的大横幅（可选，不填则无横幅） }
           - { label: 图片说明(alt), name: imageAlt, widget: string, required: false, hint: 图片说明（alt，建议英文，含产品关键词；留空则自动用品名） }
-          - label: 产品
-            name: products
-            widget: list
-            summary: "{{fields.name}}"
-            fields:
-              - { label: 名称, name: name, widget: string }
-              - label: 产品属性（可自由新增/编辑/删除，显示为规格表）
-                name: specs
-                widget: list
-                required: false
-                summary: "{{fields.label}}: {{fields.value}}"
-                fields:
-                  - { label: 属性名（如 Size/Fabric/Printing）, name: label, widget: string }
-                  - { label: 属性值（如 3*5ft、110g knitted polyester）, name: value, widget: string }
-              - { label: 宣传语（品名下方那句话，可选；可用 **词** 加粗）, name: subtitle, widget: text, required: false }
-              - { label: 图片, name: image, widget: image }
-              - { label: 图片说明(alt), name: imageAlt, widget: string, required: false, hint: 图片说明（alt，建议英文，含产品关键词；留空则自动用品名） }
           - label: 补充模块（可添加多个；每个：图 + 标题 + 文字）
             name: supplement
             widget: list
@@ -775,6 +758,23 @@ collections:
               - { label: 文字（空行分段；可用 **词** 加粗）, name: text, widget: text, required: false, hint: "空一行 = 分成两段（段与段之间会留出空隙）；按一次回车 = 换行；用两个星号包住词可加粗，如 **Wolflag**。" }
               - { label: 图片（可选）, name: image, widget: image, required: false }
               - { label: 图片说明(alt), name: imageAlt, widget: string, required: false, hint: 图片说明（alt，建议英文，含产品关键词；留空则自动用本套的标题） }
+          - label: 产品
+            name: products
+            widget: list
+            summary: "{{fields.name}}"
+            fields:
+              - { label: 名称, name: name, widget: string }
+              - label: 产品属性（可自由新增/编辑/删除，显示为规格表）
+                name: specs
+                widget: list
+                required: false
+                summary: "{{fields.label}}: {{fields.value}}"
+                fields:
+                  - { label: 属性名（如 Size/Fabric/Printing）, name: label, widget: string }
+                  - { label: 属性值（如 3*5ft、110g knitted polyester）, name: value, widget: string }
+              - { label: 宣传语（品名下方那句话，可选；可用 **词** 加粗）, name: subtitle, widget: text, required: false }
+              - { label: 图片, name: image, widget: image }
+              - { label: 图片说明(alt), name: imageAlt, widget: string, required: false, hint: 图片说明（alt，建议英文，含产品关键词；留空则自动用品名） }
           - label: 生产选项模块（可加多个；每个：标题 + 说明 + 卡片网格）
             name: optionBlocks
             widget: list
@@ -794,6 +794,42 @@ collections:
                   - { label: 卡片标题, name: title, widget: string, required: false }
                   - { label: 卡片说明, name: text, widget: text, required: false, hint: 可用 **词** 加粗；按一次回车 = 换行 }
 
+
+          - label: 尺寸选择模块（标题 + 说明 + 左侧图片轮播 + 右侧尺寸表）
+            name: sizeChart
+            widget: object
+            required: false
+            fields:
+              - { label: 显示此模块, name: show, widget: boolean, default: true, hint: 取消勾选即隐藏（内容会保留，重新勾选即可恢复） }
+              - { label: 背景色, name: bg, widget: color, default: "#ffffff", hint: "点开选颜色（下方显示色块）。默认白色 = 和页面底色一样，看不出色带。填别的颜色就会变成一条通栏色带。" }
+              - { label: 模块标题, name: title, widget: string, required: false }
+              - { label: 说明文字（空行分段；可用 **词** 加粗）, name: text, widget: text, required: false, hint: "空一行 = 分成两段；按一次回车 = 换行；可用 **词** 加粗。" }
+              - label: 左侧图片（可加多张；两张及以上会自动轮播）
+                name: images
+                widget: list
+                required: false
+                summary: "{{fields.image}}"
+                hint: "顺序有讲究：第 1 张对应左边表头（Small），第 2 张对应右边表头（Standard）。点表头会切到对应图片；不点时自动轮播。"
+                fields:
+                  - { label: 图片, name: image, widget: image }
+                  - { label: 图片说明(alt), name: imageAlt, widget: string, required: false, hint: "图片说明（alt，建议英文，含产品关键词；留空则自动用模块标题兜底）" }
+              - { label: 轮播间隔（秒；两张及以上才自动轮播）, name: interval, widget: number, default: 5, required: false, hint: "填 5 = 每 5 秒切换一张；鼠标放到图上会暂停。点了表头后会停止自动轮播，方便客户定住看某一档尺寸。" }
+              - label: 尺寸表（点击表头可切换左侧图片；当前选中列用 FAQ 的浅红底 + 深红下边线）
+                name: table
+                widget: object
+                required: false
+                hint: "点击 Small / Standard 表头会切到左侧对应图片；不点击时左侧自动轮播，表头高亮会跟着当前图片走。"
+                fields:
+                  - { label: 左列表头, name: leftTitle, widget: string, default: Small }
+                  - { label: 右列表头, name: rightTitle, widget: string, default: Standard }
+                  - label: 表格行（可加/删/拖动排序）
+                    name: rows
+                    widget: list
+                    required: false
+                    summary: "{{fields.left}} / {{fields.right}}"
+                    fields:
+                      - { label: 左列内容（Small）, name: left, widget: string }
+                      - { label: 右列内容（Standard）, name: right, widget: string }
   # ---------- 产品详情页（多图 + 规格 + 价格表 + 服务卡 + 图文区） ----------
   - name: product-details
     label: 产品详情页
