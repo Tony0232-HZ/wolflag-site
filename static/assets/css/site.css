@@ -1013,9 +1013,12 @@ ul { list-style: none; }
    `.section-supp` 原底内边距 56px 归零，交给产品区自己的 padding-top 控制（见下一条）。 */
 .section-supp.nf-supp-top { padding-top: 2px; padding-bottom: 0; }
 
-/* 国旗页产品区：用户标注「间隙距离减小一半」——上方灰块与产品卡之间 56px → **28px**。
-   只改上内边距；下内边距 56px 保持不变（产品卡 → 生产选项仍按原样）。 */
-.section.nf-products { padding-top: 28px; }
+/* 国旗页产品区（2026-10-17 两处用户标注）：
+   ① 上方灰块与产品卡之间 56px → **28px**（「间隙距离减小一半」）；
+   ② 产品卡 → 生产选项：「这个 Gap 还是太大，减小一半」→ 本 section 的 padding-bottom
+      **56 → 0**，交给下方 `.wl-opt` 自带的 padding-top:56px（手机 40px）→ 视觉 **112 → 56px**
+      （手机 80 → 40px）。⚠️ 不要再把 padding-bottom 加回来。 */
+.section.nf-products { padding-top: 28px; padding-bottom: 0; }
 
 .wl-size-title {
   font-size: 26px;                                 /* = .f-supp-title / .wl-opt-title */
