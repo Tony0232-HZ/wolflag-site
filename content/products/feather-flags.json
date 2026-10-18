@@ -209,7 +209,7 @@
       "image": "/assets/media/wolflag-feather-and-teardrop-flag-bases-mounting-options.webp",
       "show": true,
       "slot": "after-applications",
-      "direction": "textBottom"
+      "direction": "textTop"
     },
     {
       "show": true,
