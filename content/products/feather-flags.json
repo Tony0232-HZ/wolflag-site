@@ -191,6 +191,15 @@
       "direction": "textLeft"
     },
     {
+      "show": true,
+      "slot": "after-applications",
+      "direction": "textTop",
+      "image": "/assets/media/wolflag-feather-and-teardrop-flag-size-chart-7ft-to-13ft.webp",
+      "imageAlt": "Wolflag feather and teardrop flag size comparison chart from 7ft to 13ft shown next to people for real-life height scale.",
+      "title": "Find the Right Flag Height for Your Venue (7' to 13')",
+      "text": "Compare our assembled flag heights against real-life human scale to choose the ideal size for your project. Compact 7'–9' flags offer safe ceiling clearance for indoor trade shows and lobbies, while towering 10'–13' flags deliver maximum roadside visibility for outdoor events and storefronts."
+    },
+    {
       "imageBg": "#faf7f5",
       "text": "From polished showroom floors and busy sidewalks to soft grass, beach sand, and building walls, our interchangeable base system keeps your flags standing tall. Choose steel ground spikes or screw-in augers for turf and sand, sleek cross bases for indoor displays, or heavy-duty square plates, drive-on tire bases, and water-filled weights for maximum stability in high-traffic outdoor areas.",
       "imageAlt": "Wolflag universal feather and teardrop flag base options including square steel plate, car wheel base, ground spike, water tank, wall mount, cross bases, water weight bag, and sand auger.",
@@ -201,15 +210,6 @@
       "show": true,
       "slot": "after-applications",
       "direction": "textBottom"
-    },
-    {
-      "show": true,
-      "slot": "after-applications",
-      "direction": "textTop",
-      "image": "/assets/media/wolflag-feather-and-teardrop-flag-size-chart-7ft-to-13ft.webp",
-      "imageAlt": "Wolflag feather and teardrop flag size comparison chart from 7ft to 13ft shown next to people for real-life height scale.",
-      "title": "Find the Right Flag Height for Your Venue (7' to 13')",
-      "text": "Compare our assembled flag heights against real-life human scale to choose the ideal size for your project. Compact 7'–9' flags offer safe ceiling clearance for indoor trade shows and lobbies, while towering 10'–13' flags deliver maximum roadside visibility for outdoor events and storefronts."
     },
     {
       "show": true,
