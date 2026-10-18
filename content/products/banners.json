@@ -103,6 +103,26 @@
   },
   "imageAlt": "Large custom printed banners hanging on a university building facade",
   "tagline": "Make your custom banners look just the way you want",
+  "promises": {
+    "show": true,
+    "items": [
+      {
+        "icon": "/assets/media/promise-custom.svg",
+        "title": "Fully Customizable Flags",
+        "text": "Your Logo, Message or Design"
+      },
+      {
+        "icon": "/assets/media/promise-scale.svg",
+        "title": "Any Quantity, Any Size",
+        "text": ""
+      },
+      {
+        "icon": "/assets/media/promise-guarantee.svg",
+        "title": "Satisfaction Guaranteed",
+        "text": ""
+      }
+    ]
+  },
   "bannerImage": "/assets/media/harvard-banner-building.webp",
   "page": {
     "file": "banner.html",
@@ -112,6 +132,7 @@
   "supplement": [
     {
       "imageBg": "#faf7f5",
+      "imageScale": 80,
       "text": "Different flagpoles and regions require specific attachment hardware. At Wolflag, we equip our reinforced flag headers with your choice of **webbing loops, plastic C-hooks, snap clips, metal swivel hooks, figure-8 rings, or traditional rope and wooden toggles**. Simply specify your preferred finishing style when requesting a quote, and we will manufacture your flags ready for immediate installation.",
       "imageAlt": "Wolflag custom flag finishing options grid showing webbing loops, plastic snap hooks, metal swivel clips, figure-8 hooks, and rope with wooden toggle.",
       "imageFit": "contain",

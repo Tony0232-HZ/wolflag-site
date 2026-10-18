@@ -318,6 +318,150 @@ ul { list-style: none; }
 
 .page-hero .tagline { margin-top: 12px; color: #556; font-size: 14px; letter-spacing: .12em; text-transform: uppercase; }
 
+/* ==========================================================================
+   Banner page: 「三句话」翻转卡片（2026-10-18 新增，用户要求）
+   位置：标语下面、6 张产品卡上面。
+   设计（用户 2026-10-18 简化后的最终版）：
+     · 常态 = 白底卡片 + 浅灰细边框 + 深色字 + 深蓝线条图标；
+       **不要**米白/灰色底、布纹、气眼、序号/小标签、呼吸/自动轮播。
+     · 悬停 = 卡片 3D 翻转（rotateY 180°），背面是白底 + 深红细边框
+       + 深红标题 + 深红图标（保留用户喜欢的「红色字」效果）。
+     · 外层轻微上浮 + 阴影；翻转 0.65s。
+     · 减少动态效果时不做 3D 翻转，改为正面直接变红（保留红色字效果）。
+   数据：content/products/banners.json → promises{show, items[{icon,title,text}]}。
+   ========================================================================== */
+.page-hero .wl-promises {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr)); /* 一律 minmax(0,1fr)，别写裸 1fr（坑 #23） */
+  grid-auto-rows: 1fr;                              /* 三张卡等高 */
+  gap: 16px;
+  margin: 22px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.section.section-banner-promises { padding-top: 38px; }
+
+.wl-promise {
+  perspective: 1200px;
+  min-width: 0;
+  border-radius: 14px;
+  box-shadow: 0 1px 2px rgba(39, 46, 71, .04);
+  transition: transform .28s ease, box-shadow .28s ease;
+}
+.wl-promise:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 30px rgba(39, 46, 71, .10);
+}
+
+/* 正反两面用同一个 grid 单元格叠放 → 卡片高度自动取两面中较高的那一面 */
+.wl-promise-flip {
+  display: grid;
+  grid-template-areas: "card";
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform .65s cubic-bezier(.2, .7, .2, 1);
+}
+.wl-promise:hover .wl-promise-flip { transform: rotateY(180deg); }
+
+.wl-promise-face {
+  grid-area: card;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+  padding: 24px 24px 22px;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  background: #fff;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.wl-promise-back {
+  transform: rotateY(180deg);
+  border-color: #a33335;
+}
+.wl-promise:hover .wl-promise-front { border-color: #a33335; }
+
+.wl-promise-icon {
+  display: block;
+  width: 30px;
+  height: 30px;
+  margin-bottom: 16px;
+  color: var(--navy);
+  transition: color .28s ease;
+}
+.wl-promise-icon svg { display: block; width: 30px; height: 30px; }
+.wl-promise-icon img { display: block; width: 30px; height: 30px; object-fit: contain; }
+.wl-promise-back .wl-promise-icon { color: #a33335; }
+
+.wl-promise-copy {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  width: 100%;
+}
+.wl-promise-title {
+  font-family: inherit;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.25;
+  color: #191a19;
+  transition: color .28s ease;
+}
+.wl-promise-back .wl-promise-title { color: #a33335; }
+.wl-promise-sub {
+  margin-top: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.5;
+  color: #444c58;
+}
+.wl-promise-sub::before {
+  content: "—";
+  margin-right: 6px;
+  color: #b3a89d;
+}
+.wl-promise-back .wl-promise-sub::before { color: #a33335; }
+
+.wl-promise-title,
+.wl-promise-sub { max-width: 100%; overflow-wrap: break-word; }
+
+@media (max-width: 1024px) {
+  .page-hero .wl-promises { gap: 12px; }
+  .wl-promise-face { padding: 20px 20px 20px; }
+  .wl-promise-title { font-size: 19px; }
+}
+/* 平板/手机：1 张一排，保持「上图标、下文字」的卡片比例 */
+@media (max-width: 900px) {
+  .page-hero .wl-promises { grid-template-columns: minmax(0, 1fr); gap: 10px; margin-top: 18px; }
+  .section.section-banner-promises { padding-top: 30px; }
+  .wl-promise-face { padding: 16px 18px 18px; }
+  .wl-promise-icon { width: 26px; height: 26px; margin-bottom: 10px; }
+  .wl-promise-icon svg,
+  .wl-promise-icon img { width: 26px; height: 26px; }
+  .wl-promise-title { font-size: 20px; }
+  .wl-promise-sub { margin-top: 4px; font-size: 13.5px; }
+}
+@media (max-width: 560px) {
+  .wl-promise-face { padding: 15px 16px 17px; }
+  .wl-promise-title { font-size: 19px; }
+  .wl-promise-sub { font-size: 13px; }
+}
+
+/* 减少动态效果：不做 3D 翻转，正面直接变红（保留用户喜欢的红色字） */
+@media (prefers-reduced-motion: reduce) {
+  .wl-promise,
+  .wl-promise-flip,
+  .wl-promise-icon,
+  .wl-promise-title { transition: none; }
+  .wl-promise:hover { transform: none; }
+  .wl-promise:hover .wl-promise-flip { transform: none; }
+  .wl-promise:hover .wl-promise-front { border-color: #a33335; }
+  .wl-promise:hover .wl-promise-front .wl-promise-icon,
+  .wl-promise:hover .wl-promise-front .wl-promise-title { color: #a33335; }
+  .wl-promise:hover .wl-promise-front .wl-promise-sub::before { color: #a33335; }
+}
+
 /* 羽毛旗徽标行：2026-09-08 与国家旗页标语(page-hero h1)统一 20px/700/#38513f/.02em（字体不变） */
 .page-badge { font-size: 20px; font-weight: 700; color: #38513f; letter-spacing: .02em; }
 
@@ -881,6 +1025,22 @@ ul { list-style: none; }
    （后台「图片区域底色」字段，默认 #faf7f5 = 模块底色；可改 #ffffff 或其他颜色）。 */
 .f-supp-img.is-contain { background: #faf7f5; }
 .f-supp-img.is-contain img { object-fit: contain; background: transparent; }
+
+/* 2026-10-18：补充模块新增「图片显示大小（%）」imageScale。
+   后台填 70 → 图片按原比例缩到 70%（宽高一起缩），在原来的位置居中显示；
+   填 100 或不填 = 旧行为（一条规则都不生效）。
+   ⚠️ 只缩图片元素本身，**不缩文字**；容器宽度不变（contain 的底色仍铺满原区域）。
+   用 --img-scale 而不是写死 width，方便以后在后台任意填 90 / 80 / 70…
+   height:auto 必须写 —— 否则会沿用基础样式的 height:100%，图片会被压扁/拉高。 */
+.f-supp-img.is-scaled {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.f-supp-img.is-scaled img {
+  width: calc(100% * var(--img-scale, 1));
+  height: auto;
+}
 .f-supp-body { flex: 1; }
 .f-supp-title { font-size: 26px; font-weight: 700; color: #191a19; margin-bottom: 14px; }
 .f-supp-text { color: #444c58; font-size: 16px; line-height: 1.7; }

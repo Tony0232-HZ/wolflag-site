@@ -274,6 +274,15 @@ collections:
                 required: false
                 default: "#faf7f5"
                 hint: "默认 #faf7f5（和模块底色一致），留白会自动填充这个颜色；想用白色选 #ffffff，也可以选其他颜色。只对『图片显示方式=完整显示』生效。"
+              - label: 图片显示大小（%）
+                name: imageScale
+                widget: number
+                required: false
+                value_type: int
+                min: 30
+                max: 100
+                default: 100
+                hint: "100 = 和现在一样；填 70 = 图片缩到原来的 70%（宽和高一起缩、居中显示）。只在本条有图片时生效；没填按 100 处理。"
               - { label: 图片说明(alt), name: imageAlt, widget: string, required: false, hint: 图片说明（alt，建议英文，含产品关键词；留空则自动用品名） }
           - label: "页面公告条（首页页面里的滚动公告条；显示/隐藏、颜色、内容、图标都在这里）"
             name: announce
@@ -636,6 +645,15 @@ collections:
             required: false
             default: "#faf7f5"
             hint: "默认 #faf7f5（和模块底色一致），留白会自动填充这个颜色；想用白色选 #ffffff，也可以选其他颜色。只对『图片显示方式=完整显示』生效。"
+          - label: 图片显示大小（%）
+            name: imageScale
+            widget: number
+            required: false
+            value_type: int
+            min: 30
+            max: 100
+            default: 100
+            hint: "100 = 和现在一样；填 70 = 图片缩到原来的 70%（宽和高一起缩、居中显示）。只在本条有图片时生效；没填按 100 处理。"
           - { label: 图片说明(alt), name: imageAlt, widget: string, required: false, hint: 图片说明（alt，建议英文，含产品关键词；留空则自动用品名） }
 
   # ---------- 产品：羽毛旗 ----------
@@ -711,6 +729,15 @@ collections:
                 required: false
                 default: "#faf7f5"
                 hint: "默认 #faf7f5（和模块底色一致），留白会自动填充这个颜色；想用白色选 #ffffff，也可以选其他颜色。只对『图片显示方式=完整显示』生效。"
+              - label: 图片显示大小（%）
+                name: imageScale
+                widget: number
+                required: false
+                value_type: int
+                min: 30
+                max: 100
+                default: 100
+                hint: "100 = 和现在一样；填 70 = 图片缩到原来的 70%（宽和高一起缩、居中显示）。只在本条有图片时生效；没填按 100 处理。"
               - { label: 图片说明(alt), name: imageAlt, widget: string, required: false, hint: 图片说明（alt，建议英文，含产品关键词；留空则自动用本套的标题） }
 
           - label: 应用场景（「我们的旗帜用在哪里」卡片网格）
@@ -758,6 +785,26 @@ collections:
               - { label: 页面描述, name: description, widget: text }
           - { label: 页面标题, name: heading, widget: string }
           - { label: 标语, name: tagline, widget: string }
+          - label: 三句话承诺条（标语下面、产品卡上面）
+            name: promises
+            widget: object
+            required: false
+            hint: "标语下面那三张白色卡片：Fully Customizable Flags / Any Quantity, Any Size / Satisfaction Guaranteed。\n常态白底 + 深色字；鼠标悬停时卡片翻转，背面显示深红色标题和深红色图标。\n默认显示；取消勾选「显示此模块」即可隐藏。"
+            fields:
+              - { label: 显示此模块, name: show, widget: boolean, default: true, hint: 取消勾选 = 整块隐藏（内容会保留，重新勾选即可恢复） }
+              - label: 条目（建议 3 条；可拖动排序、可增删）
+                name: items
+                widget: list
+                required: false
+                summary: "{{fields.title}}"
+                fields:
+                  - label: 图标
+                    name: icon
+                    widget: image
+                    required: false
+                    hint: "建议上传【单色线条 SVG】：图标会跟着状态变色（常态深蓝、翻转后深红），效果最好。\n若传 PNG/JPG：能显示，但颜色不会变。尺寸不限（页面按 30×30 显示），文件名请用英文小写连字符。"
+                  - { label: 主文案, name: title, widget: string, hint: 例如 Fully Customizable Flags / Any Quantity, Any Size / Satisfaction Guaranteed }
+                  - { label: 补充说明（可选；可用 **词** 加粗）, name: text, widget: text, required: false, hint: "第一条可填 Your Logo, Message or Design；留空则只显示主文案。用两个星号包住词可加粗。" }
           - { label: 顶部横幅图片, name: bannerImage, widget: image, required: false, hint: 页面顶部的大横幅（可选，不填则无横幅） }
           - { label: 图片说明(alt), name: imageAlt, widget: string, required: false, hint: 图片说明（alt，建议英文，含产品关键词；留空则自动用品名） }
           - label: 产品
@@ -815,6 +862,15 @@ collections:
                 required: false
                 default: "#faf7f5"
                 hint: "默认 #faf7f5（和模块底色一致），留白会自动填充这个颜色；想用白色选 #ffffff，也可以选其他颜色。只对『图片显示方式=完整显示』生效。"
+              - label: 图片显示大小（%）
+                name: imageScale
+                widget: number
+                required: false
+                value_type: int
+                min: 30
+                max: 100
+                default: 100
+                hint: "100 = 和现在一样；填 70 = 图片缩到原来的 70%（宽和高一起缩、居中显示）。只在本条有图片时生效；没填按 100 处理。"
               - { label: 图片说明(alt), name: imageAlt, widget: string, required: false, hint: 图片说明（alt，建议英文，含产品关键词；留空则自动用本套的标题） }
 
           - label: 质量保证模块（显示开关）
@@ -881,6 +937,15 @@ collections:
                 required: false
                 default: "#faf7f5"
                 hint: "默认 #faf7f5（和模块底色一致），留白会自动填充这个颜色；想用白色选 #ffffff，也可以选其他颜色。只对『图片显示方式=完整显示』生效。"
+              - label: 图片显示大小（%）
+                name: imageScale
+                widget: number
+                required: false
+                value_type: int
+                min: 30
+                max: 100
+                default: 100
+                hint: "100 = 和现在一样；填 70 = 图片缩到原来的 70%（宽和高一起缩、居中显示）。只在本条有图片时生效；没填按 100 处理。"
               - { label: 图片说明(alt), name: imageAlt, widget: string, required: false, hint: 图片说明（alt，建议英文，含产品关键词；留空则自动用本套的标题） }
           - label: 产品
             name: products

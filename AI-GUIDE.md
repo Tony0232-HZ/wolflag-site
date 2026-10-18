@@ -257,11 +257,16 @@ wolflag-site/
 | 文件 | file | layout | 特有字段 |
 |---|---|---|---|
 | feather-flags.json | feather-flag.html | `feather` | badge(徽标行), bannerImage(顶部横幅,**可选**,不填则无横幅), products[{name,specs[{label,value}],subtitle,image}]（2026-09-08 起 size/material/desc → specs+subtitle，删除 cta） |
-| banners.json | banner.html | `bannerCards` | tagline, bannerImage(顶部横幅,**可选**), products[{name,specs[{label,value}],subtitle,image}]（2026-09-08 起 desc/material/detail → specs+subtitle） |
+| banners.json | banner.html | `bannerCards` | tagline, bannerImage(顶部横幅,**可选**), products[{name,specs[{label,value}],subtitle,image}]（2026-09-08 起 desc/material/detail → specs+subtitle）, **promises{show,items[{icon,title,text}]}（2026-10-18 三句话翻转卡片）** |
 | national-flags.json | national-flag.html | `flags` | tagline, bannerImage(顶部横幅,**可选**), products[{name,specs[{label,value}],subtitle(**可选**),image}]（2026-09-08 起 size/material/printing → specs；渲染为**品名加粗居中(.nf-card .p-name) → 属性表(.p-spec 新样式) → 可选宣传语**；原 p-size/p-material/p-chip 黑框印刷 chip 已移除；尺寸值去掉了旧文案 "popular size:" 前缀，拼写保留原样） |
 | pole-display.json | pole-display.html | `pole` | subheading, subtext, featured[2]{name,desc,detail,tag,image}, ingredients{title,subtitle,items[6]{name,desc,image}} |
 
 现有产品细节不要动，除非用户要求：feather 4 款（Feather/Leaf/Rectangle/Teardrop，Rect size 6.56ft*2.62ft、Teardrop 11.8ft*3.9ft；CTA 是**纯文本**非链接）；national-flags 6 旗（China/USA/EU/Malaysia/Kuwait/UN；**尺寸映射已验证**：China 3.15*2.1/4.72*3.15/6.3*4.2、USA 1.9*1/2.8*1.5/3.78*2、EU 3*5/3.3*6.6/4*6、Malaysia=Kuwait 2*1/4*2/6*3/8*4、UN 2*3/3*5/4*6）；banners 6 款（材质统一 comstom size/100% knitted polyester=原站拼写，**保留原拼写**）；pole 主卡2+配件6。
+
+**📌 banners.json 的 `promises`（2026-10-18 新增）**：三句话翻转卡片，`{show, items[{icon,title,text}]}`，
+后台「横幅产品页 → 三句话承诺条」；`build.mjs` 的 `bannerPromisesSection()` 插在 `bannerBody()` 的 `.page-hero` 内、h1 之后
+（**标语下面、产品卡上面**）。常态白底静态卡；悬停 `rotateY(180deg)` 0.65s 翻到背面（深红边框/图标/标题）。
+**不要**灰底/布纹/气眼/序号/呼吸/自动轮播（用户 2026-10-18 明确简化）。详见 §10.47。
 
 ### 2.4 pages/*.json（新增类目页模板，见 §5）
 
@@ -309,8 +314,12 @@ wolflag-site/
 
 - **每页底部可加多个**：`content/{页面}.json` 的 `supplement` 是**数组**，每项 `{ show, title, text, image }`。渲染由 build.mjs 的 `supplementSection(data)`（遍历数组，兼容旧单对象），条件 `show!==false` 且至少一项有内容才渲染；多个模块按数组顺序从上到下。
 - **已启用页面**：index(首页)、feather-flag、banner、national-flag、stands-displays 五个页面底部（均走各自 layout 函数里 `supplementSection(data)`；首页读 `home` 全局）。
-- **字段**：`show`(boolean，勾选=显示、取消勾选=隐藏且内容保留)、`title`(可选)、`text`(支持 `**词**` 加粗)、`image`(可选；有图=图左文右，无图=文字居中)。
+- **字段**：`show`(boolean，勾选=显示、取消勾选=隐藏且内容保留)、`title`(可选)、`text`(支持 `**词**` 加粗)、`image`(可选；有图=图左文右，无图=文字居中)、`imageScale`(可选，30–100，默认 100 = 原大小；80 = 同比例缩到 80%、居中；只缩图片不缩文字，2026-10-18 新增)。
 - **样式**：`.f-supp*`（`.f-supp` 浅米黄 #faf7f5 圆角面板、`.f-supp-img` 图(圆角)、`.f-supp-txt` 无图居中、`@media max-width:700px` 上下堆叠）。
+- **`imageScale` 渲染（2026-10-18）**：构建给 `.f-supp-img` 加 `.is-scaled` + 行内 `--img-scale:0.8`；
+  CSS `.f-supp-img.is-scaled{display:flex;align-items:center;justify-content:center}` +
+  `.f-supp-img.is-scaled img{width:calc(100% * var(--img-scale,1));height:auto}`。
+  ⚠️ **必须写 `height:auto`**，否则会沿用基础样式的 `height:100%` 被压扁/拉高（坑 #43）；只缩图片、文字不动。详见 §10.46。
 - **后台表单**：5 个栏目（首页/羽毛旗/横幅/国旗/属性网格）的「补充模块」均为 `widget: list`，可 Add 添加多个；每项：显示/标题/文字/图片。
 - 演示：羽毛旗页默认含 1 个模块(`show:false` 隐藏)，其余 4 页为 `[]` 空数组。
 
@@ -370,6 +379,8 @@ feather/national/banner 页横幅: `.page-banner`（米黄 #faf7f5 底、pad 40p
 | 时间轴 `.tl`（timeline，2026-09-09） | 背景=`bg` 后台可换（演示=白 #ffffff）；标题 `.tl-title` 36px/700 左对齐 #272e47；年份横条 `.tl-track`：`justify-content:space-between`、圆点 `.tl-dot` 18px 白底、边框 #dfe3e2（同 FAQ 底）、横线 3px #dfe3e2（在 `top:55px` 穿圆点中心）；年份字 `.tl-year-txt` 14px #6b7280；**悬停/选中 → 鲑红 #f15d49**（同 marquee 上方滚动字）+ 加粗；悬停动效：圆点 `scale(1.35)` 变红、年份 `tlJiggle` 上跳 5px 动画；选中 `.is-active` 圆点变红放大+光环 `rgba(241,93,73,.15)`；下方 `.tl-panels`：大年份 `.tl-big` 64px/800 左对齐 #272e47、文字 `.tl-text` 16px/1.7 右对齐贴右缘；区块底部 `border-bottom:2px solid #f8f8f8` 浅米黄分隔线；自动播放：`.tl` 带 `data-autoplay[on|off]`/`data-interval`（build 输出），site.js 定时 `go(cur+1)`、到末位 `%years.length` 循环回第一个、悬停 `.tl-year` 暂停/移开恢复、手动点击 `go(i)+restart`；移动端年份条横向滚动（`scrollbar-width:none` 隐藏滚动条、加 `padding` 防圆点被裁） |
 | 页脚 | `0.8fr 1fr 1fr auto` 列 + `column-gap: 48px`（2026-09-08 起：三块内容间距均匀拉开；末列 auto 收内容宽度自然贴容器右缘=与上方内容框右对齐；0.8fr 收窄 Logo 列防地址行折行）；h4 18px/500 #d6dfff（第3列15px）；p 14px #8395a0 行高29；首电话18px/500 #d6dfff；版权 14px #7d8085 + 上边框线 + pad 27/40；padding-top 100px；**联系信息带内嵌SVG线框图标**（地址=定位、电话=听筒、邮箱=信封，`.f-line` flex+gap 8、`.f-ico` 16px 颜色随文字 currentColor、地址续行 `.f-line-indent` 缩进24px；2026-09-08） |
 | **「质量保证」卡片（`.wl-qa-*`，2026-10-18 新增，国旗/羽毛旗/横幅三页共用内容）** | 模块标题 26px/700 `#191a19`、说明 16px/1.75 `#444c58`；卡片网格 `repeat(3,minmax(0,1fr))` + `grid-auto-rows:1fr`、gap 20px、圆角 12px、内边距 32×30（手机 26×22）；卡片底色 **`#faf3f3`（悬停也不变）**、标题 20px/700 `#191a19`、正文 16px/1.7 `#444c58`（悬停也不变）；图标为用户提供的橙色圆角 WebP，56×56（手机 48×48）。**悬停只出现深红 `#a33335` 圆角动态线框**：伪元素 `inset:12px`（手机 10px）+ `box-sizing:border-box` + `border-radius:10px`，上下线 `scaleX(0→1)`、左右线 `scaleY(0→1)`、0.4s。⚠️ 不能用 `width:98.5% + left:1%`（右边框被裁，坑 #42）。≤900px 单列。详见 §10.45。 |
+| **补充模块「图片显示大小」`imageScale`（2026-10-18 新增）** | 每条 30–100（默认 100）；`.f-supp-img.is-scaled` 用 flex 居中 + `img{width:calc(100% * var(--img-scale));height:auto}`；只缩图片、不缩文字。⚠️ 不写 `height:auto` 会沿用基础 `height:100%` 被压扁/拉高（坑 #43）。详见 §10.46。 |
+| **「三句话」翻转卡片（`.wl-promise-*`，2026-10-18 新增，仅横幅页）** | 白底 `#fff` + `1px #e5e7eb` 边框、圆角 14px；图标 30px 深蓝、标题 22px/700 `#191a19`、说明 14px/600 `#444c58`；悬停 `.wl-promise-flip{transform:rotateY(180deg)}` 0.65s，反面深红 `#a33335` 边框/图标/标题；外层上浮 4px + 阴影；≤900px 单列；reduced-motion 不翻转、正面直接变红。详见 §10.47。 |
 | 字体 | Catamaran(home h1)/Antic Slab(国旗卡题)/Bona Nova(BETTER)/Rufina(配件题)/Acme(marquee+FAQ题)；Google Fonts link 在 shell()，离线回退 Arial/Georgia |
 | 图片资产语义 | home-hero/workshop/printing/factory；home-cat-national|banner|feather|polekit；flag-01..06；banner-1..6；feather-1..4；pole-01..08；client-01..08；logo/footer-logo/footer-icon-1..3/favicon；about-hero/factory；pole-03..08 实物映射（03镀铬十字/04水罐/05水袋/06地钉/07方座/08张力展架） |
 
@@ -708,6 +719,13 @@ feather/national/banner 页横幅: `.page-banner`（米黄 #faf7f5 底、pad 40p
     四边都在容器内、还能做圆角。判据：**改完用 `getComputedStyle(el,'::before/::after')` 读
     `borderTop/Right/Bottom/Left` + `inset` + `boxSizing`，并截图确认四条边都可见。**
     **完整记录见 §10.45。**
+
+43. 🖼️ **给图片加「百分比缩放」时只改 width 不改 height → 沿用基础样式的 `height:100%`，图片被压扁/拉高（2026-10-18）**：
+    补充模块图片的基础样式是 `width:100%;height:100%;object-fit:cover`。新增 `imageScale` 时如果只写
+    `width:calc(100% * var(--img-scale))`，高度仍按容器的 100%，宽高比就失真。
+    ✅ 正确写法：`.f-supp-img.is-scaled img{width:calc(100% * var(--img-scale,1));height:auto}`。
+    判据：**缩放图片后必须量 `renderedW/renderedH` 是否等于 `naturalWidth/naturalHeight`**（本次实测
+    1202→962、601→481，比例 2:1 不变）。**完整记录见 §10.46。**
 
 ---
 
@@ -4338,9 +4356,51 @@ Graduations `#EDF0FD` · Expos `#EAF7F0` · Fundraisers `#FDEEE6` · Seasonal `#
 
 **文档同步**：本文件 §10.45 + 坑 #42 + 本变更日志；`README.md` 2026-10-18 章节；`AI-GUIDE-精简版.md`（§2.1 / §2.3 / §4 / §6.3）；《后台管理操作说明书.html》8.7 + 18.22（说明书本地、不入 git）。
 
+### 10.46 🖼️ 补充模块新增「图片显示大小（%）」`imageScale`（2026-10-18）
+
+**用户需求**：在横幅页新增了一条补充模块（Custom Flag Hardware & Finishing Options，方向 `textTop`、`imageFit:contain`），上传的钩子/夹子图片按 100% 通栏显示，「太满太大」；希望在后台自己填 90 / 80 / 70 等百分比，**宽和高同比例缩小**。
+
+**实现**：
+- 5 个页面的 supplement 字段都加 `imageScale`（number / int / min 30 / max 100 / default 100）；旧数据缺省 = 100，页面不变。
+- build：`supplementSection()` 读 `imageScale`，clamp 10–100；<100 时给 `.f-supp-img` 加 `.is-scaled`，行内 `--img-scale:0.80`（与 `imageBg` 合并到同一个 style）。
+- CSS：`.f-supp-img.is-scaled{display:flex;align-items:center;justify-content:center}` + `.f-supp-img.is-scaled img{width:calc(100% * var(--img-scale,1));height:auto}`。
+  - **必须写 `height:auto`**：基础样式 `.f-supp-img img{width:100%;height:100%}`，只改 width 会沿用 height:100% → 图片被压扁/拉高（**坑 #43**）。
+  - 只缩图片元素，**不缩文字**；容器宽度不变（contain 的 `imageBg` 仍铺满原区域，但默认 `#faf7f5` 与模块底色一致，看不出边界）。
+- 数据：横幅页那条设为 `imageScale:80`；后台「横幅产品页 → 补充模块 → 图片显示大小（%）」。
+- 验证：电脑 1202→962px、601→481px；手机 342→274px；宽高比 2:1 不变、左右居中（各 120px）、0 溢出；其他未填 imageScale 的补充模块 HTML 不变。
+
+**文档同步**：本文件 §10.46 + 坑 #43 + 本变更日志；`README.md` 2026-10-18 章节「一」；`AI-GUIDE-精简版.md`（§2.5 / §4 / §6.4）；《后台管理操作说明书.html》8.5 + 18.23（说明书本地、不入 git）。
+
+### 10.47 🃏 横幅页新增「三句话」翻转卡片 `promises`（2026-10-18，多轮迭代）
+
+**需求起点**：用户在横幅页标语 `Make your custom banners look just the way you want` 下面、产品卡上面加三句话：
+`Fully Customizable Flags - Your Logo, Message or Design` / `Any Quantity, Any Size` / `Satisfaction Guaranteed`，
+要求风格与全站一致、有互动。
+
+**数据 / 构建**：
+- `content/products/banners.json → promises{show, items[{icon,title,text}]}`（后台「横幅产品页 → 三句话承诺条」）。
+- `build.mjs` 的 `bannerPromisesSection()` 输出 `ul.wl-promises > li.wl-promise > .wl-promise-flip > .wl-promise-face.front/.back`；
+  正反两面**同一套内容**，反面 `aria-hidden="true"`（读屏只读正面）。位置在 `bannerBody()` 的 `.page-hero` 内、h1 之后。
+- 默认 3 条；图标用 `media/promise-custom.svg` / `promise-scale.svg` / `promise-guarantee.svg`（`stroke="currentColor"`，可随状态变色）。
+
+**用户多轮改版（最终版别改回去）**：
+1. 第一版：米白布标卡 + 布纹 + 缝线虚线 + 气眼 + 序号/小标签 + 悬停呼吸/自动轮播。
+2. 用户先要求：去掉蚂蚁线改实线、去掉模糊只保留缩放、自动轮流呼吸 3 次。
+3. **最终用户全部否掉**：「算了吧，还是弄简单一点。去掉呼吸效果。只保留鼠标悬停后的效果。鼠标悬停前那种灰色的背景不要……干脆直接弄个静态的……你会不会做那种鼠标放在卡片上，卡片有个翻转的效果。」
+4. **最终版**：三张**白底静态卡** + `1px #e5e7eb` 细边框 + 深色 22px/700 标题 + 深蓝 30px 线条图标；**没有**灰底/布纹/气眼/序号/小标签/呼吸/自动轮播。悬停 = 卡片 **3D 翻转 `rotateY(180deg)` 0.65s**，背面 = 白底 + 深红 `#a33335` 细边框 + 深红图标 + 深红标题 + 红色破折号；外层上浮 4px + 柔和阴影。手机 ≤900px 单列、无悬停；`prefers-reduced-motion` 不做 3D 翻转，正面直接变红（保留红色字效果）。
+   - ⚠️ 反面是装饰性复制，必须 `aria-hidden="true"`；正反面用 `grid-area:card` 叠在同一个单元格，卡片高度取两面较高者。
+   - ⚠️ `backface-visibility:hidden` + `-webkit-backface-visibility:hidden` 必须写，否则翻转时会看到镜像/双面重叠。
+   - ⚠️ 外层 `perspective:1200px`、内层 `transform-style:preserve-3d`；不要把 `overflow:hidden` 加在外层，否则 3D 翻转会被裁掉。
+5. **同轮追加**：CSS/JS 加内容指纹 `?v=<sha1 前 8 位>`（`ASSET_VER`，构建时对 `site.css` + `site.js` 求哈希），避免浏览器出现「新 CSS + 旧 JS」的缓存错配——这是用户反馈「呼吸彻底不工作」后查出的根因之一。
+
+**验证**：1920→320 共 15 个宽度 0 溢出；字号放大 1.5/2 倍模块内 0 溢出；翻转 `matrix3d(-1,0,0,0,0,1,0,0,0,0,-1,0,0,0,0,1)`、正反面文字方向正确、三张卡等高（1440 时 148.5px）；`prefers-reduced-motion` 下不翻转、正面标题/图标/边框变红；0 console error、0 requestfailed；`show:false` 时整块不输出。
+
+**文档同步**：本文件 §10.47 + 本变更日志；`README.md` 2026-10-18 章节「二」；`AI-GUIDE-精简版.md`（§2.3 / §4 / §6.4）；《后台管理操作说明书.html》8.8 + 18.23（说明书本地、不入 git）。
+
 ---
 
-*最后更新：2026-10-18。**三个产品页新增「Manufacturing Quality Assurance」质量保证卡片模块（新增 §10.45、坑 #42）**——照用户给的参考站 `maosen-flag.com/international-flags/` 复刻 3 张卡片，内容统一存 `settings.json → qualityAssurance`（三页共用一份），每页 `qualityAssurance.show` 独立控制显隐（默认显示）；位置：国旗页尺寸表下、羽毛旗页五步安装图下、横幅页优势条上。用户看预览后两轮改版：去掉悬停深红底、文字保持深色、白色线框改深红并缩小/内缩/圆角、修掉右边框被裁；图标改用用户提供的三张橙色圆角 WebP（56×56）。新增坑 #42（content-box 内嵌线框右边框被裁）。验证 14 宽度 0 溢出、字号 1.5/2 倍模块 0 溢出、悬停/开关/图标/后台配置全过。**前次（2026-10-17）：国旗页新增「Choose Your Flag Size」尺寸选择模块 + 两处间距减半（新增 §10.42、坑 #39）**——用户照 bestflag.com/pages/custom-flags 的「Choose Your Flag Size」要求移植：表格颜色/样式照参考站、**不要 Oversized 列**、左边用用户两张尺寸图、选中列表头**改用 FAQ 浅红 `#faf3f3` + 深红 `#a33335`**（不用参考站蓝色）。实现：`national-flags.json → sizeChart`（`show/bg/title/text/images[{image,imageAlt}]/interval/table{leftTitle,rightTitle,rows[{left,right}]}`，新建字段不涉及坑 #20）；`build.mjs` 新增 `sizeChartSection()` **只接 `nfBody()`**，最终接在 **Production Options 之后、优势条之前**；表头输出为 `<button>`，点 Small/Standard 切第 1/2 张图并**停止自动轮播**，不点时 5 秒轮播、高亮跟随（`site.js` 给 `.it-carousel` 加 `it-slide-change` 事件与 `_itGo/_itStop/_itStart`，再写 `.wl-size` 联动段）；CSS 新增 `.wl-size-*`，**覆盖 `.it-carousel` 必须用 3 类选择器**（基础样式更靠后、同权重会盖回原值 → **坑 #39**），表格 33/67 列宽、18px/600 表头、18px/400 正文、`#dee2e6` 行线、16px 圆角 + 淡阴影、外层 30px 白卡；`bg` 默认白。用户后续把表格改为 **6 行**：删 `20 x 27.75" (Guidon)`、Standard 值整体上移、删末行；两处间距 **56→28px**（标语→灰块、灰块→产品卡），尺寸表→优势条保持 **56px**；随后又按追加标注把 **产品卡→生产选项 112→56px**（手机 80→40px）；灰色图文块「Custom National Flags, Built for Scale」挪到**标语下面、产品卡上面**。**最大协作教训**：用户箭头圈的是灰色图文块，我误读成尺寸模块、连挪错两次，最后用户明确「我说的是 Custom National Flags, Built for Scale 挪到最上面」——**箭头落在两个模块之间时，先确认要挪哪一个，拿不准就问**；另：用户问"是不是套内模块"→ 独立模块直接挪，**不要复制/隐藏两份**。图片：两张尺寸图（小图 2026-10-17 用户重做、尺寸字更粗更大，同名覆盖），ALT 用用户原文；验证 1920→320 六宽度 0 溢出、字号 1.5/2 倍模块 0 溢出、联动与后台加载全过。推送前 `git fetch` 发现落后 5 个提交（羽毛旗页后台更新），`stash（仅跟踪文件）→ merge --ff-only → stash pop` 零冲突同步。
+*最后更新：2026-10-18（下午）：横幅页两块更新 —— ① 补充模块新增「图片显示大小（%）」`imageScale`（30–100、默认 100；当前 hooks 图 80%；只缩图片不缩文字，必须 `height:auto`，坑 #43）；② 横幅页新增「三句话」翻转卡片 `promises`（白底静态卡 + 悬停 `rotateY(180deg)` 0.65s，反面深红边框/图标/标题；去掉呼吸/自动轮播/灰底/布纹/气眼/序号）。另给 CSS/JS 加内容指纹 `?v=` 防缓存错配。新增 §10.46 / §10.47。*
+**前次（2026-10-18 上午）：三个产品页新增「Manufacturing Quality Assurance」质量保证卡片模块（新增 §10.45、坑 #42）**——照用户给的参考站 `maosen-flag.com/international-flags/` 复刻 3 张卡片，内容统一存 `settings.json → qualityAssurance`（三页共用一份），每页 `qualityAssurance.show` 独立控制显隐（默认显示）；位置：国旗页尺寸表下、羽毛旗页五步安装图下、横幅页优势条上。用户看预览后两轮改版：去掉悬停深红底、文字保持深色、白色线框改深红并缩小/内缩/圆角、修掉右边框被裁；图标改用用户提供的三张橙色圆角 WebP（56×56）。新增坑 #42（content-box 内嵌线框右边框被裁）。验证 14 宽度 0 溢出、字号 1.5/2 倍模块 0 溢出、悬停/开关/图标/后台配置全过。**前次（2026-10-17）：国旗页新增「Choose Your Flag Size」尺寸选择模块 + 两处间距减半（新增 §10.42、坑 #39）**——用户照 bestflag.com/pages/custom-flags 的「Choose Your Flag Size」要求移植：表格颜色/样式照参考站、**不要 Oversized 列**、左边用用户两张尺寸图、选中列表头**改用 FAQ 浅红 `#faf3f3` + 深红 `#a33335`**（不用参考站蓝色）。实现：`national-flags.json → sizeChart`（`show/bg/title/text/images[{image,imageAlt}]/interval/table{leftTitle,rightTitle,rows[{left,right}]}`，新建字段不涉及坑 #20）；`build.mjs` 新增 `sizeChartSection()` **只接 `nfBody()`**，最终接在 **Production Options 之后、优势条之前**；表头输出为 `<button>`，点 Small/Standard 切第 1/2 张图并**停止自动轮播**，不点时 5 秒轮播、高亮跟随（`site.js` 给 `.it-carousel` 加 `it-slide-change` 事件与 `_itGo/_itStop/_itStart`，再写 `.wl-size` 联动段）；CSS 新增 `.wl-size-*`，**覆盖 `.it-carousel` 必须用 3 类选择器**（基础样式更靠后、同权重会盖回原值 → **坑 #39**），表格 33/67 列宽、18px/600 表头、18px/400 正文、`#dee2e6` 行线、16px 圆角 + 淡阴影、外层 30px 白卡；`bg` 默认白。用户后续把表格改为 **6 行**：删 `20 x 27.75" (Guidon)`、Standard 值整体上移、删末行；两处间距 **56→28px**（标语→灰块、灰块→产品卡），尺寸表→优势条保持 **56px**；随后又按追加标注把 **产品卡→生产选项 112→56px**（手机 80→40px）；灰色图文块「Custom National Flags, Built for Scale」挪到**标语下面、产品卡上面**。**最大协作教训**：用户箭头圈的是灰色图文块，我误读成尺寸模块、连挪错两次，最后用户明确「我说的是 Custom National Flags, Built for Scale 挪到最上面」——**箭头落在两个模块之间时，先确认要挪哪一个，拿不准就问**；另：用户问"是不是套内模块"→ 独立模块直接挪，**不要复制/隐藏两份**。图片：两张尺寸图（小图 2026-10-17 用户重做、尺寸字更粗更大，同名覆盖），ALT 用用户原文；验证 1920→320 六宽度 0 溢出、字号 1.5/2 倍模块 0 溢出、联动与后台加载全过。推送前 `git fetch` 发现落后 5 个提交（羽毛旗页后台更新），`stash（仅跟踪文件）→ merge --ff-only → stash pop` 零冲突同步。
 **同日追加（2026-10-17）：全站补充模块新增「显示位置」top/bottom（新增 §10.43、坑 #40）**——用户在国旗页后台问「怎么在 Choose Your Flag Size 下面再放一个补充模块（颜色/面料等）」，并明确「全网站的补充模块都得添加模块显示的位置」。做法：`supplement[]` 每项加 `position`（top/bottom），5 个页面（首页/羽毛旗/横幅/国旗/展架）config 都加「显示位置」下拉；**缺省/旧数据 = bottom**（保持原位置），国旗页现有那条显式 `position:"top"`，新加默认 bottom = 尺寸模块下面。`supplementSection(..., position)` 拆 top/bottom；top 落点：首页简介后（`.main-products.has-supp-top` 130→56）、羽毛旗 badge 后 56、横幅/展架 page-hero 后 30+26=56、国旗 page-hero 后 2+26=28；bottom 保持原位，尺寸表→bottom supplement→优势条各 56。**坑 #40**：初版把「没有 position」当 top，羽毛旗 4 条底部的补充模块全被搬到顶部；已改成缺省=bottom、top 只认显式值。验证：现有页面 HTML 未变（国旗页仅多一层 wrapper）；top/bottom 间距 56/28 实测；后台加载正常；demo 已删。**文档**：本文件 §10.43 + 坑 #40；README 2026-10-17「八」；精简版 §2.5/§4/§6.1；说明书 8.5 + 18.21。
 
 **同日再次升级（2026-10-17）：补充模块从 top/bottom 升级为「多插槽 + 注册表 + 构建时生成后台下拉」（§10.43.1、坑 #40 更新）**——用户要求「所有可以插入的地方都列出来，能加在 Choose Your Flag Size 上面」。新增 `scripts/page-slots.mjs` 的 `PAGE_SLOTS`（**19 个槽：国旗 5 / 羽毛旗 4 / 横幅 3 / 展架 3 / 首页 4**）；`supplement[].slot` + `defaultSlot` 迁移（国旗 after-hero、羽毛旗 after-applications）；`slotGroup()` 输出 `.supp-slot-group`（CSS 变量 `--supp-top/--supp-bottom`，多条之间 56、最后一条按变量 0/56）；后台源 config 只留 `# @@SLOT_FIELD:key@@`，构建时生成 `static/admin/config.yml` 的 `slot` select（以后新增槽 = 注册表 + `slotGroup()`，后台自动多选项）。**事实边界**：不是运行时 DOM 自动扫描，新增段落仍需登记一次。验证：国旗 after-products/after-options/after-benefits 上下 56；羽毛旗 after-products/after-benefits；首页 after-announce 46+10=56；横幅 after-hero 26+30=56；现有内容位置不变；admin 5 个 slot 字段（5/4/3/3/4 选项）PyYAML 通过；临时测试已删。

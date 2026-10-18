@@ -245,6 +245,17 @@ wolflag-site/
   图标自带底色 → **不再套背景、不再做悬停反色**；按 56×56（手机 48×48）显示。
 - 📌 `items` 是新建字段 → 不涉及坑 #20。`[§10.45]`
 
+**「三句话」翻转卡片 `promises`（2026-10-18 新增，仅横幅页）**：
+`content/products/banners.json` 的 `promises`（对象）→ `{show, items[{icon,title,text}]}`；
+后台「**横幅产品页 → 三句话承诺条**」。`build.mjs` 的 `bannerPromisesSection()` 输出
+`ul.wl-promises > li.wl-promise > .wl-promise-flip > .wl-promise-face.front/.back`
+（正反两面同一套内容，**反面 `aria-hidden="true"`**，读屏只读正面）。
+位置：`bannerBody()` 的 `.page-hero` 里、h1 之后 → **标语下面、产品卡上面**。
+外观（用户 2026-10-18 最终版，**别改回去**）：常态 **白底 + `1px #e5e7eb` 边框 + 深色 22px/700 标题 + 深蓝图标**；
+**不要**灰底/布纹/气眼/序号/小标签/呼吸/自动轮播；悬停 = `.wl-promise-flip{transform:rotateY(180deg)}`（0.65s），
+反面 = 白底 + **深红 `#a33335` 边框/图标/标题**；外层上浮 4px + 阴影。
+手机 ≤900px 单列；`prefers-reduced-motion` 不做 3D 翻转、正面直接变红。`[§10.47]`
+
 **「图文区」`textImg` 是列表**（2026-09-20 起，可加多套）：每套 `{show, direction, title, align, text, images[]}`。
 - `direction`（文字/图片的位置）：`textTop`(默认，= 改版前的样子) / `textBottom` / `textLeft` / `textRight`，由后台下拉选择。
 - **HTML 永远"先文字、后图片"**，四种位置靠 CSS `order` 换位（同 About 图文组合）；**`h2` 在行外面**。
@@ -281,6 +292,7 @@ wolflag-site/
 - **补充模块 `supplement[]`**：每页底部可加多个图文区，每项 `{show, position, title, text, image}`；`show:false` = 隐藏但内容保留。
 - **补充模块的 `slot`（显示位置，2026-10-17 多插槽）**：每页插槽清单在 `scripts/page-slots.mjs` 的 `PAGE_SLOTS`；每条 `s.slot` 是插槽 id；**缺省 / 旧数据落到本页 `defaultSlot`（= 改动前位置）**。后台下拉由构建时从注册表自动生成（`admin/config.yml` 里只保留 `# @@SLOT_FIELD:key@@` 标记，构建写入 `static/admin/config.yml`）。国旗页 5 个槽：after-hero / after-products / after-options / after-size / after-benefits；羽毛旗 4 个；横幅/展架 3 个；首页 4 个。⚠️ 缺省槽必须是旧位置（坑 #40）；`slotGroup()` 按注册表的 top/bottom 输出 `.supp-slot-group`。`[§10.43]`
 - **补充模块的 `imageFit` / `imageBg`（图片显示方式 / 图片区域底色，2026-10-17 新增）**：`imageFit` = `cover`（默认，填满、可能裁剪）/ `contain`（完整显示、可能留白）；`imageBg` = 留白底色（默认 `#faf7f5` = 模块底色，可改 `#ffffff` 或其他颜色）。构建给 `.f-supp-img` 加 `.is-contain` + 行内 `background:imageBg`，CSS `object-fit:contain;background:transparent`。尺寸表/长图用 contain；旧数据缺省 = cover，现有图片不变。`[§10.44]`
+- **补充模块的 `imageScale`（图片显示大小，2026-10-18 新增）**：每条可填 **30–100** 的百分比（默认 100 = 原大小）；例如 80 = 同比例缩到 80%、居中。构建给 `.f-supp-img` 加 `.is-scaled` + 行内 `--img-scale:0.8`；CSS `.f-supp-img.is-scaled{display:flex;align-items:center;justify-content:center}` + `.f-supp-img.is-scaled img{width:calc(100% * var(--img-scale));height:auto}`。⚠️ **必须写 `height:auto`**，否则会沿用基础样式的 `height:100%` 被压扁/拉高（坑 #43）。只缩图片、不缩文字。`[§10.46]`
 - 🔴 **补充模块的「文字」`text` 走 `faqAnswer()`，支持空行分段 / 单回车换行**（**2026-10-15 修**）：
   改前用的是 `bold()`，而 `.f-supp-text` **没有** `white-space:pre-line` → 后台打的空行被浏览器折成空格、
   整块糊成一整段（**而本文件 §3.1 一直写着它支持换行 → 属文档写了、代码没实现**，见坑 #37）。
@@ -387,6 +399,8 @@ wolflag-site/
 | **补充模块「多插槽」** `[§10.43]` | `.supp-slot-group{padding-top:var(--supp-top,0)}`；组内 `.section-supp` 上 0 / 下 56，最后一条 `padding-bottom:var(--supp-bottom,0)`；每个槽的 top/bottom 在 `PAGE_SLOTS` 里；首页 `.main-products.has-supp-top{padding-top:56px}`。⚠️ 缺 `s.slot` 落 `defaultSlot`（旧位置，坑 #40） |
 | **补充模块图片显示方式 / 底色** `[§10.44]` | 默认 `.f-supp-img img{object-fit:cover}`（填满、可能裁剪）；`imageFit=contain` → `.f-supp-img.is-contain img{object-fit:contain;background:transparent}` + 容器行内 `background:imageBg`（默认 `#faf7f5`，可改白色/其他色）。尺寸表/长图用 contain，普通照片用 cover |
 | **「质量保证」卡片**（`.wl-qa-*`，**国旗/羽毛旗/横幅三页**）`[§10.45]` | 模块标题 **26px/700 `#191a19`**、说明 16px/1.75 `#444c58`；卡片网格 `repeat(3,minmax(0,1fr))` + `grid-auto-rows:1fr`、gap 20px、圆角 12px、内边距 32×30（手机 26×22）；卡片底色 **`#faf3f3`（悬停也不变）**、标题 20px/700 `#191a19`、正文 16px/1.7 `#444c58`（悬停也不变）；图标**用户提供的橙色圆角 WebP**，56×56（手机 48×48）。**悬停只出现深红 `#a33335` 圆角动态线框**：伪元素 `inset:12px`（手机 10px）+ `box-sizing:border-box` + `border-radius:10px`，上下线 `scaleX(0→1)`、左右线 `scaleY(0→1)`、0.4s。⚠️ 不能用 `width:98.5% + left:1%`（右边框会被裁，坑 #42）。断点：**≤900px 单列**。 |
+| **补充模块「图片显示大小」** `[§10.46]` | `imageScale` **30–100**（默认 100）；`.f-supp-img.is-scaled` 用 flex 居中 + `img{width:calc(100% * var(--img-scale));height:auto}`；只缩图片、不缩文字。⚠️ 不写 `height:auto` 会压扁/拉高（坑 #43）。 |
+| **「三句话」翻转卡片**（`.wl-promise-*`，**仅横幅页**）`[§10.47]` | 白底 `#fff` + `1px #e5e7eb` 边框、圆角 14px；图标 30px 深蓝、标题 **22px/700 `#191a19`**、说明 14px/600 `#444c58`；悬停 `rotateY(180deg)` **0.65s**，反面深红 `#a33335` 边框/图标/标题；外层上浮 4px + 阴影；≤900px 单列；reduced-motion 不翻转、正面直接变红。 |
 
 📌 **「颜色减淡一半」的算法**：`round(fg*a + bg*(1-a))`，`a=0.5`。**必须先实测它背后的真实底色**再算。
 
@@ -505,6 +519,7 @@ wolflag-site/
 | — | ⭐ **"证明只改了一个字段"的校验：改前与改后**两边都要**归一化，不能只归一化一边** | 连踩两版：① 只 `strip(改后)` 去比没处理的改前 → 连带抹掉文件里**本来就有**的 alt → 假警；② 回滚若用"删键"而非"恢复原值"，遇到 `"imageAlt": ""`（空串、键存在）又假警。✅ 正确：`strip_alts(改前) == strip_alts(改后)` [§10.37] |
 | — | 📋 **给非程序员做审阅材料：让他"能在上面写字 + 一键复制"** | 实况：`scripts/_alt_report.py` 生成的「改前 vs 改后」对比 HTML（图片预览 + 可编辑意见栏 + 一键复制意见），比"表格截图"有用得多 [§10.37] |
 | 41 | 🖼️ **补充模块「文字左/右」布局的图片默认 `object-fit:cover`，会被裁剪；contain 后留白又会是白色** | 实况：用户上传 1441×1112 的 blade feather flag 尺寸表，cover 把右边 4.55m 那列裁掉；改成 contain 后上下留白默认白底、与模块底色不一致。最终加 `imageFit`（cover/contain）+ `imageBg`（默认 `#faf7f5`，可改白/其他色），容器承担底色、图片元素透明。判据：**尺寸表/长图 → contain；普通照片想铺满 → cover；留白颜色交给 imageBg**；旧数据缺省 = cover `[§10.44]` |
+| 43 | 🖼️ **给图片加「百分比缩放」时只改 width 不改 height，会沿用基础样式的 `height:100%` → 被压扁/拉高** | 实况：补充模块图片基础样式是 `width:100%;height:100%;object-fit:cover`；加 `width:calc(100% * var(--img-scale))` 时若不写 `height:auto`，高度仍按容器 100%，比例失真。判据：**缩放图片时同时覆盖 height，并量渲染宽高比 = naturalW/naturalH**；用 `.is-scaled img{width:calc(...);height:auto}` `[§10.46]` |
 
 ### 6.5 内容 / 与用户协作
 
@@ -718,7 +733,8 @@ wolflag-site/
 ---
 
 *本精炼版生成于 2026-09-19，由 `AI-GUIDE.md`（完整版）提炼。*
-*最后更新 2026-10-18：国旗 / 羽毛旗 / 横幅三个产品页新增「Manufacturing Quality Assurance」质量保证卡片模块（`qualityAssurance`）——标题 + 3 张卡，内容统一存在 `settings.json`、三个页面共用一份，每页后台各有独立显隐开关（默认显示）；位置按用户指定：国旗页 `Choose Your Flag Size` 下面、羽毛旗页 `Quick, Tool-Free Assembly in 5 Easy Steps` 下面、横幅页 `Why Source from Wolflag?` 上面。外观经用户两轮标注定稿：**常态浅红 `#faf3f3` + 深色文字；悬停不换底色/文字，只出现深红 `#a33335` 的圆角动态线框**（`inset:12px`、`box-sizing:border-box`、圆角 10px、上下 `scaleX` / 左右 `scaleY` 0.4s）；图标用用户提供的三张橙色圆角 WebP（56×56 / 手机 48×48），不再套背景或反色。新增坑 #42（内嵌线框右边框被裁）。§2.1 / §2.3 / §4 / §6.3 / §10.45。*
+*最后更新 2026-10-18（下午）：横幅页两块更新 —— ① 补充模块新增「图片显示大小（%）」`imageScale`：30–100、默认 100；当前 hooks 图设为 80%；只缩图片不缩文字，CSS 必须写 `height:auto`（坑 #43），构建用 `.is-scaled` + `--img-scale`；② 横幅页新增「三句话」翻转卡片 `promises`：三张白底静态卡（浅灰细边框 + 深色 22px/700 标题 + 深蓝图标），悬停 3D 翻转 0.65s，反面深红边框/图标/标题；去掉呼吸/自动轮播/灰底/布纹/气眼/序号；≤900px 单列，reduced-motion 正面直接变红。另给 CSS/JS 加内容指纹 `?v=` 防缓存错配。§2.3 / §2.5 / §4 / §6.4 / §10.46 / §10.47。*
+*前次 2026-10-18（上午）：国旗 / 羽毛旗 / 横幅三个产品页新增「Manufacturing Quality Assurance」质量保证卡片模块（`qualityAssurance`）——标题 + 3 张卡，内容统一存在 `settings.json`、三个页面共用一份，每页后台各有独立显隐开关（默认显示）；位置按用户指定：国旗页 `Choose Your Flag Size` 下面、羽毛旗页 `Quick, Tool-Free Assembly in 5 Easy Steps` 下面、横幅页 `Why Source from Wolflag?` 上面。外观经用户两轮标注定稿：**常态浅红 `#faf3f3` + 深色文字；悬停不换底色/文字，只出现深红 `#a33335` 的圆角动态线框**（`inset:12px`、`box-sizing:border-box`、圆角 10px、上下 `scaleX` / 左右 `scaleY` 0.4s）；图标用用户提供的三张橙色圆角 WebP（56×56 / 手机 48×48），不再套背景或反色。新增坑 #42（内嵌线框右边框被裁）。§2.1 / §2.3 / §4 / §6.3 / §10.45。*
 *前次 2026-10-17：国旗页新增「Choose Your Flag Size」尺寸选择模块 —— 参考 bestflag.com 实测复刻表格（只保留 Small / Standard、6 行、无 Guidon）、左侧两张尺寸图轮播并与表头双向联动（点表头切图并停轮播、不点时高亮跟随）、选中列改用 FAQ 浅红/深红；模块最终在「生产选项」之后；标语→灰块、灰块→产品卡两处 56→28px，产品卡→生产选项 112→56px；新增坑 #39（复用组件同权重覆盖失效）与协作教训（先确认要挪哪个模块）；**同日追加：全站 5 页补充模块升级为「多插槽」**（19 个位置，`scripts/page-slots.mjs` 注册表 + 构建时自动生成后台下拉；缺省槽 = 旧位置；坑 #40）；**同日补充：补充模块新增「图片显示方式」`imageFit`（cover / contain）+「图片区域底色」`imageBg`（默认 #faf7f5，可改白/其他色）**（坑 #41）。§2.3 / §2.5 / §4 / §6.1 / §6.3 / §6.4 / §10。*
 *前次 2026-10-16：羽毛旗页两轮迭代 —— ① 补充模块「上下留白 112→56px + 纯文字模块条目左对齐 + 上下排布时文字不贴盒子边」（§2.5 / §4，其中「留白各减半 ≠ 间距减半」记入 §6.3）；② 新增「应用场景」卡片网格模块 `applications`（照同行参考站 vividads.com.au 源码实测值复刻，一排 3 个 × 3 排 = 9 张卡、**卡片内无任何链接**、可后台编辑，§2.3 / §4）。详见完整版 §10.41。*
 *前次 2026-10-15：国旗页新增「生产选项」卡片网格模块（`optionBlocks`，§2.3）+ 补充模块文字支持空行分段（§2.5 / §3.1）+ 新增坑 #37（"文档写了 ≠ 真支持"，碰字段前先验产物）与 #38（A/B 基线 worktree、证明纯新增、字号放大测试的正确写法，§6.7）。*

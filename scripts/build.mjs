@@ -8,6 +8,7 @@
 import { readFileSync, writeFileSync, mkdirSync, cpSync, readdirSync, existsSync, rmSync, statSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { createHash } from 'node:crypto';
 import { PAGE_SLOTS } from './page-slots.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -16,6 +17,13 @@ const MEDIA = join(ROOT, 'media');
 const ADMIN = join(ROOT, 'admin');
 const STATIC = join(ROOT, 'static');
 const TMPL = join(ROOT, 'templates');
+
+/* CSS/JS 内容指纹：每次改动 site.css / site.js 都自动换 ?v=，
+   避免用户浏览器继续用旧缓存（2026-10-18 用户反馈「看不到呼吸效果」时加）。 */
+const ASSET_VER = createHash('sha1')
+  .update(readFileSync(join(ROOT, 'src/assets/css/site.css')))
+  .update(readFileSync(join(ROOT, 'src/assets/js/site.js')))
+  .digest('hex').slice(0, 8);
 
 const j = (p) => JSON.parse(readFileSync(p, 'utf8'));
 
@@ -464,7 +472,7 @@ function shell({ title, desc, body, active, ogImage, footerMode, path, type, sch
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Catamaran:wght@400;700&family=Antic+Slab&family=Bona+Nova:wght@400;700&family=Rufina&family=Acme&family=Roboto+Condensed:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/css/site.css">
+  <link rel="stylesheet" href="/assets/css/site.css?v=${ASSET_VER}">
 ${schema ? `  <script type="application/ld+json">${JSON.stringify(schema, null, 0).replace(/</g, '\\u003c')}</script>` : ''}
 </head>
 <body>
@@ -474,7 +482,7 @@ ${body}
 </main>
 ${footerMode === 'minimal' ? minimalFooter() : footer()}
 <div class="site-lightbox" id="site-lightbox"><span class="sl-close" aria-hidden="true">✕</span><img src="" alt=""></div>
-<script src="/assets/js/site.js"></script>
+<script src="/assets/js/site.js?v=${ASSET_VER}"></script>
 </body>
 </html>`;
 }
@@ -758,11 +766,20 @@ function supplementSection(data, slot = null, defaultSlot = null) {
     .map((s) => {
       const dir = SUPP_DIRS.includes(s.direction) ? s.direction : 'textRight';
       const cls = s.image ? ` f-supp-${dir}` : ' f-supp-txt';
+      // 2026-10-18：补充模块新增「图片显示大小（%）」imageScale（默认 100 = 旧行为）。
+      // 只缩图片本身、保持原比例；由 .f-supp-img.is-scaled 用 --img-scale 控制宽度。
+      const scale = Math.max(10, Math.min(100, parseInt(s.imageScale, 10) || 100));
+      const scaled = !!s.image && scale < 100;
+      const imgCls = `f-supp-img${s.imageFit === 'contain' ? ' is-contain' : ''}${scaled ? ' is-scaled' : ''}`;
+      const imgStyles = [];
+      if (s.imageFit === 'contain') imgStyles.push(`background:${esc(s.imageBg || '#faf7f5')}`);
+      if (scaled) imgStyles.push(`--img-scale:${(scale / 100).toFixed(2)}`);
+      const imgStyle = imgStyles.length ? ` style="${imgStyles.join(';')}"` : '';
       return `
     <section class="section section-supp">
       <div class="container">
         <div class="f-supp${cls}">
-          ${s.image ? `<div class="f-supp-img${s.imageFit === 'contain' ? ' is-contain' : ''}"${s.imageFit === 'contain' ? ` style="background:${esc(s.imageBg || '#faf7f5')}"` : ''}><img src="${esc(s.image)}" alt="${altOf(s, s.title || '', 'imageAlt')}" decoding="async"></div>` : ''}
+          ${s.image ? `<div class="${imgCls}"${imgStyle}><img src="${esc(s.image)}" alt="${altOf(s, s.title || '', 'imageAlt')}" decoding="async"></div>` : ''}
           <div class="f-supp-body">
             ${s.title ? `<h2 class="f-supp-title">${esc(s.title)}</h2>` : ''}
             <div class="f-supp-text">${faqAnswer(s.text || '')}</div>
@@ -1018,6 +1035,50 @@ function featherBody(data) {
   </section>${afterProducts}${applicationsSection(data)}${afterApplications}${qualityAssuranceSection(data)}${benefitsSection()}${afterBenefits}`;
 }
 
+/* ---------------- 「Banner 三句话」翻转卡片（2026-10-18 新增，用户要求） ----------------
+   位置：横幅页标语（Make your custom banners...）下面、6 张产品卡上面。
+   用户给的三句话：Fully Customizable Flags - Your Logo, Message or Design / Any Quantity, Any Size /
+   Satisfaction Guaranteed。
+   设计（用户 2026-10-18 简化后的最终版）：
+     三张白底卡片 + 浅灰细边框 + 深色字 + 深蓝线条图标；
+     **不要**米白/灰色底、布纹、气眼、序号/小标签、呼吸/自动轮播。
+     鼠标悬停 = 卡片 3D 翻转（rotateY 180°），背面 = 白底 + 深红细边框
+     + 深红标题 + 深红图标（保留用户喜欢的红色字效果）。
+   数据：content/products/banners.json → promises{show, items[{icon,title,text}]}
+   （后台「横幅产品页 → 三句话承诺条」）。缺省 / show:false → 不输出。
+   ⚠️ 反面是同一套内容的装饰性复制，整块 aria-hidden="true"，读屏只读正面。 */
+function bannerPromisesSection(data) {
+  const m = data && data.promises;
+  if (!m || m.show === false) return '';
+  const items = (m.items || []).filter((it) => it && (it.title || it.text || it.icon));
+  if (!items.length) return '';
+
+  const face = (it, side) => {
+    const svg = inlineSvg(it.icon);
+    const icon = !it.icon ? ''
+      : svg ? `<span class="wl-promise-icon" aria-hidden="true">${svg}</span>`
+            : `<span class="wl-promise-icon" aria-hidden="true"><img src="${esc(it.icon)}" alt="" loading="lazy" decoding="async"></span>`;
+    return `
+        <div class="wl-promise-face wl-promise-${side}"${side === 'back' ? ' aria-hidden="true"' : ''}>
+          ${icon}
+          <div class="wl-promise-copy">${it.title ? `
+            <h3 class="wl-promise-title">${esc(it.title)}</h3>` : ''}${it.text ? `
+            <p class="wl-promise-sub">${bold(it.text)}</p>` : ''}
+          </div>
+        </div>`;
+  };
+
+  const lis = items.map((it) => `
+      <li class="wl-promise">
+        <div class="wl-promise-flip">${face(it, 'front')}${face(it, 'back')}
+        </div>
+      </li>`).join('');
+
+  return `
+  <ul class="wl-promises">${lis}
+  </ul>`;
+}
+
 function bannerBody(data) {
   const cards = data.products.map((p) => {
     const specRows = productSpecRows(p);
@@ -1041,12 +1102,13 @@ function bannerBody(data) {
   const afterHero = slotGroup(data, 'banner', 'after-hero');
   const afterProducts = slotGroup(data, 'banner', 'after-products');
   const afterBenefits = slotGroup(data, 'banner', 'after-benefits');
+  const promises = bannerPromisesSection(data);
   return `
   ${banner}
   <section class="page-hero">
-    <div class="container"><h1>${esc(data.tagline)}</h1></div>
+    <div class="container"><h1>${esc(data.tagline)}</h1>${promises}</div>
   </section>${afterHero}
-  <section class="section">
+  <section class="section${promises ? ' section-banner-promises' : ''}">
     <div class="container">
       <div class="product-grid-3">${cards}</div>
     </div>
