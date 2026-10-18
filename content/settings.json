@@ -153,5 +153,25 @@
         "label": "100% Quality Guaranteed"
       }
     ]
+  },
+  "qualityAssurance": {
+    "title": "Manufacturing Quality Assurance",
+    "items": [
+      {
+        "icon": "/assets/media/wolflag-accurate-flag-details-icon.webp",
+        "title": "Accurate Artwork & Sizing",
+        "text": "Every design layout, color match, and flag dimension is strictly verified against your approved specifications before printing begins."
+      },
+      {
+        "icon": "/assets/media/wolflag-reinforced-flag-finishing-icon.webp",
+        "title": "Reinforced Flag Finishing",
+        "text": "Double-stitched hems, heavy-duty headers, pole sleeves, and brass grommets are reinforced for superior tear resistance and outdoor durability."
+      },
+      {
+        "icon": "/assets/media/wolflag-batch-quality-inspection-icon.webp",
+        "title": "Batch Quality Inspection",
+        "text": "Finished flags undergo rigorous pre-shipment inspection to ensure vibrant print clarity, clean stitching, and consistent quality across bulk orders."
+      }
+    ]
   }
 }

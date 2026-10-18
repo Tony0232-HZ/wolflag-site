@@ -110,5 +110,8 @@
     "layout": "bannerCards",
     "nav": "/banner"
   },
+  "qualityAssurance": {
+    "show": true
+  },
   "imageAlt": "Large custom printed banners hanging on a university building facade"
 }

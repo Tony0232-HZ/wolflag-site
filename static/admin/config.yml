@@ -118,6 +118,29 @@ collections:
                     hint: "⚠️ 请上传【单色线条 SVG】图标 —— 黑色或品牌蓝会被自动替换成主题色，这样鼠标悬停时才能变酒红。若传 PNG/JPG 或【多色图标】：图标能正常显示，但【悬停不会变色】。尺寸不限（页面按 75×75 显示），文件名请用英文小写连字符。"
                   - { label: 文字, name: label, widget: string, hint: 图标下方那行字，建议英文 }
 
+          - label: 质量保证模块（Manufacturing Quality Assurance；三个产品页共用内容）
+            name: qualityAssurance
+            widget: object
+            required: false
+            hint: "这里是模块的**内容**，改一次，国旗页 / 羽毛旗页 / 横幅页三个页面同时生效。\n想在某个页面隐藏它，请去那个产品页把「质量保证模块 → 显示此模块」取消勾选——三个页面默认都显示。"
+            fields:
+              - { label: 模块标题, name: title, widget: string, required: false, default: "Manufacturing Quality Assurance" }
+              - { label: 说明文字（可选；空行分段；可用 **词** 加粗）, name: text, widget: text, required: false, hint: "标题下面那段说明，可留空。空一行 = 分成两段；按一次回车 = 换行；用两个星号包住词可加粗。" }
+              - { label: 背景色, name: bg, widget: color, required: false, default: "#ffffff", hint: "默认白色 = 和页面底色一样，看不出色带。填别的颜色会变成一条通栏色带，并且模块上方会自动留出和下方一样的空白。" }
+              - label: 卡片（每条 = 图标 + 标题 + 说明；可拖动排序、可增删）
+                name: items
+                widget: list
+                required: false
+                summary: "{{fields.title}}"
+                fields:
+                  - label: 图标
+                    name: icon
+                    widget: image
+                    required: false
+                    hint: "现在三张卡用的是橙色圆角小图标（您提供的三张 webp）。\n想换图：建议正方形、透明底、256×256 左右，PNG / WebP / SVG 都可以（页面按 56×56 显示）。\n⚠️ 图标是纯装饰，不需要填图片说明；文件名请用英文小写连字符。"
+                  - { label: 卡片标题, name: title, widget: string, required: false }
+                  - { label: 卡片说明（按一次回车=换行；可用 **词** 加粗）, name: text, widget: text, required: false, hint: "这一段在卡片里显示；留空则只显示标题。用两个星号包住词可加粗。" }
+
   # ---------- 首页 ----------
   - name: home
     label: 首页
@@ -740,6 +763,14 @@ collections:
                   - { label: 卡片说明（可用 **词** 加粗；按一次回车=换行）, name: text, widget: text, required: false, hint: "一句话即可（参考站是一两句）。\n用两个星号包住词可加粗。" }
                   - { label: 卡片底色, name: bg, widget: color, required: false, default: "#f4f4f6", hint: "点开选色。现在是 9 个不同的浅色（米白/浅粉/浅黄/浅紫/浅蓝/浅绿…），一眼能区分开。\n⚠️ 请只用**浅色**——卡片文字是深色的，填了深色底就看不清字了。" }
 
+          - label: 质量保证模块（显示开关）
+            name: qualityAssurance
+            widget: object
+            required: false
+            hint: "本页是否显示「Manufacturing Quality Assurance」卡片模块。\n📌 文字和卡片内容不在这里改——请去「站点设置 → 质量保证模块」统一修改，改一次三个页面同时生效。\n默认显示。"
+            fields:
+              - { label: 显示此模块, name: show, widget: boolean, default: true, hint: 取消勾选即在本页隐藏（内容不会丢，重新勾选即可恢复） }
+
   # ---------- 产品：横幅 ----------
   - name: banners
     label: 横幅产品页
@@ -823,6 +854,14 @@ collections:
                 default: "#faf7f5"
                 hint: "默认 #faf7f5（和模块底色一致），留白会自动填充这个颜色；想用白色选 #ffffff，也可以选其他颜色。只对『图片显示方式=完整显示』生效。"
               - { label: 图片说明(alt), name: imageAlt, widget: string, required: false, hint: 图片说明（alt，建议英文，含产品关键词；留空则自动用本套的标题） }
+
+          - label: 质量保证模块（显示开关）
+            name: qualityAssurance
+            widget: object
+            required: false
+            hint: "本页是否显示「Manufacturing Quality Assurance」卡片模块。\n📌 文字和卡片内容不在这里改——请去「站点设置 → 质量保证模块」统一修改，改一次三个页面同时生效。\n默认显示。"
+            fields:
+              - { label: 显示此模块, name: show, widget: boolean, default: true, hint: 取消勾选即在本页隐藏（内容不会丢，重新勾选即可恢复） }
 
   # ---------- 产品：国旗 ----------
   - name: national-flags
@@ -964,6 +1003,14 @@ collections:
                     fields:
                       - { label: 左列内容（Small）, name: left, widget: string }
                       - { label: 右列内容（Standard）, name: right, widget: string }
+
+          - label: 质量保证模块（显示开关）
+            name: qualityAssurance
+            widget: object
+            required: false
+            hint: "本页是否显示「Manufacturing Quality Assurance」卡片模块。\n📌 文字和卡片内容不在这里改——请去「站点设置 → 质量保证模块」统一修改，改一次三个页面同时生效。\n默认显示。"
+            fields:
+              - { label: 显示此模块, name: show, widget: boolean, default: true, hint: 取消勾选即在本页隐藏（内容不会丢，重新勾选即可恢复） }
   # ---------- 产品详情页（多图 + 规格 + 价格表 + 服务卡 + 图文区） ----------
   - name: product-details
     label: 产品详情页

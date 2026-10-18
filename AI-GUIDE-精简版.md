@@ -165,7 +165,7 @@ wolflag-site/
 
 | 文件 | layout | 要点 |
 |---|---|---|
-| `settings.json` | — | `nav[]`（菜单，`children[]` 子菜单）、`contactButton`、`catalogButton{text,file}`、`footer{sections,phones,emails,logo,icons[],copyright}`、**`benefits{enabled,title,items[{icon,label}]}`**（优势条，**6 页共用这一份**） |
+| `settings.json` | — | `nav[]`（菜单，`children[]` 子菜单）、`contactButton`、`catalogButton{text,file}`、`footer{sections,phones,emails,logo,icons[],copyright}`、**`benefits{enabled,title,items[{icon,label}]}`**（优势条，**6 页共用这一份**）、**`qualityAssurance{title,text?,bg?,items[{icon,title,text}]}`**（质量保证模块，**3 页共用内容**；每页只用 `qualityAssurance.show` 控制显隐） |
 | `home.json` | `home` | `hero{title,title2,titleSize,title2Size,sepColor,text,image,images[],interval,mode,features[2]}`、`intro{title,text,images[3]}`（**顺序敏感**：缝纫车间→喷印全景→印刷机）、`categories{items[4]}`、`clients{enabled,bg,eyebrow,title,subtitle,speed,row1[],row2[]}`、`announce{}`、`supplement[]` |
 | `about.json` | `home` | `hero{}` + **`blocks[]`**（模块列表，可拖排序/增删）。当前顺序：`textImg` → `marquee` → `timeline` → `clients` → `faq`。**每个块都有 `bg`**（背景色） |
 | `products/*.json` | 见右 | 4 个专用类：`feather`(羽毛旗) / `bannerCards`(横幅) / `flags`(国旗) / `pole`(旗杆展架) |
@@ -228,6 +228,22 @@ wolflag-site/
 表头高亮**跟着当前图片实时切换**（`site.js` 的 `.wl-size` 段 + `.it-carousel` 新增的 `it-slide-change` 事件 / `_itGo` / `_itStop`）。
 ⚠️ 联动按**图片顺序**绑定（第 1 张 = 左表头，第 2 张 = 右表头），换图时不要打乱顺序。
 📌 `images` / `table.rows` 都是新建字段 → **不涉及坑 #20**。`[§10.42]`
+
+**「质量保证」卡片模块 `qualityAssurance`（2026-10-18 新增，三个产品页共用内容）**：
+- **内容**在 `content/settings.json` 的 `qualityAssurance`（**对象，只有一份**）→
+  `{title, text?, bg?, items[{icon,title,text}]}`；后台「**站点设置 → 质量保证模块**」。改一次三页同时生效。
+- **每页显隐**在 `content/products/{national-flags,feather-flags,banners}.json` 的 `qualityAssurance.show`
+  （**默认 true**；后台在各自产品页 →「质量保证模块（显示开关）」）。三页独立，互不影响。
+- `build.mjs` 的 `qualityAssuranceSection(data)` 读取 `settings.qualityAssurance` + 本页 `show`；
+  位置（用户 2026-10-18 指定）：**国旗页**在 `sizeChartSection` 之后、`afterSize` 之前；
+  **羽毛旗页**在 `afterApplications` 之后、优势条之前；**横幅页**在 `afterProducts` 之后、优势条之前。
+- **外观**（用户多轮标注后的最终版，**别改回去**）：常态卡片浅红 `#faf3f3` + 深色文字；
+  **悬停不换底色、不换文字颜色**；悬停**只出现深红 `#a33335` 的圆角动态线框**
+  （上下线 `scaleX 0→1`、左右线 `scaleY 0→1`，0.4s）；线框 `inset:12px`（手机 10px）、圆角 10px。
+  ⚠️ 线框必须用 `inset` + `box-sizing:border-box`，**不能**用 `width:98.5% + left:1%`（右边框会被 `overflow:hidden` 裁掉，坑 #42）。
+- 图标用用户提供的三张橙色圆角 WebP（`media/wolflag-{accurate-flag-details,reinforced-flag-finishing,batch-quality-inspection}-icon.webp`），
+  图标自带底色 → **不再套背景、不再做悬停反色**；按 56×56（手机 48×48）显示。
+- 📌 `items` 是新建字段 → 不涉及坑 #20。`[§10.45]`
 
 **「图文区」`textImg` 是列表**（2026-09-20 起，可加多套）：每套 `{show, direction, title, align, text, images[]}`。
 - `direction`（文字/图片的位置）：`textTop`(默认，= 改版前的样子) / `textBottom` / `textLeft` / `textRight`，由后台下拉选择。
@@ -370,6 +386,7 @@ wolflag-site/
 | **国旗页三处间距减半** `[§10.42]` | 国旗顶部插槽 `after-hero` 的 `--supp-top:2px`（page-hero 底 26 + 2 = **28px**）；`.section.nf-products{padding-top:28px;padding-bottom:0}`（灰块 → 产品卡 **28px**；产品卡 → 生产选项 **112→56px**，手机 80→40px）。⚠️ 用户标注「间隙减半」共三处，别改回 56 / 112 |
 | **补充模块「多插槽」** `[§10.43]` | `.supp-slot-group{padding-top:var(--supp-top,0)}`；组内 `.section-supp` 上 0 / 下 56，最后一条 `padding-bottom:var(--supp-bottom,0)`；每个槽的 top/bottom 在 `PAGE_SLOTS` 里；首页 `.main-products.has-supp-top{padding-top:56px}`。⚠️ 缺 `s.slot` 落 `defaultSlot`（旧位置，坑 #40） |
 | **补充模块图片显示方式 / 底色** `[§10.44]` | 默认 `.f-supp-img img{object-fit:cover}`（填满、可能裁剪）；`imageFit=contain` → `.f-supp-img.is-contain img{object-fit:contain;background:transparent}` + 容器行内 `background:imageBg`（默认 `#faf7f5`，可改白色/其他色）。尺寸表/长图用 contain，普通照片用 cover |
+| **「质量保证」卡片**（`.wl-qa-*`，**国旗/羽毛旗/横幅三页**）`[§10.45]` | 模块标题 **26px/700 `#191a19`**、说明 16px/1.75 `#444c58`；卡片网格 `repeat(3,minmax(0,1fr))` + `grid-auto-rows:1fr`、gap 20px、圆角 12px、内边距 32×30（手机 26×22）；卡片底色 **`#faf3f3`（悬停也不变）**、标题 20px/700 `#191a19`、正文 16px/1.7 `#444c58`（悬停也不变）；图标**用户提供的橙色圆角 WebP**，56×56（手机 48×48）。**悬停只出现深红 `#a33335` 圆角动态线框**：伪元素 `inset:12px`（手机 10px）+ `box-sizing:border-box` + `border-radius:10px`，上下线 `scaleX(0→1)`、左右线 `scaleY(0→1)`、0.4s。⚠️ 不能用 `width:98.5% + left:1%`（右边框会被裁，坑 #42）。断点：**≤900px 单列**。 |
 
 📌 **「颜色减淡一半」的算法**：`round(fg*a + bg*(1-a))`，`a=0.5`。**必须先实测它背后的真实底色**再算。
 
@@ -470,6 +487,7 @@ wolflag-site/
 | — | 垂直 padding **对行内元素不生效** | 要"整行可点/加行高"必须 `display:block` |
 | — | 📐 **"上下留白各减一半"≠"两个模块的间距减一半"** | 间距 = **上一节的下内边距 + 本节的上内边距**；两边各减半 → 总间距只减 **1/4**。要让总间距减半，必须**把其中一侧归零**（本次做法：给模块所在 section 单独加类、`padding-top:0`）。**调任何间距前，先量清"这个空档由哪几个内/外边距相加而成"** `[§10.41]` |
 | 39 | 🎨 **复用站内已有组件的 CSS 时，同权重覆盖会被"后面那条基础样式"盖掉** | 实况：`.wl-size-carousel` 与 `.it-carousel` 同权重，但基础样式在 CSS 里更靠后 → 背景/比例/控件颜色全被盖回原值，截图看着像"覆盖没写"。判据：**改完先读 `getComputedStyle` 确认真的生效**；修法：**提高一级权重**（`.wl-size .wl-size-carousel …`）或把覆盖规则放到基础样式之后 `[§10.42]` |
+| 42 | 🖼️ **内嵌描边线框用 `width:98.5% + left:1%` + `border` 会被 `overflow:hidden` 裁掉右边框**（content-box 的边框加在宽度之外，右边框超出容器） | 要画"比卡片小一圈"的线框，用 **`inset:12px` + `box-sizing:border-box` + `border-radius`**；四边都要实测可见。实况：参考站白框右边看不见（用户标注），本次改深红圆角框时一并修好 `[§10.45]` |
 
 ### 6.4 图片（**先量像素，别只看盒子**）
 
@@ -700,7 +718,8 @@ wolflag-site/
 ---
 
 *本精炼版生成于 2026-09-19，由 `AI-GUIDE.md`（完整版）提炼。*
-*最后更新 2026-10-17：国旗页新增「Choose Your Flag Size」尺寸选择模块 —— 参考 bestflag.com 实测复刻表格（只保留 Small / Standard、6 行、无 Guidon）、左侧两张尺寸图轮播并与表头双向联动（点表头切图并停轮播、不点时高亮跟随）、选中列改用 FAQ 浅红/深红；模块最终在「生产选项」之后；标语→灰块、灰块→产品卡两处 56→28px，产品卡→生产选项 112→56px；新增坑 #39（复用组件同权重覆盖失效）与协作教训（先确认要挪哪个模块）；**同日追加：全站 5 页补充模块升级为「多插槽」**（19 个位置，`scripts/page-slots.mjs` 注册表 + 构建时自动生成后台下拉；缺省槽 = 旧位置；坑 #40）；**同日补充：补充模块新增「图片显示方式」`imageFit`（cover / contain）+「图片区域底色」`imageBg`（默认 #faf7f5，可改白/其他色）**（坑 #41）。§2.3 / §2.5 / §4 / §6.1 / §6.3 / §6.4 / §10。*
+*最后更新 2026-10-18：国旗 / 羽毛旗 / 横幅三个产品页新增「Manufacturing Quality Assurance」质量保证卡片模块（`qualityAssurance`）——标题 + 3 张卡，内容统一存在 `settings.json`、三个页面共用一份，每页后台各有独立显隐开关（默认显示）；位置按用户指定：国旗页 `Choose Your Flag Size` 下面、羽毛旗页 `Quick, Tool-Free Assembly in 5 Easy Steps` 下面、横幅页 `Why Source from Wolflag?` 上面。外观经用户两轮标注定稿：**常态浅红 `#faf3f3` + 深色文字；悬停不换底色/文字，只出现深红 `#a33335` 的圆角动态线框**（`inset:12px`、`box-sizing:border-box`、圆角 10px、上下 `scaleX` / 左右 `scaleY` 0.4s）；图标用用户提供的三张橙色圆角 WebP（56×56 / 手机 48×48），不再套背景或反色。新增坑 #42（内嵌线框右边框被裁）。§2.1 / §2.3 / §4 / §6.3 / §10.45。*
+*前次 2026-10-17：国旗页新增「Choose Your Flag Size」尺寸选择模块 —— 参考 bestflag.com 实测复刻表格（只保留 Small / Standard、6 行、无 Guidon）、左侧两张尺寸图轮播并与表头双向联动（点表头切图并停轮播、不点时高亮跟随）、选中列改用 FAQ 浅红/深红；模块最终在「生产选项」之后；标语→灰块、灰块→产品卡两处 56→28px，产品卡→生产选项 112→56px；新增坑 #39（复用组件同权重覆盖失效）与协作教训（先确认要挪哪个模块）；**同日追加：全站 5 页补充模块升级为「多插槽」**（19 个位置，`scripts/page-slots.mjs` 注册表 + 构建时自动生成后台下拉；缺省槽 = 旧位置；坑 #40）；**同日补充：补充模块新增「图片显示方式」`imageFit`（cover / contain）+「图片区域底色」`imageBg`（默认 #faf7f5，可改白/其他色）**（坑 #41）。§2.3 / §2.5 / §4 / §6.1 / §6.3 / §6.4 / §10。*
 *前次 2026-10-16：羽毛旗页两轮迭代 —— ① 补充模块「上下留白 112→56px + 纯文字模块条目左对齐 + 上下排布时文字不贴盒子边」（§2.5 / §4，其中「留白各减半 ≠ 间距减半」记入 §6.3）；② 新增「应用场景」卡片网格模块 `applications`（照同行参考站 vividads.com.au 源码实测值复刻，一排 3 个 × 3 排 = 9 张卡、**卡片内无任何链接**、可后台编辑，§2.3 / §4）。详见完整版 §10.41。*
 *前次 2026-10-15：国旗页新增「生产选项」卡片网格模块（`optionBlocks`，§2.3）+ 补充模块文字支持空行分段（§2.5 / §3.1）+ 新增坑 #37（"文档写了 ≠ 真支持"，碰字段前先验产物）与 #38（A/B 基线 worktree、证明纯新增、字号放大测试的正确写法，§6.7）。*
 *完整版一字未删，**遇到任何需要细节、来历、证据的情况，请去查 `AI-GUIDE.md` 的对应章节**。*

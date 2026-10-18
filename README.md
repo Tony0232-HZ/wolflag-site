@@ -297,6 +297,72 @@ Double-Sided / Size-Material / Finishing and Packing）——照您给的参考�
 
 ---
 
+## 🆕 三个产品页新增「Manufacturing Quality Assurance」质量保证卡片模块（2026-10-18）
+
+### 一、加在哪三个页面
+
+| 页面 | 位置 |
+|---|---|
+| **国旗页 National Flags** | 「Choose Your Flag Size」下面、「Why Source from Wolflag?」上面 |
+| **羽毛旗页 Feather Flags** | 「Quick, Tool-Free Assembly in 5 Easy Steps」下面、「Why Source from Wolflag?」上面 |
+| **横幅页 Banners** | 「Why Source from Wolflag?」上面 |
+
+三个页面**默认都显示**；每个产品页后台各有一个开关，觉得哪一页太冗余，可以单独隐藏。
+
+### 二、长什么样
+
+- 标题 + **3 张卡片**（每条 = 左上角小图标 + 标题 + 说明）。
+- **正常状态**：卡片底色是 FAQ 的浅红 `#faf3f3`，标题和正文都是深色；左上角是您提供的**橙色圆角小图标**。
+- **鼠标悬停**：卡片底色和文字**都不变**，只出现一个**深红 `#a33335` 的圆角线框**，线框从中间向四周展开（0.4 秒），鼠标移开后收回。
+- **电脑**一排 3 个；**平板 / 手机**自动变成 1 列。
+- 已按您 2026-10-18 的标注改好：**去掉深红色背景**、线框从白色改成**深红色**、线框**缩小并离边缘更远**、**加圆角**，并且修好了原来**右边框被裁掉、看不见**的问题。
+
+### 三、三张卡片的当前文案
+
+| # | 标题 | 内容 |
+|---|---|---|
+| 1 | **Accurate Artwork & Sizing** | Every design layout, color match, and flag dimension is strictly verified against your approved specifications before printing begins. |
+| 2 | **Reinforced Flag Finishing** | Double-stitched hems, heavy-duty headers, pole sleeves, and brass grommets are reinforced for superior tear resistance and outdoor durability. |
+| 3 | **Batch Quality Inspection** | Finished flags undergo rigorous pre-shipment inspection to ensure vibrant print clarity, clean stitching, and consistent quality across bulk orders. |
+
+### 四、后台怎么改
+
+**改内容（三个页面共用一份，改一次三页同时生效）**：
+
+`/admin/` → **站点设置** → 「**质量保证模块（Manufacturing Quality Assurance；三个产品页共用内容）**」
+
+| 字段 | 作用 |
+|---|---|
+| **模块标题** | 现在是 `Manufacturing Quality Assurance` |
+| **说明文字（可选）** | 标题下面那段说明，可留空；空一行 = 分段、按一次回车 = 换行、`**词**` = 加粗 |
+| **背景色** | 默认白色（和页面底色一样）；填别的颜色会变成一条通栏色带 |
+| **卡片** | 每条三项：**图标** + **卡片标题** + **卡片说明**。可 **Add 加**、可**拖动排序**、可删 |
+
+**单独隐藏某一页**：
+
+| 页面 | 后台位置 |
+|---|---|
+| 国旗页 | **国旗产品页** → 「质量保证模块」→ 取消勾选「显示此模块」 |
+| 羽毛旗页 | **羽毛旗产品页** → 「质量保证模块」→ 取消勾选「显示此模块」 |
+| 横幅页 | **横幅产品页** → 「质量保证模块」→ 取消勾选「显示此模块」 |
+
+> 📌 三页的**显示开关是各自独立的**；内容只有一份。取消勾选后**内容不会丢**，重新勾上就恢复。
+
+### 五、这次测过了
+
+| 检查项 | 结果 |
+|---|---|
+| 三个页面位置 | ✅ 国旗页在尺寸表下面、羽毛旗页在五步安装图下面、横幅页在优势条上面 |
+| 卡片列数 | ✅ 电脑 3 列 / 平板手机 1 列 |
+| 屏幕宽度 1920→320 | ✅ 模块内 **0 横向溢出、0 文字被裁** |
+| 字号放大 1.5 / 2 倍 | ✅ 模块内 **0 溢出** |
+| 鼠标悬停 | ✅ 底色和文字不变；深红圆角线框四边完整、动画正常 |
+| 三个图标 | ✅ 全部正常加载（56×56，手机 48×48） |
+| 单页显示开关 | ✅ 实测关闭后该页模块消失，重新打开恢复 |
+| 报错 / 裂图 | ✅ 0 console 报错、0 资源 404 |
+
+---
+
 ## 🆕 国旗页新增「Choose Your Flag Size」尺寸选择模块 + 两处间距减半（2026-10-17）
 
 ### 一、最终位置

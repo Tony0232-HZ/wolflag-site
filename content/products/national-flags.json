@@ -124,6 +124,9 @@
     "layout": "flags",
     "nav": "/national-flag"
   },
+  "qualityAssurance": {
+    "show": true
+  },
   "supplement": [
     {
       "show": true,

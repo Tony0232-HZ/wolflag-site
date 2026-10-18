@@ -1389,6 +1389,146 @@ ul { list-style: none; }
   .wl-app-t { font-size: 16px; }
 }
 
+/* ==========================================================================
+   「质量保证」卡片模块（2026-10-18 新增，用户要求）
+   版式来源：同行参考站 maosen-flag.com/international-flags/ 的
+   「Manufacturing Quality Assurance」一节（渲染后 getComputedStyle 实测）：
+     3 张卡片一排；悬停时上下两条线横向展开（scaleX 0→1），
+     左右两条线纵向展开（scaleY 0→1），0.4s 组成一个完整矩形框。
+   ⚠️ 用户 2026-10-18 看预览后的最终要求（**别改回去**）：
+     ① 常态卡片 = FAQ 浅红底 #faf3f3 + 深色文字；
+     ② **悬停不换卡片底色、不换文字颜色**（深红底已被用户明确否掉）；
+     ③ 悬停时**只出现一个深红 #a33335 的动态线框**（原来是白色，用户要求改深红）；
+     ④ 线框要比卡片小一圈、离边缘远一点、**四边都要看得见、且是圆角**
+        （原做法 width:98.5% + 1% 偏移会被 overflow 裁掉右边框）。
+     ⑤ 左上角小图标用用户提供的三张橙色圆角图标（media/wolflag-*-icon.webp），
+        图标本身自带底色，这里不再套背景、不再做悬停反色。
+   三个页面共用 settings.json 的 qualityAssurance 内容，每页只控制显示/隐藏。
+   ========================================================================== */
+
+.wl-qa { padding: 0 0 56px; }
+/* 只有填了非白色背景时才需要上内边距，否则色带会紧贴标题。
+   （白色背景保持 0 上边距，上方模块自带的 56px 留白正好接上。） */
+.wl-qa.is-band { padding-top: 56px; }
+
+.wl-qa-title {
+  font-size: 26px;                                 /* = .f-supp-title / .wl-opt-title */
+  font-weight: 700;
+  color: #191a19;
+}
+.wl-qa-lead {
+  max-width: 1020px;
+  margin-top: 14px;
+  font-size: 16px;
+  line-height: 1.75;
+  color: #444c58;
+}
+.wl-qa-lead p + p { margin-top: 10px; }            /* 全站 reset 清掉 p 段距（坑 #25） */
+
+.wl-qa-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr)); /* 一律 minmax(0,1fr)，别写裸 1fr（坑 #23） */
+  grid-auto-rows: 1fr;                              /* 同一排卡片等高 */
+  gap: 20px;
+  list-style: none;
+  margin: 28px 0 0;
+  padding: 0;
+}
+
+.wl-qa-card {
+  position: relative;
+  overflow: hidden;                                 /* 线框动画与圆角裁切 */
+  border-radius: 12px;                              /* 与站内 .wl-opt-card 一致 */
+  padding: 32px 30px;
+  background: #faf3f3;                              /* FAQ 浅红（悬停不变） */
+}
+
+/* 深红动态线框（用伪元素实现）：
+   ::before = 上下两条线，横向展开；::after = 左右两条线，纵向展开。
+   ⚠️ 必须用 `inset` + `box-sizing:border-box`，不能再写 width:98.5% + left:1%：
+       content-box 的边框会加在宽度之外，右边框被 overflow:hidden 裁掉
+       （用户实测标注「白色的框子右边部分看不见」就是它造成的）。 */
+.wl-qa-card::before,
+.wl-qa-card::after {
+  content: "";
+  position: absolute;
+  inset: 12px;                                      /* 比卡片小一圈、离边缘远一点 */
+  box-sizing: border-box;
+  border-radius: 10px;                              /* 线框也要圆角 */
+  opacity: 0;
+  pointer-events: none;
+  transition: transform .4s ease, opacity .4s ease;
+}
+.wl-qa-card::before {
+  border-top: 1px solid #a33335;
+  border-bottom: 1px solid #a33335;
+  transform: scaleX(0);
+}
+.wl-qa-card::after {
+  border-left: 1px solid #a33335;
+  border-right: 1px solid #a33335;
+  transform: scaleY(0);
+}
+.wl-qa-card:hover::before { opacity: 1; transform: scaleX(1); }
+.wl-qa-card:hover::after  { opacity: 1; transform: scaleY(1); }
+
+/* 左上角小图标：用户提供的三张图本身是 256×256 橙色圆角方块（透明角），
+   直接按 56×56 显示即可；不再套深红底、不再做悬停反色。 */
+.wl-qa-icon {
+  display: block;
+  width: 56px;
+  height: 56px;
+}
+.wl-qa-icon svg,
+.wl-qa-icon img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.wl-qa-card-title {
+  margin: 16px 0 8px;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.35;
+  color: #191a19;
+}
+.wl-qa-card-text {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.7;
+  color: #444c58;
+  white-space: pre-line;                            /* bold() 的换行靠它 */
+}
+
+.wl-qa-title,
+.wl-qa-lead,
+.wl-qa-card-title,
+.wl-qa-card-text { overflow-wrap: break-word; }
+
+/* 平板/手机：1 张一排（3 张卡时 2 列会剩一张孤零零的，直接单列更整齐） */
+@media (max-width: 900px) {
+  .wl-qa-grid { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  .wl-qa-card { padding: 28px 26px; }
+}
+@media (max-width: 560px) {
+  .wl-qa-title { font-size: 22px; }                 /* = .wl-opt-title 手机档 */
+  .wl-qa.is-band { padding-top: 40px; }
+  .wl-qa-grid { margin-top: 20px; }
+  .wl-qa-card { padding: 26px 22px; }
+  .wl-qa-card::before,
+  .wl-qa-card::after { inset: 10px; }               /* 手机卡片更小，线框相应收一点 */
+  .wl-qa-icon { width: 48px; height: 48px; }
+  .wl-qa-card-title { font-size: 18px; }
+  .wl-qa-card-text { font-size: 15px; }
+}
+/* 用户系统开了「减少动态效果」→ 取消过渡，状态直接切换 */
+@media (prefers-reduced-motion: reduce) {
+  .wl-qa-card::before,
+  .wl-qa-card::after { transition: none; }
+}
+
 @media (max-width: 900px) {
   .product-grid-2 { grid-template-columns: 1fr; }
 }

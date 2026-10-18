@@ -167,6 +167,9 @@
     "layout": "feather",
     "nav": "/feather-flag"
   },
+  "qualityAssurance": {
+    "show": true
+  },
   "supplement": [
     {
       "show": true,

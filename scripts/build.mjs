@@ -683,7 +683,7 @@ function nfBody(data) {
     <div class="container">
       <div class="product-grid-3">${cards}</div>
     </div>
-  </section>${afterProducts}${optionBlocksSection(data)}${afterOptions}${sizeChartSection(data)}${afterSize}${benefitsSection()}${afterBenefits}`;
+  </section>${afterProducts}${optionBlocksSection(data)}${afterOptions}${sizeChartSection(data)}${qualityAssuranceSection(data)}${afterSize}${benefitsSection()}${afterBenefits}`;
 }
 
 /* ---------------- 「Why Source from Wolflag?」优势条（2026-09-15 新增） ----------------
@@ -929,6 +929,59 @@ function applicationsSection(data) {
   </section>`;
 }
 
+/* ---------------- 「质量保证」卡片模块（2026-10-18 新增，用户要求） ----------------
+   版式来源：同行参考站 maosen-flag.com/international-flags/ 的
+   「Manufacturing Quality Assurance」一节（渲染后用 getComputedStyle 实测）：
+     3 张卡片一排；悬停时上下两条线横向展开（scaleX 0→1）、
+     左右两条线纵向展开（scaleY 0→1），0.4s 组成一个完整矩形框。
+   ⚠️ 用户 2026-10-18 看预览后的最终要求（**别改回去**）：
+     ① 常态卡片 = FAQ 浅红底 #faf3f3 + 深色文字；
+     ② **悬停不换卡片底色、不换文字颜色**（深红底已被用户明确否掉）；
+     ③ 悬停时**只出现一个深红 #a33335 的动态线框**（原参考站是白色，用户要求改深红）；
+     ④ 线框比卡片小一圈、离边缘远一点、四边都可见、且是圆角；
+     ⑤ 左上角小图标用用户提供的三张橙色圆角图标（media/wolflag-*-icon.webp），
+        图标自带底色，不再套背景、不再做悬停反色。
+   数据来源：settings.json 的 `qualityAssurance`（后台「站点设置 → 质量保证模块」），
+     三个页面共用这一份内容；每页的 content/products/*.json 里只用
+     `qualityAssurance.show` 控制本页显示/隐藏（默认显示）。
+   位置（用户指定）：
+     国旗页 = 「Choose Your Flag Size」下面、「Why Source from Wolflag?」上面 → nfBody()
+     羽毛旗页 = 「Quick, Tool-Free Assembly in 5 Easy Steps」下面、优势条上面 → featherBody()
+     横幅页 = 「Why Source from Wolflag?」上面 → bannerBody()
+   ⚠️ items 是新建字段，没有历史数据 → 不涉及坑 #20 那类"数据形状升级"问题。 */
+function qualityAssuranceSection(data) {
+  const m = settings.qualityAssurance;
+  if (!m) return '';
+  if (data && data.qualityAssurance && data.qualityAssurance.show === false) return '';
+  const items = (m.items || []).filter((it) => it && (it.title || it.text || it.icon));
+  if (!m.title && !m.text && !items.length) return '';
+
+  const bg = m.bg || '#ffffff';
+  const isBand = !/^#?(fff|ffffff)$/i.test(String(bg).trim());
+  const cards = items.map((it) => {
+    const svg = inlineSvg(it.icon);
+    const icon = !it.icon ? ''
+      : svg ? `<span class="wl-qa-icon" aria-hidden="true">${svg}</span>`
+            : `<span class="wl-qa-icon" aria-hidden="true"><img src="${esc(it.icon)}" alt="" loading="lazy" decoding="async"></span>`;
+    return `
+      <li class="wl-qa-card">
+        ${icon}
+        ${it.title ? `<h3 class="wl-qa-card-title">${esc(it.title)}</h3>` : ''}
+        ${it.text ? `<p class="wl-qa-card-text">${bold(it.text)}</p>` : ''}
+      </li>`;
+  }).join('');
+
+  return `
+<section class="wl-qa${isBand ? ' is-band' : ''}" style="background-color:${esc(bg)}">
+  <div class="container">${m.title ? `
+    <h2 class="wl-qa-title">${esc(m.title)}</h2>` : ''}${m.text ? `
+    <div class="wl-qa-lead">${faqAnswer(m.text)}</div>` : ''}${cards ? `
+    <ul class="wl-qa-grid">${cards}
+    </ul>` : ''}
+  </div>
+</section>`;
+}
+
 function featherBody(data) {
   const cards = data.products.map((p) => {
     const specRows = productSpecRows(p);
@@ -962,7 +1015,7 @@ function featherBody(data) {
     <div class="container">
       <div class="product-grid-2">${cards}</div>
     </div>
-  </section>${afterProducts}${applicationsSection(data)}${afterApplications}${benefitsSection()}${afterBenefits}`;
+  </section>${afterProducts}${applicationsSection(data)}${afterApplications}${qualityAssuranceSection(data)}${benefitsSection()}${afterBenefits}`;
 }
 
 function bannerBody(data) {
@@ -997,7 +1050,7 @@ function bannerBody(data) {
     <div class="container">
       <div class="product-grid-3">${cards}</div>
     </div>
-  </section>${afterProducts}${benefitsSection()}${afterBenefits}`;
+  </section>${afterProducts}${qualityAssuranceSection(data)}${benefitsSection()}${afterBenefits}`;
 }
 
 function poleBody(data) {
