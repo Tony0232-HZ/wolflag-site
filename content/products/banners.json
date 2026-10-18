@@ -103,6 +103,12 @@
   },
   "imageAlt": "Large custom printed banners hanging on a university building facade",
   "tagline": "Make your custom banners look just the way you want",
+  "bannerImage": "/assets/media/harvard-banner-building.webp",
+  "page": {
+    "file": "banner.html",
+    "layout": "bannerCards",
+    "nav": "/banner"
+  },
   "promises": {
     "show": true,
     "items": [
@@ -123,24 +129,30 @@
       }
     ]
   },
-  "bannerImage": "/assets/media/harvard-banner-building.webp",
-  "page": {
-    "file": "banner.html",
-    "layout": "bannerCards",
-    "nav": "/banner"
-  },
   "supplement": [
     {
       "imageBg": "#faf7f5",
-      "imageScale": 80,
       "text": "Different flagpoles and regions require specific attachment hardware. At Wolflag, we equip our reinforced flag headers with your choice of **webbing loops, plastic C-hooks, snap clips, metal swivel hooks, figure-8 rings, or traditional rope and wooden toggles**. Simply specify your preferred finishing style when requesting a quote, and we will manufacture your flags ready for immediate installation.",
       "imageAlt": "Wolflag custom flag finishing options grid showing webbing loops, plastic snap hooks, metal swivel clips, figure-8 hooks, and rope with wooden toggle.",
+      "imageScale": 80,
       "imageFit": "contain",
       "title": "Custom Flag Hardware & Finishing Options",
       "image": "/assets/media/wolflag-custom-flag-finishing-options-hooks-clips-toggle.webp",
       "show": true,
       "slot": "after-products",
       "direction": "textTop"
+    },
+    {
+      "imageBg": "#faf7f5",
+      "text": "Choose how your design looks on the back side (front is always identical):\n\n**Single Reverse (Mirror Back)**\n• Single-layer dye print where the back shows a mirrored image—lightweight and best for flying flags.\n• Materials: Poly Knit, Spun Poly, & Nylon\n\n**Single-Sided (Blank Back)**\n• Printed on one side with a blank white back—ideal for wall banners and backdrops.\n• Materials: Vinyl, Satin, & Oxford\n\n**Double-Sided (Reads Correctly)**\n• Two layers sewn with a blockout liner so text reads correctly on both sides (or print two different designs).\n• Materials: Blockout Poly Knit, Satin, & Vinyl",
+      "imageAlt": "Wolflag custom flag and banner printing comparison diagram showing front view versus single reverse, single-sided, and double-sided back views.",
+      "imageScale": 100,
+      "imageFit": "cover",
+      "title": "Select Your Printing Option",
+      "image": "/assets/media/wolflag-single-reverse-vs-single-sided-vs-double-sided-flag-printing.webp",
+      "show": true,
+      "slot": "after-products",
+      "direction": "textLeft"
     }
   ],
   "seo": {
