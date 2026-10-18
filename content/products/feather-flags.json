@@ -160,15 +160,15 @@
       "imageAlt": "Wolflag factory-direct custom pinpoint flags for real estate open houses, printed teardrop flags with FOR SALE and OPEN HOUSE for RE/MAX property promotions."
     }
   ],
+  "qualityAssurance": {
+    "show": true
+  },
   "imageAlt": "Custom advertising feather flags for outdoor promotions, including OPEN, FARM FRESH EGGS, EASY FINANCE, CAR WASH, OPEN HOUSE, and Just Listed banner designs.",
   "bannerImage": "/assets/media/feather-banner.webp",
   "page": {
     "file": "feather-flag.html",
     "layout": "feather",
     "nav": "/feather-flag"
-  },
-  "qualityAssurance": {
-    "show": true
   },
   "supplement": [
     {
@@ -191,13 +191,16 @@
       "direction": "textLeft"
     },
     {
+      "imageBg": "#faf7f5",
+      "text": "From polished showroom floors and busy sidewalks to soft grass, beach sand, and building walls, our interchangeable base system keeps your flags standing tall. Choose steel ground spikes or screw-in augers for turf and sand, sleek cross bases for indoor displays, or heavy-duty square plates, drive-on tire bases, and water-filled weights for maximum stability in high-traffic outdoor areas.",
+      "imageAlt": "Wolflag universal feather and teardrop flag base options including square steel plate, car wheel base, ground spike, water tank, wall mount, cross bases, water weight bag, and sand auger.",
+      "imageScale": 80,
+      "imageFit": "contain",
+      "title": "Universal Bases for Every Surface & Wind Condition",
+      "image": "/assets/media/wolflag-feather-and-teardrop-flag-bases-mounting-options.webp",
       "show": true,
       "slot": "after-applications",
-      "direction": "textBottom",
-      "title": "Universal Bases for Every Surface & Wind Condition",
-      "text": "From polished showroom floors and busy sidewalks to soft grass, beach sand, and building walls, our interchangeable base system keeps your flags standing tall. Choose steel ground spikes or screw-in augers for turf and sand, sleek cross bases for indoor displays, or heavy-duty square plates, drive-on tire bases, and water-filled weights for maximum stability in high-traffic outdoor areas.",
-      "image": "/assets/media/wolflag-feather-and-teardrop-flag-bases-mounting-options.webp",
-      "imageAlt": "Wolflag universal feather and teardrop flag base options including square steel plate, car wheel base, ground spike, water tank, wall mount, cross bases, water weight bag, and sand auger."
+      "direction": "textBottom"
     },
     {
       "show": true,
