@@ -114,7 +114,7 @@
       "imageBg": "#faf7f5",
       "text": "Different flagpoles and regions require specific attachment hardware. At Wolflag, we equip our reinforced flag headers with your choice of **webbing loops, plastic C-hooks, snap clips, metal swivel hooks, figure-8 rings, or traditional rope and wooden toggles**. Simply specify your preferred finishing style when requesting a quote, and we will manufacture your flags ready for immediate installation.",
       "imageAlt": "Wolflag custom flag finishing options grid showing webbing loops, plastic snap hooks, metal swivel clips, figure-8 hooks, and rope with wooden toggle.",
-      "imageFit": "cover",
+      "imageFit": "contain",
       "title": "Custom Flag Hardware & Finishing Options",
       "image": "/assets/media/wolflag-custom-flag-finishing-options-hooks-clips-toggle.webp",
       "show": true,
