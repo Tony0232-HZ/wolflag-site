@@ -1130,7 +1130,7 @@ function poleBody(data) {
     <article class="ing-card">
       <img src="${p.image}" alt="${altOf(p, p.name)}" loading="lazy" decoding="async"${dimAttrs(p.image, 0.5)}>
       <h4>${esc(p.name)}</h4>
-      <p>${esc(p.desc)}</p>
+      ${faqAnswer(p.desc)}
     </article>`).join('');
   return `
   <section class="page-hero pole-hero">

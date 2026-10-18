@@ -1821,7 +1821,9 @@ ul { list-style: none; }
   line-height: 1.5;
   max-width: 328px;
   margin: 0 auto;
+  text-align: left;                /* 2026-10-18：保留后台换行后，● 条目左对齐才不会每行错位 */
 }
+.ing-card p + p { margin-top: 10px; }   /* 全站 reset 清掉 p 段距（坑 #25），空行分段时自己补 */
 
 @media (max-width: 1180px) {
   .featured-2 { grid-template-columns: 1fr; margin-left: 0; }
