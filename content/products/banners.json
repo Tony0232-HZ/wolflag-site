@@ -147,7 +147,7 @@
       "text": "Choose how your design looks on the back side (front is always identical):\n\n**Single Reverse (Mirror Back)**\n• Single-layer dye print where the back shows a mirrored image—lightweight and best for flying flags.\n• Materials: Poly Knit, Spun Poly, & Nylon\n\n**Single-Sided (Blank Back)**\n• Printed on one side with a blank white back—ideal for wall banners and backdrops.\n• Materials: Vinyl, Satin, & Oxford\n\n**Double-Sided (Reads Correctly)**\n• Two layers sewn with a blockout liner so text reads correctly on both sides (or print two different designs).\n• Materials: Blockout Poly Knit, Satin, & Vinyl",
       "imageAlt": "Wolflag custom flag and banner printing comparison diagram showing front view versus single reverse, single-sided, and double-sided back views.",
       "imageScale": 100,
-      "imageFit": "cover",
+      "imageFit": "contain",
       "title": "Select Your Printing Option",
       "image": "/assets/media/wolflag-single-reverse-vs-single-sided-vs-double-sided-flag-printing.webp",
       "show": true,
