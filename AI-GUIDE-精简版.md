@@ -27,7 +27,7 @@
 
 **当前 15 个页面**：`/` `/about-us` `/banner` `/blog` `/car-flags` `/custom-pennant-flags` `/feather-flag` `/hand-held-flags` `/international-maritime-signal-flags` `/national-flag` `/pole-display` `/products` `/stands-displays` `/table-flags` `/404`
 
-**当前导航**：Home ／ Feather flags ／ **Full Products**（子菜单：Banners · Car Flags · Table & Desk Flags · Hand Held Flags · International Maritime Signal Flags · Custom Pennant Flags）／ National Flags ／ Stands & Displays ／ Flagpoles & Accessories ／ About Us ／ Blog ／ 右侧 Contact Us 按钮
+**当前导航**：Home ／ Feather flags ／ **National Flags** ／ **Full Products**（子菜单：Banners · Car Flags · Table & Desk Flags · Hand Held Flags · International Maritime Signal Flags · Custom Pennant Flags）／ Stands & Displays ／ Flagpoles & Accessories ／ About Us ／ Blog ／ 右侧 Contact Us 按钮（2026-10-18 用户要求把 National Flags 挪到 Full Products 前面）
 
 ---
 
@@ -733,7 +733,8 @@ wolflag-site/
 ---
 
 *本精炼版生成于 2026-09-19，由 `AI-GUIDE.md`（完整版）提炼。*
-*最后更新 2026-10-18（下午）：横幅页两块更新 —— ① 补充模块新增「图片显示大小（%）」`imageScale`：30–100、默认 100；当前 hooks 图设为 80%；只缩图片不缩文字，CSS 必须写 `height:auto`（坑 #43），构建用 `.is-scaled` + `--img-scale`；② 横幅页新增「三句话」翻转卡片 `promises`：三张白底静态卡（浅灰细边框 + 深色 22px/700 标题 + 深蓝图标），悬停 3D 翻转 0.65s，反面深红边框/图标/标题；去掉呼吸/自动轮播/灰底/布纹/气眼/序号；≤900px 单列，reduced-motion 正面直接变红。另给 CSS/JS 加内容指纹 `?v=` 防缓存错配。§2.3 / §2.5 / §4 / §6.4 / §10.46 / §10.47。*
+*最后更新 2026-10-18（傍晚）：顶部导航顺序调整 —— **National Flags 挪到 Full Products 前面**（`settings.json → nav` 数组顺序，所有页面共用）；桌面端和手机菜单同步生效，active 高亮与 Full Products 下拉均正常。§0。*
+*前次 2026-10-18（下午）：横幅页两块更新 —— ① 补充模块新增「图片显示大小（%）」`imageScale`：30–100、默认 100；当前 hooks 图设为 80%；只缩图片不缩文字，CSS 必须写 `height:auto`（坑 #43），构建用 `.is-scaled` + `--img-scale`；② 横幅页新增「三句话」翻转卡片 `promises`：三张白底静态卡（浅灰细边框 + 深色 22px/700 标题 + 深蓝图标），悬停 3D 翻转 0.65s，反面深红边框/图标/标题；去掉呼吸/自动轮播/灰底/布纹/气眼/序号；≤900px 单列，reduced-motion 正面直接变红。另给 CSS/JS 加内容指纹 `?v=` 防缓存错配。§2.3 / §2.5 / §4 / §6.4 / §10.46 / §10.47。*
 *前次 2026-10-18（上午）：国旗 / 羽毛旗 / 横幅三个产品页新增「Manufacturing Quality Assurance」质量保证卡片模块（`qualityAssurance`）——标题 + 3 张卡，内容统一存在 `settings.json`、三个页面共用一份，每页后台各有独立显隐开关（默认显示）；位置按用户指定：国旗页 `Choose Your Flag Size` 下面、羽毛旗页 `Quick, Tool-Free Assembly in 5 Easy Steps` 下面、横幅页 `Why Source from Wolflag?` 上面。外观经用户两轮标注定稿：**常态浅红 `#faf3f3` + 深色文字；悬停不换底色/文字，只出现深红 `#a33335` 的圆角动态线框**（`inset:12px`、`box-sizing:border-box`、圆角 10px、上下 `scaleX` / 左右 `scaleY` 0.4s）；图标用用户提供的三张橙色圆角 WebP（56×56 / 手机 48×48），不再套背景或反色。新增坑 #42（内嵌线框右边框被裁）。§2.1 / §2.3 / §4 / §6.3 / §10.45。*
 *前次 2026-10-17：国旗页新增「Choose Your Flag Size」尺寸选择模块 —— 参考 bestflag.com 实测复刻表格（只保留 Small / Standard、6 行、无 Guidon）、左侧两张尺寸图轮播并与表头双向联动（点表头切图并停轮播、不点时高亮跟随）、选中列改用 FAQ 浅红/深红；模块最终在「生产选项」之后；标语→灰块、灰块→产品卡两处 56→28px，产品卡→生产选项 112→56px；新增坑 #39（复用组件同权重覆盖失效）与协作教训（先确认要挪哪个模块）；**同日追加：全站 5 页补充模块升级为「多插槽」**（19 个位置，`scripts/page-slots.mjs` 注册表 + 构建时自动生成后台下拉；缺省槽 = 旧位置；坑 #40）；**同日补充：补充模块新增「图片显示方式」`imageFit`（cover / contain）+「图片区域底色」`imageBg`（默认 #faf7f5，可改白/其他色）**（坑 #41）。§2.3 / §2.5 / §4 / §6.1 / §6.3 / §6.4 / §10。*
 *前次 2026-10-16：羽毛旗页两轮迭代 —— ① 补充模块「上下留白 112→56px + 纯文字模块条目左对齐 + 上下排布时文字不贴盒子边」（§2.5 / §4，其中「留白各减半 ≠ 间距减半」记入 §6.3）；② 新增「应用场景」卡片网格模块 `applications`（照同行参考站 vividads.com.au 源码实测值复刻，一排 3 个 × 3 排 = 9 张卡、**卡片内无任何链接**、可后台编辑，§2.3 / §4）。详见完整版 §10.41。*

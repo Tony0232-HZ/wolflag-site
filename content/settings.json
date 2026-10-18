@@ -13,6 +13,11 @@
       "external": false
     },
     {
+      "label": "National Flags",
+      "url": "/national-flag",
+      "external": false
+    },
+    {
       "label": "Full Products",
       "url": "/products",
       "external": false,
@@ -48,11 +53,6 @@
           "url": "/custom-pennant-flags"
         }
       ]
-    },
-    {
-      "label": "National Flags",
-      "url": "/national-flag",
-      "external": false
     },
     {
       "external": false,
