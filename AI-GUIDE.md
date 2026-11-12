@@ -315,7 +315,12 @@ wolflag-site/
 
 - **每页底部可加多个**：`content/{页面}.json` 的 `supplement` 是**数组**，每项 `{ show, title, text, image }`。渲染由 build.mjs 的 `supplementSection(data)`（遍历数组，兼容旧单对象），条件 `show!==false` 且至少一项有内容才渲染；多个模块按数组顺序从上到下。
 - **已启用页面**：index(首页)、feather-flag、banner、national-flag、stands-displays 五个页面底部（均走各自 layout 函数里 `supplementSection(data)`；首页读 `home` 全局）。
-- **字段**：`show`(boolean，勾选=显示、取消勾选=隐藏且内容保留)、`title`(可选)、`text`(支持 `**词**` 加粗)、`image`(可选；有图=图左文右，无图=文字居中)、`imageScale`(可选，30–100，默认 100 = 原大小；80 = 同比例缩到 80%、居中；只缩图片不缩文字，2026-10-18 新增)。
+- **字段**：`show`(boolean，勾选=显示、取消勾选=隐藏且内容保留)、`title`(可选)、`text`(支持 `**词**` 加粗)、`image`(可选；有图=图左文右，无图=文字居中)、`imageScale`(可选，30–100，默认 100 = 原大小；80 = 同比例缩到 80%、居中；只缩图片不缩文字，2026-10-18 新增)、`table`(可选；两列尺寸对照表，2026-11-12 新增，见下)。
+- **两列尺寸对照表 `table`（2026-11-12 新增）**：`{ leftTitle, rightTitle, rows:[{left,right}] }`，渲染在「文字」下方。
+  `build.mjs` 的 `suppTable(t)` **只在 rows 非空时输出** `.f-supp-table`（老数据零变化）；单元格同走 `bold()`（先转义、支持 `**加粗**`）。
+  电脑上左右两列对齐；≤900px 每行改成「左列在上、右列在下」，表头视觉隐藏、只留给屏幕阅读器。
+  后台在「补充模块 → 尺寸对照表」（5 个页面都有这个可选字段）。
+  🔴 **不要在「文字」里用连续空格 / 制表符排两列** —— HTML 会把连续空白折成一个（坑 #34），网页上必然粘在一起。详见 §10.49。
 - **样式**：`.f-supp*`（`.f-supp` 浅米黄 #faf7f5 圆角面板、`.f-supp-img` 图(圆角)、`.f-supp-txt` 无图居中、`@media max-width:700px` 上下堆叠）。
 - **`imageScale` 渲染（2026-10-18）**：构建给 `.f-supp-img` 加 `.is-scaled` + 行内 `--img-scale:0.8`；
   CSS `.f-supp-img.is-scaled{display:flex;align-items:center;justify-content:center}` +
@@ -4418,7 +4423,31 @@ Graduations `#EDF0FD` · Expos `#EAF7F0` · Fundraisers `#FDEEE6` · Seasonal `#
 
 ---
 
-*最后更新：2026-10-18（晚）：修好**旗杆展架配件卡的描述换行** —— `ingredients.items[].desc` 从 `esc()` 改为 `faqAnswer()`（单回车→`<br>`、空行→分段、`**词**`→加粗）；`.ing-card p` 改 `text-align:left` + `p + p` 10px，● 条目终于排成一条竖线。影响 Square Plate Base / Chrome Cross Base；电脑/手机 0 溢出、0 报错。新增 §10.48、坑 #33 补第 4 处。*
+### 10.49 📐 补充模块新增可选「两列尺寸对照表」`table`（2026-11-12）
+
+**用户反馈**：在后台「横幅产品页 → 补充模块」里，用**多个空格和制表符**把 `Flagpole Height` 与 `Banner Size` 排成两列，后台输入框里看着很整齐；网页上两列却**粘在一起**（每行的高度和尺寸也挤成一句）。
+
+**根因**：不是后台排版坏了，是 **HTML 会把连续空白（空格 / 制表符 / 换行）折叠成一个空格**——这正是坑 #34「用户用空格表达排版意图，在 HTML 里一律无效」。数据里实际用的是 `\t`（制表符），同样被折叠。
+📌 **补充事实**：即使让网页保留空格也排不齐 —— 后台输入框是**等宽字体**，网页正文是比例字体，每列字符宽度不同。**要严格对齐只能用真正的表格，不能靠空格。**
+
+**方案**：给补充模块加一个**可选对象字段** `table`（5 个页面的 supplement 都加，默认不填）：
+`{ leftTitle, rightTitle, rows:[{left,right}] }`；后台「补充模块 → 尺寸对照表」（表头 2 个输入框 + 行列表，可 Add/删除/拖动排序）。
+- `build.mjs` 新增 `suppTable(t)`：**只有 rows 非空才输出** `.f-supp-table`；单元格同走 `bold()`（先转义、支持 `**加粗**`）；老数据一个字节都不变。
+- CSS `.f-supp-table`：表头 16px/700 `#191a19`、正文 16px `#444c58` / 行高 1.7、行线 `#ece8e4`、左列前置深红 `#a33335` 圆点、首列桌面 `white-space:nowrap`。
+- 响应式：**≤900px** 每行改「左列在上、右列在下」（不是等到 700px 才变，因为 701–900px 时左右两栏的正文列只剩约 400px，硬排会挤成窄条）；`thead` 用 1px + `clip` 视觉隐藏，仍留给屏幕阅读器。
+- ⚠️ 表头 `thead tr/th` 也要压成 `1px` + `overflow:hidden`，否则它们按整行文字宽度排版，会被溢出检查误判（本次首个版本踩到，已修）。
+
+**数据迁移**：横幅页第 3 条补充模块（`How to Choose the Perfect Banner Size…`）的 `text` 清空，原 4 行尺寸**逐字原样**搬进 `table.rows`（`40/33/26/20 ft` + 对应 cm/inch）；`title`、`image`、`imageFit:contain`、`imageScale:100`、`slot:after-products`、`direction:textRight` 全部未动。
+后台「文字」框现在是空的 —— **不是内容丢了**，内容在「尺寸对照表」里（字段提示已写明这一点）。
+
+**验证**：1920/1440/1366/1280/1240/1200/1024/900/768/430/390/375/320 共 **13 个宽度**，整页 + 元素盒子 + 文字三条溢出判据全部 0；**字号 ×1.5** 表格 0 溢出（⚠️ 1.5× 下顶部导航在 1440 会挤出，但 `/products`、`/about-us` 同样复现 → **老问题、非本次引入**，已如实告知用户、未动）；本地预览无 console error / 无 requestfailed；`admin/config.yml` PyYAML + 字段层级（5 处 `table` 均在 supplement 顶层）+ `/admin/` 加载三项通过；新图核实为**真 WebP**（2518×2240 / 203KB），无需转换。
+
+**文档同步**：本文件 §2.8 + §10.49 + 本变更日志；`README.md` 2026-11-12 章节。⚠️ **`AI-GUIDE-精简版.md` 本次未改** —— 用户只点名了 `AI-GUIDE.md` 与 `README.md` 两份文件（按「一事一批」，未擅自扩到精简版）。
+
+---
+
+*最后更新：2026-11-12：**补充模块新增可选「两列尺寸对照表」`table`（新增 §10.49）**——用户在后台用空格 / 制表符把「Flagpole Height」与「Banner Size」排成两列，HTML 会把连续空白折成一个（坑 #34），网页上必然粘在一起；改为真正的 `<table>`：后台逐行填「左列 / 右列」，电脑左右对齐、≤900px 每行改上下两行、表头只留给读屏；横幅页原 4 行旗杆高度/横幅尺寸逐字迁入，未填表格的老模块渲染结果零变化。验证 13 个宽度 0 溢出、字号 ×1.5 表格 0 溢出；新图核实为真 WebP（2518×2240 / 203KB）。*
+**前次（2026-10-18 晚）：修好旗杆展架配件卡的描述换行** —— `ingredients.items[].desc` 从 `esc()` 改为 `faqAnswer()`（单回车→`<br>`、空行→分段、`**词**`→加粗）；`.ing-card p` 改 `text-align:left` + `p + p` 10px，● 条目终于排成一条竖线。影响 Square Plate Base / Chrome Cross Base；电脑/手机 0 溢出、0 报错。新增 §10.48、坑 #33 补第 4 处。
 **前次（2026-10-18 傍晚）：顶部导航顺序调整 —— National Flags 挪到 Full Products 前面**（`settings.json → nav` 数组顺序，所有页面共用）；桌面端和手机菜单同步生效，active 高亮与 Full Products 下拉均正常。§2.6。
 **前次（2026-10-18 下午）：横幅页两块更新 —— ① 补充模块新增「图片显示大小（%）」`imageScale`（30–100、默认 100；当前 hooks 图 80%；只缩图片不缩文字，必须 `height:auto`，坑 #43）；② 横幅页新增「三句话」翻转卡片 `promises`（白底静态卡 + 悬停 `rotateY(180deg)` 0.65s，反面深红边框/图标/标题；去掉呼吸/自动轮播/灰底/布纹/气眼/序号）。另给 CSS/JS 加内容指纹 `?v=` 防缓存错配。新增 §10.46 / §10.47。*
 **前次（2026-10-18 上午）：三个产品页新增「Manufacturing Quality Assurance」质量保证卡片模块（新增 §10.45、坑 #42）**——照用户给的参考站 `maosen-flag.com/international-flags/` 复刻 3 张卡片，内容统一存 `settings.json → qualityAssurance`（三页共用一份），每页 `qualityAssurance.show` 独立控制显隐（默认显示）；位置：国旗页尺寸表下、羽毛旗页五步安装图下、横幅页优势条上。用户看预览后两轮改版：去掉悬停深红底、文字保持深色、白色线框改深红并缩小/内缩/圆角、修掉右边框被裁；图标改用用户提供的三张橙色圆角 WebP（56×56）。新增坑 #42（content-box 内嵌线框右边框被裁）。验证 14 宽度 0 溢出、字号 1.5/2 倍模块 0 溢出、悬停/开关/图标/后台配置全过。**前次（2026-10-17）：国旗页新增「Choose Your Flag Size」尺寸选择模块 + 两处间距减半（新增 §10.42、坑 #39）**——用户照 bestflag.com/pages/custom-flags 的「Choose Your Flag Size」要求移植：表格颜色/样式照参考站、**不要 Oversized 列**、左边用用户两张尺寸图、选中列表头**改用 FAQ 浅红 `#faf3f3` + 深红 `#a33335`**（不用参考站蓝色）。实现：`national-flags.json → sizeChart`（`show/bg/title/text/images[{image,imageAlt}]/interval/table{leftTitle,rightTitle,rows[{left,right}]}`，新建字段不涉及坑 #20）；`build.mjs` 新增 `sizeChartSection()` **只接 `nfBody()`**，最终接在 **Production Options 之后、优势条之前**；表头输出为 `<button>`，点 Small/Standard 切第 1/2 张图并**停止自动轮播**，不点时 5 秒轮播、高亮跟随（`site.js` 给 `.it-carousel` 加 `it-slide-change` 事件与 `_itGo/_itStop/_itStart`，再写 `.wl-size` 联动段）；CSS 新增 `.wl-size-*`，**覆盖 `.it-carousel` 必须用 3 类选择器**（基础样式更靠后、同权重会盖回原值 → **坑 #39**），表格 33/67 列宽、18px/600 表头、18px/400 正文、`#dee2e6` 行线、16px 圆角 + 淡阴影、外层 30px 白卡；`bg` 默认白。用户后续把表格改为 **6 行**：删 `20 x 27.75" (Guidon)`、Standard 值整体上移、删末行；两处间距 **56→28px**（标语→灰块、灰块→产品卡），尺寸表→优势条保持 **56px**；随后又按追加标注把 **产品卡→生产选项 112→56px**（手机 80→40px）；灰色图文块「Custom National Flags, Built for Scale」挪到**标语下面、产品卡上面**。**最大协作教训**：用户箭头圈的是灰色图文块，我误读成尺寸模块、连挪错两次，最后用户明确「我说的是 Custom National Flags, Built for Scale 挪到最上面」——**箭头落在两个模块之间时，先确认要挪哪一个，拿不准就问**；另：用户问"是不是套内模块"→ 独立模块直接挪，**不要复制/隐藏两份**。图片：两张尺寸图（小图 2026-10-17 用户重做、尺寸字更粗更大，同名覆盖），ALT 用用户原文；验证 1920→320 六宽度 0 溢出、字号 1.5/2 倍模块 0 溢出、联动与后台加载全过。推送前 `git fetch` 发现落后 5 个提交（羽毛旗页后台更新），`stash（仅跟踪文件）→ merge --ff-only → stash pop` 零冲突同步。
