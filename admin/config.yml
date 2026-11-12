@@ -258,6 +258,23 @@ collections:
                 hint: "四种排布在下拉里选一个，然后点右上角 Publish 保存，1-3 分钟生效。\n图片在左、文字在右：默认，和现在一样（左边图片、右边文字）。\n文字在上、图片在下：标题和文字在上、图片在下面。\n图片在上、文字在下：反过来，先让客户看到图。\n文字在左、图片在右：左右两栏并排，方向反过来。\n⚠️ 手机上无论选哪种都会自动变成上下堆叠（屏幕太窄，两栏放不下）；左右两种在手机上会变成「文字在上」。\n每一套可以各选各的，互不影响。\n没有传图片时，一律只显示文字并居中（和现在一样）。"
               - { label: 标题（可选）, name: title, widget: string, required: false }
               - { label: 文字（空行分段；可用 **词** 加粗）, name: text, widget: text, required: false, hint: "空一行 = 分成两段（段与段之间会留出空隙）；按一次回车 = 换行；用两个星号包住词可加粗，如 **Wolflag**。" }
+              - label: 尺寸对照表（可选；填了就在文字下方显示一张两列表格）
+                name: table
+                widget: object
+                required: false
+                collapsed: true
+                hint: "网页会把连续空格合并成一个，所以在上面『文字』里用空格排两列是排不齐的；要左右对齐请用这张表。"
+                fields:
+                  - { label: 左列表头（如 Flagpole Height）, name: leftTitle, widget: string, required: false }
+                  - { label: 右列表头（如 Banner Size）, name: rightTitle, widget: string, required: false }
+                  - label: 表格行（一行 = 一条对照）
+                    name: rows
+                    widget: list
+                    required: false
+                    summary: "{{fields.left}} ｜ {{fields.right}}"
+                    fields:
+                      - { label: 左列内容（如 40 ft (approx. 12 m)）, name: left, widget: string }
+                      - { label: 右列内容（如 150 cm × 600 cm）, name: right, widget: string }
               - { label: 图片（可选）, name: image, widget: image, required: false }
               - label: 图片显示方式（裁剪 / 完整显示）
                 name: imageFit
@@ -629,6 +646,23 @@ collections:
             hint: "四种排布在下拉里选一个，然后点右上角 Publish 保存，1-3 分钟生效。\n图片在左、文字在右：默认，和现在一样（左边图片、右边文字）。\n文字在上、图片在下：标题和文字在上、图片在下面。\n图片在上、文字在下：反过来，先让客户看到图。\n文字在左、图片在右：左右两栏并排，方向反过来。\n⚠️ 手机上无论选哪种都会自动变成上下堆叠（屏幕太窄，两栏放不下）；左右两种在手机上会变成「文字在上」。\n每一套可以各选各的，互不影响。\n没有传图片时，一律只显示文字并居中（和现在一样）。"
           - { label: 标题（可选）, name: title, widget: string, required: false }
           - { label: 文字（空行分段；可用 **词** 加粗）, name: text, widget: text, required: false, hint: "空一行 = 分成两段（段与段之间会留出空隙）；按一次回车 = 换行；用两个星号包住词可加粗，如 **Wolflag**。" }
+          - label: 尺寸对照表（可选；填了就在文字下方显示一张两列表格）
+            name: table
+            widget: object
+            required: false
+            collapsed: true
+            hint: "网页会把连续空格合并成一个，所以在上面『文字』里用空格排两列是排不齐的；要左右对齐请用这张表。"
+            fields:
+              - { label: 左列表头（如 Flagpole Height）, name: leftTitle, widget: string, required: false }
+              - { label: 右列表头（如 Banner Size）, name: rightTitle, widget: string, required: false }
+              - label: 表格行（一行 = 一条对照）
+                name: rows
+                widget: list
+                required: false
+                summary: "{{fields.left}} ｜ {{fields.right}}"
+                fields:
+                  - { label: 左列内容（如 40 ft (approx. 12 m)）, name: left, widget: string }
+                  - { label: 右列内容（如 150 cm × 600 cm）, name: right, widget: string }
           - { label: 图片（可选）, name: image, widget: image, required: false }
           - label: 图片显示方式（裁剪 / 完整显示）
             name: imageFit
@@ -713,6 +747,23 @@ collections:
                 hint: "四种排布在下拉里选一个，然后点右上角 Publish 保存，1-3 分钟生效。\n图片在左、文字在右：默认，和现在一样（左边图片、右边文字）。\n文字在上、图片在下：标题和文字在上、图片在下面。\n图片在上、文字在下：反过来，先让客户看到图。\n文字在左、图片在右：左右两栏并排，方向反过来。\n⚠️ 手机上无论选哪种都会自动变成上下堆叠（屏幕太窄，两栏放不下）；左右两种在手机上会变成「文字在上」。\n每一套可以各选各的，互不影响。\n没有传图片时，一律只显示文字并居中（和现在一样）。"
               - { label: 标题（可选）, name: title, widget: string, required: false }
               - { label: 文字（空行分段；可用 **词** 加粗）, name: text, widget: text, required: false, hint: "空一行 = 分成两段（段与段之间会留出空隙）；按一次回车 = 换行；用两个星号包住词可加粗，如 **Wolflag**。" }
+              - label: 尺寸对照表（可选；填了就在文字下方显示一张两列表格）
+                name: table
+                widget: object
+                required: false
+                collapsed: true
+                hint: "网页会把连续空格合并成一个，所以在上面『文字』里用空格排两列是排不齐的；要左右对齐请用这张表。"
+                fields:
+                  - { label: 左列表头（如 Flagpole Height）, name: leftTitle, widget: string, required: false }
+                  - { label: 右列表头（如 Banner Size）, name: rightTitle, widget: string, required: false }
+                  - label: 表格行（一行 = 一条对照）
+                    name: rows
+                    widget: list
+                    required: false
+                    summary: "{{fields.left}} ｜ {{fields.right}}"
+                    fields:
+                      - { label: 左列内容（如 40 ft (approx. 12 m)）, name: left, widget: string }
+                      - { label: 右列内容（如 150 cm × 600 cm）, name: right, widget: string }
               - { label: 图片（可选）, name: image, widget: image, required: false }
               - label: 图片显示方式（裁剪 / 完整显示）
                 name: imageFit
@@ -846,6 +897,23 @@ collections:
                 hint: "四种排布在下拉里选一个，然后点右上角 Publish 保存，1-3 分钟生效。\n图片在左、文字在右：默认，和现在一样（左边图片、右边文字）。\n文字在上、图片在下：标题和文字在上、图片在下面。\n图片在上、文字在下：反过来，先让客户看到图。\n文字在左、图片在右：左右两栏并排，方向反过来。\n⚠️ 手机上无论选哪种都会自动变成上下堆叠（屏幕太窄，两栏放不下）；左右两种在手机上会变成「文字在上」。\n每一套可以各选各的，互不影响。\n没有传图片时，一律只显示文字并居中（和现在一样）。"
               - { label: 标题（可选）, name: title, widget: string, required: false }
               - { label: 文字（空行分段；可用 **词** 加粗）, name: text, widget: text, required: false, hint: "空一行 = 分成两段（段与段之间会留出空隙）；按一次回车 = 换行；用两个星号包住词可加粗，如 **Wolflag**。" }
+              - label: 尺寸对照表（可选；填了就在文字下方显示一张两列表格）
+                name: table
+                widget: object
+                required: false
+                collapsed: true
+                hint: "网页会把连续空格合并成一个，所以在上面『文字』里用空格排两列是排不齐的；要左右对齐请用这张表。"
+                fields:
+                  - { label: 左列表头（如 Flagpole Height）, name: leftTitle, widget: string, required: false }
+                  - { label: 右列表头（如 Banner Size）, name: rightTitle, widget: string, required: false }
+                  - label: 表格行（一行 = 一条对照）
+                    name: rows
+                    widget: list
+                    required: false
+                    summary: "{{fields.left}} ｜ {{fields.right}}"
+                    fields:
+                      - { label: 左列内容（如 40 ft (approx. 12 m)）, name: left, widget: string }
+                      - { label: 右列内容（如 150 cm × 600 cm）, name: right, widget: string }
               - { label: 图片（可选）, name: image, widget: image, required: false }
               - label: 图片显示方式（裁剪 / 完整显示）
                 name: imageFit
@@ -921,6 +989,23 @@ collections:
                 hint: "四种排布在下拉里选一个，然后点右上角 Publish 保存，1-3 分钟生效。\n图片在左、文字在右：默认，和现在一样（左边图片、右边文字）。\n文字在上、图片在下：标题和文字在上、图片在下面。\n图片在上、文字在下：反过来，先让客户看到图。\n文字在左、图片在右：左右两栏并排，方向反过来。\n⚠️ 手机上无论选哪种都会自动变成上下堆叠（屏幕太窄，两栏放不下）；左右两种在手机上会变成「文字在上」。\n每一套可以各选各的，互不影响。\n没有传图片时，一律只显示文字并居中（和现在一样）。"
               - { label: 标题（可选）, name: title, widget: string, required: false }
               - { label: 文字（空行分段；可用 **词** 加粗）, name: text, widget: text, required: false, hint: "空一行 = 分成两段（段与段之间会留出空隙）；按一次回车 = 换行；用两个星号包住词可加粗，如 **Wolflag**。" }
+              - label: 尺寸对照表（可选；填了就在文字下方显示一张两列表格）
+                name: table
+                widget: object
+                required: false
+                collapsed: true
+                hint: "网页会把连续空格合并成一个，所以在上面『文字』里用空格排两列是排不齐的；要左右对齐请用这张表。"
+                fields:
+                  - { label: 左列表头（如 Flagpole Height）, name: leftTitle, widget: string, required: false }
+                  - { label: 右列表头（如 Banner Size）, name: rightTitle, widget: string, required: false }
+                  - label: 表格行（一行 = 一条对照）
+                    name: rows
+                    widget: list
+                    required: false
+                    summary: "{{fields.left}} ｜ {{fields.right}}"
+                    fields:
+                      - { label: 左列内容（如 40 ft (approx. 12 m)）, name: left, widget: string }
+                      - { label: 右列内容（如 150 cm × 600 cm）, name: right, widget: string }
               - { label: 图片（可选）, name: image, widget: image, required: false }
               - label: 图片显示方式（裁剪 / 完整显示）
                 name: imageFit

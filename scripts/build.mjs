@@ -751,6 +751,23 @@ function benefitsSection() {
 //   ⚠️ textRight（图左文右）= 改动前的版式，是默认；缺省 / 非法值一律退回它 → 老数据零变化；
 //   ⚠️ 没图片时（.f-supp-txt）方向不生效，仍按原来的「只显示文字并居中」渲染。
 const SUPP_DIRS = ['textTop', 'textBottom', 'textLeft', 'textRight'];
+
+/** 补充模块可选的「两列尺寸对照表」（2026-11-12）。
+ *  数据：s.table = { leftTitle, rightTitle, rows:[{left,right}] }（后台「尺寸对照表」字段）。
+ *  ⚠️ 新字段是可选的：没有 table / rows 为空 → 返回空串，老数据渲染结果逐字节不变。
+ *  ⚠️ 单元格同样走 bold()（先转义、再支持 **加粗**），后台写 HTML 不会破坏页面结构。
+ *  手机上由 CSS 把每行改成「上下两行」；表头视觉隐藏、只留给屏幕阅读器。 */
+function suppTable(t) {
+  if (!t || !Array.isArray(t.rows)) return '';
+  const rows = t.rows.filter((r) => r && (r.left || r.right));
+  if (!rows.length) return '';
+  const head = (t.leftTitle || t.rightTitle)
+    ? `<thead><tr><th scope="col">${bold(t.leftTitle || '')}</th><th scope="col">${bold(t.rightTitle || '')}</th></tr></thead>`
+    : '';
+  const body = rows.map((r) => `<tr><td>${bold(r.left || '')}</td><td>${bold(r.right || '')}</td></tr>`).join('');
+  return `<div class="f-supp-table"><table>${head}<tbody>${body}</tbody></table></div>`;
+}
+
 function supplementSection(data, slot = null, defaultSlot = null) {
   const raw = data && data.supplement;
   const items = Array.isArray(raw) ? raw : (raw ? [raw] : []);
@@ -782,7 +799,7 @@ function supplementSection(data, slot = null, defaultSlot = null) {
           ${s.image ? `<div class="${imgCls}"${imgStyle}><img src="${esc(s.image)}" alt="${altOf(s, s.title || '', 'imageAlt')}" decoding="async"></div>` : ''}
           <div class="f-supp-body">
             ${s.title ? `<h2 class="f-supp-title">${esc(s.title)}</h2>` : ''}
-            <div class="f-supp-text">${faqAnswer(s.text || '')}</div>
+            <div class="f-supp-text">${faqAnswer(s.text || '')}</div>${suppTable(s.table)}
           </div>
         </div>
       </div>

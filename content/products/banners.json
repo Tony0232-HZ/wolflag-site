@@ -156,7 +156,7 @@
     },
     {
       "imageBg": "#faf7f5",
-      "text": " **Flagpole Height**       **Banner Size** (Metric)  / (Inches)\n• 40 ft (approx. 12 m)\t150 cm × 600 cm / 59\" × 236\"\n• 33 ft (approx. 10 m)\t150 cm × 500 cm / 59\" × 197\"\n• 26 ft (approx. 8 m)   \t120 cm × 400 cm /\t47\" × 157.5\"\n• 20 ft (approx. 6 m)  \t100 cm × 300 cm /\t39\" × 118\"",
+      "text": "",
       "imageAlt": "WolFlag commercial flagpole and vertical banner size guide chart, showing proportional banner dimensions for 20ft, 26ft, 33ft, and 40ft flagpoles with human scale reference.",
       "imageScale": 100,
       "imageFit": "contain",
@@ -164,7 +164,29 @@
       "image": "/assets/media/commercial-flagpole-vertical-banner-size-chart-wolflag.webp",
       "show": true,
       "slot": "after-products",
-      "direction": "textRight"
+      "direction": "textRight",
+      "table": {
+        "leftTitle": "Flagpole Height",
+        "rightTitle": "Banner Size (Metric) / (Inches)",
+        "rows": [
+          {
+            "left": "40 ft (approx. 12 m)",
+            "right": "150 cm × 600 cm / 59\" × 236\""
+          },
+          {
+            "left": "33 ft (approx. 10 m)",
+            "right": "150 cm × 500 cm / 59\" × 197\""
+          },
+          {
+            "left": "26 ft (approx. 8 m)",
+            "right": "120 cm × 400 cm / 47\" × 157.5\""
+          },
+          {
+            "left": "20 ft (approx. 6 m)",
+            "right": "100 cm × 300 cm / 39\" × 118\""
+          }
+        ]
+      }
     }
   ],
   "seo": {

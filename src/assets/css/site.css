@@ -1048,6 +1048,71 @@ ul { list-style: none; }
    全站 reset 把 p 的默认段距清零了，所以按空行分出来的段落必须自己补间距（坑 #25）——
    10px 与 FAQ 答案、detail 图文区、以及下方「生产选项」模块保持一致。 */
 .f-supp-text p + p { margin-top: 10px; }
+
+/* 2026-11-12：补充模块可选「两列尺寸对照表」（后台字段「尺寸对照表」）。
+   起因：用户在后台用多个空格 / 制表符把「旗杆高度」和「横幅尺寸」排成两列，
+        但 HTML 会把连续空白折成一个空格 → 网页上两列粘在一起（坑 #34）。
+   做法：用真正的 <table> 排两列，后台一行填一条对照；电脑上左右两列对齐。
+   ⚠️ 只在该条补充模块填了表格时才有这个元素；老数据一条规则都不生效。 */
+.f-supp-table { margin-top: 14px; }
+.f-supp-table table { width: 100%; border-collapse: collapse; }
+.f-supp-table th,
+.f-supp-table td { text-align: left; vertical-align: top; }
+.f-supp-table th {
+  padding: 0 16px 10px 0;
+  border-bottom: 1px solid #e5e0dc;
+  font-size: 16px;
+  font-weight: 700;
+  color: #191a19;
+}
+.f-supp-table td {
+  padding: 9px 16px 9px 0;
+  border-bottom: 1px solid #ece8e4;
+  font-size: 16px;
+  line-height: 1.7;
+  color: #444c58;
+}
+.f-supp-table tr:last-child td { border-bottom: 0; }
+.f-supp-table td:first-child { white-space: nowrap; }
+.f-supp-table td:first-child::before { content: "• "; color: #a33335; font-weight: 700; }
+
+/* ≤900px：左右两栏的正文列已经不够宽（约 400px 以下），两列硬排会挤成窄条
+   → 每一行改成「高度」在上、「横幅尺寸」在下；表头只留给屏幕阅读器。 */
+@media (max-width: 900px) {
+  .f-supp-table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+  /* 表头只留给读屏：把内部 tr/th 也压成 1px 并裁切，
+     否则它们的盒子仍按整行文字宽度排版，会被溢出检查判为“超出屏幕”。 */
+  .f-supp-table thead tr,
+  .f-supp-table thead th {
+    display: block;
+    width: 1px;
+    height: 1px;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+  }
+  .f-supp-table table,
+  .f-supp-table tbody,
+  .f-supp-table tr,
+  .f-supp-table td { display: block; width: 100%; }
+  .f-supp-table tr { padding: 10px 0; border-bottom: 1px solid #ece8e4; }
+  .f-supp-table tr:last-child { border-bottom: 0; }
+  .f-supp-table td { padding: 0; border: 0; }
+  .f-supp-table td:first-child { white-space: normal; font-weight: 700; color: #191a19; }
+  .f-supp-table td:last-child { padding: 2px 0 0 18px; }
+}
 .f-supp.f-supp-txt { display: block; text-align: center; padding: 40px; }
 /* 补充模块「文字/图片的位置」（2026-09-21 新增）：
    默认 textRight（图左文右）= 上面那套原样，一条规则都不写——默认路径零改动。
